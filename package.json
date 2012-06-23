@@ -1,0 +1,22 @@
+{
+  "author": "Andris Reinman <andris@node.ee>",
+  "name": "pem",
+  "description": "Create private keys and certificates with node.js",
+  "version": "0.1.0",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/andris9/pem.git"
+  },
+  "main": "lib/pem",
+  "scripts": {
+    "test": "nodeunit test"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "nodeunit": "*"
+  },
+  "optionalDependencies": {},
+  "engines": {
+    "node": "*"
+  }
+}
