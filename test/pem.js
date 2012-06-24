@@ -2,13 +2,239 @@ var pem = require(".."),
     testCase = require('nodeunit').testCase;
 
 exports["General Tests"] = {
-    "Sample test": function(test){
-        
-        pem.createCertificate(null, function(error, data){
+
+    "Create default sized Private key": function(test){
+        pem.createPrivateKey(function(error, data){
+            var key = (data && data.key || "").toString();
             test.ifError(error);
-            test.ok(data);
-            console.log(data);
+            test.ok(key);
+            test.ok(key.match(/^\n*\-\-\-\-\-BEGIN RSA PRIVATE KEY\-\-\-\-\-\n/));
+            test.ok(key.match(/\n\-\-\-\-\-END RSA PRIVATE KEY\-\-\-\-\-\n*$/));
+            test.ok(key.trim().length > 850 && key.trim().length < 900);
             test.done();
+        });
+    },
+    
+    "Create 2048bit Private key": function(test){
+        pem.createPrivateKey(2048, function(error, data){
+            var key = (data && data.key || "").toString();
+            test.ifError(error);
+            test.ok(key);
+            test.ok(key.match(/^\n*\-\-\-\-\-BEGIN RSA PRIVATE KEY\-\-\-\-\-\n/));
+            test.ok(key.match(/\n\-\-\-\-\-END RSA PRIVATE KEY\-\-\-\-\-\n*$/));
+            test.ok(key.trim().length > 1650 && key.trim().length < 1700);
+            test.done();
+        });
+    },
+    
+    "Create default CSR": function(test){
+        pem.createCSR(function(error, data){
+            var csr = (data && data.csr || "").toString();
+            test.ifError(error);
+            test.ok(csr);
+            test.ok(csr.match(/^\n*\-\-\-\-\-BEGIN CERTIFICATE REQUEST\-\-\-\-\-\n/));
+            test.ok(csr.match(/\n\-\-\-\-\-END CERTIFICATE REQUEST\-\-\-\-\-\n*$/));
+            
+            test.ok(data && data.clientKey);
+            
+            test.done();
+        });
+    },
+    
+    "Create CSR with own key": function(test){
+        pem.createPrivateKey(function(error, data){
+            var key = (data && data.key || "").toString();
+            
+            pem.createCSR({clientKey: key}, function(error, data){
+                var csr = (data && data.csr || "").toString();
+                test.ifError(error);
+                test.ok(csr);
+                test.ok(csr.match(/^\n*\-\-\-\-\-BEGIN CERTIFICATE REQUEST\-\-\-\-\-\n/));
+                test.ok(csr.match(/\n\-\-\-\-\-END CERTIFICATE REQUEST\-\-\-\-\-\n*$/));
+                
+                test.equal(data && data.clientKey, key);
+                
+                test.ok(data && data.clientKey);
+                
+                test.done();
+            });
+            
+        });
+    },
+    
+    "Create default certificate": function(test){
+        pem.createCertificate(function(error, data){
+            var certificate = (data && data.certificate || "").toString();
+            test.ifError(error);
+            test.ok(certificate);
+            test.ok(certificate.match(/^\n*\-\-\-\-\-BEGIN CERTIFICATE\-\-\-\-\-\n/));
+            test.ok(certificate.match(/\n\-\-\-\-\-END CERTIFICATE\-\-\-\-\-\n*$/));
+            
+            test.ok((data && data.clientKey) != (data && data.serviceKey));
+            
+            test.ok(data && data.clientKey);
+            test.ok(data && data.serviceKey);
+            test.ok(data && data.csr);
+            
+            test.done();
+        });
+    },
+    
+    "Create self signed certificate": function(test){
+        pem.createCertificate({selfSigned: true}, function(error, data){
+            var certificate = (data && data.certificate || "").toString();
+            test.ifError(error);
+            test.ok(certificate);
+            test.ok(certificate.match(/^\n*\-\-\-\-\-BEGIN CERTIFICATE\-\-\-\-\-\n/));
+            test.ok(certificate.match(/\n\-\-\-\-\-END CERTIFICATE\-\-\-\-\-\n*$/));
+            
+            test.ok((data && data.clientKey) == (data && data.serviceKey));
+            
+            test.ok(data && data.clientKey);
+            test.ok(data && data.serviceKey);
+            test.ok(data && data.csr);
+            
+            test.done();
+        });
+    },
+    
+    "Read default cert data from CSR": function(test){
+        pem.createCSR(function(error, data){
+            var csr = (data && data.csr || "").toString();
+            test.ifError(error);
+            
+            pem.readCertificateInfo(csr, function(error, data){
+                test.ifError(error);
+                test.deepEqual(data,{
+                    country: '',
+                    state: '',
+                    locality: '',
+                    organization: '',
+                    organizationUnit: '',
+                    commonName: 'localhost',
+                    emailAddress: '' })
+                test.done();
+            });
+        });
+    },
+    
+    "Read edited cert data from CSR": function(test){
+        var certInfo = {country:"EE", 
+                        state:"Harjumaa", 
+                        locality:"Tallinn", 
+                        organization:"Node.ee", 
+                        organizationUnit:"test", 
+                        commonName:"www.node.ee", 
+                        emailAddress:"andris@node.ee"};
+        pem.createCSR(Object.create(certInfo), function(error, data){
+            var csr = (data && data.csr || "").toString();
+            test.ifError(error);
+            
+            pem.readCertificateInfo(csr, function(error, data){
+                test.ifError(error);
+                test.deepEqual(data, certInfo)
+                test.done();
+            });
+        });
+    },
+    
+    "Read default cert data from certificate": function(test){
+        pem.createCertificate(function(error, data){
+            var certificate = (data && data.certificate || "").toString();
+            test.ifError(error);
+            
+            pem.readCertificateInfo(certificate, function(error, data){
+                test.ifError(error);
+                test.deepEqual(data,{
+                    country: '',
+                    state: '',
+                    locality: '',
+                    organization: '',
+                    organizationUnit: '',
+                    commonName: 'localhost',
+                    emailAddress: '' })
+                test.done();
+            });
+        });
+    },
+    
+    "Read edited cert data from certificate": function(test){
+        var certInfo = {country:"EE", 
+                        state:"Harjumaa", 
+                        locality:"Tallinn", 
+                        organization:"Node.ee", 
+                        organizationUnit:"test", 
+                        commonName:"www.node.ee", 
+                        emailAddress:"andris@node.ee"};
+        pem.createCertificate(Object.create(certInfo), function(error, data){
+            var certificate = (data && data.certificate || "").toString();
+            test.ifError(error);
+            
+            pem.readCertificateInfo(certificate, function(error, data){
+                test.ifError(error);
+                test.deepEqual(data, certInfo)
+                test.done();
+            });
+        });
+    },
+    
+    "Get public key from private key": function(test){
+        pem.createPrivateKey(function(error, data){
+            var key = (data && data.key || "").toString();
+            test.ifError(error);
+            test.ok(key);
+            
+            pem.getPublicKey(key, function(error, data){
+                var pubkey = (data && data.publicKey || "").toString();
+                test.ifError(error);
+                test.ok(pubkey);
+                
+                test.ok(pubkey.match(/^\n*\-\-\-\-\-BEGIN PUBLIC KEY\-\-\-\-\-\n/));
+                test.ok(pubkey.match(/\n\-\-\-\-\-END PUBLIC KEY\-\-\-\-\-\n*$/));
+                
+                test.done();
+            });
+            
+        });
+    },
+    
+    "Get public key from CSR": function(test){
+        pem.createCSR(function(error, data){
+            var key = (data && data.clientKey || "").toString();
+            test.ifError(error);
+            test.ok(key);
+            
+            pem.getPublicKey(key, function(error, data){
+                var pubkey = (data && data.publicKey || "").toString();
+                test.ifError(error);
+                test.ok(pubkey);
+                
+                test.ok(pubkey.match(/^\n*\-\-\-\-\-BEGIN PUBLIC KEY\-\-\-\-\-\n/));
+                test.ok(pubkey.match(/\n\-\-\-\-\-END PUBLIC KEY\-\-\-\-\-\n*$/));
+                
+                test.done();
+            });
+            
+        });
+    },
+    
+    "Get public key from certificate": function(test){
+        pem.createCertificate(function(error, data){
+            var key = (data && data.clientKey || "").toString();
+            test.ifError(error);
+            test.ok(key);
+            
+            pem.getPublicKey(key, function(error, data){
+                var pubkey = (data && data.publicKey || "").toString();
+                test.ifError(error);
+                test.ok(pubkey);
+                
+                test.ok(pubkey.match(/^\n*\-\-\-\-\-BEGIN PUBLIC KEY\-\-\-\-\-\n/));
+                test.ok(pubkey.match(/\n\-\-\-\-\-END PUBLIC KEY\-\-\-\-\-\n*$/));
+                
+                test.done();
+            });
+            
         });
     }
 }
