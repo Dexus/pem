@@ -112,7 +112,7 @@ exports["General Tests"] = {
                     organization: '',
                     organizationUnit: '',
                     commonName: 'localhost',
-                    emailAddress: '' })
+                    emailAddress: '' });
                 test.done();
             });
         });
@@ -132,7 +132,7 @@ exports["General Tests"] = {
             
             pem.readCertificateInfo(csr, function(error, data){
                 test.ifError(error);
-                test.deepEqual(data, certInfo)
+                test.deepEqual(data, certInfo);
                 test.done();
             });
         });
@@ -152,7 +152,7 @@ exports["General Tests"] = {
                     organization: '',
                     organizationUnit: '',
                     commonName: 'localhost',
-                    emailAddress: '' })
+                    emailAddress: '' });
                 test.done();
             });
         });
@@ -172,7 +172,7 @@ exports["General Tests"] = {
             
             pem.readCertificateInfo(certificate, function(error, data){
                 test.ifError(error);
-                test.deepEqual(data, certInfo)
+                test.deepEqual(data, certInfo);
                 test.done();
             });
         });
@@ -237,4 +237,4 @@ exports["General Tests"] = {
             
         });
     }
-}
+};
