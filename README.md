@@ -93,6 +93,17 @@ Where
   * **certificate** is a PEM encoded CSR or a certificate
   * **callback** is a callback function with an error object and `{country, state, locality, organization, organizationUnit, commonName, emailAddress}`
 
+### Get fingerprint
+
+Use `getFingerprint` to get the SHA1 fingerprint for a certificate
+
+    pem.getFingerprint(certificate, callback)
+
+Where
+
+  * **certificate** is a PEM encoded certificate
+  * **callback** is a callback function with an error object and `{fingerprint}`
+
 ## License
 
 **MIT**
