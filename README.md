@@ -5,8 +5,6 @@ Create private keys and certificates with node.js
 
 [![Build Status](https://secure.travis-ci.org/andris9/pem.png)](http://travis-ci.org/andris9/pem)
 
-**NB!** This module does not yet support node v0.7+/0.8 or Windows. Sorry.
-
 ## Installation
 
 Install with npm
