@@ -13,7 +13,7 @@ Install with npm
 
 ## Examples
 
-Here are some examples for creating an SSL key/cert on the fly, and running an HTTPS server on port 443.  443 is teh standard HTTPS port, but requires root permissions on most systems.  To get around this, you could use a higher port number, like 4300, and use https://localhost:4300 to access your server.
+Here are some examples for creating an SSL key/cert on the fly, and running an HTTPS server on port 443.  443 is the standard HTTPS port, but requires root permissions on most systems.  To get around this, you could use a higher port number, like 4300, and use https://localhost:4300 to access your server.
 
 ### Basic https
 ```javascript
