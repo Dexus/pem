@@ -1,6 +1,8 @@
 var pem = require(".."),
     testCase = require('nodeunit').testCase;
 
+// TODO: use ursa to actually test, rather than looking at armor
+
 exports["General Tests"] = {
 
     "Create default sized Private key": function(test){
@@ -62,11 +64,6 @@ exports["General Tests"] = {
         });
     },
 
-/*
-    
-
-    
-
     "Create default certificate": function(test){
         pem.createCertificate(function(error, data){
             var certificate = (data && data.certificate || "").toString();
@@ -102,6 +99,13 @@ exports["General Tests"] = {
             test.done();
         });
     },
+
+/*
+    
+
+    
+
+    
 
     "Read default cert data from CSR": function(test){
         pem.createCSR(function(error, data){
