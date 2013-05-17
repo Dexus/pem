@@ -64,6 +64,11 @@ exports["General Tests"] = {
         });
     },
 
+    
+
+/*
+    
+
     "Create default certificate": function(test){
         pem.createCertificate(function(error, data){
             var certificate = (data && data.certificate || "").toString();
@@ -99,11 +104,6 @@ exports["General Tests"] = {
             test.done();
         });
     },
-
-/*
-    
-
-    
 
     
 
