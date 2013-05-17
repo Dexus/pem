@@ -27,6 +27,8 @@ exports["General Tests"] = {
         });
     },
 
+/*
+    
     "Create default CSR": function(test){
         pem.createCSR(function(error, data){
             var csr = (data && data.csr || "").toString();
@@ -61,6 +63,7 @@ exports["General Tests"] = {
 
         });
     },
+    
 
     "Create default certificate": function(test){
         pem.createCertificate(function(error, data){
@@ -255,4 +258,5 @@ exports["General Tests"] = {
 
         });
     }
+    */
 };
