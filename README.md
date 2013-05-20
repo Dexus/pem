@@ -11,6 +11,39 @@ Install with npm
 
     npm install pem
 
+## Examples
+
+Here are some examples for creating an SSL key/cert on the fly, and running an HTTPS server on port 443.  443 is the standard HTTPS port, but requires root permissions on most systems.  To get around this, you could use a higher port number, like 4300, and use https://localhost:4300 to access your server.
+
+### Basic https
+```javascript
+var https = require('https'),
+    pem = require('pem');
+
+pem.createCertificate({days:1, selfSigned:true}, function(err, keys){
+    https.createServer({key: keys.serviceKey, cert: keys.certificate}, function(req, res){
+        res.end("o hai!")
+    }).listen(443);
+});
+```
+
+###  Express
+```javascript
+var https = require('https'),
+    pem = require('pem'),
+    express = require('express');
+
+pem.createCertificate({days:1, selfSigned:true}, function(err, keys){
+  var app = express();
+  
+  app.get('/',  requireAuth, function(req, res){
+    res.send("o hai!");
+  });
+  
+  https.createServer({key: keys.serviceKey, cert: keys.certificate}, app).listen(443);
+});
+```
+
 ## API
 
 ### Create a private key
