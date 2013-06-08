@@ -135,6 +135,17 @@ Where
   * **certificate** is a PEM encoded certificate
   * **callback** is a callback function with an error object and `{fingerprint}`
 
+### Get modulus
+
+Use `getModulus` to get the modulus for a certificate, a CSR or a private key. Modulus can be useful to check that a Private Key Matches a Certificate
+
+    pem.getModulus(certificate, callback)
+
+Where
+
+  * **certificate** is a PEM encoded certificate, CSR or private key
+  * **callback** is a callback function with an error object and `{modulus}`
+
 ## License
 
 **MIT**
