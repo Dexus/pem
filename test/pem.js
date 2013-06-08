@@ -254,5 +254,23 @@ exports["General Tests"] = {
             });
 
         });
+    },
+
+    "Get modulus from certificate": function(test){
+        pem.createCertificate(function(error, data){
+            var certificate = (data && data.certificate || "").toString();
+            test.ifError(error);
+            test.ok(certificate);
+
+            pem.getModulus(certificate, function(error, data){
+                var modulus = (data && data.modulus || "").toString();
+                test.ifError(error);
+                test.ok(modulus);
+                test.ok(modulus.match(/^[0-9A-F]*$/));
+
+                test.done();
+            });
+
+        });
     }
 };
