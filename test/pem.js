@@ -259,16 +259,24 @@ exports["General Tests"] = {
     "Get modulus from certificate": function(test){
         pem.createCertificate(function(error, data){
             var certificate = (data && data.certificate || "").toString();
+            var key = (data && data.clientKey || "").toString();
             test.ifError(error);
             test.ok(certificate);
 
             pem.getModulus(certificate, function(error, data){
-                var modulus = (data && data.modulus || "").toString();
+                var certmodulus = (data && data.modulus || "").toString();
                 test.ifError(error);
-                test.ok(modulus);
-                test.ok(modulus.match(/^[0-9A-F]*$/));
+                test.ok(certmodulus);
+                test.ok(certmodulus.match(/^[0-9A-F]*$/));
+                pem.getModulus(certificate, function(error, data){
+                    var keymodulus = (data && data.modulus || "").toString();
+                    test.ifError(error);
+                    test.ok(keymodulus);
+                    test.ok(keymodulus.match(/^[0-9A-F]*$/));
+                    test.ok(keymodulus == certmodulus);
+                    test.done();
+                });
 
-                test.done();
             });
 
         });
