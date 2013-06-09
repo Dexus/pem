@@ -122,7 +122,7 @@ Use `readCertificateInfo` for reading subject data from a certificate or a CSR
 Where
 
   * **certificate** is a PEM encoded CSR or a certificate
-  * **callback** is a callback function with an error object and `{country, state, locality, organization, organizationUnit, commonName, emailAddress}`
+  * **callback** is a callback function with an error object and `{country, state, locality, organization, organizationUnit, commonName, emailAddress, validity{start, end} }`
 
 ### Get fingerprint
 
