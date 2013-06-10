@@ -145,6 +145,8 @@ exports["General Tests"] = {
 
             pem.readCertificateInfo(certificate, function(error, data){
                 test.ifError(error);
+                if(data.validity)
+                    delete data.validity;
                 test.deepEqual(data,{
                     country: '',
                     state: '',
@@ -172,6 +174,8 @@ exports["General Tests"] = {
 
             pem.readCertificateInfo(certificate, function(error, data){
                 test.ifError(error);
+                if(data.validity)
+                    delete data.validity;
                 test.deepEqual(data, certInfo);
                 test.done();
             });
