@@ -1,5 +1,10 @@
 var pem = require(".."),
     testCase = require('nodeunit').testCase;
+process.env.PEMJS_TMPDIR = "./tmp";
+var fs = require("fs");
+try {
+    fs.mkdirSync("./tmp");
+} catch (e) {}
 
 exports["General Tests"] = {
 
@@ -11,6 +16,7 @@ exports["General Tests"] = {
             test.ok(key.match(/^\n*\-\-\-\-\-BEGIN RSA PRIVATE KEY\-\-\-\-\-\n/));
             test.ok(key.match(/\n\-\-\-\-\-END RSA PRIVATE KEY\-\-\-\-\-\n*$/));
             test.ok(key.trim().length > 850 && key.trim().length < 900);
+            test.ok(fs.readdirSync("./tmp").length == 0);
             test.done();
         });
     },
@@ -23,6 +29,7 @@ exports["General Tests"] = {
             test.ok(key.match(/^\n*\-\-\-\-\-BEGIN RSA PRIVATE KEY\-\-\-\-\-\n/));
             test.ok(key.match(/\n\-\-\-\-\-END RSA PRIVATE KEY\-\-\-\-\-\n*$/));
             test.ok(key.trim().length > 1650 && key.trim().length < 1700);
+            test.ok(fs.readdirSync("./tmp").length == 0);
             test.done();
         });
     },
@@ -36,7 +43,7 @@ exports["General Tests"] = {
             test.ok(csr.match(/\n\-\-\-\-\-END CERTIFICATE REQUEST\-\-\-\-\-\n*$/));
 
             test.ok(data && data.clientKey);
-
+            test.ok(fs.readdirSync("./tmp").length == 0);
             test.done();
         });
     },
@@ -55,7 +62,7 @@ exports["General Tests"] = {
                 test.equal(data && data.clientKey, key);
 
                 test.ok(data && data.clientKey);
-
+                test.ok(fs.readdirSync("./tmp").length == 0);
                 test.done();
             });
 
@@ -75,7 +82,7 @@ exports["General Tests"] = {
             test.ok(data && data.clientKey);
             test.ok(data && data.serviceKey);
             test.ok(data && data.csr);
-
+            test.ok(fs.readdirSync("./tmp").length == 0);
             test.done();
         });
     },
@@ -93,7 +100,7 @@ exports["General Tests"] = {
             test.ok(data && data.clientKey);
             test.ok(data && data.serviceKey);
             test.ok(data && data.csr);
-
+            test.ok(fs.readdirSync("./tmp").length == 0);
             test.done();
         });
     },
@@ -102,6 +109,7 @@ exports["General Tests"] = {
         pem.createCSR(function(error, data){
             var csr = (data && data.csr || "").toString();
             test.ifError(error);
+            test.ok(fs.readdirSync("./tmp").length == 0);
 
             pem.readCertificateInfo(csr, function(error, data){
                 test.ifError(error);
@@ -113,6 +121,7 @@ exports["General Tests"] = {
                     organizationUnit: '',
                     commonName: 'localhost',
                     emailAddress: '' });
+                test.ok(fs.readdirSync("./tmp").length == 0);
                 test.done();
             });
         });
@@ -129,10 +138,12 @@ exports["General Tests"] = {
         pem.createCSR(Object.create(certInfo), function(error, data){
             var csr = (data && data.csr || "").toString();
             test.ifError(error);
+            test.ok(fs.readdirSync("./tmp").length == 0);
 
             pem.readCertificateInfo(csr, function(error, data){
                 test.ifError(error);
                 test.deepEqual(data, certInfo);
+                test.ok(fs.readdirSync("./tmp").length == 0);
                 test.done();
             });
         });
@@ -142,6 +153,7 @@ exports["General Tests"] = {
         pem.createCertificate(function(error, data){
             var certificate = (data && data.certificate || "").toString();
             test.ifError(error);
+            test.ok(fs.readdirSync("./tmp").length == 0);
 
             pem.readCertificateInfo(certificate, function(error, data){
                 test.ifError(error);
@@ -155,6 +167,7 @@ exports["General Tests"] = {
                     organizationUnit: '',
                     commonName: 'localhost',
                     emailAddress: '' });
+                test.ok(fs.readdirSync("./tmp").length == 0);
                 test.done();
             });
         });
@@ -171,12 +184,14 @@ exports["General Tests"] = {
         pem.createCertificate(Object.create(certInfo), function(error, data){
             var certificate = (data && data.certificate || "").toString();
             test.ifError(error);
+            test.ok(fs.readdirSync("./tmp").length == 0);
 
             pem.readCertificateInfo(certificate, function(error, data){
                 test.ifError(error);
                 if(data.validity)
                     delete data.validity;
                 test.deepEqual(data, certInfo);
+                test.ok(fs.readdirSync("./tmp").length == 0);
                 test.done();
             });
         });
@@ -187,6 +202,7 @@ exports["General Tests"] = {
             var key = (data && data.key || "").toString();
             test.ifError(error);
             test.ok(key);
+            test.ok(fs.readdirSync("./tmp").length == 0);
 
             pem.getPublicKey(key, function(error, data){
                 var pubkey = (data && data.publicKey || "").toString();
@@ -195,6 +211,7 @@ exports["General Tests"] = {
 
                 test.ok(pubkey.match(/^\n*\-\-\-\-\-BEGIN PUBLIC KEY\-\-\-\-\-\n/));
                 test.ok(pubkey.match(/\n\-\-\-\-\-END PUBLIC KEY\-\-\-\-\-\n*$/));
+                test.ok(fs.readdirSync("./tmp").length == 0);
 
                 test.done();
             });
@@ -207,6 +224,7 @@ exports["General Tests"] = {
             var key = (data && data.clientKey || "").toString();
             test.ifError(error);
             test.ok(key);
+            test.ok(fs.readdirSync("./tmp").length == 0);
 
             pem.getPublicKey(key, function(error, data){
                 var pubkey = (data && data.publicKey || "").toString();
@@ -215,6 +233,7 @@ exports["General Tests"] = {
 
                 test.ok(pubkey.match(/^\n*\-\-\-\-\-BEGIN PUBLIC KEY\-\-\-\-\-\n/));
                 test.ok(pubkey.match(/\n\-\-\-\-\-END PUBLIC KEY\-\-\-\-\-\n*$/));
+                test.ok(fs.readdirSync("./tmp").length == 0);
 
                 test.done();
             });
@@ -227,6 +246,7 @@ exports["General Tests"] = {
             var key = (data && data.clientKey || "").toString();
             test.ifError(error);
             test.ok(key);
+            test.ok(fs.readdirSync("./tmp").length == 0);
 
             pem.getPublicKey(key, function(error, data){
                 var pubkey = (data && data.publicKey || "").toString();
@@ -235,6 +255,7 @@ exports["General Tests"] = {
 
                 test.ok(pubkey.match(/^\n*\-\-\-\-\-BEGIN PUBLIC KEY\-\-\-\-\-\n/));
                 test.ok(pubkey.match(/\n\-\-\-\-\-END PUBLIC KEY\-\-\-\-\-\n*$/));
+                test.ok(fs.readdirSync("./tmp").length == 0);
 
                 test.done();
             });
@@ -247,12 +268,14 @@ exports["General Tests"] = {
             var certificate = (data && data.certificate || "").toString();
             test.ifError(error);
             test.ok(certificate);
+            test.ok(fs.readdirSync("./tmp").length == 0);
 
             pem.getFingerprint(certificate, function(error, data){
                 var fingerprint = (data && data.fingerprint || "").toString();
                 test.ifError(error);
                 test.ok(fingerprint);
                 test.ok(fingerprint.match(/^[0-9A-F]{2}(:[0-9A-F]{2}){19}$/));
+                test.ok(fs.readdirSync("./tmp").length == 0);
 
                 test.done();
             });
@@ -266,18 +289,21 @@ exports["General Tests"] = {
             var key = (data && data.clientKey || "").toString();
             test.ifError(error);
             test.ok(certificate);
+            test.ok(fs.readdirSync("./tmp").length == 0);
 
             pem.getModulus(certificate, function(error, data){
                 var certmodulus = (data && data.modulus || "").toString();
                 test.ifError(error);
                 test.ok(certmodulus);
                 test.ok(certmodulus.match(/^[0-9A-F]*$/));
+                test.ok(fs.readdirSync("./tmp").length == 0);
                 pem.getModulus(certificate, function(error, data){
                     var keymodulus = (data && data.modulus || "").toString();
                     test.ifError(error);
                     test.ok(keymodulus);
                     test.ok(keymodulus.match(/^[0-9A-F]*$/));
                     test.ok(keymodulus == certmodulus);
+                    test.ok(fs.readdirSync("./tmp").length == 0);
                     test.done();
                 });
 
