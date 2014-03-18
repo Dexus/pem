@@ -2,7 +2,7 @@
   "author": "Andris Reinman <andris@node.ee>",
   "name": "pem",
   "description": "Create private keys and certificates with node.js",
-  "version": "1.2.2",
+  "version": "1.3.0",
   "repository": {
     "type": "git",
     "url": "git://github.com/andris9/pem.git"
