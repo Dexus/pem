@@ -15,7 +15,7 @@ exports["General Tests"] = {
             test.ok(key);
             test.ok(key.match(/^\n*\-\-\-\-\-BEGIN RSA PRIVATE KEY\-\-\-\-\-\n/));
             test.ok(key.match(/\n\-\-\-\-\-END RSA PRIVATE KEY\-\-\-\-\-\n*$/));
-            test.ok(key.trim().length > 850 && key.trim().length < 900);
+            test.ok(key.trim().length > 850 && key.trim().length < 1900);
             test.ok(fs.readdirSync("./tmp").length == 0);
             test.done();
         });
