@@ -310,5 +310,20 @@ exports["General Tests"] = {
             });
 
         });
+    },
+    "Create and verify wildcard certificate": function(test) {
+        var certInfo = {commonName:"*.node.ee"};
+        pem.createCertificate(Object.create(certInfo), function(error, data){
+            var certificate = (data && data.certificate || "").toString();
+            test.ifError(error);
+            test.ok(fs.readdirSync("./tmp").length == 0);
+
+            pem.readCertificateInfo(certificate, function(error, data){
+                test.ifError(error);
+		test.equal(data.commonName, certInfo.commonName);
+                test.ok(fs.readdirSync("./tmp").length == 0);
+                test.done();
+            });
+        });
     }
 };
