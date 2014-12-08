@@ -59,7 +59,7 @@ Where
 
 ### Create a Certificate Signing Request
 
-Use `createCSR` for creating private keys
+Use `createCSR` for creating certificate signing requests
 
     pem.createCSR(options, callback)
 
