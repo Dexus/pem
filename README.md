@@ -79,7 +79,7 @@ Possible options are the following
   * **organization** is a CSR organization field
   * **organizationUnit** is a CSR organizational unit field
   * **commonName** is a CSR common name field (defaults to `localhost`)
-  * **altNames** is a list of subjectAltNames in the subjectAltName field (optional)
+  * **altNames** is a list (`Array`) of subjectAltNames in the subjectAltName field (optional)
   * **emailAddress** is a CSR email address field
 
 ### Create a certificate
