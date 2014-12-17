@@ -99,6 +99,8 @@ CSR needs to be generated.
 In addition, possible options are the following
 
   * **serviceKey** is a private key for signing the certificate, if not defined a new one is generated
+  * **serviceCertificate** is the optional certificate for the `serviceKey`
+  * **serial** is the unique serial number for the signed certificate, required if `serviceCertificate` is defined
   * **selfSigned** - if set to true and `serviceKey` is not defined, use `clientKey` for signing
   * **csr** is a CSR for the certificate, if not defined a new one is generated
   * **days** is the certificate expire time in days
