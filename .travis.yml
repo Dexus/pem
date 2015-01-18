@@ -7,6 +7,6 @@ node_js:
 notifications:
   email:
     recipients:
-      - andris@node.ee
+      - andris@kreata.ee
     on_success: change
     on_failure: change
