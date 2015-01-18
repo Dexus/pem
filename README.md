@@ -35,11 +35,11 @@ var https = require('https'),
 
 pem.createCertificate({days:1, selfSigned:true}, function(err, keys){
   var app = express();
-  
+
   app.get('/',  requireAuth, function(req, res){
     res.send("o hai!");
   });
-  
+
   https.createServer({key: keys.serviceKey, cert: keys.certificate}, app).listen(443);
 });
 ```
@@ -126,7 +126,7 @@ Where
 
   * **certificate** is a PEM encoded CSR or a certificate
   * **callback** is a callback function with an error object and `{country, state, locality, organization, organizationUnit, commonName, emailAddress, validity{start, end}, san{dns, ip}? }`
-  
+
 ? *san* is only present if the CSR or certificate has SAN entries.
 
 ### Get fingerprint
@@ -152,7 +152,5 @@ Where
   * **callback** is a callback function with an error object and `{modulus}`
 
 ## License
-
-
 
 **MIT**
