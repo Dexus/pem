@@ -22,7 +22,7 @@ var https = require('https'),
 
 pem.createCertificate({days:1, selfSigned:true}, function(err, keys){
     https.createServer({key: keys.serviceKey, cert: keys.certificate}, function(req, res){
-        res.end("o hai!")
+        res.end('o hai!')
     }).listen(443);
 });
 ```
@@ -37,7 +37,7 @@ pem.createCertificate({days:1, selfSigned:true}, function(err, keys){
   var app = express();
 
   app.get('/',  requireAuth, function(req, res){
-    res.send("o hai!");
+    res.send('o hai!');
   });
 
   https.createServer({key: keys.serviceKey, cert: keys.certificate}, app).listen(443);
@@ -150,6 +150,19 @@ Where
 
   * **certificate** is a PEM encoded certificate, CSR or private key
   * **callback** is a callback function with an error object and `{modulus}`
+
+### Setting openssl location
+
+In some systems the `openssl` executable might not be available by the default name or it is not included in $PATH. In this case you can define the location of the executable yourself as a one time action after you have loaded the pem module:
+
+```javascript
+var pem = require('pem');
+pem.config({
+    pathOpenSSL: '/usr/local/bin/openssl'
+});
+...
+// do something with the pem module
+```
 
 ## License
 

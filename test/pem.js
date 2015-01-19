@@ -338,5 +338,21 @@ exports['General Tests'] = {
                 test.done();
             });
         });
+    },
+    'Return an error if openssl was not found': function(test) {
+        pem.config({
+            pathOpenSSL: 'zzzzzzzzzzz'
+        });
+
+        pem.createPrivateKey(function(error) {
+            test.ok(error);
+            pem.config({
+                pathOpenSSL: 'openssl'
+            });
+            pem.createPrivateKey(function(error) {
+                test.ifError(error);
+                test.done();
+            });
+        });
     }
 };
