@@ -22,7 +22,7 @@ var https = require('https'),
 
 pem.createCertificate({days:1, selfSigned:true}, function(err, keys){
     https.createServer({key: keys.serviceKey, cert: keys.certificate}, function(req, res){
-        res.end("o hai!")
+        res.end('o hai!')
     }).listen(443);
 });
 ```
@@ -35,11 +35,11 @@ var https = require('https'),
 
 pem.createCertificate({days:1, selfSigned:true}, function(err, keys){
   var app = express();
-  
+
   app.get('/',  requireAuth, function(req, res){
-    res.send("o hai!");
+    res.send('o hai!');
   });
-  
+
   https.createServer({key: keys.serviceKey, cert: keys.certificate}, app).listen(443);
 });
 ```
@@ -59,7 +59,7 @@ Where
 
 ### Create a Certificate Signing Request
 
-Use `createCSR` for creating private keys
+Use `createCSR` for creating certificate signing requests
 
     pem.createCSR(options, callback)
 
@@ -79,7 +79,7 @@ Possible options are the following
   * **organization** is a CSR organization field
   * **organizationUnit** is a CSR organizational unit field
   * **commonName** is a CSR common name field (defaults to `localhost`)
-  * **altNames** is a list of subjectAltNames in the subjectAltName field (optional)
+  * **altNames** is a list (`Array`) of subjectAltNames in the subjectAltName field (optional)
   * **emailAddress** is a CSR email address field
 
 ### Create a certificate
@@ -99,6 +99,8 @@ CSR needs to be generated.
 In addition, possible options are the following
 
   * **serviceKey** is a private key for signing the certificate, if not defined a new one is generated
+  * **serviceCertificate** is the optional certificate for the `serviceKey`
+  * **serial** is the unique serial number for the signed certificate, required if `serviceCertificate` is defined
   * **selfSigned** - if set to true and `serviceKey` is not defined, use `clientKey` for signing
   * **csr** is a CSR for the certificate, if not defined a new one is generated
   * **days** is the certificate expire time in days
@@ -124,7 +126,7 @@ Where
 
   * **certificate** is a PEM encoded CSR or a certificate
   * **callback** is a callback function with an error object and `{country, state, locality, organization, organizationUnit, commonName, emailAddress, validity{start, end}, san{dns, ip}? }`
-  
+
 ? *san* is only present if the CSR or certificate has SAN entries.
 
 ### Get fingerprint
@@ -148,6 +150,19 @@ Where
 
   * **certificate** is a PEM encoded certificate, CSR or private key
   * **callback** is a callback function with an error object and `{modulus}`
+
+### Setting openssl location
+
+In some systems the `openssl` executable might not be available by the default name or it is not included in $PATH. In this case you can define the location of the executable yourself as a one time action after you have loaded the pem module:
+
+```javascript
+var pem = require('pem');
+pem.config({
+    pathOpenSSL: '/usr/local/bin/openssl'
+});
+...
+// do something with the pem module
+```
 
 ## License
 
