@@ -9,13 +9,15 @@
   },
   "main": "lib/pem",
   "scripts": {
-    "test": "nodeunit test"
+    "test": "grunt"
   },
   "dependencies": {
     "which": "~1.0.8"
   },
   "devDependencies": {
-    "nodeunit": "*"
+    "grunt": "^0.4.5",
+    "grunt-contrib-jshint": "^0.11.0",
+    "grunt-contrib-nodeunit": "^0.4.1"
   },
   "optionalDependencies": {},
   "engines": {

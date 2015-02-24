@@ -11,7 +11,7 @@ try {
 
 exports['General Tests'] = {
 
-	'Create default sized dhparam key': function(test) {
+    'Create default sized dhparam key': function(test) {
         pem.createDhparam(function(error, data) {
             var dhparam = (data && data.dhparam || '').toString();
             test.ifError(error);
@@ -36,7 +36,7 @@ exports['General Tests'] = {
             test.done();
         });
     },
-	
+
     'Create default sized Private key': function(test) {
         pem.createPrivateKey(function(error, data) {
             var key = (data && data.key || '').toString();
