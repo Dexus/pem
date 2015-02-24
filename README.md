@@ -46,6 +46,17 @@ pem.createCertificate({days:1, selfSigned:true}, function(err, keys){
 
 ## API
 
+### Create a dhparam key
+
+Use `createDhparam` for creating dhparam keys
+
+    pem.createDhparam(keyBitsize, callback)
+
+Where
+
+  * **keyBitsize** is an optional size of the key, defaults to 512 (bit)
+  * **callback** is a callback function with an error object and `{dhparam}`
+
 ### Create a private key
 
 Use `createPrivateKey` for creating private keys
