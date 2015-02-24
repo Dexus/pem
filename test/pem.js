@@ -14,7 +14,6 @@ exports['General Tests'] = {
 	'Create default sized dhparam key': function(test) {
         pem.createDhparam(function(error, data) {
             var dhparam = (data && data.dhparam || '').toString();
-			console.log(dhparam.length);
             test.ifError(error);
             test.ok(dhparam);
             test.ok(dhparam.match(/^\n*\-\-\-\-\-BEGIN DH PARAMETERS\-\-\-\-\-\n/));
@@ -28,7 +27,6 @@ exports['General Tests'] = {
     'Create 2048bit dhparam key': function(test) {
         pem.createDhparam(2048, function(error, data) {
             var dhparam = (data && data.dhparam || '').toString();
-			console.log(dhparam.length);
             test.ifError(error);
             test.ok(dhparam);
             test.ok(dhparam.match(/^\n*\-\-\-\-\-BEGIN DH PARAMETERS\-\-\-\-\-\n/));
