@@ -11,6 +11,32 @@ try {
 
 exports['General Tests'] = {
 
+	'Create default sized dhparam key': function(test) {
+        pem.createDhparam(function(error, data) {
+            var dhparam = (data && data.dhparam || '').toString();
+            test.ifError(error);
+            test.ok(dhparam);
+            test.ok(dhparam.match(/^\n*\-\-\-\-\-BEGIN DH PARAMETERS\-\-\-\-\-\n/));
+            test.ok(dhparam.match(/\n\-\-\-\-\-END DH PARAMETERS\-\-\-\-\-\n*$/));
+            test.ok(dhparam.trim().length > 150 && dhparam.trim().length < 160);
+            test.ok(fs.readdirSync('./tmp').length === 0);
+            test.done();
+        });
+    },
+
+    'Create 2048bit dhparam key': function(test) {
+        pem.createDhparam(2048, function(error, data) {
+            var dhparam = (data && data.dhparam || '').toString();
+            test.ifError(error);
+            test.ok(dhparam);
+            test.ok(dhparam.match(/^\n*\-\-\-\-\-BEGIN DH PARAMETERS\-\-\-\-\-\n/));
+            test.ok(dhparam.match(/\n\-\-\-\-\-END DH PARAMETERS\-\-\-\-\-\n*$/));
+            test.ok(dhparam.trim().length > 420 && dhparam.trim().length < 430);
+            test.ok(fs.readdirSync('./tmp').length === 0);
+            test.done();
+        });
+    },
+	
     'Create default sized Private key': function(test) {
         pem.createPrivateKey(function(error, data) {
             var key = (data && data.key || '').toString();

@@ -46,6 +46,17 @@ pem.createCertificate({days:1, selfSigned:true}, function(err, keys){
 
 ## API
 
+### Create a dhparam key
+
+Use `createDhparam` for creating dhparam keys
+
+    pem.createDhparam(keyBitsize, callback)
+
+Where
+
+  * **keyBitsize** is an optional size of the key, defaults to 512 (bit)
+  * **callback** is a callback function with an error object and `{dhparam}`
+
 ### Create a private key
 
 Use `createPrivateKey` for creating private keys
@@ -131,13 +142,14 @@ Where
 
 ### Get fingerprint
 
-Use `getFingerprint` to get the SHA1 fingerprint for a certificate
+Use `getFingerprint` to get the default SHA1 fingerprint for a certificate
 
-    pem.getFingerprint(certificate, callback)
+    pem.getFingerprint(certificate, [hash,] callback)
 
 Where
 
   * **certificate** is a PEM encoded certificate
+  * **hash** is a hash function to use (either `md5`, `sha1` or `sha256`, defaults to `sha1`)
   * **callback** is a callback function with an error object and `{fingerprint}`
 
 ### Get modulus
