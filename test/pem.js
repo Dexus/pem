@@ -63,6 +63,20 @@ exports['General Tests'] = {
         });
     },
 
+    'Create 2048bit Private key with Password': function(test) {
+        pem.createPrivateKey(2048,{cipher:'des',password:'TestMe'}, function(error, data) {
+            var key = (data && data.key || '').toString();
+            test.ifError(error);
+            test.ok(key);
+            test.ok(key.match(/ENCRYPTED\n/));
+            test.ok(key.match(/^\n*\-\-\-\-\-BEGIN RSA PRIVATE KEY\-\-\-\-\-\n/));
+            test.ok(key.match(/\n\-\-\-\-\-END RSA PRIVATE KEY\-\-\-\-\-\n*$/));
+            test.ok(key.trim().length > 1700 && key.trim().length < 1780);
+            test.ok(fs.readdirSync('./tmp').length === 0);
+            test.done();
+        });
+    },
+
     'Create default CSR': function(test) {
         pem.createCSR(function(error, data) {
             var csr = (data && data.csr || '').toString();
