@@ -84,6 +84,7 @@ Where
 Possible options are the following
 
   * **clientKey** is an optional client key to use
+  * **clientKeyPassword** the optional password for `clientKey`
   * **keyBitsize** - if `clientKey` is undefined, bit size to use for generating a new key (defaults to 2048)
   * **hash** is a hash function to use (either `md5`, `sha1` or `sha256`, defaults to `sha256`)
   * **country** is a CSR country field
