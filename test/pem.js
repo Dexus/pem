@@ -112,9 +112,9 @@ exports['General Tests'] = {
             });
         });
     },
-    
+
     'Create CSR with own encrypted key': function(test) {
-        var password = 'Some pass-phrase';
+        var password = 'my:secure! "password\'s\nawesome';
         pem.createPrivateKey(2048, { cipher: 'des3', password: password }, function(error, data) {
             var key = (data && data.key || '').toString();
 
@@ -136,7 +136,7 @@ exports['General Tests'] = {
             });
         });
     },
-    
+
     'Create default certificate': function(test) {
         pem.createCertificate(function(error, data) {
             var certificate = (data && data.certificate || '').toString();
