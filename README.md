@@ -61,11 +61,13 @@ Where
 
 Use `createPrivateKey` for creating private keys
 
-    pem.createPrivateKey(keyBitsize, callback)
+    pem.createPrivateKey(keyBitsize, [options,] callback)
 
 Where
 
   * **keyBitsize** is an optional size of the key, defaults to 2048 (bit)
+  * **options** is an optional object of the cipher and password (both required for encryption), defaults {cipher:'',password:''} 
+  (ciphers:["aes128", "aes192", "aes256", "camellia128", "camellia192", "camellia256", "des", "des3", "idea"])
   * **callback** is a callback function with an error object and `{key}`
 
 ### Create a Certificate Signing Request
