@@ -113,6 +113,30 @@ exports['General Tests'] = {
         });
     },
 
+    'Create CSR with own encrypted key': function(test) {
+        var password = 'my:secure! "password\'s\nawesome';
+        pem.createPrivateKey(2048, { cipher: 'des3', password: password }, function(error, data) {
+            var key = (data && data.key || '').toString();
+
+            pem.createCSR({
+                clientKey: key,
+                clientKeyPassword: password
+            }, function(error, data) {
+                var csr = (data && data.csr || '').toString();
+                test.ifError(error);
+                test.ok(csr);
+                test.ok(csr.match(/^\n*\-\-\-\-\-BEGIN CERTIFICATE REQUEST\-\-\-\-\-\n/));
+                test.ok(csr.match(/\n\-\-\-\-\-END CERTIFICATE REQUEST\-\-\-\-\-\n*$/));
+
+                test.equal(data && data.clientKey, key);
+
+                test.ok(data && data.clientKey);
+                test.ok(fs.readdirSync('./tmp').length === 0);
+                test.done();
+            });
+        });
+    },
+
     'Create default certificate': function(test) {
         pem.createCertificate(function(error, data) {
             var certificate = (data && data.certificate || '').toString();
