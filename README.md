@@ -139,7 +139,7 @@ Use `readCertificateInfo` for reading subject data from a certificate or a CSR
 Where
 
   * **certificate** is a PEM encoded CSR or a certificate
-  * **callback** is a callback function with an error object and `{country, state, locality, organization, organizationUnit, commonName, emailAddress, validity{start, end}, san{dns, ip}? }`
+  * **callback** is a callback function with an error object and `{country, state, locality, organization, organizationUnit, commonName, emailAddress, validity{start, end}, san{dns, ip}?, issuer{country, state, locality, organization, organizationUnit}? }`
 
 ? *san* is only present if the CSR or certificate has SAN entries.
 

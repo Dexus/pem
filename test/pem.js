@@ -184,6 +184,7 @@ exports['General Tests'] = {
             pem.readCertificateInfo(csr, function(error, data) {
                 test.ifError(error);
                 test.deepEqual(data, {
+                    issuer : {},
                     country: '',
                     state: '',
                     locality: '',
@@ -200,6 +201,7 @@ exports['General Tests'] = {
 
     'Read edited cert data from CSR': function(test) {
         var certInfo = {
+            issuer : {},
             country: 'EE',
             state: 'Harjumaa',
             locality: 'Tallinn',
@@ -236,6 +238,14 @@ exports['General Tests'] = {
                 }
 
                 test.deepEqual(data, {
+                    issuer : {
+                        country: '',
+                        state: '',
+                        locality: '',
+                        organization: '',
+                        organizationUnit: '',
+                        commonName: 'localhost'
+                    },
                     country: '',
                     state: '',
                     locality: '',
@@ -252,6 +262,14 @@ exports['General Tests'] = {
 
     'Read edited cert data from certificate': function(test) {
         var certInfo = {
+            issuer : {
+                country: 'EE',
+                state: 'Harjumaa',
+                locality: 'Tallinn',
+                organization: 'Node.ee',
+                organizationUnit: 'test',
+                commonName: 'www.node.ee'
+            },
             country: 'EE',
             state: 'Harjumaa',
             locality: 'Tallinn',
