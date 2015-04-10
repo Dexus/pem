@@ -407,7 +407,7 @@ exports['General Tests'] = {
     },
     'Get modulus from a protected key': function(test) {
         var certificate = fs.readFileSync('./test/fixtures/test.crt').toString();
-        var key = fs.readFileSync('./test/fixtures/test.key').toString();git
+        var key = fs.readFileSync('./test/fixtures/test.key').toString();
 
         pem.getModulus(certificate, function(error, data) {
             var certmodulus = (data && data.modulus || '').toString();
