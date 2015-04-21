@@ -3,6 +3,7 @@
 var pem = require('..');
 var fs = require('fs');
 
+
 process.env.PEMJS_TMPDIR = './tmp';
 
 try {
@@ -403,6 +404,28 @@ exports['General Tests'] = {
                 });
             });
         });
+    },
+    'Get modulus from a protected key': function(test) {
+        var certificate = fs.readFileSync('./test/fixtures/test.crt').toString();
+        var key = fs.readFileSync('./test/fixtures/test.key').toString();
+
+        pem.getModulus(certificate, function(error, data) {
+            var certmodulus = (data && data.modulus || '').toString();
+            test.ifError(error);
+            test.ok(certmodulus);
+            test.ok(certmodulus.match(/^[0-9A-F]*$/));
+            test.ok(fs.readdirSync('./tmp').length === 0);
+            pem.getModulusFromProtected(key, 'password' ,function(error, data) {
+                var keymodulus = (data && data.modulus || '').toString();
+                test.ifError(error);
+                test.ok(keymodulus);
+                test.ok(keymodulus.match(/^[0-9A-F]*$/));
+                test.ok(keymodulus === certmodulus);
+                test.ok(fs.readdirSync('./tmp').length === 0);
+                test.done();
+            });
+        });
+
     },
     'Create and verify wildcard certificate': function(test) {
         var certInfo = {
