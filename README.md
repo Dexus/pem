@@ -166,6 +166,17 @@ Where
   * **certificate** is a PEM encoded certificate, CSR or private key
   * **callback** is a callback function with an error object and `{modulus}`
 
+### Get DH parameter information
+
+Use `getDhparamInfo` to get the size and prime of DH parameters.
+
+    pem.getDhparamInfo(dhparam, callback)
+
+Where
+
+  * **dhparam** is a PEM encoded DH parameters string
+  * **callback** is a callback function with an error object and `{size, prime}`
+
 ### Setting openssl location
 
 In some systems the `openssl` executable might not be available by the default name or it is not included in $PATH. In this case you can define the location of the executable yourself as a one time action after you have loaded the pem module:

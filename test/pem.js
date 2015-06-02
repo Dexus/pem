@@ -405,6 +405,7 @@ exports['General Tests'] = {
             });
         });
     },
+
     'Get modulus from a protected key': function(test) {
         var certificate = fs.readFileSync('./test/fixtures/test.crt').toString();
         var key = fs.readFileSync('./test/fixtures/test.key').toString();
@@ -425,8 +426,24 @@ exports['General Tests'] = {
                 test.done();
             });
         });
-
     },
+
+    'Get DH param info': function(test) {
+        var dh = fs.readFileSync('./test/fixtures/test.dh').toString();
+
+        pem.getDhparamInfo(dh, function(error, data) {
+            var size = data && data.size || 0;
+            var prime = (data && data.prime || '').toString();
+            test.ifError(error);
+            test.equal(size, 1024);
+            test.ok(prime);
+            test.ok(fs.readdirSync('./tmp').length === 0);
+            test.equal(typeof size, 'number');
+            test.ok(/([0-9a-f][0-9a-f]:)+[0-9a-f][0-9a-f]$/g.test(prime));
+            test.done();
+        });
+    },
+
     'Create and verify wildcard certificate': function(test) {
         var certInfo = {
             commonName: '*.node.ee'
