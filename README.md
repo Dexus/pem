@@ -166,6 +166,20 @@ Where
   * **certificate** is a PEM encoded certificate, CSR or private key
   * **callback** is a callback function with an error object and `{modulus}`
 
+## Export to PKCS12 keystore
+
+Use `createPkcs12` to export a certificate and the private key to a PKCS12 keystore.
+
+	pem.createPkcs12(clientKey, certificate, p12Password, [options], callback)
+	
+Where
+
+* **clientKey** is a PEM encoded private key
+* **certificate** is a PEM encoded certificate
+* **p12Password** is the password of the exported keystore
+* **options** is an optional options object with `cipher` and `clientKeyPassword` (ciphers:["aes128", "aes192", "aes256", "camellia128", "camellia192", "camellia256", "des", "des3", "idea"])
+* **callback** is a callback function with an error object and `{pkcs12}` (binary)
+
 ### Setting openssl location
 
 In some systems the `openssl` executable might not be available by the default name or it is not included in $PATH. In this case you can define the location of the executable yourself as a one time action after you have loaded the pem module:

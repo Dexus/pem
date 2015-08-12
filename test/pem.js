@@ -459,5 +459,43 @@ exports['General Tests'] = {
                 test.done();
             });
         });
+    },
+    'Create PKCS12 without key password': function(test) {
+        pem.createPrivateKey(function(error, data) {
+            var key = (data && data.key || '').toString();
+
+            pem.createCertificate({
+                clientKey: key,
+                selfSigned: true
+            }, function(error, csr) {
+                
+                pem.createPkcs12(csr.clientKey, csr.certificate, 'mypassword', function(err,pkcs12){
+                    test.ifError(err);
+                    test.ok(pkcs12);
+
+                    test.ok(fs.readdirSync('./tmp').length === 0);
+                    test.done();
+                });
+            });
+        });
+    },
+    'Create PKCS12 with key password': function(test) {
+        pem.createPrivateKey({cipher:'aes128',password:'xxx'}, function(error, data) {
+            var key = (data && data.key || '').toString();
+
+            pem.createCertificate({
+                clientKey: key,
+                selfSigned: true
+            }, function(error, csr) {
+                
+                pem.createPkcs12(csr.clientKey, csr.certificate, 'mypassword', {cipher: 'aes256', clientKeyPassword: 'xxx'}, function(err,pkcs12){
+                    test.ifError(err);
+                    test.ok(pkcs12);
+
+                    test.ok(fs.readdirSync('./tmp').length === 0);
+                    test.done();
+                });              
+            });
+        });
     }
 };
