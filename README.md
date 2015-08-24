@@ -180,6 +180,18 @@ Where
 * **options** is an optional options object with `cipher` and `clientKeyPassword` (ciphers:["aes128", "aes192", "aes256", "camellia128", "camellia192", "camellia256", "des", "des3", "idea"])
 * **callback** is a callback function with an error object and `{pkcs12}` (binary)
 
+## Verify a certificate signing chain
+
+Use `verifySigningChain` to assert that a given certificate has a valid signing chain.
+
+    pem.verifySigningChain(certificate, ca, callback)
+
+Where
+
+* **certificate** is a PEM encoded certificate string
+* **ca** is a PEM encoded CA certificate string or an array of certificate strings
+* **callback** is a callback function with an error object and a boolean as arguments
+
 ### Setting openssl location
 
 In some systems the `openssl` executable might not be available by the default name or it is not included in $PATH. In this case you can define the location of the executable yourself as a one time action after you have loaded the pem module:
