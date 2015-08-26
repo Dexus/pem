@@ -113,11 +113,14 @@ CSR needs to be generated.
 In addition, possible options are the following
 
   * **serviceKey** is a private key for signing the certificate, if not defined a new one is generated
+  * **serviceKeyPassword** Password of the service key
   * **serviceCertificate** is the optional certificate for the `serviceKey`
   * **serial** is the unique serial number for the signed certificate, required if `serviceCertificate` is defined
   * **selfSigned** - if set to true and `serviceKey` is not defined, use `clientKey` for signing
   * **csr** is a CSR for the certificate, if not defined a new one is generated
   * **days** is the certificate expire time in days
+  * **extFile** extension config file - **without** `-extensions v3_req`
+  * **config** extension config file - **with** `-extensions v3_req`
 
 ### Export a public key
 
@@ -139,7 +142,7 @@ Use `readCertificateInfo` for reading subject data from a certificate or a CSR
 Where
 
   * **certificate** is a PEM encoded CSR or a certificate
-  * **callback** is a callback function with an error object and `{country, state, locality, organization, organizationUnit, commonName, emailAddress, validity{start, end}, san{dns, ip}?, issuer{country, state, locality, organization, organizationUnit} }`
+  * **callback** is a callback function with an error object and `{serial, country, state, locality, organization, organizationUnit, commonName, emailAddress, validity{start, end}, san{dns, ip}?, issuer{country, state, locality, organization, organizationUnit} }`
 
 ? *san* is only present if the CSR or certificate has SAN entries.
 
@@ -166,6 +169,18 @@ Where
   * **certificate** is a PEM encoded certificate, CSR or private key
   * **callback** is a callback function with an error object and `{modulus}`
 
+### Get DH parameter information
+
+Use `getDhparamInfo` to get the size and prime of DH parameters.
+
+    pem.getDhparamInfo(dhparam, callback)
+
+Where
+
+  * **dhparam** is a PEM encoded DH parameters string
+  * **callback** is a callback function with an error object and `{size, prime}`
+
+  
 ## Export to PKCS12 keystore
 
 Use `createPkcs12` to export a certificate and the private key to a PKCS12 keystore.
