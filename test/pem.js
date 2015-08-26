@@ -497,5 +497,143 @@ exports['General Tests'] = {
                 });              
             });
         });
+    },
+    'Verify sigining chain': function(test) {
+      pem.createCertificate({
+        commonName: 'CA Certificate'
+      }, function (error, ca) {
+        test.ifError(error);
+
+        pem.createCertificate({
+          serviceKey: ca.serviceKey,
+          serviceCertificate: ca.certificate,
+          serial: Date.now(),
+        }, function (error, cert) {
+          test.ifError(error);
+
+          pem.verifySigningChain(cert.certificate, ca.certificate, function (error, valid) {
+            test.ifError(error);
+            test.ok(valid === true);
+
+            test.done();
+          });
+        });
+      });
+    },
+    'Verify deep sigining chain': function(test) {
+      pem.createCertificate({
+        commonName: 'CA Certificate'
+      }, function (error, ca) {
+        test.ifError(error);
+
+        pem.createCertificate({
+          commonName: 'Intermediate CA Certificate',
+          serviceKey: ca.serviceKey,
+          serviceCertificate: ca.certificate,
+          serial: Date.now(),
+        }, function (error, intermediate) {
+          test.ifError(error);
+
+          pem.createCertificate({
+            serviceKey: intermediate.clientKey,
+            serviceCertificate: intermediate.certificate,
+            serial: Date.now(),
+          }, function (error, cert) {
+            test.ifError(error);
+
+            pem.verifySigningChain(cert.certificate, [ca.certificate, intermediate.certificate], function (error, valid) {
+              test.ifError(error);
+              test.ok(valid === true);
+
+              test.done();
+            });
+          });
+        });
+      });
+    },
+    'Fail to verify invalid sigining chain': function(test) {
+      pem.createCertificate({
+        commonName: 'CA Certificate'
+      }, function (error, ca) {
+        test.ifError(error);
+
+        pem.createCertificate({
+          serviceKey: ca.serviceKey,
+          serviceCertificate: ca.certificate,
+          serial: Date.now(),
+        }, function (error, cert) {
+          test.ifError(error);
+
+          pem.verifySigningChain(cert.certificate, cert.certificate, function (error, valid) {
+            test.ifError(error);
+            test.ok(valid === false);
+
+            test.done();
+          });
+        });
+      });
+    },
+    'Fail to verify deep sigining chain with missing CA certificate': function(test) {
+      pem.createCertificate({
+        commonName: 'CA Certificate'
+      }, function (error, ca) {
+        test.ifError(error);
+
+        pem.createCertificate({
+          commonName: 'Intermediate CA Certificate',
+          serviceKey: ca.serviceKey,
+          serviceCertificate: ca.certificate,
+          serial: Date.now(),
+        }, function (error, intermediate) {
+          test.ifError(error);
+
+          pem.createCertificate({
+            serviceKey: intermediate.clientKey,
+            serviceCertificate: intermediate.certificate,
+            serial: Date.now(),
+          }, function (error, cert) {
+            test.ifError(error);
+
+            pem.verifySigningChain(cert.certificate, [intermediate.certificate], function (error, valid) {
+              test.ifError(error);
+              test.ok(valid === false);
+
+              test.done();
+            });
+          });
+        });
+      });
+    },
+    'Fail to verify deep sigining chain with missing intermediate certificate': function(test) {
+      pem.createCertificate({
+        commonName: 'CA Certificate'
+      }, function (error, ca) {
+        test.ifError(error);
+
+        pem.createCertificate({
+          commonName: 'Intermediate CA Certificate',
+          serviceKey: ca.serviceKey,
+          serviceCertificate: ca.certificate,
+          serial: Date.now(),
+        }, function (error, intermediate) {
+          test.ifError(error);
+
+          pem.createCertificate({
+            serviceKey: intermediate.clientKey,
+            serviceCertificate: intermediate.certificate,
+            serial: Date.now(),
+            days: 1024
+          }, function (error, cert) {
+            test.ifError(error);
+
+            pem.verifySigningChain(cert.certificate, [ca.certificate], function (error, valid) {
+              test.ifError(error);
+              test.ok(valid === false);
+
+              test.done();
+            });
+          });
+        });
+      });
     }
 };
