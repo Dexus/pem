@@ -1,4 +1,5 @@
 language: node_js
+sudo: false
 node_js:
   - "0.10"
   - 0.12
@@ -9,5 +10,6 @@ notifications:
   email:
     recipients:
       - andris@kreata.ee
+      - github+2015@josef-froehle.de
     on_success: change
     on_failure: change
