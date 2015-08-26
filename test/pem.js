@@ -237,6 +237,9 @@ exports['General Tests'] = {
                 if (data.validity) {
                     delete data.validity;
                 }
+                if (data.serial) {
+                    delete data.serial;
+                }
 
                 test.deepEqual(data, {
                     issuer : {
@@ -289,6 +292,9 @@ exports['General Tests'] = {
 
                 if (data.validity) {
                     delete data.validity;
+                }
+                if (data.serial) {
+                    delete data.serial;
                 }
 
                 test.deepEqual(data, certInfo);
