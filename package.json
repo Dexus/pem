@@ -3,12 +3,13 @@
   "contributors": [
     {
       "name": "Josef Fröhle",
-      "email": "git@josef-froehle.de"
+      "email": "github@josef-froehle.de",
+      "url" : "https://www.josef-froehle.de/"
     }
   ],
   "name": "pem",
   "description": "Create private keys and certificates with node.js and io.js",
-  "version": "1.8.0",
+  "version": "1.8.1",
   "repository": {
     "type": "git",
     "url": "git://github.com/andris9/pem.git"
@@ -18,13 +19,13 @@
     "test": "grunt"
   },
   "dependencies": {
-    "which": "~1.0.8"
+    "which": "~1.1.2"
   },
   "devDependencies": {
     "grunt": "^0.4.5",
-    "grunt-contrib-jshint": "^0.11.0",
+    "grunt-contrib-jshint": "^0.11.3",
     "grunt-contrib-nodeunit": "^0.4.1",
-    "nodeunit": "^0.9.0"
+    "nodeunit": "^0.9.1"
   },
   "optionalDependencies": {},
   "engines": {

@@ -3,6 +3,8 @@ sudo: false
 node_js:
   - "0.10"
   - "0.12"
+  - "4.0"
+  - "4.1"
   - "iojs-v1.8"
   - "iojs-v2.5"
   - "iojs-v3.3"
