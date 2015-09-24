@@ -4,6 +4,7 @@ pem
 Create private keys and certificates with node.js
 
 [![Build Status](https://secure.travis-ci.org/andris9/pem.png)](http://travis-ci.org/andris9/pem)
+[![npm version](https://badge.fury.io/js/pem.svg)](http://badge.fury.io/js/pem)
 
 ## Installation
 
