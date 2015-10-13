@@ -67,7 +67,7 @@ Use `createPrivateKey` for creating private keys
 Where
 
   * **keyBitsize** is an optional size of the key, defaults to 2048 (bit)
-  * **options** is an optional object of the cipher and password (both required for encryption), defaults {cipher:'',password:''} 
+  * **options** is an optional object of the cipher and password (both required for encryption), defaults {cipher:'',password:''}
   (ciphers:["aes128", "aes192", "aes256", "camellia128", "camellia192", "camellia256", "des", "des3", "idea"])
   * **callback** is a callback function with an error object and `{key}`
 
@@ -181,22 +181,34 @@ Where
   * **dhparam** is a PEM encoded DH parameters string
   * **callback** is a callback function with an error object and `{size, prime}`
 
-  
-## Export to PKCS12 keystore
 
-Use `createPkcs12` to export a certificate and the private key to a PKCS12 keystore.
+### Export to a PKCS12 keystore
+
+Use `createPkcs12` to export a certificate, the private key and optionally any signing or intermediate CA certificates to a PKCS12 keystore.
 
 	pem.createPkcs12(clientKey, certificate, p12Password, [options], callback)
-	
+
 Where
 
 * **clientKey** is a PEM encoded private key
 * **certificate** is a PEM encoded certificate
 * **p12Password** is the password of the exported keystore
-* **options** is an optional options object with `cipher` and `clientKeyPassword` (ciphers:["aes128", "aes192", "aes256", "camellia128", "camellia192", "camellia256", "des", "des3", "idea"])
+* **options** is an optional options object with `cipher`, (one of "aes128", "aes192", "aes256", "camellia128", "camellia192", "camellia256", "des", "des3" or "idea"), `clientKeyPassword` and `certFiles` (an array of additional certificates to include - e.g. CA certificates)
 * **callback** is a callback function with an error object and `{pkcs12}` (binary)
 
-## Verify a certificate signing chain
+### Read a PKCS12 keystore
+
+Use `readPkcs12` to read a certificate, private key and CA certificates from a PKCS12 keystore.
+
+	pem.readPkcs12(bufferOrPath, [options], callback)
+
+Where
+
+* **bufferOrPath** is a PKCS12 keystore as a [Buffer](https://nodejs.org/api/buffer.html) or the path to a file
+* **options** is an optional options object with `clientKeyPassword` which will be used to encrypt the stored key and `p12Password` which will be used to open the keystore
+* **callback** is a callback function with an error object and `{key: String, cert: String, ca: Array}`
+
+### Verify a certificate signing chain
 
 Use `verifySigningChain` to assert that a given certificate has a valid signing chain.
 

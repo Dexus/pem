@@ -411,7 +411,7 @@ exports['General Tests'] = {
             });
         });
     },
-    
+
     'Get modulus from a protected key': function(test) {
         var certificate = fs.readFileSync('./test/fixtures/test.crt').toString();
         var key = fs.readFileSync('./test/fixtures/test.key').toString();
@@ -434,7 +434,7 @@ exports['General Tests'] = {
         });
 
     },
- 
+
     'Get DH param info': function(test) {
         var dh = fs.readFileSync('./test/fixtures/test.dh').toString();
 
@@ -492,7 +492,7 @@ exports['General Tests'] = {
                 clientKey: key,
                 selfSigned: true
             }, function(error, csr) {
-                
+
                 pem.createPkcs12(csr.clientKey, csr.certificate, 'mypassword', function(err,pkcs12){
                     test.ifError(err);
                     test.ok(pkcs12);
@@ -511,16 +511,57 @@ exports['General Tests'] = {
                 clientKey: key,
                 selfSigned: true
             }, function(error, csr) {
-                
+
                 pem.createPkcs12(csr.clientKey, csr.certificate, 'mypassword', {cipher: 'aes256', clientKeyPassword: 'xxx'}, function(err,pkcs12){
                     test.ifError(err);
                     test.ok(pkcs12);
 
                     test.ok(fs.readdirSync('./tmp').length === 0);
                     test.done();
-                });              
+                });
             });
         });
+    },
+    'Create PKCS12 with ca certificates': function(test) {
+      pem.createCertificate({
+          commonName: 'CA Certificate'
+      }, function (error, ca) {
+        test.ifError(error);
+
+        pem.createCertificate({
+            serviceKey: ca.serviceKey,
+            serviceCertificate: ca.certificate,
+            serial: Date.now(),
+        }, function (error, cert) {
+            test.ifError(error);
+
+            pem.createPkcs12(cert.clientKey, cert.certificate, '', {certFiles: [ca.certificate]}, function (error, pkcs12) {
+                test.ifError(error);
+                test.ok(pkcs12.pkcs12);
+
+                test.ok(fs.readdirSync('./tmp').length === 0);
+
+                pem.readPkcs12(pkcs12.pkcs12, function (error, keystore) {
+                    test.ifError(error);
+                    test.ok(keystore);
+
+                    test.equal(ca.certificate, keystore.ca[0]);
+                    test.equal(cert.certificate, keystore.cert);
+                    test.equal(cert.clientKey, keystore.key);
+
+                    test.done();
+                });
+              });
+          });
+      });
+    },
+    'Respond with ENOENT for missing PKCS12 file': function(test) {
+      pem.readPkcs12('/i/do/not/exist.p12', function (error) {
+          test.ok(error);
+          test.equal(error.code, 'ENOENT');
+
+          test.done();
+      });
     },
     'Verify sigining chain': function(test) {
       pem.createCertificate({
