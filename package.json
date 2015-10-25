@@ -19,6 +19,7 @@
     "test": "grunt"
   },
   "dependencies": {
+    "os-tmpdir": "^1.0.1",
     "which": "~1.1.2"
   },
   "devDependencies": {
