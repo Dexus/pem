@@ -4,7 +4,7 @@
     {
       "name": "Josef Fröhle",
       "email": "github@josef-froehle.de",
-      "url" : "https://www.josef-froehle.de/"
+      "url": "https://www.josef-froehle.de/"
     }
   ],
   "name": "pem",
@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "os-tmpdir": "^1.0.1",
-    "which": "~1.1.2"
+    "which": "^1.2.4"
   },
   "devDependencies": {
     "grunt": "^0.4.5",
