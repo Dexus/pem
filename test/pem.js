@@ -92,6 +92,37 @@ exports['General Tests'] = {
         });
     },
 
+    'Create CSR using config file': function(test) {
+        var certInfo = {
+            issuer : {},
+            country: 'EE',
+            state: 'Harjumaa',
+            locality: 'Tallinn',
+            organization: 'Node.ee',
+            organizationUnit: 'test',
+            commonName: 'www.node.ee',
+            emailAddress: 'andris@node.ee'
+        };
+        
+        pem.createCSR({ csrConfigFile: './test/fixtures/test.cnf' }, function(error, data) {
+            var csr = (data && data.csr || '').toString();
+            test.ifError(error);
+            test.ok(csr);
+            test.ok(csr.match(/^\n*\-\-\-\-\-BEGIN CERTIFICATE REQUEST\-\-\-\-\-\n/));
+            test.ok(csr.match(/\n\-\-\-\-\-END CERTIFICATE REQUEST\-\-\-\-\-\n*$/));
+
+            test.ok(data && data.clientKey);
+            test.ok(fs.readdirSync('./tmp').length === 0);
+
+            pem.readCertificateInfo(csr, function(error, data) {
+                test.ifError(error);
+                test.deepEqual(data, certInfo);
+                test.ok(fs.readdirSync('./tmp').length === 0);
+                test.done();
+            });
+        });
+    },
+
     'Create CSR with own key': function(test) {
         pem.createPrivateKey(function(error, data) {
             var key = (data && data.key || '').toString();
