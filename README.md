@@ -96,6 +96,7 @@ Possible options are the following
   * **commonName** is a CSR common name field (defaults to `localhost`)
   * **altNames** is a list (`Array`) of subjectAltNames in the subjectAltName field (optional)
   * **emailAddress** is a CSR email address field
+  * **csrConfigFile** is a CSR config file
 
 ### Create a certificate
 
