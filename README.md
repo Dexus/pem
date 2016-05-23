@@ -164,7 +164,7 @@ Where
 
 Use `getModulus` to get the modulus for a certificate, a CSR or a private key. Modulus can be useful to check that a Private Key Matches a Certificate
 
-    pem.getModulus(certificate, callback)
+    pem.getModulus(certificate, [password,] callback)
 
 Where
 
