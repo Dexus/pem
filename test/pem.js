@@ -453,7 +453,7 @@ exports['General Tests'] = {
             test.ok(certmodulus);
             test.ok(certmodulus.match(/^[0-9A-F]*$/));
             test.ok(fs.readdirSync('./tmp').length === 0);
-            pem.getModulusFromProtected(key, 'password' ,function(error, data) {
+            pem.getModulus(key, 'password' ,function(error, data) {
                 var keymodulus = (data && data.modulus || '').toString();
                 test.ifError(error);
                 test.ok(keymodulus);
