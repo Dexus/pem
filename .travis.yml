@@ -1,18 +1,28 @@
 language: node_js
-sudo: false
+cache:
+  directories:
+    - node_modules
 node_js:
   - "0.10"
   - "0.12"
   - "4"
-  - "5"
-  - "iojs-v1.8"
-  - "iojs-v2.5"
-  - "iojs-v3.3"
+  - "6"
+  - "7"
 before_install:
   - npm install -g grunt-cli
+before_script:
+  - npm prune
+script:
+  - grunt
+after_success:
+  - npm run semantic-release
+branches:
+  except:
+    - /^v\d+\.\d+\.\d+$/
 notifications:
   email:
     recipients:
       - github@josef-froehle.de
     on_success: change
     on_failure: change
+

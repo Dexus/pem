@@ -9,14 +9,15 @@
   ],
   "name": "pem",
   "description": "Create private keys and certificates with node.js and io.js",
-  "version": "1.8.3",
+  "version": "1.9.1",
   "repository": {
     "type": "git",
-    "url": "git://github.com/andris9/pem.git"
+    "url": "https://github.com/Dexus/pem.git"
   },
   "main": "lib/pem",
   "scripts": {
-    "test": "grunt"
+    "test": "grunt",
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
   "dependencies": {
     "os-tmpdir": "^1.0.1",
@@ -26,11 +27,19 @@
     "grunt": "^0.4.5",
     "grunt-contrib-jshint": "^0.11.3",
     "grunt-contrib-nodeunit": "^0.4.1",
-    "nodeunit": "^0.9.1"
+    "nodeunit": "^0.9.1",
+    "semantic-release": "^6.3.2",
+    "semantic-release-tamia": "^1.0.0"
   },
   "optionalDependencies": {},
   "engines": {
     "node": "*",
     "iojs": "*"
+  },
+  "release": {
+    "analyzeCommits": "semantic-release-tamia/analyzeCommits",
+    "generateNotes": "semantic-release-tamia/generateNotes",
+    "verifyRelease": "semantic-release-tamia/verifyRelease",
+    "verifyConditions": "./"
   }
 }
