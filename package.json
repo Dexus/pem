@@ -9,7 +9,7 @@
   ],
   "name": "pem",
   "description": "Create private keys and certificates with node.js and io.js",
-  "version": "1.9.3",
+  "version": "1.9.4",
   "repository": {
     "type": "git",
     "url": "https://github.com/Dexus/pem.git"
