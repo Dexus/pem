@@ -28,7 +28,7 @@
     "grunt-contrib-jshint": "^1.1.0",
     "grunt-contrib-nodeunit": "^1.0.0",
     "nodeunit": "^0.10.2",
-    "semantic-release": "^6.3.4",
+    "semantic-release": "^6.3.2",
     "semantic-release-tamia": "^1.0.0"
   },
   "optionalDependencies": {},
@@ -36,6 +36,5 @@
     "node": "*",
     "iojs": "*"
   },
-  "release": {
-  }
+  "release": {}
 }
