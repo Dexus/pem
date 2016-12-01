@@ -3,7 +3,7 @@ pem
 
 Create private keys and certificates with node.js
 
-[![Build Status](https://secure.travis-ci.org/andris9/pem.png)](http://travis-ci.org/andris9/pem)
+[![Build Status](https://secure.travis-ci.org/Dexus/pem.png)](http://travis-ci.org/Dexus/pem)
 [![npm version](https://badge.fury.io/js/pem.svg)](http://badge.fury.io/js/pem)
 
 ## Installation
@@ -233,6 +233,10 @@ pem.config({
 ...
 // do something with the pem module
 ```
+
+### Specialthanks to
+
+- Andris Reinman (@andris9) - Initiator of pem
 
 ## License
 

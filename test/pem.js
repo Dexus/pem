@@ -101,7 +101,8 @@ exports['General Tests'] = {
             organization: 'Node.ee',
             organizationUnit: 'test',
             commonName: 'www.node.ee',
-            emailAddress: 'andris@node.ee'
+            emailAddress: 'andris@node.ee',
+            dc: ''
         };
         
         pem.createCSR({ csrConfigFile: './test/fixtures/test.cnf' }, function(error, data) {
@@ -223,7 +224,8 @@ exports['General Tests'] = {
                     organization: '',
                     organizationUnit: '',
                     commonName: 'localhost',
-                    emailAddress: ''
+                    emailAddress: '',
+                    dc: ''
                 });
                 test.ok(fs.readdirSync('./tmp').length === 0);
                 test.done();
@@ -240,7 +242,8 @@ exports['General Tests'] = {
             organization: 'Node.ee',
             organizationUnit: 'test',
             commonName: 'www.node.ee',
-            emailAddress: 'andris@node.ee'
+            emailAddress: 'andris@node.ee',
+            dc: ''
         };
         pem.createCSR(Object.create(certInfo), function(error, data) {
             var csr = (data && data.csr || '').toString();
@@ -279,7 +282,8 @@ exports['General Tests'] = {
                         locality: '',
                         organization: '',
                         organizationUnit: '',
-                        commonName: 'localhost'
+                        commonName: 'localhost',
+                        dc: ''
                     },
                     country: '',
                     state: '',
@@ -287,7 +291,8 @@ exports['General Tests'] = {
                     organization: '',
                     organizationUnit: '',
                     commonName: 'localhost',
-                    emailAddress: ''
+                    emailAddress: '',
+                    dc: ''
                 });
                 test.ok(fs.readdirSync('./tmp').length === 0);
                 test.done();
@@ -303,7 +308,8 @@ exports['General Tests'] = {
                 locality: 'Tallinn',
                 organization: 'Node.ee',
                 organizationUnit: 'test',
-                commonName: 'www.node.ee'
+                commonName: 'www.node.ee',
+                dc: ''
             },
             country: 'EE',
             state: 'Harjumaa',
@@ -311,7 +317,8 @@ exports['General Tests'] = {
             organization: 'Node.ee',
             organizationUnit: 'test',
             commonName: 'www.node.ee',
-            emailAddress: 'andris@node.ee'
+            emailAddress: 'andris@node.ee',
+            dc: ''
         };
         pem.createCertificate(Object.create(certInfo), function(error, data) {
             var certificate = (data && data.certificate || '').toString();
