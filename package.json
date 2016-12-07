@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "os-tmpdir": "^1.0.1",
+    "semver": "^5.3.0",
     "which": "^1.2.4"
   },
   "devDependencies": {
