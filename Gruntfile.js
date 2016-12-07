@@ -11,7 +11,8 @@ module.exports = function(grunt) {
         },
 
         nodeunit: {
-            all: 'test/pem.js'
+            all: 'test/pem.js',
+            certPublicKey: 'test/cert-from-publickey.js'
         }
     });
 
