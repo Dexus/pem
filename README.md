@@ -221,6 +221,46 @@ Where
 * **ca** is a PEM encoded CA certificate string or an array of certificate strings
 * **callback** is a callback function with an error object and a boolean as arguments
 
+### Custom extensions config file
+
+You can specify custom OpenSSL extensions using the `config` or `extFile` options for `createCertificate` (or using `csrConfigFile` with `createCSR`).
+
+`extFile` and `csrConfigFile` should be paths to the extension files. While `config` will generate a temporary file from the supplied file contents.
+
+If you specify `config` then the `v3_req` section of your config file will be used.
+
+The following would be an example of a Certificate Authority extensions file:
+
+    [req]
+    req_extensions = v3_req
+    distinguished_name = req_distinguished_name
+
+    [req_distinguished_name]
+    commonName = Common Name
+    commonName_max = 64
+
+    [v3_req]
+    basicConstraints = critical,CA:TRUE
+
+While the following would specify subjectAltNames in the resulting certificate:
+
+    [req]
+    req_extensions = v3_req
+
+    [ v3_req ]
+    basicConstraints = CA:FALSE
+    keyUsage = nonRepudiation, digitalSignature, keyEncipherment
+    subjectAltName = @alt_names
+
+    [alt_names]
+    DNS.1 = host1.example.com
+    DNS.2 = host2.example.com
+    DNS.3 = host3.example.com
+
+Note that `createCertificate` and `createCSR` supports the `altNames` option which would be easier to use in most cases.
+
+**Warning: If you specify `altNames` the custom extensions file will not be passed to OpenSSL.**
+
 ### Setting openssl location
 
 In some systems the `openssl` executable might not be available by the default name or it is not included in $PATH. In this case you can define the location of the executable yourself as a one time action after you have loaded the pem module:
