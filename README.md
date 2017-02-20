@@ -1,6 +1,8 @@
 pem
 ===
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/Dexus/pem.svg)](https://greenkeeper.io/)
+
 Create private keys and certificates with node.js
 
 [![Build Status](https://secure.travis-ci.org/Dexus/pem.png)](http://travis-ci.org/Dexus/pem)
