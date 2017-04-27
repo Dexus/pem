@@ -104,7 +104,6 @@ exports['General Tests'] = {
             emailAddress: 'andris@node.ee',
             dc: '',
             signatureAlgorithm: 'sha256WithRSAEncryption',
-            publicKeySize: '2048 bit',
             publicKeyAlgorithm: 'rsaEncryption'
         };
         
@@ -120,6 +119,9 @@ exports['General Tests'] = {
 
             pem.readCertificateInfo(csr, function(error, data) {
                 test.ifError(error);
+                if (data.publicKeySize){
+                    delete data.publicKeySize;
+                }
                 test.deepEqual(data, certInfo);
                 test.ok(fs.readdirSync('./tmp').length === 0);
                 test.done();
@@ -219,6 +221,9 @@ exports['General Tests'] = {
 
             pem.readCertificateInfo(csr, function(error, data) {
                 test.ifError(error);
+                if (data.publicKeySize){
+                    delete data.publicKeySize;
+                }
                 test.deepEqual(data, {
                     issuer : {},
                     country: '',
@@ -230,7 +235,6 @@ exports['General Tests'] = {
                     emailAddress: '',
                     dc: '',
                     signatureAlgorithm: 'sha256WithRSAEncryption',
-                    publicKeySize: '2048 bit',
                     publicKeyAlgorithm: 'rsaEncryption'
                 });
                 test.ok(fs.readdirSync('./tmp').length === 0);
@@ -251,7 +255,6 @@ exports['General Tests'] = {
             emailAddress: 'andris@node.ee',
             dc: '',
             signatureAlgorithm: 'sha256WithRSAEncryption',
-            publicKeySize: '2048 bit',
             publicKeyAlgorithm: 'rsaEncryption'
         };
         pem.createCSR(Object.create(certInfo), function(error, data) {
@@ -261,6 +264,9 @@ exports['General Tests'] = {
 
             pem.readCertificateInfo(csr, function(error, data) {
                 test.ifError(error);
+                if (data.publicKeySize){
+                    delete data.publicKeySize;
+                }
                 test.deepEqual(data, certInfo);
                 test.ok(fs.readdirSync('./tmp').length === 0);
                 test.done();
@@ -341,7 +347,6 @@ exports['General Tests'] = {
             emailAddress: 'andris@node.ee',
             dc: '',
             signatureAlgorithm: 'sha256WithRSAEncryption',
-            publicKeySize: '2048 bit',
             publicKeyAlgorithm: 'rsaEncryption'
         };
         pem.createCertificate(Object.create(certInfo), function(error, data) {
@@ -357,6 +362,9 @@ exports['General Tests'] = {
                 }
                 if (data.serial) {
                     delete data.serial;
+                }
+                if (data.publicKeySize){
+                    delete data.publicKeySize;
                 }
 
                 test.deepEqual(data, certInfo);
