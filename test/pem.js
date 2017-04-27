@@ -102,7 +102,10 @@ exports['General Tests'] = {
             organizationUnit: 'test',
             commonName: 'www.node.ee',
             emailAddress: 'andris@node.ee',
-            dc: ''
+            dc: '',
+            signatureAlgorithm: 'sha256WithRSAEncryption',
+            publicKeySize: '2048 bit',
+            publicKeyAlgorithm: 'rsaEncryption'
         };
         
         pem.createCSR({ csrConfigFile: './test/fixtures/test.cnf' }, function(error, data) {
@@ -225,7 +228,10 @@ exports['General Tests'] = {
                     organizationUnit: '',
                     commonName: 'localhost',
                     emailAddress: '',
-                    dc: ''
+                    dc: '',
+                    signatureAlgorithm: 'sha256WithRSAEncryption',
+                    publicKeySize: '2048 bit',
+                    publicKeyAlgorithm: 'rsaEncryption'
                 });
                 test.ok(fs.readdirSync('./tmp').length === 0);
                 test.done();
@@ -243,7 +249,10 @@ exports['General Tests'] = {
             organizationUnit: 'test',
             commonName: 'www.node.ee',
             emailAddress: 'andris@node.ee',
-            dc: ''
+            dc: '',
+            signatureAlgorithm: 'sha256WithRSAEncryption',
+            publicKeySize: '2048 bit',
+            publicKeyAlgorithm: 'rsaEncryption'
         };
         pem.createCSR(Object.create(certInfo), function(error, data) {
             var csr = (data && data.csr || '').toString();
@@ -273,6 +282,18 @@ exports['General Tests'] = {
                 }
                 if (data.serial) {
                     delete data.serial;
+                }
+
+                if (data.signatureAlgorithm){
+                    delete data.signatureAlgorithm;
+                }
+
+                if (data.publicKeySize){
+                    delete data.publicKeySize;
+                }
+
+                if (data.publicKeyAlgorithm){
+                    delete data.publicKeyAlgorithm;
                 }
 
                 test.deepEqual(data, {
@@ -318,7 +339,10 @@ exports['General Tests'] = {
             organizationUnit: 'test',
             commonName: 'www.node.ee',
             emailAddress: 'andris@node.ee',
-            dc: ''
+            dc: '',
+            signatureAlgorithm: 'sha256WithRSAEncryption',
+            publicKeySize: '2048 bit',
+            publicKeyAlgorithm: 'rsaEncryption'
         };
         pem.createCertificate(Object.create(certInfo), function(error, data) {
             var certificate = (data && data.certificate || '').toString();
