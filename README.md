@@ -146,9 +146,11 @@ Use `readCertificateInfo` for reading subject data from a certificate or a CSR
 Where
 
   * **certificate** is a PEM encoded CSR or a certificate
-  * **callback** is a callback function with an error object and `{serial, country, state, locality, organization, organizationUnit, commonName, emailAddress, validity{start, end}, san{dns, ip}?, issuer{country, state, locality, organization, organizationUnit} }`
+  * **callback** is a callback function with an error object and `{serial, country, state, locality, organization, organizationUnit, commonName, emailAddress, validity{start, end}, san{dns, ip}?, issuer{country, state, locality, organization, organizationUnit}, signatureAlgorithm, publicKeyAlgorithm, publicKeySize }`
 
 ? *san* is only present if the CSR or certificate has SAN entries.
+
+*signatureAlgorithm, publicKeyAlgorithm and publicKeySize* only available if supportet and can parsed form openssl output
 
 ### Get fingerprint
 
