@@ -20,6 +20,7 @@
     "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
   "dependencies": {
+    "md5": "^2.2.1",
     "os-tmpdir": "^1.0.1",
     "which": "^1.2.4"
   },
