@@ -156,7 +156,7 @@ Where
 
 Use `getFingerprint` to get the default SHA1 fingerprint for a certificate
 
-    pem.getFingerprint(certificate, [hash,] callback)
+    pem.getFingerprint(certificate, [hash], callback)
 
 Where
 
@@ -168,11 +168,13 @@ Where
 
 Use `getModulus` to get the modulus for a certificate, a CSR or a private key. Modulus can be useful to check that a Private Key Matches a Certificate
 
-    pem.getModulus(certificate, [password,] callback)
+    pem.getModulus(certificate, [password], [hash], callback)
 
 Where
 
   * **certificate** is a PEM encoded certificate, CSR or private key
+  * **password** is an optional passphrase for passpharse protected certificates
+  * **hash** is an optional hash function to use (up to now `md5` supported) (default: none)
   * **callback** is a callback function with an error object and `{modulus}`
 
 ### Get DH parameter information
@@ -213,6 +215,18 @@ Where
 * **options** is an optional options object with `clientKeyPassword` which will be used to encrypt the stored key and `p12Password` which will be used to open the keystore
 * **callback** is a callback function with an error object and `{key: String, cert: String, ca: Array}`
 
+### Check a PKCS12 keystore
+
+Use `checkPkcs12` to check a PKCS12 keystore.
+
+	pem.checkPkcs12(bufferOrPath, [passphrase], callback)
+
+Where
+
+* **bufferOrPath** is a PKCS12 keystore as a [Buffer](https://nodejs.org/api/buffer.html) or the path to a file
+* **passphrase** is an optional passphrase which will be used to open the keystore
+* **callback** is a callback function with an error object and a boolean as arguments
+
 ### Verify a certificate signing chain
 
 Use `verifySigningChain` to assert that a given certificate has a valid signing chain.
@@ -223,6 +237,17 @@ Where
 
 * **certificate** is a PEM encoded certificate string
 * **ca** is a PEM encoded CA certificate string or an array of certificate strings
+* **callback** is a callback function with an error object and a boolean as arguments
+
+### Check a certificate file
+
+Use `checkCertificate` to check / verify consistency of a certificate.
+
+    pem.checkCertificate(certificate, callback)
+
+Where
+
+* **certificate** is a PEM encoded certificate string
 * **callback** is a callback function with an error object and a boolean as arguments
 
 ### Custom extensions config file
