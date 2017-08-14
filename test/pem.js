@@ -107,7 +107,7 @@ exports['General Tests'] = {
             publicKeyAlgorithm: 'rsaEncryption',
             publicKeySize: '2048 bit'
         };
-        
+
         pem.createCSR({ csrConfigFile: './test/fixtures/test.cnf' }, function(error, data) {
             var csr = (data && data.csr || '').toString();
             test.ifError(error);
@@ -209,6 +209,27 @@ exports['General Tests'] = {
             test.ok(fs.readdirSync('./tmp').length === 0);
             test.done();
         });
+    },
+
+    'Check certificate': function(test) {
+      var key = fs.readFileSync('./test/fixtures/test.key').toString();
+      pem.checkCertificate(key, 'password', function(error, result){
+        test.ifError(error);
+        test.ok(result);
+
+        var certificate = fs.readFileSync('./test/fixtures/test.crt').toString();
+        pem.checkCertificate(certificate, function(error, result){
+          test.ifError(error);
+          test.ok(result);
+
+          var csr = fs.readFileSync('./test/fixtures/test.csr').toString();
+          pem.checkCertificate(csr, function(error, result){
+            test.ifError(error);
+            test.ok(result);
+            test.done();
+          });
+        });
+      });
     },
 
     'Read default cert data from CSR': function(test) {
@@ -461,11 +482,30 @@ exports['General Tests'] = {
                 test.ok(certmodulus);
                 test.ok(certmodulus.match(/^[0-9A-F]*$/));
                 test.ok(fs.readdirSync('./tmp').length === 0);
+
                 pem.getModulus(certificate, function(error, data) {
                     var keymodulus = (data && data.modulus || '').toString();
                     test.ifError(error);
                     test.ok(keymodulus);
                     test.ok(keymodulus.match(/^[0-9A-F]*$/));
+                    test.ok(keymodulus === certmodulus);
+                    test.ok(fs.readdirSync('./tmp').length === 0);
+                    test.done();
+                });
+            });
+
+            pem.getModulus(certificate, null, 'md5', function(error, data) {
+                var certmodulus = (data && data.modulus || '').toString();
+                test.ifError(error);
+                test.ok(certmodulus);
+                test.ok(/^[a-f0-9]{32}$/i.test(certmodulus));
+                test.ok(fs.readdirSync('./tmp').length === 0);
+
+                pem.getModulus(certificate, null, 'md5', function(error, data) {
+                    var keymodulus = (data && data.modulus || '').toString();
+                    test.ifError(error);
+                    test.ok(keymodulus);
+                    test.ok(/^[a-f0-9]{32}$/i.test(keymodulus));
                     test.ok(keymodulus === certmodulus);
                     test.ok(fs.readdirSync('./tmp').length === 0);
                     test.done();
@@ -623,6 +663,43 @@ exports['General Tests'] = {
           test.equal(error.code, 'ENOENT');
 
           test.done();
+      });
+    },
+    'Check PKCS12 keystore': function(test) {
+      pem.createCertificate({
+          commonName: 'CA Certificate'
+      }, function (error, ca) {
+        test.ifError(error);
+
+        pem.createCertificate({
+            serviceKey: ca.serviceKey,
+            serviceCertificate: ca.certificate,
+            serial: Date.now(),
+        }, function (error, cert) {
+            test.ifError(error);
+
+            pem.createPkcs12(cert.clientKey, cert.certificate, '', {certFiles: [ca.certificate]}, function (error, pkcs12) {
+                test.ifError(error);
+                test.ok(pkcs12.pkcs12);
+
+                test.ok(fs.readdirSync('./tmp').length === 0);
+
+                pem.readPkcs12(pkcs12.pkcs12, function (error, keystore) {
+                    test.ifError(error);
+                    test.ok(keystore);
+
+                    test.equal(ca.certificate, keystore.ca[0]);
+                    test.equal(cert.certificate, keystore.cert);
+                    test.equal(cert.clientKey, keystore.key);
+
+                    pem.checkPkcs12(pkcs12.pkcs12, function(error, result){
+                        test.ifError(error);
+                        test.ok(result);
+                        test.done();
+                    });
+                });
+              });
+          });
       });
     },
     'Verify sigining chain': function(test) {
