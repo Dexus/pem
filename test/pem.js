@@ -666,40 +666,11 @@ exports['General Tests'] = {
       });
     },
     'Check PKCS12 keystore': function(test) {
-      pem.createCertificate({
-          commonName: 'CA Certificate'
-      }, function (error, ca) {
-        test.ifError(error);
-
-        pem.createCertificate({
-            serviceKey: ca.serviceKey,
-            serviceCertificate: ca.certificate,
-            serial: Date.now(),
-        }, function (error, cert) {
-            test.ifError(error);
-
-            pem.createPkcs12(cert.clientKey, cert.certificate, '', {certFiles: [ca.certificate]}, function (error, pkcs12) {
-                test.ifError(error);
-                test.ok(pkcs12.pkcs12);
-
-                test.ok(fs.readdirSync('./tmp').length === 0);
-
-                pem.readPkcs12(pkcs12.pkcs12, function (error, keystore) {
-                    test.ifError(error);
-                    test.ok(keystore);
-
-                    test.equal(ca.certificate, keystore.ca[0]);
-                    test.equal(cert.certificate, keystore.cert);
-                    test.equal(cert.clientKey, keystore.key);
-
-                    pem.checkPkcs12(pkcs12.pkcs12, function(error, result){
-                        test.ifError(error);
-                        test.ok(result);
-                        test.done();
-                    });
-                });
-              });
-          });
+      var pkcs12 = fs.readFileSync('./test/fixtures/idsrv3test.pfx');
+      pem.checkPkcs12(pkcs12, 'idsrv3test', function(error, result){
+          test.ifError(error);
+          test.ok(result);
+          test.done();
       });
     },
     'Verify sigining chain': function(test) {
