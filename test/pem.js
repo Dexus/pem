@@ -107,7 +107,7 @@ exports['General Tests'] = {
             publicKeyAlgorithm: 'rsaEncryption',
             publicKeySize: '2048 bit'
         };
-        
+
         pem.createCSR({ csrConfigFile: './test/fixtures/test.cnf' }, function(error, data) {
             var csr = (data && data.csr || '').toString();
             test.ifError(error);
@@ -209,6 +209,27 @@ exports['General Tests'] = {
             test.ok(fs.readdirSync('./tmp').length === 0);
             test.done();
         });
+    },
+
+    'Check certificate': function(test) {
+      var key = fs.readFileSync('./test/fixtures/test.key').toString();
+      pem.checkCertificate(key, 'password', function(error, result){
+        test.ifError(error);
+        test.ok(result);
+
+        var certificate = fs.readFileSync('./test/fixtures/test.crt').toString();
+        pem.checkCertificate(certificate, function(error, result){
+          test.ifError(error);
+          test.ok(result);
+
+          var csr = fs.readFileSync('./test/fixtures/test.csr').toString();
+          pem.checkCertificate(csr, function(error, result){
+            test.ifError(error);
+            test.ok(result);
+            test.done();
+          });
+        });
+      });
     },
 
     'Read default cert data from CSR': function(test) {
@@ -461,11 +482,39 @@ exports['General Tests'] = {
                 test.ok(certmodulus);
                 test.ok(certmodulus.match(/^[0-9A-F]*$/));
                 test.ok(fs.readdirSync('./tmp').length === 0);
+
                 pem.getModulus(certificate, function(error, data) {
                     var keymodulus = (data && data.modulus || '').toString();
                     test.ifError(error);
                     test.ok(keymodulus);
                     test.ok(keymodulus.match(/^[0-9A-F]*$/));
+                    test.ok(keymodulus === certmodulus);
+                    test.ok(fs.readdirSync('./tmp').length === 0);
+                    test.done();
+                });
+            });
+        });
+    },
+
+    'Get modulus from certificate [md5 hashed]': function(test) {
+        pem.createCertificate(function(error, data) {
+            var certificate = (data && data.certificate || '').toString();
+            test.ifError(error);
+            test.ok(certificate);
+            test.ok(fs.readdirSync('./tmp').length === 0);
+
+            pem.getModulus(certificate, null, 'md5', function(error, data) {
+                var certmodulus = (data && data.modulus || '').toString();
+                test.ifError(error);
+                test.ok(certmodulus);
+                test.ok(/^[a-f0-9]{32}$/i.test(certmodulus));
+                test.ok(fs.readdirSync('./tmp').length === 0);
+
+                pem.getModulus(certificate, null, 'md5', function(error, data) {
+                    var keymodulus = (data && data.modulus || '').toString();
+                    test.ifError(error);
+                    test.ok(keymodulus);
+                    test.ok(/^[a-f0-9]{32}$/i.test(keymodulus));
                     test.ok(keymodulus === certmodulus);
                     test.ok(fs.readdirSync('./tmp').length === 0);
                     test.done();
@@ -622,6 +671,14 @@ exports['General Tests'] = {
           test.ok(error);
           test.equal(error.code, 'ENOENT');
 
+          test.done();
+      });
+    },
+    'Check PKCS12 keystore': function(test) {
+      var pkcs12 = fs.readFileSync('./test/fixtures/idsrv3test.pfx');
+      pem.checkPkcs12(pkcs12, 'idsrv3test', function(error, result){
+          test.ifError(error);
+          test.ok(result);
           test.done();
       });
     },
