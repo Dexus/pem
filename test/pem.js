@@ -493,6 +493,15 @@ exports['General Tests'] = {
                     test.done();
                 });
             });
+        });
+    },
+
+    'Get modulus from certificate [md5 hashed]': function(test) {
+        pem.createCertificate(function(error, data) {
+            var certificate = (data && data.certificate || '').toString();
+            test.ifError(error);
+            test.ok(certificate);
+            test.ok(fs.readdirSync('./tmp').length === 0);
 
             pem.getModulus(certificate, null, 'md5', function(error, data) {
                 var certmodulus = (data && data.modulus || '').toString();
