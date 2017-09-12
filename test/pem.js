@@ -3,7 +3,6 @@
 var pem = require('..');
 var fs = require('fs');
 
-
 process.env.PEMJS_TMPDIR = './tmp';
 
 try {
@@ -133,7 +132,7 @@ exports['General Tests'] = {
             country: 'EE',
             state: 'Harjumaa',
             locality: 'Tallinn',
-            organization: ['Node.ee', 'Node2.ee'],
+            organization: ['Node2.ee', 'Node.ee'],
             organizationUnit: 'test',
             commonName: 'www.node.ee',
             emailAddress: 'andris@node.ee',
