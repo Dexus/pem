@@ -22,7 +22,8 @@
   "dependencies": {
     "md5": "^2.2.1",
     "os-tmpdir": "^1.0.1",
-    "which": "^1.2.4"
+    "which": "^1.2.4",
+    "log4js": "*"
   },
   "devDependencies": {
     "grunt": "^1.0.1",
