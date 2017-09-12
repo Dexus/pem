@@ -35,8 +35,7 @@
   },
   "optionalDependencies": {},
   "engines": {
-    "node": "*",
-    "iojs": "*"
+    "node": ">=4.0.0"
   },
   "release": {}
 }
