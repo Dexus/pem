@@ -9,7 +9,7 @@
   ],
   "name": "pem",
   "description": "Create private keys and certificates with node.js and io.js",
-  "version": "1.10.1",
+  "version": "1.10.2",
   "repository": {
     "type": "git",
     "url": "https://github.com/Dexus/pem.git"
@@ -22,8 +22,7 @@
   "dependencies": {
     "md5": "^2.2.1",
     "os-tmpdir": "^1.0.1",
-    "which": "^1.2.4",
-    "log4js": "*"
+    "which": "^1.2.4"
   },
   "devDependencies": {
     "grunt": "^1.0.1",
