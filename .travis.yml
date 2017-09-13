@@ -2,10 +2,16 @@ language: node_js
 cache:
   directories:
     - node_modules
+notifications:
+  email:
+    recipients:
+      - github@josef-froehle.de
+    on_success: change
+    on_failure: change
 node_js:
-  - "4"
-  - "6"
-  - "8"
+  - '8'
+  - '6'
+  - '4'
 before_install:
   - npm install -g grunt-cli
 before_script:
@@ -17,10 +23,3 @@ after_success:
 branches:
   except:
     - /^v\d+\.\d+\.\d+$/
-notifications:
-  email:
-    recipients:
-      - github@josef-froehle.de
-    on_success: change
-    on_failure: change
-

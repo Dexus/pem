@@ -1,24 +1,27 @@
-'use strict';
+'use strict'
 
-module.exports = function(grunt) {
-    // Project configuration.
-    grunt.initConfig({
-        jshint: {
-            all: ['lib/*.js', 'test/*.js', 'Gruntfile.js'],
-            options: {
-                jshintrc: '.jshintrc'
-            }
-        },
+module.exports = function (grunt) {
+  // Project configuration.
+  grunt.initConfig({
+    standard: {
+      options: {
+        fix: true
+      },
+      app: {
+        src: [
+          '{,lib/,test/}*.js'
+        ]
+      }
+    },
+    nodeunit: {
+      all: 'test/pem.js'
+    }
+  })
 
-        nodeunit: {
-            all: 'test/pem.js'
-        }
-    });
+  // Load the plugin(s)
+  grunt.loadNpmTasks('grunt-standard')
+  grunt.loadNpmTasks('grunt-contrib-nodeunit')
 
-    // Load the plugin(s)
-    grunt.loadNpmTasks('grunt-contrib-jshint');
-    grunt.loadNpmTasks('grunt-contrib-nodeunit');
-
-    // Tasks
-    grunt.registerTask('default', ['jshint', 'nodeunit']);
-};
+  // Tasks
+  grunt.registerTask('default', ['standard', 'nodeunit'])
+}
