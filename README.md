@@ -7,6 +7,7 @@ Create private keys and certificates with node.js
 
 [![Build Status](https://secure.travis-ci.org/Dexus/pem.png)](http://travis-ci.org/Dexus/pem)
 [![npm version](https://badge.fury.io/js/pem.svg)](http://badge.fury.io/js/pem)
+[![JavaScript Style Guide](https://cdn.rawgit.com/standard/standard/master/badge.svg)](https://github.com/standard/standard)
 
 ## Installation
 
