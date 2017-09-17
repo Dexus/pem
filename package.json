@@ -30,7 +30,7 @@
     "grunt-contrib-nodeunit": "^1.0.0",
     "grunt-standard": "^3.1.0",
     "nodeunit": "^0.11.0",
-    "semantic-release": "^7.0.2",
+    "semantic-release": "^8.0.0",
     "semantic-release-tamia": "^1.0.0"
   },
   "optionalDependencies": {},
