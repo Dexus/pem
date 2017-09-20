@@ -16,8 +16,26 @@
   },
   "main": "lib/pem",
   "scripts": {
-    "test": "grunt",
-    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
+    "changelog": "auto-changelog --output HISTORY.md",
+    "coverage": "cross-env NODE_ENV=development nyc ./node_modules/.bin/_mocha --opts mocha.opts $(find . -type f -name '*.spec.js'  ! -path './nyc_output/*' ! -path './coverage/*' ! -path './node_modules/*')",
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post",
+    "test": "standard && npm run coverage --silent"
+  },
+  "standard": {
+    "envs": [
+      "mocha"
+    ],
+    "fix": true
+  },
+  "nyc": {
+    "reporter": [
+      "html",
+      "text"
+    ],
+    "exclude": [
+      "**/*.spec.js",
+      "test/pem.helper.js"
+    ]
   },
   "dependencies": {
     "safe-buffer": "^5.1.1",
@@ -26,12 +44,20 @@
     "which": "^1.2.4"
   },
   "devDependencies": {
-    "grunt": "^1.0.1",
-    "grunt-contrib-nodeunit": "^1.0.0",
-    "grunt-standard": "^3.1.0",
-    "nodeunit": "^0.11.0",
-    "semantic-release": "^7.0.2",
-    "semantic-release-tamia": "^1.0.0"
+    "auto-changelog": "^0.3.2",
+    "chai": "^4.1.2",
+    "cross-env": "^5.0.5",
+    "dirty-chai": "^2.0.1",
+    "eslint-config-standard": "^10.2.1",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-node": "^5.1.1",
+    "eslint-plugin-promise": "^3.5.0",
+    "eslint-plugin-standard": "^3.0.1",
+    "mocha": "^3.5.3",
+    "nyc": "^11.2.1",
+    "semantic-release": "^8.0.0",
+    "semantic-release-tamia": "^1.0.0",
+    "standard": "^10.0.3"
   },
   "optionalDependencies": {},
   "engines": {
