@@ -127,7 +127,7 @@ describe('General Tests', function () {
       it('create private key with password', function (done) {
         pem.createPrivateKey(2048, {
           cipher: 'aes128',
-          password: 'xxx'
+          password: 'min4chars'
         }, function (error, data) {
           hlp.checkError(error)
           hlp.checkPrivateKey(data, 1700, 1780, true)
@@ -140,7 +140,7 @@ describe('General Tests', function () {
       it('create csr using private key with password', function (done) {
         pem.createCSR({
           clientKey: pwkey.key,
-          clientKeyPassword: 'xxx'
+          clientKeyPassword: 'min4chars'
         }, function (error, data) {
           hlp.checkError(error)
           hlp.checkCSR(data, pwkey.key)
@@ -152,7 +152,7 @@ describe('General Tests', function () {
       it('create cert using pkey w/ password; create pkcs12', function (done) {
         pem.createCertificate({
           clientKey: pwkey.key,
-          clientKeyPassword: 'xxx',
+          clientKeyPassword: 'min4chars',
           selfSigned: true
         }, function (error, data) {
           hlp.checkError(error)
@@ -161,7 +161,7 @@ describe('General Tests', function () {
 
           pem.createPkcs12(data.clientKey, data.certificate, 'mypassword', {
             cipher: 'aes256',
-            clientKeyPassword: 'xxx'
+            clientKeyPassword: 'min4chars'
           }, function (error, pkcs12) {
             hlp.checkError(error)
             expect(pkcs12).to.be.ok()
