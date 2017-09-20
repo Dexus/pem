@@ -69,3 +69,5 @@ esac
 sudo chmod -Rf 0755 /openssl
 
 cd ${NORMALPATH}
+
+rm -r -f node_modules && npm i
