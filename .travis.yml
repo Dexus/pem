@@ -43,7 +43,7 @@ before_script:
   - npm prune
 script:
   - if [[ "$OPENSSL_DIR" != "" ]]; then "./test_build_openssl.sh" ; fi
-  - grunt
+  - npm run test
 after_success:
   - npm run semantic-release
 branches:

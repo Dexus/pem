@@ -5,6 +5,8 @@ if [ -d "${OPENSSL_DIR}" ]; then
     exit 0
 fi
 
+NORMALPATH=$(pwd)
+
 sudo apt-get install -y --no-install-recommends curl
 
 case "${LIBRARY}" in
@@ -54,3 +56,4 @@ esac
 
 make -j$(nproc)
 sudo make install
+cd ${NORMALPATH}
