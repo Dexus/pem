@@ -10,6 +10,10 @@ chai.use(dirtyChai)
 
 process.env.PEMJS_TMPDIR = './tmp'
 
+if (process.env.TRAVIS === 'true' && process.env.OPENSSL_DIR !== '') {
+  process.env.OPENSSL_BIN = '/openssl/bin/openssl'
+}
+
 describe('General Tests', function () {
   this.timeout(300000)
   this.slow(2000)
@@ -30,7 +34,7 @@ describe('General Tests', function () {
       pem.createPrivateKey(function (error) {
         hlp.checkError(error, true)
         pem.config({
-          pathOpenSSL: 'openssl'
+          pathOpenSSL: process.env.OPENSSL_BIN || 'openssl'
         })
         pem.createPrivateKey(function (error) {
           hlp.checkError(error)
