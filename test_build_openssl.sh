@@ -47,7 +47,7 @@ tar --strip-components=1 -xzf ${OUT}
 
 case "${LIBRARY}" in
 "openssl")
-    ./Configure --prefix=${OPENSSL_DIR} ${OS_COMPILER} -fPIC -g ${OS_FLAGS} no-shared
+    ./Configure --prefix=${OPENSSL_DIR} ${OS_COMPILER} -fPIC -g ${OS_FLAGS} no-shared -static
     ;;
 "libressl")
     ./configure --prefix=${OPENSSL_DIR} --disable-shared --with-pic
@@ -55,5 +55,19 @@ case "${LIBRARY}" in
 esac
 
 make -j$(nproc)
-sudo make install
+sudo make install_sw
+
+case "${LIBRARY}" in
+"openssl")
+    if [[ ! -f  "${OPENSSL_DIR}/ssl/openssl.cnf" ]]; then sudo mkdir -p ${OPENSSL_DIR}/ssl && sudo cp apps/openssl.cnf ${OPENSSL_DIR}/ssl/openssl.cnf ; fi
+    ;;
+"libressl")
+    if [[ ! -f  "${OPENSSL_DIR}/ssl/openssl.cnf" ]]; then sudo mkdir -p ${OPENSSL_DIR}/ssl && sudo cp apps/openssl/openssl.cnf ${OPENSSL_DIR}/ssl/openssl.cnf ; fi
+    ;;
+esac
+
+sudo chmod -Rf 0755 /openssl
+
 cd ${NORMALPATH}
+
+rm -r -f node_modules && npm i

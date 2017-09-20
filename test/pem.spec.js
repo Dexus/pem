@@ -435,26 +435,16 @@ describe('General Tests', function () {
                       pem.readPkcs12(d.pkcs12,
                         function (error, keystore) {
                           hlp.checkError(error)
-                          expect(keystore).to.be.an(
-                            'object')
-                          expect(keystore).to.have
-                            .property('ca')
-                          expect(keystore).to.have
-                            .property('cert')
-                          expect(keystore).to.have
-                            .property('key')
-                          expect(keystore.ca).to.be
-                            .an('array')
-                          expect(keystore.cert).to
-                            .be.an('string')
-                          expect(keystore.key).to
-                            .be.an('string')
-                          expect(keystore.ca[0]).to
-                            .equal(ca.certificate)
-                          expect(keystore.cert).to
-                            .equal(data.certificate)
-                          expect(keystore.key).to
-                            .equal(data.clientKey)
+                          expect(keystore).to.be.an('object')
+                          expect(keystore).to.have.property('ca')
+                          expect(keystore).to.have.property('cert')
+                          expect(keystore).to.have.property('key')
+                          expect(keystore.ca).to.be.an('array')
+                          expect(keystore.cert).to.be.an('string')
+                          expect(keystore.key).to.be.an('string')
+                          expect(keystore.ca[0]).to.equal(ca.certificate)
+                          expect(keystore.cert).to.equal(data.certificate)
+                          expect(keystore.key).to.equal(data.clientKey)
                           done()
                         })
                     })
@@ -684,10 +674,8 @@ describe('General Tests', function () {
 
     describe('#.checkPkcs12 tests', function () {
       it('Check PKCS12 keystore', function (done) {
-        var pkcs12 = fs.readFileSync(
-          './test/fixtures/idsrv3test.pfx')
-        pem.checkPkcs12(pkcs12, 'idsrv3test', function (error,
-          result) {
+        var pkcs12 = fs.readFileSync('./test/fixtures/idsrv3test.pfx')
+        pem.checkPkcs12(pkcs12, 'idsrv3test', function (error, result) {
           hlp.checkError(error)
           expect(result).to.be.ok()
           done()
