@@ -5,6 +5,10 @@ var fs = require('fs')
 
 process.env.PEMJS_TMPDIR = './tmp'
 
+if (process.env.TRAVIS === 'true') {
+  process.env.OPENSSL_BIN = '/openssl/bin/openssl'
+}
+
 try {
   fs.mkdirSync('./tmp')
 } catch (e) {}
