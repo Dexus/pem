@@ -1,4 +1,5 @@
 language: node_js
+sudo: required
 cache:
   directories:
     - node_modules
@@ -12,11 +13,36 @@ node_js:
   - '8'
   - '6'
   - '4'
+env:
+  global:
+  - OPENSSL_DIR=/openssl
+  - TARGET=x86_64-unknown-linux-gnu
+  matrix:
+  - LIBRARY=openssl VERSION=0.9.8zh
+  - LIBRARY=openssl VERSION=1.0.1u
+  - LIBRARY=openssl VERSION=1.0.2l
+  - LIBRARY=openssl VERSION=1.1.0f
+  - LIBRARY=libressl VERSION=2.4.4
+  - LIBRARY=libressl VERSION=2.5.5
+  - LIBRARY=libressl VERSION=2.6.1
+matrix:
+  exclude:
+    - node_js: '6'
+    - node_js: '4'
+  include:
+    - node_js: '6'
+      env:
+        - OPENSSL_DIR=""
+    - node_js: '4'
+      env:
+        - OPENSSL_DIR=""
+
 before_install:
   - npm install -g grunt-cli
 before_script:
   - npm prune
 script:
+  - if [[ "$OPENSSL_DIR" != "" ]]; then "./test_build_openssl.sh" ; fi
   - grunt
 after_success:
   - npm run semantic-release

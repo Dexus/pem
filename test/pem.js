@@ -5,6 +5,10 @@ var fs = require('fs')
 
 process.env.PEMJS_TMPDIR = './tmp'
 
+if (process.env.TRAVIS === 'true' && process.env.OPENSSL_DIR !== '') {
+  process.env.OPENSSL_BIN = '/openssl/bin/openssl'
+}
+
 try {
   fs.mkdirSync('./tmp')
 } catch (e) {}
@@ -424,12 +428,11 @@ exports['General Tests'] = {
       pem.readCertificateInfo(certificate, function (error, data) {
         test.ifError(error)
 
-        if (data.validity) {
-          delete data.validity
-        }
-        if (data.serial) {
-          delete data.serial
-        }
+        test.ok(data.validity)
+        delete data.validity
+
+        test.ok(data.serial)
+        delete data.serial
 
         test.deepEqual(data, certInfo)
         test.ok(fs.readdirSync('./tmp').length === 0)
