@@ -12,12 +12,10 @@ node_js:
   - '8'
   - '6'
   - '4'
-before_install:
-  - npm install -g grunt-cli
 before_script:
   - npm prune
 script:
-  - grunt
+  - npm test
 after_success:
   - npm run semantic-release
 branches:
