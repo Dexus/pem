@@ -5,7 +5,7 @@ var fs = require('fs')
 
 process.env.PEMJS_TMPDIR = './tmp'
 
-if (process.env.TRAVIS === 'true') {
+if (process.env.TRAVIS === 'true' && process.env.OPENSSL_DIR !== '') {
   process.env.OPENSSL_BIN = '/openssl/bin/openssl'
 }
 
