@@ -19,13 +19,8 @@
     "changelog": "auto-changelog --output HISTORY.md",
     "coverage": "cross-env NODE_ENV=development nyc ./node_modules/.bin/_mocha --opts mocha.opts $(find . -type f -name '*.spec.js'  ! -path './nyc_output/*' ! -path './coverage/*' ! -path './node_modules/*')",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post",
-    "test": "standard && npm run coverage --silent"
-  },
-  "standard": {
-    "envs": [
-      "mocha"
-    ],
-    "fix": true
+    "lint": "eslint --fix --config=./.eslintrc.js *.js *.md *.json lib/*.js test/*.js",
+    "test": "npm run lint --silent && npm run coverage --silent"
   },
   "nyc": {
     "reporter": [
@@ -48,18 +43,19 @@
     "chai": "^4.1.2",
     "cross-env": "^5.0.5",
     "dirty-chai": "^2.0.1",
+    "eslint": "^4.7.1",
     "eslint-config-standard": "^10.2.1",
     "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-json": "^1.2.0",
+    "eslint-plugin-markdown": "^1.0.0-beta.6",
     "eslint-plugin-node": "^5.1.1",
     "eslint-plugin-promise": "^3.5.0",
     "eslint-plugin-standard": "^3.0.1",
     "mocha": "^3.5.3",
     "nyc": "^11.2.1",
     "semantic-release": "^8.0.0",
-    "semantic-release-tamia": "^1.0.0",
-    "standard": "^10.0.3"
+    "semantic-release-tamia": "^1.0.0"
   },
-  "optionalDependencies": {},
   "engines": {
     "node": ">=4.0.0"
   },
