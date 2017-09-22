@@ -67,6 +67,17 @@ Where
   * **keyBitsize** is an optional size of the key, defaults to 512 (bit)
   * **callback** is a callback function with an error object and `{dhparam}`
 
+### Create a ecparam key
+
+Use `createEcparam` for creating ecparam keys
+
+    pem.createEcparam(keyName, callback)
+
+Where
+
+  * **keyName** is an optional name of the key curves name, defaults to secp256k1
+  * **callback** is a callback function with an error object and `{ecparam}`
+
 ### Create a private key
 
 Use `createPrivateKey` for creating private keys
