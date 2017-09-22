@@ -63,6 +63,49 @@ describe('General Tests', function () {
     })
   })
 
+  describe('#.createEcparam tests', function () {
+    it('Create default ecparam key', function (done) {
+      pem.createEcparam(function (error, data) {
+        hlp.checkError(error)
+        hlp.checkEcparam(data, 430, 440)
+        hlp.checkTmpEmpty()
+        done()
+      })
+    })
+    it('Create secp521k1 ecparam key', function (done) {
+      pem.createEcparam('secp521r1', function (error, data) {
+        hlp.checkError(error)
+        hlp.checkEcparam(data, 960, 980)
+        hlp.checkTmpEmpty()
+        done()
+      })
+    })
+    it('Create brainpoolP256r1 ecparam key', function (done) {
+      pem.createEcparam('brainpoolP256r1', function (error, data) {
+        hlp.checkError(error)
+        hlp.checkEcparam(data, 520, 530)
+        hlp.checkTmpEmpty()
+        done()
+      })
+    })
+    it('Create brainpoolP512t1 ecparam key', function (done) {
+      pem.createEcparam('brainpoolP512t1', function (error, data) {
+        hlp.checkError(error)
+        hlp.checkEcparam(data, 920, 980)
+        hlp.checkTmpEmpty()
+        done()
+      })
+    })
+    it('Create prime256v1 ecparam key', function (done) {
+      pem.createEcparam('prime256v1', function (error, data) {
+        hlp.checkError(error)
+        hlp.checkEcparam(data, 430, 560)
+        hlp.checkTmpEmpty()
+        done()
+      })
+    })
+  })
+
   describe('#.createPrivateKey tests', function () {
     describe('default sized private key', function () {
       var pkey

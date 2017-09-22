@@ -21,6 +21,17 @@ function checkError (error, expectError) {
   } else { expect(error).to.not.be.ok() }
 }
 
+function checkEcparam (data, min, max) {
+  expect(data).to.be.an('object').that.has.property('ecparam')
+  expect(data.ecparam).to.be.a('string')
+  expect(/^\n*-----BEGIN EC PARAMETERS-----\n/.test(data.ecparam)).to.be.true()
+  expect(/\n-----END EC PARAMETERS-----\n/.test(data.ecparam)).to.be.true()
+  expect(/\n-----BEGIN EC PRIVATE KEY-----\n/.test(data.ecparam)).to.be.true()
+  expect(/\n-----END EC PRIVATE KEY-----\n*$/.test(data.ecparam)).to.be.true()
+  var matchup = /-----BEGIN EC PRIVATE KEY-----[\s\S]+-----END EC PRIVATE KEY-----/.exec(data.ecparam)
+  expect(matchup[0].trim().length).to.be.within(min + 1, max - 1)
+}
+
 function checkDhparam (data, min, max) {
   expect(data).to.be.an('object').that.has.property('dhparam')
   expect(data.dhparam).to.be.a('string')
@@ -94,6 +105,7 @@ module.exports = {
   checkTmpEmpty: checkTmpEmpty,
   checkError: checkError,
   checkDhparam: checkDhparam,
+  checkEcparam: checkEcparam,
   checkPrivateKey: checkPrivateKey,
   checkCSR: checkCSR,
   checkCertificate: checkCertificate,
