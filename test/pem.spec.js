@@ -80,22 +80,6 @@ describe('General Tests', function () {
         done()
       })
     })
-    it('Create brainpoolP256r1 ecparam key', function (done) {
-      pem.createEcparam('brainpoolP256r1', function (error, data) {
-        hlp.checkError(error)
-        hlp.checkEcparam(data, 520, 530)
-        hlp.checkTmpEmpty()
-        done()
-      })
-    })
-    it('Create brainpoolP512t1 ecparam key', function (done) {
-      pem.createEcparam('brainpoolP512t1', function (error, data) {
-        hlp.checkError(error)
-        hlp.checkEcparam(data, 920, 980)
-        hlp.checkTmpEmpty()
-        done()
-      })
-    })
     it('Create prime256v1 ecparam key', function (done) {
       pem.createEcparam('prime256v1', function (error, data) {
         hlp.checkError(error)
