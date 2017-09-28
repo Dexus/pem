@@ -15,8 +15,8 @@ if (process.env.TRAVIS === 'true' && process.env.OPENSSL_DIR !== '') {
 }
 
 describe('General Tests', function () {
-  this.timeout(300000)
-  this.slow(2000)
+  this.timeout(300000)// 5 minutes
+  this.slow(2000)// 2 seconds
 
   describe('Requirements', function () {
     it('Create tmp folder', function () {
@@ -54,6 +54,7 @@ describe('General Tests', function () {
       })
     })
     it('Create 2048bit dhparam key', function (done) {
+      this.timeout(600000)// 10 minutes
       pem.createDhparam(2048, function (error, data) {
         hlp.checkError(error)
         hlp.checkDhparam(data, 420, 430)
