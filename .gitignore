@@ -18,3 +18,5 @@ npm-debug.log*
 tmp
 .idea
 .npmrc
+
+docs
