@@ -17,6 +17,7 @@
   },
   "main": "lib/pem",
   "scripts": {
+    "jsdoc": "jsdoc -c jsdoc.json",
     "changelog": "auto-changelog --output HISTORY.md",
     "coverage": "cross-env NODE_ENV=development nyc ./node_modules/.bin/_mocha --opts mocha.opts $(find . -type f -name '*.spec.js'  ! -path './nyc_output/*' ! -path './coverage/*' ! -path './node_modules/*')",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post",
@@ -44,6 +45,7 @@
     "chai": "^4.1.2",
     "cross-env": "^5.0.5",
     "dirty-chai": "^2.0.1",
+    "docdash": "^0.4.0",
     "eslint": "^4.7.1",
     "eslint-config-standard": "^10.2.1",
     "eslint-plugin-import": "^2.7.0",
@@ -52,6 +54,7 @@
     "eslint-plugin-node": "^5.1.1",
     "eslint-plugin-promise": "^3.5.0",
     "eslint-plugin-standard": "^3.0.1",
+    "jsdoc": "^3.5.5",
     "mocha": "^3.5.3",
     "nyc": "^11.2.1",
     "semantic-release": "^8.0.3"
