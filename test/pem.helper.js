@@ -6,6 +6,12 @@ var dirtyChai = require('dirty-chai')
 var expect = chai.expect
 chai.use(dirtyChai)
 
+process.env.PEMJS_TMPDIR = './tmp'
+
+if (process.env.TRAVIS === 'true' && process.env.OPENSSL_DIR !== '') {
+  process.env.OPENSSL_BIN = '/openssl/bin/openssl'
+}
+
 function checkTmpEmpty () {
   expect(fs.readdirSync(process.env.PEMJS_TMPDIR)).to.be.empty()
 }
