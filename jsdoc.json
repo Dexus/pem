@@ -32,7 +32,7 @@
     "opts": {
       "verbose": true,
       "encoding": "utf8",
-      "destination": "docs/",
+      "destination": "docs/jsdoc",
       "recurse": true,
       "readme": "./README.md",
       "template": "node_modules/docdash"
