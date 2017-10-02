@@ -8,12 +8,6 @@ var dirtyChai = require('dirty-chai')
 var expect = chai.expect
 chai.use(dirtyChai)
 
-process.env.PEMJS_TMPDIR = './tmp'
-
-if (process.env.TRAVIS === 'true' && process.env.OPENSSL_DIR !== '') {
-  process.env.OPENSSL_BIN = '/openssl/bin/openssl'
-}
-
 describe('General Tests', function () {
   this.timeout(300000)// 5 minutes
   this.slow(2000)// 2 seconds
