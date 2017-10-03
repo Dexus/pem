@@ -52,7 +52,7 @@
     "eslint-plugin-node": "^5.1.1",
     "eslint-plugin-promise": "^3.5.0",
     "eslint-plugin-standard": "^3.0.1",
-    "mocha": "^3.5.3",
+    "mocha": "^4.0.0",
     "nyc": "^11.2.1",
     "semantic-release": "^8.0.3"
   },
