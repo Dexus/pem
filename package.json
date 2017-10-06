@@ -17,6 +17,8 @@
   },
   "main": "lib/pem",
   "scripts": {
+    "documentation": "npm run docco --silent && npm run jsdoc --silent",
+    "docco": "docco -l parallel -o docs/docco lib/helper.js lib/openssl.js lib/pem.js",
     "jsdoc": "jsdoc -c jsdoc.json",
     "changelog": "auto-changelog --output HISTORY.md",
     "coverage": "cross-env NODE_ENV=development nyc ./node_modules/.bin/_mocha --opts mocha.opts $(find . -type f -name '*.spec.js'  ! -path './nyc_output/*' ! -path './coverage/*' ! -path './node_modules/*')",
@@ -45,6 +47,7 @@
     "chai": "^4.1.2",
     "cross-env": "^5.0.5",
     "dirty-chai": "^2.0.1",
+    "docco": "^0.7.0",
     "docdash": "^0.4.0",
     "eslint": "^4.8.0",
     "eslint-config-standard": "^10.2.1",
