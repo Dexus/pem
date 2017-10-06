@@ -18,7 +18,7 @@ describe('convert.js tests', function () {
       './test/fixtures/tmp.p7b',
       './test/fixtures/tmp.pfx'
     ]
-    pemHelper.helperDeleteTempFiles(tmpfiles, function (fsErr) {
+    pemHelper.deleteTempFiles(tmpfiles, function (fsErr) {
       hlp.checkError(fsErr)
       done()
     })
