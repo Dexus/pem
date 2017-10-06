@@ -34,7 +34,6 @@ matrix:
       env:
         - OPENSSL_DIR=""
 before_install:
-  - npm install -g eslint
   - sudo apt-get install -y haveged
 before_script:
   - npm prune
