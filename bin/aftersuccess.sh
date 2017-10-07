@@ -4,8 +4,6 @@ set -e
 OUTPUT=$(node "$(pwd)/bin/aftersuccess.js")
 STATUS=$?
 
-echo "${STATUS} ${OUTPUT}"
-
 if [[ "${STATUS}" == "0" ]]
 then
   git config --global user.name "Dexus via TravisCI"
