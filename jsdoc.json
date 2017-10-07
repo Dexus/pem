@@ -35,7 +35,7 @@
       "destination": "docs/jsdoc/",
       "recurse": true,
       "readme": "./README.md",
-      "template": "node_modules/docdash"
+      "template": "node_modules/@deineagenturug/docdash"
     },
     "docdash": {
         "static": true,
