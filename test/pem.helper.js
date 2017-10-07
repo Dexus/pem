@@ -30,10 +30,10 @@ function checkError (error, expectError) {
 function checkEcparam (data, min, max) {
   expect(data).to.be.an('object').that.has.property('ecparam')
   expect(data.ecparam).to.be.a('string')
-  expect(/^\n*-----BEGIN EC PARAMETERS-----\n/.test(data.ecparam)).to.be.true()
-  expect(/\n-----END EC PARAMETERS-----\n/.test(data.ecparam)).to.be.true()
-  expect(/\n-----BEGIN EC PRIVATE KEY-----\n/.test(data.ecparam)).to.be.true()
-  expect(/\n-----END EC PRIVATE KEY-----\n*$/.test(data.ecparam)).to.be.true()
+  expect(/^\r?\n*-----BEGIN EC PARAMETERS-----\r?\n/.test(data.ecparam)).to.be.true()
+  expect(/\r?\n-----END EC PARAMETERS-----\r?\n/.test(data.ecparam)).to.be.true()
+  expect(/\r?\n-----BEGIN EC PRIVATE KEY-----\r?\n/.test(data.ecparam)).to.be.true()
+  expect(/\r?\n-----END EC PRIVATE KEY-----\r?\n*$/.test(data.ecparam)).to.be.true()
   var matchup = /-----BEGIN EC PRIVATE KEY-----[\s\S]+-----END EC PRIVATE KEY-----/.exec(data.ecparam)
   expect(matchup[0].trim().length).to.be.within(min + 1, max - 1)
 }
@@ -41,17 +41,17 @@ function checkEcparam (data, min, max) {
 function checkDhparam (data, min, max) {
   expect(data).to.be.an('object').that.has.property('dhparam')
   expect(data.dhparam).to.be.a('string')
-  expect(/^\n*-----BEGIN DH PARAMETERS-----\n/.test(data.dhparam)).to.be.true()
-  expect(/\n-----END DH PARAMETERS-----\n*$/.test(data.dhparam)).to.be.true()
+  expect(/^\r?\n*-----BEGIN DH PARAMETERS-----\r?\n/.test(data.dhparam)).to.be.true()
+  expect(/\r?\n-----END DH PARAMETERS-----\r?\n*$/.test(data.dhparam)).to.be.true()
   expect(data.dhparam.trim().length).to.be.within(min + 1, max - 1)
 }
 
 function checkPrivateKey (data, min, max, encrypted) {
   expect(data).to.be.an('object').that.has.property('key')
   expect(data.key).to.be.a('string')
-  if (encrypted) { expect(/ENCRYPTED\n/.test(data.key)).to.be.true() }
-  expect(/^\n*-----BEGIN RSA PRIVATE KEY-----\n/.test(data.key)).to.be.true()
-  expect(/\n-----END RSA PRIVATE KEY-----\n*$/.test(data.key)).to.be.true()
+  if (encrypted) { expect(/ENCRYPTED\r?\n/.test(data.key)).to.be.true() }
+  expect(/^\r?\n*-----BEGIN RSA PRIVATE KEY-----\r?\n/.test(data.key)).to.be.true()
+  expect(/\r?\n-----END RSA PRIVATE KEY-----\r?\n*$/.test(data.key)).to.be.true()
   expect(data.key.trim().length).to.be.within(min + 1, max - 1)
 }
 
@@ -62,8 +62,8 @@ function checkCSR (data, expectClientKey) {
     expect(data[k]).to.be.a('string')
   })
   if (expectClientKey) { expect(data.clientKey).to.equal(expectClientKey) }
-  expect(/^\n*-----BEGIN CERTIFICATE REQUEST-----\n/.test(data.csr)).to.be.true()
-  expect(/\n-----END CERTIFICATE REQUEST-----\n*$/.test(data.csr)).to.be.true()
+  expect(/^\r?\n*-----BEGIN CERTIFICATE REQUEST-----\r?\n/.test(data.csr)).to.be.true()
+  expect(/\r?\n-----END CERTIFICATE REQUEST-----\r?\n*$/.test(data.csr)).to.be.true()
 }
 
 function checkCertificate (data, selfsigned) {
@@ -72,8 +72,8 @@ function checkCertificate (data, selfsigned) {
     expect(data).to.have.property(k)
     expect(data[k]).to.be.a('string')
   })
-  expect(/^\n*-----BEGIN CERTIFICATE-----\n/.test(data.certificate)).to.be.true()
-  expect(/\n-----END CERTIFICATE-----\n*$/.test(data.certificate)).to.be.true()
+  expect(/^\r?\n*-----BEGIN CERTIFICATE-----\r?\n/.test(data.certificate)).to.be.true()
+  expect(/\r?\n-----END CERTIFICATE-----\r?\n*$/.test(data.certificate)).to.be.true()
   if (selfsigned) { expect(data.clientKey).to.equal(data.serviceKey) } else { expect(data.clientKey).to.not.equal(data.serviceKey) }
 }
 
@@ -84,8 +84,8 @@ function checkCertificateData (data, info) {
 function checkPublicKey (data) {
   expect(data).to.be.an('object').that.has.property('publicKey')
   expect(data.publicKey).to.be.a('string')
-  expect(/^\n*-----BEGIN PUBLIC KEY-----\n/.test(data.publicKey)).to.be.true()
-  expect(/\n-----END PUBLIC KEY-----\n*$/.test(data.publicKey)).to.be.true()
+  expect(/^\r?\n*-----BEGIN PUBLIC KEY-----\r?\n/.test(data.publicKey)).to.be.true()
+  expect(/\r?\n-----END PUBLIC KEY-----\r?\n*$/.test(data.publicKey)).to.be.true()
 }
 
 function checkFingerprint (data) {

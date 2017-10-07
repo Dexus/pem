@@ -62,7 +62,7 @@ describe('General Tests', function () {
     it('Create default ecparam key', function (done) {
       pem.createEcparam(function (error, data) {
         hlp.checkError(error)
-        hlp.checkEcparam(data, 430, 440)
+        hlp.checkEcparam(data, 430, 470)
         hlp.checkTmpEmpty()
         done()
       })
@@ -70,7 +70,7 @@ describe('General Tests', function () {
     it('Create secp521k1 ecparam key', function (done) {
       pem.createEcparam('secp521r1', function (error, data) {
         hlp.checkError(error)
-        hlp.checkEcparam(data, 960, 980)
+        hlp.checkEcparam(data, 960, 1000)
         hlp.checkTmpEmpty()
         done()
       })
@@ -78,7 +78,7 @@ describe('General Tests', function () {
     it('Create prime256v1 ecparam key', function (done) {
       pem.createEcparam('prime256v1', function (error, data) {
         hlp.checkError(error)
-        hlp.checkEcparam(data, 430, 560)
+        hlp.checkEcparam(data, 430, 570)
         hlp.checkTmpEmpty()
         done()
       })
@@ -140,7 +140,7 @@ describe('General Tests', function () {
       it('create private key', function (done) {
         pem.createPrivateKey(2048, function (error, data) {
           hlp.checkError(error)
-          hlp.checkPrivateKey(data, 1650, 1700)
+          hlp.checkPrivateKey(data, 1650, 1710)
           hlp.checkTmpEmpty()
           done()
         })
@@ -152,7 +152,7 @@ describe('General Tests', function () {
           password: 'min4chars'
         }, function (error, data) {
           hlp.checkError(error)
-          hlp.checkPrivateKey(data, 1700, 1780, true)
+          hlp.checkPrivateKey(data, 1700, 1800, true)
           hlp.checkTmpEmpty()
           pwkey = data
           done()
@@ -421,287 +421,371 @@ describe('General Tests', function () {
       it('create ca certificate', function (done) {
         pem.createCertificate({
           commonName: 'CA Certificate'
-        }, function (error, data) {
+        },
+        function (error, data) {
           hlp.checkError(error)
           hlp.checkCertificate(data)
           hlp.checkTmpEmpty()
           ca = data
           done()
         })
-        it('verify signing chain; create and read PKCS12',
-          function (done) {
-            pem.createCertificate({
-              serviceKey: ca.serviceKey,
-              serviceCertificate: ca.certificate,
-              serial: Date.now()
-            }, function (error, data) {
-              hlp.checkError(error)
-              hlp.checkCertificate(data)
-              hlp.checkTmpEmpty()
-
-              pem.verifySigningChain(data.certificate,
-                ca.certificate,
-                function (error, valid) {
-                  hlp.checkError(error)
-                  expect(valid).to.be.true()
-
-                  pem.createPkcs12(data.clientKey,
-                    data.certificate, '', {
-                      certFiles: [ca.certificate]
-                    },
-                    function (error, d) {
-                      hlp.checkError(error)
-                      expect(d).to.be.ok()
-                      hlp.checkTmpEmpty()
-
-                      pem.readPkcs12(d.pkcs12,
-                        function (error, keystore) {
-                          hlp.checkError(error)
-                          expect(keystore).to.be.an('object')
-                          expect(keystore).to.have.property('ca')
-                          expect(keystore).to.have.property('cert')
-                          expect(keystore).to.have.property('key')
-                          expect(keystore.ca).to.be.an('array')
-                          expect(keystore.cert).to.be.an('string')
-                          expect(keystore.key).to.be.an('string')
-                          expect(keystore.ca[0]).to.equal(ca.certificate)
-                          expect(keystore.cert).to.equal(data.certificate)
-                          expect(keystore.key).to.equal(data.clientKey)
-                          done()
-                        })
-                    })
-                })
-            })
-          })
-        it('Fail to verify invalid sigining chain', function (
-          done) {
-          pem.createCertificate({
-            serviceKey: ca.serviceKey,
-            serviceCertificate: ca.certificate,
-            serial: Date.now()
-          }, function (error, data) {
-            hlp.checkError(error)
-            hlp.checkCertificate(data)
-            hlp.checkTmpEmpty()
-
-            pem.verifySigningChain(data.certificate,
-              data.certificate,
-              function (error, valid) {
-                hlp.checkError(error)
-                expect(valid).to.be.false()
-                done()
-              })
-          })
-        })
-        it('Verify deep sigining chain', function (done) {
-          pem.createCertificate({
-            commonName: 'Intermediate CA Certificate',
-            serviceKey: ca.serviceKey,
-            serviceCertificate: ca.certificate,
-            serial: Date.now()
-          }, function (error, intermediate) {
-            hlp.checkError(error)
-            hlp.checkCertificate(intermediate)
-            hlp.checkTmpEmpty()
-
-            pem.createCertificate({
-              serviceKey: intermediate.clientKey,
-              serviceCertificate: intermediate.certificate,
-              serial: Date.now()
-              // days: 1024
-            }, function (error, cert) {
-              hlp.checkError(error)
-              hlp.checkCertificate(cert)
-              hlp.checkTmpEmpty()
-
-              // chain check ok
-              pem.verifySigningChain(cert.certificate, [
-                ca.certificate, intermediate.certificate
-              ], function (error, valid) {
-                hlp.checkError(error)
-                expect(valid).to.be.true()
-
-                // chain check fails -> missing ca cert in chain
-                pem.verifySigningChain(cert.certificate, [
-                  intermediate.certificate
-                ], function (error, valid) {
-                  hlp.checkError(error)
-                  expect(valid).to.be.false()
-
-                  // chain check fails -> missing intermediate cert in chain
-                  pem.verifySigningChain(
-                    cert.certificate, [
-                      ca.certificate
-                    ],
-                    function (error,
-                      valid) {
-                      hlp.checkError(error)
-                      expect(valid).to.be.false()
-                      done()
-                    })
-                })
-              })
-            })
-          })
-        })
       })
-
-      it('Create self signed certificate', function (done) {
+      it('create certificate with text serial "demo-serial"', function (done) {
         pem.createCertificate({
-          selfSigned: true
-        }, function (error, data) {
-          hlp.checkError(error)
-          hlp.checkCertificate(data, true)
-          hlp.checkTmpEmpty()
-          done()
-        })
-      })
-      it('Create and verify wildcard certificate', function (done) {
-        var certInfo = {
-          commonName: '*.node.ee'
-        }
-        pem.createCertificate(Object.create(certInfo), function (error, data) {
+          serviceKey: ca.serviceKey,
+          serviceCertificate: ca.certificate,
+          serial: 'demo-serial'
+        },
+        function (error, data) {
           hlp.checkError(error)
           hlp.checkCertificate(data)
           hlp.checkTmpEmpty()
-
           pem.readCertificateInfo(data.certificate, function (error, data) {
-            hlp.checkError(error)
-            expect(data).to.be.an('object').that.has.property('commonName')
-            expect(data.commonName).to.equal(certInfo.commonName)
+            hlp.checkError(error);
+            ['validity', 'serial'].forEach(function (k) {
+              if (data[k]) {
+                delete data[k]
+              }
+            })
             hlp.checkTmpEmpty()
             done()
           })
         })
       })
-      it('Read edited cert data from certificate', function (done) {
-        var certInfo = {
-          issuer: {
-            country: 'EE',
-            state: 'Harjumaa',
-            locality: 'Tallinn',
-            organization: 'Node.ee',
-            organizationUnit: 'test',
-            commonName: 'www.node.ee',
-            dc: ''
-          },
+      it('create certificate with hex serial "0x1234567890abcdef"', function (done) {
+        pem.createCertificate({
+          serviceKey: ca.serviceKey,
+          serviceCertificate: ca.certificate,
+          serial: '0x1234567890abcdef'
+        },
+        function (error, data) {
+          hlp.checkError(error)
+          hlp.checkCertificate(data)
+          hlp.checkTmpEmpty()
+          pem.readCertificateInfo(data.certificate, function (error, data) {
+            hlp.checkError(error);
+            ['validity', 'serial'].forEach(function (k) {
+              if (data[k]) {
+                delete data[k]
+              }
+            })
+            hlp.checkTmpEmpty()
+            done()
+          })
+        })
+      })
+      it('create certificate with hex serial "1234567890abcdef"', function (done) {
+        pem.createCertificate({
+          serviceKey: ca.serviceKey,
+          serviceCertificate: ca.certificate,
+          serial: '1234567890abcdef'
+        },
+        function (error, data) {
+          hlp.checkError(error)
+          hlp.checkCertificate(data)
+          hlp.checkTmpEmpty()
+          pem.readCertificateInfo(data.certificate, function (error, data) {
+            hlp.checkError(error);
+            ['validity', 'serial'].forEach(function (k) {
+              if (data[k]) {
+                delete data[k]
+              }
+            })
+            hlp.checkTmpEmpty()
+            done()
+          })
+        })
+      })
+      it('create certificate with number serial "1234567890"', function (done) {
+        pem.createCertificate({
+          serviceKey: ca.serviceKey,
+          serviceCertificate: ca.certificate,
+          serial: 1234567890
+        },
+        function (error, data) {
+          hlp.checkError(error)
+          hlp.checkCertificate(data)
+          hlp.checkTmpEmpty()
+          pem.readCertificateInfo(data.certificate, function (error, data) {
+            hlp.checkError(error);
+            ['validity', 'serial'].forEach(function (k) {
+              if (data[k]) {
+                delete data[k]
+              }
+            })
+            hlp.checkTmpEmpty()
+            done()
+          })
+        })
+      })
+      it('verify signing chain; create and read PKCS12', function (done) {
+        pem.createCertificate({
+          serviceKey: ca.serviceKey,
+          serviceCertificate: ca.certificate,
+          serial: Date.now()
+        }, function (error, data) {
+          hlp.checkError(error)
+          hlp.checkCertificate(data)
+          hlp.checkTmpEmpty()
+
+          pem.verifySigningChain(data.certificate,
+            ca.certificate,
+            function (error, valid) {
+              hlp.checkError(error)
+              expect(valid).to.be.true()
+
+              pem.createPkcs12(data.clientKey,
+                data.certificate, '', {
+                  certFiles: [ca.certificate]
+                },
+                function (error, d) {
+                  hlp.checkError(error)
+                  expect(d).to.be.ok()
+                  hlp.checkTmpEmpty()
+
+                  pem.readPkcs12(d.pkcs12,
+                    function (error, keystore) {
+                      hlp.checkError(error)
+                      expect(keystore).to.be.an('object')
+                      expect(keystore).to.have.property('ca')
+                      expect(keystore).to.have.property('cert')
+                      expect(keystore).to.have.property('key')
+                      expect(keystore.ca).to.be.an('array')
+                      expect(keystore.cert).to.be.an('string')
+                      expect(keystore.key).to.be.an('string')
+                      expect(keystore.ca[0]).to.equal(ca.certificate)
+                      expect(keystore.cert).to.equal(data.certificate)
+                      expect(keystore.key).to.equal(data.clientKey)
+                      done()
+                    })
+                })
+            })
+        })
+      })
+      it('Fail to verify invalid sigining chain', function (done) {
+        pem.createCertificate({
+          serviceKey: ca.serviceKey,
+          serviceCertificate: ca.certificate,
+          serial: Date.now()
+        }, function (error, data) {
+          hlp.checkError(error)
+          hlp.checkCertificate(data)
+          hlp.checkTmpEmpty()
+
+          pem.verifySigningChain(data.certificate,
+            data.certificate,
+            function (error, valid) {
+              hlp.checkError(error)
+              expect(valid).to.be.false()
+              done()
+            })
+        })
+      })
+      it('Verify deep sigining chain', function (done) {
+        pem.createCertificate({
+          commonName: 'Intermediate CA Certificate',
+          serviceKey: ca.serviceKey,
+          serviceCertificate: ca.certificate,
+          serial: Date.now()
+        }, function (error, intermediate) {
+          hlp.checkError(error)
+          hlp.checkCertificate(intermediate)
+          hlp.checkTmpEmpty()
+
+          pem.createCertificate({
+            serviceKey: intermediate.clientKey,
+            serviceCertificate: intermediate.certificate,
+            serial: Date.now()
+            // days: 1024
+          }, function (error, cert) {
+            hlp.checkError(error)
+            hlp.checkCertificate(cert)
+            hlp.checkTmpEmpty()
+
+            // chain check ok
+            pem.verifySigningChain([intermediate.certificate, cert.certificate], [
+              ca.certificate, intermediate.certificate
+            ], function (error, valid) {
+              hlp.checkError(error)
+              expect(valid).to.be.true()
+
+              // chain check fails -> missing ca cert in chain
+              pem.verifySigningChain(cert.certificate, [
+                intermediate.certificate
+              ], function (error, valid) {
+                hlp.checkError(error)
+                expect(valid).to.be.false()
+
+                // chain check fails -> missing intermediate cert in chain
+                pem.verifySigningChain(
+                  cert.certificate, [
+                    ca.certificate
+                  ],
+                  function (error,
+                    valid) {
+                    hlp.checkError(error)
+                    expect(valid).to.be.false()
+                    done()
+                  })
+              })
+            })
+          })
+        })
+      })
+    })
+
+    it('Create self signed certificate', function (done) {
+      pem.createCertificate({
+        selfSigned: true
+      }, function (error, data) {
+        hlp.checkError(error)
+        hlp.checkCertificate(data, true)
+        hlp.checkTmpEmpty()
+        done()
+      })
+    })
+    it('Create and verify wildcard certificate', function (done) {
+      var certInfo = {
+        commonName: '*.node.ee'
+      }
+      pem.createCertificate(Object.create(certInfo), function (error, data) {
+        hlp.checkError(error)
+        hlp.checkCertificate(data)
+        hlp.checkTmpEmpty()
+
+        pem.readCertificateInfo(data.certificate, function (error, data) {
+          hlp.checkError(error)
+          expect(data).to.be.an('object').that.has.property('commonName')
+          expect(data.commonName).to.equal(certInfo.commonName)
+          hlp.checkTmpEmpty()
+          done()
+        })
+      })
+    })
+    it('Read edited cert data from certificate', function (done) {
+      var certInfo = {
+        issuer: {
           country: 'EE',
           state: 'Harjumaa',
           locality: 'Tallinn',
           organization: 'Node.ee',
           organizationUnit: 'test',
           commonName: 'www.node.ee',
-          emailAddress: 'andris@node.ee',
-          dc: '',
-          signatureAlgorithm: 'sha256WithRSAEncryption',
-          publicKeyAlgorithm: 'rsaEncryption',
-          publicKeySize: '2048 bit'
-        }
-        pem.createCertificate(Object.create(certInfo), function (error, data) {
-          hlp.checkError(error)
-          hlp.checkCertificate(data)
-          hlp.checkTmpEmpty()
+          dc: ''
+        },
+        country: 'EE',
+        state: 'Harjumaa',
+        locality: 'Tallinn',
+        organization: 'Node.ee',
+        organizationUnit: 'test',
+        commonName: 'www.node.ee',
+        emailAddress: 'andris@node.ee',
+        dc: '',
+        signatureAlgorithm: 'sha256WithRSAEncryption',
+        publicKeyAlgorithm: 'rsaEncryption',
+        publicKeySize: '2048 bit'
+      }
+      pem.createCertificate(Object.create(certInfo), function (error, data) {
+        hlp.checkError(error)
+        hlp.checkCertificate(data)
+        hlp.checkTmpEmpty()
 
-          pem.readCertificateInfo(data.certificate, function (error, data) {
-            hlp.checkError(error);
-            ['validity', 'serial'].forEach(function (k) {
-              if (data[k]) { delete data[k] }
-            })
-            hlp.checkCertificateData(data, certInfo)
-            hlp.checkTmpEmpty()
-            done()
+        pem.readCertificateInfo(data.certificate, function (error, data) {
+          hlp.checkError(error);
+          ['validity', 'serial'].forEach(function (k) {
+            if (data[k]) { delete data[k] }
           })
-        })
-      })
-    })
-
-    describe('#.checkCertificate tests', function () {
-      it('Check certificate file @ ./test/fixtures/test.key',
-        function (done) {
-          var d = fs.readFileSync('./test/fixtures/test.key').toString()
-          pem.checkCertificate(d, 'password', function (error, result) {
-            hlp.checkError(error)
-            expect(result).to.be.ok()
-            done()
-          })
-        })
-      it('Check certificate file @ ./test/fixtures/test.crt',
-        function (done) {
-          var d = fs.readFileSync('./test/fixtures/test.crt').toString()
-          pem.checkCertificate(d, function (error, result) {
-            hlp.checkError(error)
-            expect(result).to.be.ok()
-            done()
-          })
-        })
-      it('Check certificate file @ ./test/fixtures/test.csr',
-        function (done) {
-          var d = fs.readFileSync('./test/fixtures/test.csr').toString()
-          pem.checkCertificate(d, function (error, result) {
-            hlp.checkError(error)
-            expect(result).to.be.ok()
-            done()
-          })
-        })
-    })
-
-    describe('#.getModulus tests', function () {
-      it('Check matching modulus of  key and cert file', function (done) {
-        var f = fs.readFileSync('./test/fixtures/test.crt').toString()
-        pem.getModulus(f, function (error, data1) {
-          hlp.checkError(error)
-          hlp.checkModulus(data1)
-          hlp.checkTmpEmpty()
-
-          f = fs.readFileSync('./test/fixtures/test.key').toString()
-          pem.getModulus(f, 'password', function (error, data2) {
-            hlp.checkError(error)
-            hlp.checkModulus(data2)
-            expect(data1.modulus).to.equal(data2.modulus)
-            hlp.checkTmpEmpty()
-            done()
-          })
-        })
-      })
-    })
-
-    describe('#.getDhparamInfo tests', function () {
-      it('Get DH param info', function (done) {
-        var dh = fs.readFileSync('./test/fixtures/test.dh').toString()
-        pem.getDhparamInfo(dh, function (error, data) {
-          hlp.checkError(error)
-          var size = (data && data.size) || 0
-          var prime = ((data && data.prime) || '').toString()
-          expect(size).to.be.a('number')
-          expect(size).to.equal(1024)
-          expect(prime).to.be.a('string')
-          expect(/([0-9a-f][0-9a-f]:)+[0-9a-f][0-9a-f]$/g.test(prime)).to.be.true()
+          hlp.checkCertificateData(data, certInfo)
           hlp.checkTmpEmpty()
           done()
         })
       })
     })
+  })
 
-    describe('#.readPkcs12 tests', function () {
-      it('Respond with ENOENT for missing PKCS12 file', function (
-        done) {
-        pem.readPkcs12('/i/do/not/exist.p12', function (error) {
-          hlp.checkError(error, {
-            code: 'ENOENT'
-          })
+  describe('#.checkCertificate tests', function () {
+    it('Check certificate file @ ./test/fixtures/test.key', function (done) {
+      var d = fs.readFileSync('./test/fixtures/test.key').toString()
+      pem.checkCertificate(d, 'password', function (error, result) {
+        hlp.checkError(error)
+        expect(result).to.be.ok()
+        done()
+      })
+    })
+    it('Check certificate file @ ./test/fixtures/test.crt', function (done) {
+      var d = fs.readFileSync('./test/fixtures/test.crt').toString()
+      pem.checkCertificate(d, function (error, result) {
+        hlp.checkError(error)
+        expect(result).to.be.ok()
+        done()
+      })
+    })
+    it('Check certificate file @ ./test/fixtures/test.csr', function (done) {
+      var d = fs.readFileSync('./test/fixtures/test.csr').toString()
+      pem.checkCertificate(d, function (error, result) {
+        hlp.checkError(error)
+        expect(result).to.be.ok()
+        done()
+      })
+    })
+  })
+
+  describe('#.getModulus tests', function () {
+    it('Check matching modulus of  key and cert file', function (done) {
+      var f = fs.readFileSync('./test/fixtures/test.crt').toString()
+      pem.getModulus(f, function (error, data1) {
+        hlp.checkError(error)
+        hlp.checkModulus(data1)
+        hlp.checkTmpEmpty()
+
+        f = fs.readFileSync('./test/fixtures/test.key').toString()
+        pem.getModulus(f, 'password', function (error, data2) {
+          hlp.checkError(error)
+          hlp.checkModulus(data2)
+          expect(data1.modulus).to.equal(data2.modulus)
+          hlp.checkTmpEmpty()
           done()
         })
       })
     })
+  })
 
-    describe('#.checkPkcs12 tests', function () {
-      it('Check PKCS12 keystore', function (done) {
-        var pkcs12 = fs.readFileSync('./test/fixtures/idsrv3test.pfx')
-        pem.checkPkcs12(pkcs12, 'idsrv3test', function (error, result) {
-          hlp.checkError(error)
-          expect(result).to.be.ok()
-          done()
+  describe('#.getDhparamInfo tests', function () {
+    it('Get DH param info', function (done) {
+      var dh = fs.readFileSync('./test/fixtures/test.dh').toString()
+      pem.getDhparamInfo(dh, function (error, data) {
+        hlp.checkError(error)
+        var size = (data && data.size) || 0
+        var prime = ((data && data.prime) || '').toString()
+        expect(size).to.be.a('number')
+        expect(size).to.equal(1024)
+        expect(prime).to.be.a('string')
+        expect(/([0-9a-f][0-9a-f]:)+[0-9a-f][0-9a-f]$/g.test(prime)).to.be.true()
+        hlp.checkTmpEmpty()
+        done()
+      })
+    })
+  })
+
+  describe('#.readPkcs12 tests', function () {
+    it('Respond with ENOENT for missing PKCS12 file', function (
+      done) {
+      pem.readPkcs12('/i/do/not/exist.p12', function (error) {
+        hlp.checkError(error, {
+          code: 'ENOENT'
         })
+        done()
+      })
+    })
+  })
+
+  describe('#.checkPkcs12 tests', function () {
+    it('Check PKCS12 keystore', function (done) {
+      var pkcs12 = fs.readFileSync('./test/fixtures/idsrv3test.pfx')
+      pem.checkPkcs12(pkcs12, 'idsrv3test', function (error, result) {
+        hlp.checkError(error)
+        expect(result).to.be.ok()
+        done()
       })
     })
   })
