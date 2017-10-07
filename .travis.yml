@@ -47,7 +47,7 @@ script:
   - if [[ "$OPENSSL_DIR" != "" ]]; then "./bin/test_build_openssl.sh" ; fi
   - npm run test
 after_success:
-  - if [ "$TRAVIS_NODE_VERSION" == "8" ]; then npm run aftersuccess ; fi
+  - if [[ "$TRAVIS_NODE_VERSION" == "8" && "$TRAVIS_BRANCH" == "master" ]]; then npm run aftersuccess ; fi
   - if [ "$TRAVIS_BRANCH" == "master" ]; then npm run semantic-release ; fi
 branches:
   except:
