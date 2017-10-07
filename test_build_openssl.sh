@@ -40,34 +40,34 @@ cd /tmp/build
 
 OUT=/tmp/openssl.tgz
 MAX_REDIRECTS=5
-curl -o ${OUT} -L --max-redirs ${MAX_REDIRECTS} ${URL1} \
-  || curl -o ${OUT} -L --max-redirs ${MAX_REDIRECTS} ${URL2}
+curl -o ${OUT} -L --max-redirs ${MAX_REDIRECTS} "${URL1}" \
+  || curl -o ${OUT} -L --max-redirs ${MAX_REDIRECTS} "${URL2}"
 
 tar --strip-components=1 -xzf ${OUT}
 
 case "${LIBRARY}" in
 "openssl")
-    ./Configure --prefix=${OPENSSL_DIR} ${OS_COMPILER} -fPIC -g ${OS_FLAGS} no-shared -static
+    ./Configure --prefix="${OPENSSL_DIR}" ${OS_COMPILER} -fPIC -g ${OS_FLAGS} no-shared -static
     ;;
 "libressl")
-    ./configure --prefix=${OPENSSL_DIR} --disable-shared --with-pic
+    ./configure --prefix="${OPENSSL_DIR}" --disable-shared --with-pic
     ;;
 esac
 
-make -j$(nproc)
+make "-j$(nproc)"
 sudo make install_sw
 
 case "${LIBRARY}" in
 "openssl")
-    if [[ ! -f  "${OPENSSL_DIR}/ssl/openssl.cnf" ]]; then sudo mkdir -p ${OPENSSL_DIR}/ssl && sudo cp apps/openssl.cnf ${OPENSSL_DIR}/ssl/openssl.cnf ; fi
+    if [[ ! -f  "${OPENSSL_DIR}/ssl/openssl.cnf" ]]; then sudo mkdir -p "${OPENSSL_DIR}/ssl" && sudo cp apps/openssl.cnf "${OPENSSL_DIR}/ssl/openssl.cnf" ; fi
     ;;
 "libressl")
-    if [[ ! -f  "${OPENSSL_DIR}/ssl/openssl.cnf" ]]; then sudo mkdir -p ${OPENSSL_DIR}/ssl && sudo cp apps/openssl/openssl.cnf ${OPENSSL_DIR}/ssl/openssl.cnf ; fi
+    if [[ ! -f  "${OPENSSL_DIR}/ssl/openssl.cnf" ]]; then sudo mkdir -p "${OPENSSL_DIR}/ssl" && sudo cp apps/openssl/openssl.cnf "${OPENSSL_DIR}/ssl/openssl.cnf" ; fi
     ;;
 esac
 
 sudo chmod -Rf 0755 /openssl
 
-cd ${NORMALPATH}
+cd "${NORMALPATH}"
 
 rm -r -f node_modules && npm i
