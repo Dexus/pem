@@ -47,11 +47,11 @@ describe('General Tests', function () {
         done()
       })
     })
-    it('Create 2048bit dhparam key', function (done) {
+    it('Create 1024bit dhparam key', function (done) {
       this.timeout(600000)// 10 minutes
-      pem.createDhparam(2048, function (error, data) {
+      pem.createDhparam(1024, function (error, data) {
         hlp.checkError(error)
-        hlp.checkDhparam(data, 420, 430)
+        hlp.checkDhparam(data, 240, 250)
         hlp.checkTmpEmpty()
         done()
       })
