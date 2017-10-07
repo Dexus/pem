@@ -9,16 +9,16 @@ chai.use(dirtyChai)
 
 // NOTE: we cover here only the test cases left in coverage report
 describe('helper.js tests', function () {
-  describe('#.helperCreatePasswordFile()', function () {
+  describe('#.createPasswordFile()', function () {
     it('invalid options [not sufficient object keys]', function (done) {
       var tmpfiles = []
       var bufferOrPath = fs.readFileSync('./test/fixtures/idsrv3test.pfx')
-      helper.helperCreatePasswordFile(
+      helper.createPasswordFile(
         {},
         ['pkcs12', '-info', '-in', bufferOrPath, '-noout', '-maciter', '-nodes'],
         tmpfiles[tmpfiles.length]
       )
-      helper.helperDeleteTempFiles(tmpfiles, function (fsErr) {
+      helper.deleteTempFiles(tmpfiles, function (fsErr) {
         hlp.checkError(fsErr)
         done()
       })
@@ -26,12 +26,12 @@ describe('helper.js tests', function () {
     it('invalid options [no password and passType option]', function (done) {
       var tmpfiles = []
       var bufferOrPath = fs.readFileSync('./test/fixtures/idsrv3test.pfx')
-      helper.helperCreatePasswordFile(
+      helper.createPasswordFile(
         {cipher: '', bla: true, blub: true},
         ['pkcs12', '-info', '-in', bufferOrPath, '-noout', '-maciter', '-nodes'],
         tmpfiles[tmpfiles.length]
       )
-      helper.helperDeleteTempFiles(tmpfiles, function (fsErr) {
+      helper.deleteTempFiles(tmpfiles, function (fsErr) {
         hlp.checkError(fsErr)
         done()
       })
@@ -39,33 +39,33 @@ describe('helper.js tests', function () {
     it('mustPass option', function (done) {
       var tmpfiles = []
       var bufferOrPath = fs.readFileSync('./test/fixtures/idsrv3test.pfx')
-      helper.helperCreatePasswordFile(
+      helper.createPasswordFile(
         {cipher: '', password: 'gregegegeg', passType: 'in', mustPass: 'password'},
         ['pkcs12', '-info', '-in', bufferOrPath, '-noout', '-maciter', '-nodes'],
         tmpfiles[tmpfiles.length]
       )
-      helper.helperDeleteTempFiles(tmpfiles, function (fsErr) {
+      helper.deleteTempFiles(tmpfiles, function (fsErr) {
         hlp.checkError(fsErr)
         done()
       })
     })
   })
 
-  describe('#.helperDeleteTempFiles()', function () {
+  describe('#.deleteTempFiles()', function () {
     it('files argument typeof string', function (done) {
-      helper.helperDeleteTempFiles('404.pem', function (fsErr) {
+      helper.deleteTempFiles('404.pem', function (fsErr) {
         hlp.checkError(fsErr)
         done()
       })
     })
     it('files argument invalid type', function (done) {
-      helper.helperDeleteTempFiles(true, function (fsErr) {
+      helper.deleteTempFiles(true, function (fsErr) {
         hlp.checkError(fsErr, true)
         done()
       })
     })
     it('files argument array contains non-string value', function (done) {
-      helper.helperDeleteTempFiles([true], function (fsErr) {
+      helper.deleteTempFiles([true], function (fsErr) {
         hlp.checkError(fsErr)
         done()
       })
