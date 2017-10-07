@@ -35,14 +35,20 @@ matrix:
         - OPENSSL_DIR=""
 before_install:
   - sudo apt-get install -y haveged
+  - if [ "$TRAVIS_BRANCH" == "master" ]; then
+      git clone "https://github.com/$TRAVIS_REPO_SLUG.git" "$TRAVIS_REPO_SLUG";
+      cd "$TRAVIS_REPO_SLUG";
+      git checkout -qf "$TRAVIS_COMMIT";
+    fi
 before_script:
   - npm prune
-  - sudo haveged -w 4096
+  - sudo haveged -w 2048
 script:
-  - if [[ "$OPENSSL_DIR" != "" ]]; then "./test_build_openssl.sh" ; fi
+  - if [[ "$OPENSSL_DIR" != "" ]]; then "./bin/test_build_openssl.sh" ; fi
   - npm run test
 after_success:
-  - npm run semantic-release
+  - if [ "$TRAVIS_NODE_VERSION" == "8" ]; then npm run aftersuccess ; fi
+  - if [ "$TRAVIS_BRANCH" == "master" ]; then npm run semantic-release ; fi
 branches:
   except:
     - /^v\d+\.\d+\.\d+$/
