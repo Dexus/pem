@@ -1,14 +1,9 @@
 pem
 ===
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/Dexus/pem.svg)](https://greenkeeper.io/)
-
 Create private keys and certificates with node.js
 
-[![Build Status](https://secure.travis-ci.org/Dexus/pem.png)](http://travis-ci.org/Dexus/pem)
-[![npm version](https://badge.fury.io/js/pem.svg)](http://badge.fury.io/js/pem)
-[![npm downloads](https://img.shields.io/npm/dt/pem.svg)](https://www.npmjs.com/package/pem)
-[![pem documentation](https://img.shields.io/badge/pem-documentation-0099ff.svg?style=flat)](https://www.deineagentur.com/projects/pem)
+[![Build Status](https://secure.travis-ci.org/Dexus/pem.png)](http://travis-ci.org/Dexus/pem) [![npm version](https://badge.fury.io/js/pem.svg)](http://badge.fury.io/js/pem) [![npm downloads](https://img.shields.io/npm/dt/pem.svg)](https://www.npmjs.com/package/pem) [![pem documentation](https://img.shields.io/badge/pem-documentation-0099ff.svg?style=flat)](https://www.deineagentur.com/projects/pem) [![Greenkeeper badge](https://badges.greenkeeper.io/Dexus/pem.svg)](https://greenkeeper.io/)
 
 
 [![JavaScript Style Guide](https://cdn.rawgit.com/standard/standard/master/badge.svg)](https://github.com/standard/standard)
@@ -59,7 +54,10 @@ pem.createCertificate({ days: 1, selfSigned: true }, function (err, keys) {
 ```
 
 ## API
+Please have a look into the [API documentation](https://www.deineagentur.com/projects/pem/index.html).
 
+_we had to clean up a bit_
+<!--
 ### Create a dhparam key
 
 Use `createDhparam` for creating dhparam keys
@@ -271,8 +269,9 @@ Where
 
 * **certificate** is a PEM encoded certificate string
 * **callback** is a callback function with an error object and a boolean as arguments
+-->
 
-### Custom extensions config file
+### Custom extensions config file
 
 You can specify custom OpenSSL extensions using the `config` or `extFile` options for `createCertificate` (or using `csrConfigFile` with `createCSR`).
 
