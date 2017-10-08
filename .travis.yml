@@ -35,10 +35,16 @@ matrix:
         - OPENSSL_DIR=""
 before_install:
   - sudo apt-get install -y haveged
-  - if [ "$TRAVIS_BRANCH" == "master" ]; then
-      git clone "https://github.com/$TRAVIS_REPO_SLUG.git" "$TRAVIS_REPO_SLUG";
-      cd "$TRAVIS_REPO_SLUG";
-      git checkout -qf "$TRAVIS_COMMIT";
+  - |
+    if [[ "$TRAVIS_BRANCH" == "master" && "$TRAVIS_PULL_REQUEST" != "false" ]]; then
+      #git clone "https://github.com/$TRAVIS_REPO_SLUG.git" "$TRAVIS_REPO_SLUG";
+      #cd "$TRAVIS_REPO_SLUG";
+      ( set -euo pipefail
+        if [[ "${TRAVIS_COMMIT}" != "$(git rev-parse HEAD)" ]]; then
+          echo "Commit $(git rev-parse HEAD) doesn't match expected commit ${TRAVIS_COMMIT}"
+          git checkout "${TRAVIS_COMMIT}"
+        fi
+      )
     fi
 before_script:
   - npm prune
@@ -47,8 +53,9 @@ script:
   - if [[ "$OPENSSL_DIR" != "" ]]; then "./bin/test_build_openssl.sh" ; fi
   - npm run test
 after_success:
-  - if [[ "$TRAVIS_NODE_VERSION" == "8" && "$TRAVIS_BRANCH" == "master" ]]; then npm run aftersuccess ; fi
-  - if [ "$TRAVIS_BRANCH" == "master" ]; then npm run semantic-release ; fi
+  - if [[ "$TRAVIS_NODE_VERSION" == "8" && "$TRAVIS_BRANCH" == "master" && "$TRAVIS_PULL_REQUEST" == "false" ]]; then npm run aftersuccess ; fi
+  - if [[ "$TRAVIS_BRANCH" == "master" && "$TRAVIS_PULL_REQUEST" == "false" ]]; then npm run semantic-release ; fi
+  - if [[ "$TRAVIS_NODE_VERSION" == "8" && "$TRAVIS_BRANCH" == "master" && "$TRAVIS_PULL_REQUEST" == "false" ]]; then npm run aftersuccess -- -push ; fi
 branches:
   except:
     - /^v\d+\.\d+\.\d+$/

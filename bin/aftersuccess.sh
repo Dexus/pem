@@ -1,16 +1,31 @@
 #!/bin/bash
 set -e
 
-OUTPUT=$(node "$(pwd)/bin/aftersuccess.js")
-STATUS=$?
+VAR_PUSH=0
 
-if [[ "${STATUS}" == "0" ]]
+for i in "$@" ; do
+    if [[ $i == "-push" ]] ; then
+        VAR_PUSH=1
+        break
+    fi
+done
+
+git config --global user.name "Dexus via TravisCI"
+git config --global user.email "github@josef-froehle.de"
+git config credential.helper "store --file=.git/credentials"
+echo "https://$GH_TOKEN:@github.com" > .git/credentials
+git checkout "$TRAVIS_BRANCH" || exit 0
+
+if [[ "${VAR_PUSH}" == "1" ]]
 then
-  git config --global user.name "Dexus via TravisCI"
-  git config --global user.email "github@josef-froehle.de"
-  git config credential.helper "store --file=.git/credentials"
-  echo "https://$GH_TOKEN:@github.com" > .git/credentials
-  git checkout "$TRAVIS_BRANCH"
+  OUTPUT=$(node "$(pwd)/bin/aftersuccess.js")
+  STATUS=$?
+  echo "${OUTPUT}"
+fi
+
+if [[ "${STATUS}" == "0" && "${VAR_PUSH}" == "1" ]]
+then
+  sleep 10
   npm run changelog
   git add HISTORY.md
   git commit -m "Update HISTORY.md via TravisCI" -m "[ci skip]"
