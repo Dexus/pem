@@ -26,6 +26,8 @@ fi
 if [[ "${STATUS}" == "0" && "${VAR_PUSH}" == "1" ]]
 then
   sleep 10
+  git fetch origin
+  git pull
   npm run changelog
   git add HISTORY.md
   git commit -m "Update HISTORY.md via TravisCI" -m "[ci skip]"
