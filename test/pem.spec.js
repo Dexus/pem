@@ -581,6 +581,14 @@ describe('General Tests', function () {
             })
         })
       })
+      it('Verify google.com certificate without provided CA certificates', function (done) {
+        var certificate = fs.readFileSync('./test/fixtures/google.com.pem').toString()
+        pem.verifySigningChain(certificate, function (error, valid) {
+          hlp.checkError(error)
+          expect(valid).to.be.false()
+          done()
+        })
+      })
       it('Verify deep sigining chain', function (done) {
         pem.createCertificate({
           commonName: 'Intermediate CA Certificate',
