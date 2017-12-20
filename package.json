@@ -48,7 +48,7 @@
     "chai": "^4.1.2",
     "cross-env": "^5.0.5",
     "dirty-chai": "^2.0.1",
-    "docco": "^0.7.0",
+    "docco": "^0.8.0",
     "@deineagenturug/docdash": "^0.4.1",
     "eslint": "^4.8.0",
     "eslint-config-standard": "^10.2.1",
