@@ -62,7 +62,7 @@
     "mocha": "^4.0.1",
     "nyc": "^11.2.1",
     "semantic-release": "^8.1.1",
-    "travis-deploy-once": "^3.0.0"
+    "travis-deploy-once": "^4.0.0"
   },
   "engines": {
     "node": ">=4.0.0"
