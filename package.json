@@ -46,7 +46,7 @@
   "devDependencies": {
     "auto-changelog": "^1.0.0",
     "chai": "^4.1.2",
-    "cross-env": "^5.0.5",
+    "cross-env": "^5.1.2",
     "dirty-chai": "^2.0.1",
     "docco": "^0.8.0",
     "@deineagenturug/docdash": "^0.4.1",
@@ -62,7 +62,7 @@
     "mocha": "^4.0.1",
     "nyc": "^11.2.1",
     "semantic-release": "^11.0.2",
-    "travis-deploy-once": "^3.0.0"
+    "travis-deploy-once": "^4.0.0"
   },
   "engines": {
     "node": ">=4.0.0"
