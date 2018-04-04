@@ -46,7 +46,7 @@
   "devDependencies": {
     "auto-changelog": "^1.0.0",
     "chai": "^4.1.2",
-    "cross-env": "^5.1.2",
+    "cross-env": "^5.1.4",
     "dirty-chai": "^2.0.1",
     "docco": "^0.8.0",
     "@deineagenturug/docdash": "^0.4.1",
