@@ -31,6 +31,7 @@ then
   git pull
   npm run changelog
   git add HISTORY.md
+  git add package-lock.json
   git commit -m "Update HISTORY.md via TravisCI" -m "[ci skip]"
   git push
 fi
