@@ -59,7 +59,7 @@
     "eslint-plugin-promise": "^3.5.0",
     "eslint-plugin-standard": "^3.0.1",
     "jsdoc": "^3.5.5",
-    "mocha": "^4.0.1",
+    "mocha": "^5.0.0",
     "nyc": "^11.2.1",
     "semantic-release": "^12.2.2",
     "travis-deploy-once": "^4.0.0"
