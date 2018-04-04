@@ -23,7 +23,7 @@
     "jsdoc": "jsdoc -c jsdoc.json",
     "changelog": "auto-changelog --output HISTORY.md",
     "coverage": "cross-env NODE_ENV=development nyc ./node_modules/.bin/_mocha --opts mocha.opts $(find . -type f -name '*.spec.js'  ! -path './nyc_output/*' ! -path './coverage/*' ! -path './node_modules/*')",
-    "semantic-release": "semantic-release pre && npm publish && semantic-release post",
+    "semantic-release": "semantic-release",
     "lint": "eslint --fix --config=./.eslintrc.js *.js *.md *.json lib/*.js test/*.js test/*.spec.js",
     "test": "npm run lint --silent && npm run coverage --silent"
   },
