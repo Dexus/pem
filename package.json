@@ -52,7 +52,7 @@
     "@deineagenturug/docdash": "^0.4.1",
     "eslint": "^4.8.0",
     "eslint-config-standard": "^11.0.0",
-    "eslint-plugin-import": "2.11.0",
+    "eslint-plugin-import": "2.12.0",
     "eslint-plugin-json": "^1.2.0",
     "eslint-plugin-markdown": "^1.0.0-beta.7",
     "eslint-plugin-node": "^6.0.1",
