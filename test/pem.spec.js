@@ -83,6 +83,14 @@ describe('General Tests', function () {
         done()
       })
     })
+    it('Create prime256v1 ecparam key with named_curve param encoding', function (done) {
+      pem.createEcparam('prime256v1', 'named_curve', function (error, data) {
+        hlp.checkError(error)
+        hlp.checkEcparam(data, 200, 430)
+        hlp.checkTmpEmpty()
+        done()
+      })
+    })
   })
 
   describe('#.createPrivateKey tests', function () {
