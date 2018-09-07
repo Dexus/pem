@@ -38,6 +38,15 @@ function checkEcparam (data, min, max) {
   expect(matchup[0].trim().length).to.be.within(min + 1, max - 1)
 }
 
+function checkEcparamNoOut (data, min, max) {
+  expect(data).to.be.an('object').that.has.property('ecparam')
+  expect(data.ecparam).to.be.a('string')
+  expect(/^\r?\n*-----BEGIN EC PRIVATE KEY-----\r?\n/.test(data.ecparam)).to.be.true()
+  expect(/\r?\n-----END EC PRIVATE KEY-----\r?\n*$/.test(data.ecparam)).to.be.true()
+  var matchup = /-----BEGIN EC PRIVATE KEY-----[\s\S]+-----END EC PRIVATE KEY-----/.exec(data.ecparam)
+  expect(matchup[0].trim().length).to.be.within(min + 1, max - 1)
+}
+
 function checkDhparam (data, min, max) {
   expect(data).to.be.an('object').that.has.property('dhparam')
   expect(data.dhparam).to.be.a('string')
@@ -112,6 +121,7 @@ module.exports = {
   checkError: checkError,
   checkDhparam: checkDhparam,
   checkEcparam: checkEcparam,
+  checkEcparamNoOut: checkEcparamNoOut,
   checkPrivateKey: checkPrivateKey,
   checkCSR: checkCSR,
   checkCertificate: checkCertificate,
