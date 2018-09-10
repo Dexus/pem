@@ -7,6 +7,7 @@ notifications:
     on_success: change
     on_failure: change
 node_js:
+  - '10'
   - '8'
   - '6'
   - '4'
@@ -27,6 +28,7 @@ matrix:
   exclude:
     - node_js: '6'
     - node_js: '4'
+    - node_js: '8'
   include:
     - node_js: '6'
       env:
