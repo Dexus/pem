@@ -10,7 +10,7 @@
   "license": "MIT",
   "name": "pem",
   "description": "Create private keys and certificates with node.js and io.js",
-  "version": "0.0.0-development",
+  "version": "1.12.6",
   "repository": {
     "type": "git",
     "url": "https://github.com/Dexus/pem.git"
