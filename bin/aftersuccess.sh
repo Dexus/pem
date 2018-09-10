@@ -20,7 +20,7 @@ git checkout "$TRAVIS_BRANCH" || exit 0
 
 if [[ "${VAR_PUSH}" == "1" ]]
 then
-  git fetch --unshallow
+  #git fetch --unshallow
   OUTPUT=$(node "$(pwd)/bin/aftersuccess.js")
   STATUS=$?
   echo "${OUTPUT}"
