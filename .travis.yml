@@ -51,14 +51,15 @@ before_install:
     fi
 before_script:
   - npm prune
+  - npm install -g travis-deploy-once
   - sudo haveged -w 2048
 script:
   - if [[ "$OPENSSL_DIR" != "" ]]; then "./bin/test_build_openssl.sh" ; fi
   - npm run test
 after_success:
-  - if [[ "$TRAVIS_NODE_VERSION" == "8" && "$TRAVIS_BRANCH" == "master" && "$TRAVIS_PULL_REQUEST" == "false" ]]; then npm run aftersuccess ; fi
-  - if [[ "$TRAVIS_BRANCH" == "master" && "$TRAVIS_PULL_REQUEST" == "false" ]]; then npm run semantic-release ; fi
-  - if [[ "$TRAVIS_NODE_VERSION" == "8" && "$TRAVIS_BRANCH" == "master" && "$TRAVIS_PULL_REQUEST" == "false" ]]; then npm run aftersuccess -- -push ; fi
+#  - if [[ "$TRAVIS_NODE_VERSION" == "8" && "$TRAVIS_BRANCH" == "master" && "$TRAVIS_PULL_REQUEST" == "false" ]]; then npm run aftersuccess ; fi
+  - if [[ "$TRAVIS_BRANCH" == "master" && "$TRAVIS_PULL_REQUEST" == "false" ]]; then travis-deploy-once && npm run semantic-release ; fi
+#  - if [[ "$TRAVIS_NODE_VERSION" == "8" && "$TRAVIS_BRANCH" == "master" && "$TRAVIS_PULL_REQUEST" == "false" ]]; then npm run aftersuccess -- -push ; fi
 branches:
   except:
     - /^v\d+\.\d+\.\d+$/

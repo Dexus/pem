@@ -30,10 +30,10 @@ fi
 
 if [[ "${STATUS}" == "0" && "${VAR_PUSH}" == "1" ]]
 then
-  sleep 10
-  git pull
-  npm run changelog
-  git add HISTORY.md
-  git commit -a -m "Update HISTORY.md via TravisCI" -m "[ci skip]"
-  git push
+#  sleep 10
+#  git pull
+#  npm run 
+#  git add HISTORY.md
+#  git commit -a -m "Update HISTORY.md via TravisCI" -m "[ci skip]"
+#  git push
 fi

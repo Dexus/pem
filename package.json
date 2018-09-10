@@ -45,6 +45,10 @@
   },
   "devDependencies": {
     "@deineagenturug/docdash": "^0.4.1",
+    "@semantic-release/changelog": "^3.0.0",
+    "@semantic-release/git": "^7.0.3",
+    "@semantic-release/github": "^5.0.4",
+    "@semantic-release/npm": "^5.0.4",
     "auto-changelog": "^1.8.0",
     "chai": "^4.1.2",
     "cross-env": "^5.2.0",
@@ -59,6 +63,7 @@
     "eslint-plugin-promise": "^3.8.0",
     "eslint-plugin-standard": "^3.1.0",
     "jsdoc": "^3.5.5",
+    "marked": "^0.5.0",
     "mocha": "^5.2.0",
     "nyc": "^11.9.0",
     "semantic-release": "^15.9.14",
@@ -68,6 +73,18 @@
     "node": ">=4.0.0"
   },
   "release": {
-    "debug": false
+    "debug": false,
+    "verifyConditions": [
+      "@semantic-release/changelog",
+      "@semantic-release/npm",
+      "@semantic-release/git",
+      "@semantic-release/github"
+    ],
+    "prepare": [
+      "@semantic-release/changelog",
+      "@semantic-release/npm",
+      "@semantic-release/git",
+      "@semantic-release/github"
+    ]
   }
 }
