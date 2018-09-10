@@ -1,5 +1,6 @@
 #!/bin/bash
 set -e
+ 
 
 VAR_PUSH=0
 
