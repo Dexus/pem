@@ -16,6 +16,7 @@ git config credential.helper "store --file=.git/credentials"
 echo "https://$GH_TOKEN:@github.com" > .git/credentials
 git fetch
 #git rm package-lock.json
+git checkout HEAD -- package-lock.json
 git checkout "$TRAVIS_BRANCH" || exit 0
 
 if [[ "${VAR_PUSH}" == "1" ]]
