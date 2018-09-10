@@ -83,7 +83,10 @@
     "prepare": [
       "@semantic-release/changelog",
       "@semantic-release/npm",
-      "@semantic-release/git",
+      "@semantic-release/git"
+    ],
+    "publish": [
+      "@semantic-release/npm",
       "@semantic-release/github"
     ]
   }
