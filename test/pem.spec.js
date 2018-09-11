@@ -353,48 +353,6 @@ describe('General Tests', function () {
         })
       })
     })
-
-    it('Read CertInformation form ./test/fixtures/pem196.pem', function (done) {
-      var certInfo = {
-        issuer: {
-          country: 'BO',
-          state: '',
-          locality: '',
-          organization: 'ADSIB',
-          organizationUnit: '',
-          commonName: 'Entidad Certificadora Publica ADSIB',
-          dc: ''
-        },
-        serial: '2854046357827755658 (0x279b9c0a82d21e8a)',
-        '1.3.6.1.1.1.1.0': '#0C0734373132323836',
-        dnQualifier: 'CI',
-        country: 'BO',
-        state: '',
-        locality: '',
-        organization: '',
-        organizationUnit: '',
-        commonName: 'ILSE SILES BECERRA',
-        emailAddress: '',
-        dc: '',
-        validity: {
-          start: 1524175291000,
-          end: 1524434491000
-        },
-        signatureAlgorithm: 'sha256WithRSAEncryption',
-        publicKeySize: '2048 bit',
-        publicKeyAlgorithm: 'rsaEncryption'
-      }
-
-      var d = fs.readFileSync('./test/fixtures/pem196.pem').toString()
-      pem.readCertificateInfo(d, function (error, data) {
-        if (data.serial) delete data.serial
-        if (certInfo.serial) delete certInfo.serial
-        hlp.checkError(error)
-        hlp.checkCertificateData(data, certInfo)
-        hlp.checkTmpEmpty()
-        done()
-      })
-    })
   })
 
   describe('#.createCertificate tests', function () {
@@ -773,6 +731,145 @@ describe('General Tests', function () {
           hlp.checkTmpEmpty()
           done()
         })
+      })
+    })
+
+    it('Read CertInformation form ./test/fixtures/pem196.pem', function (done) {
+      var certInfo = {
+        issuer: {
+          country: 'BO',
+          state: '',
+          locality: '',
+          organization: 'ADSIB',
+          organizationUnit: '',
+          commonName: 'Entidad Certificadora Publica ADSIB',
+          dc: ''
+        },
+        serial: '2854046357827755658 (0x279b9c0a82d21e8a)',
+        '1.3.6.1.1.1.1.0': '#0C0734373132323836',
+        dnQualifier: 'CI',
+        country: 'BO',
+        state: '',
+        locality: '',
+        organization: '',
+        organizationUnit: '',
+        commonName: 'ILSE SILES BECERRA',
+        emailAddress: '',
+        dc: '',
+        validity: {
+          start: 1524175291000,
+          end: 1524434491000
+        },
+        signatureAlgorithm: 'sha256WithRSAEncryption',
+        publicKeySize: '2048 bit',
+        publicKeyAlgorithm: 'rsaEncryption'
+      }
+
+      var d = fs.readFileSync('./test/fixtures/pem196.pem').toString()
+      pem.readCertificateInfo(d, function (error, data) {
+        if (data.serial) delete data.serial
+        if (certInfo.serial) delete certInfo.serial
+        hlp.checkError(error)
+        hlp.checkCertificateData(data, certInfo)
+        hlp.checkTmpEmpty()
+        done()
+      })
+    })
+
+    it('Read CertInformation from ./test/fixtures/ru_openssl.crt', function (done) {
+      var certInfo = {
+        issuer: {
+          country: 'RU',
+          state: '',
+          locality: 'Москва',
+          organization: 'Моя компания',
+          organizationUnit: 'Моё подразделение',
+          commonName: 'Описание сайта',
+          dc: ''
+        },
+        country: 'RU',
+        state: '',
+        locality: 'Москва',
+        organization: 'Моя компания',
+        organizationUnit: 'Моё подразделение',
+        commonName: 'Описание сайта',
+        emailAddress: 'envek@envek.name',
+        dc: '',
+        validity: {
+          end: 1568233615000,
+          start: 1536697615000
+        },
+        san: {
+          dns: [
+            "example.com",
+            "*.app.example.com",
+            "www.example.com"
+          ],
+          email: [],
+          ip: []
+        },
+        signatureAlgorithm: 'sha256WithRSAEncryption',
+        publicKeySize: '4096 bit',
+        publicKeyAlgorithm: 'rsaEncryption'
+      }
+
+      var d = fs.readFileSync('./test/fixtures/ru_openssl.crt').toString()
+      pem.readCertificateInfo(d, function (error, data) {
+        if (data.serial) delete data.serial
+        if (certInfo.serial) delete certInfo.serial
+        hlp.checkError(error)
+        hlp.checkCertificateData(data, certInfo)
+        hlp.checkTmpEmpty()
+        done()
+      })
+    })
+
+    it('Read CertInformation from ./test/fixtures/cn_openssl.crt', function (done) {
+      var certInfo = {
+        issuer: {
+          country: 'RU',
+          state: '',
+          locality: '兰克福',
+          organization: '法兰克福分行',
+          organizationUnit: '克福分',
+          commonName: '中国银行',
+          dc: ''
+        },
+        serial: '2854046357827755658 (0x279b9c0a82d21e8a)',
+        country: 'RU',
+        state: '',
+        locality: '兰克福',
+        organization: '法兰克福分行',
+        organizationUnit: '克福分',
+        commonName: '中国银行',
+        emailAddress: 'envek@envek.name',
+        dc: '',
+        validity: {
+          end: 1568233543000,
+          start: 1536697543000
+        },
+        san: {
+          dns: [
+            "example.com",
+            "*.app.example.com",
+            "www.example.com"
+          ],
+          email: [],
+          ip: []
+        },
+        signatureAlgorithm: 'sha256WithRSAEncryption',
+        publicKeySize: '4096 bit',
+        publicKeyAlgorithm: 'rsaEncryption'
+      }
+
+      var d = fs.readFileSync('./test/fixtures/cn_openssl.crt').toString()
+      pem.readCertificateInfo(d, function (error, data) {
+        if (data.serial) delete data.serial
+        if (certInfo.serial) delete certInfo.serial
+        hlp.checkError(error)
+        hlp.checkCertificateData(data, certInfo)
+        hlp.checkTmpEmpty()
+        done()
       })
     })
   })
