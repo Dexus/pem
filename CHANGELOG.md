@@ -1,3 +1,13 @@
+## [1.12.8](https://github.com/Dexus/pem/compare/v1.12.7...v1.12.8) (2018-09-11)
+
+
+### Bug Fixes
+
+* **package:** dep updates and fix deprecated api ([610a403](https://github.com/Dexus/pem/commit/610a403))
+* **package:** fix deprecated api ([6fdfd32](https://github.com/Dexus/pem/commit/6fdfd32))
+* **package:** fix deprecated api ([3fbe212](https://github.com/Dexus/pem/commit/3fbe212))
+* **pem:** allow utf8 charset in fields ([2cb97aa](https://github.com/Dexus/pem/commit/2cb97aa))
+
 ## [1.12.7](https://github.com/Dexus/pem/compare/v1.12.6...v1.12.7) (2018-09-11)
 
 
