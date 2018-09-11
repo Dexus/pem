@@ -1,3 +1,10 @@
+# [1.13.0](https://github.com/Dexus/pem/compare/v1.12.8...v1.13.0) (2018-09-11)
+
+
+### Features
+
+* **package:** add promisify methods pem.promisify.FUNCTIONNAME ([8a0c1bc](https://github.com/Dexus/pem/commit/8a0c1bc))
+
 ## [1.12.8](https://github.com/Dexus/pem/compare/v1.12.7...v1.12.8) (2018-09-11)
 
 
