@@ -27,7 +27,7 @@ describe('helper.js tests', function () {
       var tmpfiles = []
       var bufferOrPath = fs.readFileSync('./test/fixtures/idsrv3test.pfx')
       helper.createPasswordFile(
-        {cipher: '', bla: true, blub: true},
+        { cipher: '', bla: true, blub: true },
         ['pkcs12', '-info', '-in', bufferOrPath, '-noout', '-maciter', '-nodes'],
         tmpfiles[tmpfiles.length]
       )
@@ -40,7 +40,7 @@ describe('helper.js tests', function () {
       var tmpfiles = []
       var bufferOrPath = fs.readFileSync('./test/fixtures/idsrv3test.pfx')
       helper.createPasswordFile(
-        {cipher: '', password: 'gregegegeg', passType: 'in', mustPass: 'password'},
+        { cipher: '', password: 'gregegegeg', passType: 'in', mustPass: 'password' },
         ['pkcs12', '-info', '-in', bufferOrPath, '-noout', '-maciter', '-nodes'],
         tmpfiles[tmpfiles.length]
       )

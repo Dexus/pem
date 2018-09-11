@@ -43,7 +43,7 @@ describe('convert.js tests', function () {
       })
     })
     it('#.PEM2P7B()', function (done) {
-      pem.convert.PEM2P7B({cert: './test/fixtures/nopkey.pem'}, './test/fixtures/tmp.p7b', function (error, result) {
+      pem.convert.PEM2P7B({ cert: './test/fixtures/nopkey.pem' }, './test/fixtures/tmp.p7b', function (error, result) {
         hlp.checkError(error, true)
         done()
       })
@@ -72,7 +72,7 @@ describe('convert.js tests', function () {
       })
     })
     it('#.P7B2PFX() [error in 1st step]', function (done) {
-      pem.convert.P7B2PFX({cert: './test/fixtures/test.p7b', key: './test/fixtures/test.key', ca: './test/fixtures/GeoTrust_Primary_CA.pem'}, './test/fixtures/tmp.pfx', 'password', function (error, result) {
+      pem.convert.P7B2PFX({ cert: './test/fixtures/test.p7b', key: './test/fixtures/test.key', ca: './test/fixtures/GeoTrust_Primary_CA.pem' }, './test/fixtures/tmp.pfx', 'password', function (error, result) {
         hlp.checkError(error, true)
         done()
       })
@@ -81,7 +81,7 @@ describe('convert.js tests', function () {
       pem.config({
         pathOpenSSL: process.env.OPENSSL_BIN || 'openssl'
       })
-      pem.convert.P7B2PFX({cert: './test/fixtures/test.p7b', key: './test/fixtures/test404.key', ca: './test/fixtures/ca404.pem'}, './test/fixtures/tmp.pfx', 'password', function (error, result) {
+      pem.convert.P7B2PFX({ cert: './test/fixtures/test.p7b', key: './test/fixtures/test404.key', ca: './test/fixtures/ca404.pem' }, './test/fixtures/tmp.pfx', 'password', function (error, result) {
         hlp.checkError(error, true)
         done()
       })
@@ -128,7 +128,7 @@ describe('convert.js tests', function () {
     })
 
     it('#.PEM2P7B() [providing a CA cert; no array format]', function (done) {
-      pem.convert.PEM2P7B({cert: './test/fixtures/nopkey.pem', ca: './test/fixtures/GeoTrust_Primary_CA.pem'}, './test/fixtures/tmp.p7b', function (error, result) {
+      pem.convert.PEM2P7B({ cert: './test/fixtures/nopkey.pem', ca: './test/fixtures/GeoTrust_Primary_CA.pem' }, './test/fixtures/tmp.p7b', function (error, result) {
         hlp.checkError(error)
         expect(result).to.be.true()
         done()
@@ -136,7 +136,7 @@ describe('convert.js tests', function () {
     })
 
     it('#.PEM2P7B() [providing a CA cert; array format]', function (done) {
-      pem.convert.PEM2P7B({cert: './test/fixtures/nopkey.pem', ca: ['./test/fixtures/GeoTrust_Primary_CA.pem']}, './test/fixtures/tmp.p7b', function (error, result) {
+      pem.convert.PEM2P7B({ cert: './test/fixtures/nopkey.pem', ca: ['./test/fixtures/GeoTrust_Primary_CA.pem'] }, './test/fixtures/tmp.p7b', function (error, result) {
         hlp.checkError(error)
         expect(result).to.be.true()
         done()
@@ -144,7 +144,7 @@ describe('convert.js tests', function () {
     })
 
     it('#.PEM2P7B() [not providing a CA cert]', function (done) {
-      pem.convert.PEM2P7B({cert: './test/fixtures/nopkey.pem'}, './test/fixtures/tmp.p7b', function (error, result) {
+      pem.convert.PEM2P7B({ cert: './test/fixtures/nopkey.pem' }, './test/fixtures/tmp.p7b', function (error, result) {
         hlp.checkError(error)
         expect(result).to.be.true()
         done()
@@ -229,7 +229,7 @@ describe('convert.js tests', function () {
     })
 
     it('#.P7B2PFX() [providing ca cert; no array format]', function (done) {
-      pem.convert.P7B2PFX({cert: './test/fixtures/test.p7b', key: './test/fixtures/test.key', ca: './test/fixtures/GeoTrust_Primary_CA.pem'}, './test/fixtures/tmp.pfx', 'password', function (error, result) {
+      pem.convert.P7B2PFX({ cert: './test/fixtures/test.p7b', key: './test/fixtures/test.key', ca: './test/fixtures/GeoTrust_Primary_CA.pem' }, './test/fixtures/tmp.pfx', 'password', function (error, result) {
         hlp.checkError(error)
         expect(result).to.be.true()
         done()
@@ -237,7 +237,7 @@ describe('convert.js tests', function () {
     })
 
     it('#.P7B2PFX() [providing ca cert; array format]', function (done) {
-      pem.convert.P7B2PFX({cert: './test/fixtures/test.p7b', key: './test/fixtures/test.key', ca: ['./test/fixtures/GeoTrust_Primary_CA.pem']}, './test/fixtures/tmp.pfx', 'password', function (error, result) {
+      pem.convert.P7B2PFX({ cert: './test/fixtures/test.p7b', key: './test/fixtures/test.key', ca: ['./test/fixtures/GeoTrust_Primary_CA.pem'] }, './test/fixtures/tmp.pfx', 'password', function (error, result) {
         hlp.checkError(error)
         expect(result).to.be.true()
         done()
@@ -245,7 +245,7 @@ describe('convert.js tests', function () {
     })
 
     it('#.P7B2PFX() [not providing ca cert]', function (done) {
-      pem.convert.P7B2PFX({cert: './test/fixtures/test.p7b', key: './test/fixtures/test.key'}, './test/fixtures/tmp.pfx', 'password', function (error, result) {
+      pem.convert.P7B2PFX({ cert: './test/fixtures/test.p7b', key: './test/fixtures/test.key' }, './test/fixtures/tmp.pfx', 'password', function (error, result) {
         hlp.checkError(error)
         expect(result).to.be.true()
         done()

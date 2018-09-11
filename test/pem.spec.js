@@ -801,9 +801,9 @@ describe('General Tests', function () {
         },
         san: {
           dns: [
-            "example.com",
-            "*.app.example.com",
-            "www.example.com"
+            'example.com',
+            '*.app.example.com',
+            'www.example.com'
           ],
           email: [],
           ip: []
@@ -850,9 +850,9 @@ describe('General Tests', function () {
         },
         san: {
           dns: [
-            "example.com",
-            "*.app.example.com",
-            "www.example.com"
+            'example.com',
+            '*.app.example.com',
+            'www.example.com'
           ],
           email: [],
           ip: []
