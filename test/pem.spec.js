@@ -387,6 +387,8 @@ describe('General Tests', function () {
 
       var d = fs.readFileSync('./test/fixtures/pem196.pem').toString()
       pem.readCertificateInfo(d, function (error, data) {
+        if (data.serial) delete data.serial
+        if (certInfo.serial) delete certInfo.serial
         hlp.checkError(error)
         hlp.checkCertificateData(data, certInfo)
         hlp.checkTmpEmpty()
