@@ -58,7 +58,7 @@ script:
   - npm run test
 after_success:
 #  - if [[ "$TRAVIS_NODE_VERSION" == "8" && "$TRAVIS_BRANCH" == "master" && "$TRAVIS_PULL_REQUEST" == "false" ]]; then npm run aftersuccess ; fi
-  - if [[ "$TRAVIS_BRANCH" == "master" && "$TRAVIS_PULL_REQUEST" == "false" ]]; then travis-deploy-once -b 1 && npm run semantic-release ; fi
+  - if [[ "$TRAVIS_BRANCH" == "master" && "$TRAVIS_PULL_REQUEST" == "false" ]]; then travis-deploy-once -b 3 && npm run changelog && npm run semantic-release ; fi
 #  - if [[ "$TRAVIS_NODE_VERSION" == "8" && "$TRAVIS_BRANCH" == "master" && "$TRAVIS_PULL_REQUEST" == "false" ]]; then npm run aftersuccess -- -push ; fi
 branches:
   except:
