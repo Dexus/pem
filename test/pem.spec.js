@@ -353,6 +353,46 @@ describe('General Tests', function () {
         })
       })
     })
+
+    it('Read CertInformation form ./test/fixtures/pem196.pem', function (done) {
+      var certInfo = {
+        issuer: {
+          country: 'BO',
+          state: '',
+          locality: '',
+          organization: 'ADSIB',
+          organizationUnit: '',
+          commonName: 'Entidad Certificadora Publica ADSIB',
+          dc: ''
+        },
+        serial: '2854046357827755658 (0x279b9c0a82d21e8a)',
+        '1.3.6.1.1.1.1.0': '#0C0734373132323836',
+        dnQualifier: 'CI',
+        country: 'BO',
+        state: '',
+        locality: '',
+        organization: '',
+        organizationUnit: '',
+        commonName: 'ILSE SILES BECERRA',
+        emailAddress: '',
+        dc: '',
+        validity: {
+          start: 1524175291000,
+          end: 1524434491000
+        },
+        signatureAlgorithm: 'sha256WithRSAEncryption',
+        publicKeySize: '2048 bit',
+        publicKeyAlgorithm: 'rsaEncryption'
+      }
+
+      var d = fs.readFileSync('./test/fixtures/pem196.pem').toString()
+      pem.readCertificateInfo(d, function (error, data) {
+        hlp.checkError(error)
+        hlp.checkCertificateData(data, certInfo)
+        hlp.checkTmpEmpty()
+        done()
+      })
+    })
   })
 
   describe('#.createCertificate tests', function () {
