@@ -1,3 +1,10 @@
+## [1.13.1](https://github.com/Dexus/pem/compare/v1.13.0...v1.13.1) (2018-09-14)
+
+
+### Bug Fixes
+
+* **package:** remove -utf8 option ([4d10fb2](https://github.com/Dexus/pem/commit/4d10fb2)), closes [#214](https://github.com/Dexus/pem/issues/214)
+
 # [1.13.0](https://github.com/Dexus/pem/compare/v1.12.8...v1.13.0) (2018-09-11)
 
 
