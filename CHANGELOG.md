@@ -1,3 +1,10 @@
+## [1.13.2](https://github.com/Dexus/pem/compare/v1.13.1...v1.13.2) (2018-10-26)
+
+
+### Bug Fixes
+
+* **package:** security fix ([#217](https://github.com/Dexus/pem/issues/217)) ([bed1190](https://github.com/Dexus/pem/commit/bed1190))
+
 ## [1.13.1](https://github.com/Dexus/pem/compare/v1.13.0...v1.13.1) (2018-09-14)
 
 
