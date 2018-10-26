@@ -16,7 +16,7 @@ describe('helper.js tests', function () {
       helper.createPasswordFile(
         {},
         ['pkcs12', '-info', '-in', bufferOrPath, '-noout', '-maciter', '-nodes'],
-        tmpfiles[tmpfiles.length]
+        tmpfiles
       )
       helper.deleteTempFiles(tmpfiles, function (fsErr) {
         hlp.checkError(fsErr)
@@ -29,7 +29,7 @@ describe('helper.js tests', function () {
       helper.createPasswordFile(
         { cipher: '', bla: true, blub: true },
         ['pkcs12', '-info', '-in', bufferOrPath, '-noout', '-maciter', '-nodes'],
-        tmpfiles[tmpfiles.length]
+        tmpfiles
       )
       helper.deleteTempFiles(tmpfiles, function (fsErr) {
         hlp.checkError(fsErr)
@@ -42,7 +42,7 @@ describe('helper.js tests', function () {
       helper.createPasswordFile(
         { cipher: '', password: 'gregegegeg', passType: 'in', mustPass: 'password' },
         ['pkcs12', '-info', '-in', bufferOrPath, '-noout', '-maciter', '-nodes'],
-        tmpfiles[tmpfiles.length]
+        tmpfiles
       )
       helper.deleteTempFiles(tmpfiles, function (fsErr) {
         hlp.checkError(fsErr)
