@@ -48,7 +48,7 @@
     "@semantic-release/git": "^7.0.4",
     "@semantic-release/github": "^5.0.5",
     "@semantic-release/npm": "^5.0.4",
-    "ajv": "^6.0.0",
+    "ajv": "^6.6.1",
     "auto-changelog": "^1.8.0",
     "chai": "^4.1.2",
     "cross-env": "^5.2.0",
