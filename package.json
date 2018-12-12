@@ -48,7 +48,7 @@
     "@semantic-release/git": "^7.0.4",
     "@semantic-release/github": "^5.0.5",
     "@semantic-release/npm": "^5.0.4",
-    "ajv": "^6.0.0",
+    "ajv": "^6.6.1",
     "auto-changelog": "^1.8.0",
     "chai": "^4.1.2",
     "cross-env": "^5.2.0",
@@ -59,7 +59,7 @@
     "eslint-plugin-import": "2.14.0",
     "eslint-plugin-json": "^1.2.1",
     "eslint-plugin-markdown": "^1.0.0-beta.8",
-    "eslint-plugin-node": "^7.0.1",
+    "eslint-plugin-node": "^8.0.0",
     "eslint-plugin-promise": "^4.0.1",
     "eslint-plugin-standard": "^4.0.0",
     "jsdoc": "^3.5.5",
@@ -67,7 +67,7 @@
     "mocha": "^5.2.0",
     "nyc": "^13.1.0",
     "semantic-release": "^15.12.5",
-    "travis-deploy-once": "^5.0.7"
+    "travis-deploy-once": "^5.0.10"
   },
   "engines": {
     "node": ">=6.0.0"
