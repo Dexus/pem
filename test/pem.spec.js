@@ -440,6 +440,90 @@ describe('General Tests', function () {
       })
     })
 
+    describe('SAN certificate', function () {
+      var cert
+      it('Create default certificate', function (done) {
+        var d = fs.readFileSync('./test/fixtures/ru_openssl.csr').toString()
+        pem.createCertificate({ csr: d }, function (error, data) {
+          hlp.checkError(error)
+          hlp.checkCertificate(data)
+          hlp.checkTmpEmpty()
+          cert = data
+          done()
+        })
+      })
+
+      it('get its fingerprint', function (done) {
+        pem.getFingerprint(cert.certificate, function (error, data) {
+          hlp.checkError(error)
+          hlp.checkFingerprint(data)
+          hlp.checkTmpEmpty()
+          done()
+        })
+      })
+
+      it('get its modulus [not hashed]', function (done) {
+        pem.getModulus(cert.certificate, function (error,
+          data) {
+          hlp.checkError(error)
+          hlp.checkModulus(data)
+          hlp.checkTmpEmpty()
+          done()
+        })
+      })
+
+      it('get its modulus [md5 hashed]', function (done) {
+        pem.getModulus(cert.certificate, null, 'md5',
+          function (error, data) {
+            hlp.checkError(error)
+            hlp.checkModulus(data, 'md5')
+            hlp.checkTmpEmpty()
+            done()
+          })
+      })
+
+      it('read its data', function (done) {
+        pem.readCertificateInfo(cert.certificate, function (
+          error, data) {
+          hlp.checkError(error);
+          ['validity', 'serial', 'signatureAlgorithm',
+            'publicKeySize', 'publicKeyAlgorithm'
+          ].forEach(function (k) {
+            if (data[k]) { delete data[k] }
+          })
+          hlp.checkCertificateData(data, {
+            'commonName': 'Описание сайта',
+            'country': 'RU',
+            'dc': '',
+            'emailAddress': 'envek@envek.name',
+            'issuer': {
+              'commonName': 'Описание сайта',
+              'country': 'RU',
+              'dc': '',
+              'locality': 'Москва',
+              'organization': 'Моя компания',
+              'organizationUnit': 'Моё подразделение',
+              'state': ''
+            },
+            'locality': 'Москва',
+            'organization': 'Моя компания',
+            'organizationUnit': 'Моё подразделение',
+            'san': {
+              'dns': [
+                'example.com',
+                '*.example.com'
+              ],
+              'email': [],
+              'ip': []
+            },
+            'state': ''
+          })
+          hlp.checkTmpEmpty()
+          done()
+        })
+      })
+    })
+
     describe('CA certificate', function () {
       var ca
       it('create ca certificate', function (done) {
