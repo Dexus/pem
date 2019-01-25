@@ -1,3 +1,10 @@
+## [1.14.1](https://github.com/Dexus/pem/compare/v1.14.0...v1.14.1) (2019-01-25)
+
+
+### Bug Fixes
+
+* **package:** add altNames + csrConfigFile options to createCertificate ([f599d96](https://github.com/Dexus/pem/commit/f599d96))
+
 # [1.14.0](https://github.com/Dexus/pem/compare/v1.13.2...v1.14.0) (2019-01-25)
 
 
