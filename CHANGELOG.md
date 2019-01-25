@@ -1,3 +1,10 @@
+# [1.14.0](https://github.com/Dexus/pem/compare/v1.13.2...v1.14.0) (2019-01-25)
+
+
+### Features
+
+* **package:** Support SAN Certificate from CSR ([#229](https://github.com/Dexus/pem/issues/229)) ([fa450f5](https://github.com/Dexus/pem/commit/fa450f5))
+
 ## [1.13.2](https://github.com/Dexus/pem/compare/v1.13.1...v1.13.2) (2018-10-26)
 
 
