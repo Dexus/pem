@@ -195,6 +195,18 @@ describe('General Tests', function () {
         })
       })
 
+      it('create cert using serviceKeyPassword', function (done) {
+        pem.createCertificate({
+          serviceKeyPassword: 'min4chars',
+          selfSigned: true
+        }, function (error, data) {
+          hlp.checkError(error)
+          hlp.checkCertificate(data, true)
+          hlp.checkTmpEmpty()
+          done()
+        })
+      })
+
       it('create cert using pkey w/ password; create pkcs12', function (done) {
         pem.createCertificate({
           clientKey: pwkey.key,
