@@ -1,3 +1,10 @@
+## [1.14.2](https://github.com/Dexus/pem/compare/v1.14.1...v1.14.2) (2019-02-16)
+
+
+### Bug Fixes
+
+* Merge pull request [#234](https://github.com/Dexus/pem/issues/234) from pvangeepuram/fix-serviceKeyPassword-issue ([1649e7b](https://github.com/Dexus/pem/commit/1649e7b))
+
 ## [1.14.1](https://github.com/Dexus/pem/compare/v1.14.0...v1.14.1) (2019-01-25)
 
 
