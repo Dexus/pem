@@ -1,40 +1,24 @@
 {
-  "author": "Andris Reinman <andris@kreata.ee>",
-  "contributors": [
-    {
-      "name": "Josef Fröhle",
-      "email": "github@josef-froehle.de",
-      "url": "https://www.josef-froehle.de/"
-    }
-  ],
+  "author": "Andris Reinman <andris@node.ee>",
   "name": "pem",
-  "description": "Create private keys and certificates with node.js and io.js",
-  "version": "1.9.6",
+  "description": "Create private keys and certificates with node.js",
+  "version": "0.2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Dexus/pem.git"
+    "url": "git://github.com/andris9/pem.git"
   },
   "main": "lib/pem",
   "scripts": {
-    "test": "grunt",
-    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
+    "test": "nodeunit test"
   },
   "dependencies": {
-    "os-tmpdir": "^1.0.1",
-    "which": "^1.2.4"
+    "ursa": "0.9.4"
   },
   "devDependencies": {
-    "grunt": "^1.0.1",
-    "grunt-contrib-jshint": "^1.1.0",
-    "grunt-contrib-nodeunit": "^1.0.0",
-    "nodeunit": "^0.11.0",
-    "semantic-release": "^6.3.2",
-    "semantic-release-tamia": "^1.0.0"
+    "nodeunit": "*"
   },
   "optionalDependencies": {},
   "engines": {
-    "node": "*",
-    "iojs": "*"
-  },
-  "release": {}
+    "node": "*"
+  }
 }
