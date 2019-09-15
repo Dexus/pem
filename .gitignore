@@ -1,4 +1,3 @@
-lib-cov
 *.seed
 *.log
 *.csv
@@ -12,8 +11,13 @@ logs
 results
 
 node_modules
-npm-debug.log
+coverage
+.nyc_output
+npm-debug.log*
 .DS_Store
 tmp
 .idea
 .npmrc
+
+docs
+test/fixtures/tmp.*

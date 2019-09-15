@@ -1,24 +1,103 @@
 {
-  "author": "Andris Reinman <andris@node.ee>",
+  "author": "Andris Reinman <andris@kreata.ee>",
+  "contributors": [
+    {
+      "name": "Josef Fröhle",
+      "email": "github@josef-froehle.de",
+      "url": "https://www.josef-froehle.de/"
+    }
+  ],
+  "license": "MIT",
   "name": "pem",
-  "description": "Create private keys and certificates with node.js",
-  "version": "0.2.0",
+  "description": "Create private keys and certificates with node.js and io.js",
+  "version": "1.14.2",
   "repository": {
     "type": "git",
-    "url": "git://github.com/andris9/pem.git"
+    "url": "https://github.com/Dexus/pem.git"
   },
   "main": "lib/pem",
   "scripts": {
-    "test": "nodeunit test"
+    "documentation": "npm run docco --silent && npm run jsdoc --silent",
+    "docco": "docco -l parallel -o docs/docco lib/helper.js lib/openssl.js lib/pem.js",
+    "jsdoc": "jsdoc -c jsdoc.json",
+    "changelog": "auto-changelog --output HISTORY.md",
+    "coverage": "cross-env NODE_ENV=development nyc ./node_modules/.bin/_mocha --opts mocha.opts $(find . -type f -name '*.spec.js'  ! -path './nyc_output/*' ! -path './coverage/*' ! -path './node_modules/*')",
+    "semantic-release": "semantic-release",
+    "lint": "eslint --fix --config=./.eslintrc.js lib/*.js *.md *.json lib/*.js test/*.js test/*.spec.js",
+    "test": "npm run lint --silent && npm run coverage --silent"
+  },
+  "nyc": {
+    "reporter": [
+      "html",
+      "text"
+    ],
+    "exclude": [
+      "**/*.spec.js",
+      "test/pem.helper.js"
+    ]
   },
   "dependencies": {
-    "ursa": "0.9.4"
+    "es6-promisify": "^6.0.0",
+    "md5": "^2.2.1",
+    "os-tmpdir": "^1.0.1",
+    "which": "^1.3.1"
   },
   "devDependencies": {
-    "nodeunit": "*"
+    "@deineagenturug/docdash": "^0.4.1",
+    "@semantic-release/changelog": "^3.0.0",
+    "@semantic-release/git": "^7.0.4",
+    "@semantic-release/github": "^5.0.5",
+    "@semantic-release/npm": "^5.0.4",
+    "ajv": "^6.6.1",
+    "auto-changelog": "^1.8.0",
+    "chai": "^4.1.2",
+    "cross-env": "^5.2.0",
+    "dirty-chai": "^2.0.1",
+    "docco": "^0.8.0",
+    "eslint": "^5.5.0",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-plugin-import": "2.18.0",
+    "eslint-plugin-json": "^1.2.1",
+    "eslint-plugin-markdown": "^1.0.0-beta.8",
+    "eslint-plugin-node": "^8.0.0",
+    "eslint-plugin-promise": "^4.0.1",
+    "eslint-plugin-standard": "^4.0.0",
+    "jsdoc": "^3.5.5",
+    "marked": "^0.7.0",
+    "mocha": "^6.1.4",
+    "nyc": "^13.1.0",
+    "semantic-release": "^15.12.5",
+    "travis-deploy-once": "^5.0.10"
   },
-  "optionalDependencies": {},
   "engines": {
-    "node": "*"
+    "node": ">=6.0.0"
+  },
+  "release": {
+    "debug": false,
+    "verifyConditions": [
+      "@semantic-release/changelog",
+      "@semantic-release/npm",
+      "@semantic-release/git",
+      "@semantic-release/github"
+    ],
+    "prepare": [
+      "@semantic-release/changelog",
+      "@semantic-release/npm",
+      {
+        "path": "@semantic-release/git",
+        "assets": [
+          "CHANGELOG.md",
+          "HISTORY.md",
+          "package.json",
+          "package-lock.json",
+          "npm-shrinkwrap.json"
+        ],
+        "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+      }
+    ],
+    "publish": [
+      "@semantic-release/npm",
+      "@semantic-release/github"
+    ]
   }
 }
