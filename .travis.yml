@@ -10,6 +10,8 @@ node_js:
   - '10'
   - '8'
   - '6'
+cache:
+  npm: false
 env:
   global:
   - OPENSSL_DIR=/openssl
