@@ -1,3 +1,10 @@
+## [1.14.3](https://github.com/Dexus/pem/compare/v1.14.2...v1.14.3) (2019-09-17)
+
+
+### Bug Fixes
+
+* **package:** fix [#264](https://github.com/Dexus/pem/issues/264) & remove package-lock.josn ([53f1356](https://github.com/Dexus/pem/commit/53f1356))
+
 ## [1.14.2](https://github.com/Dexus/pem/compare/v1.14.1...v1.14.2) (2019-02-16)
 
 
