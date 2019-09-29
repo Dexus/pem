@@ -54,7 +54,7 @@
     "cross-env": "^5.2.0",
     "dirty-chai": "^2.0.1",
     "docco": "^0.8.0",
-    "eslint": "^5.5.0",
+    "eslint": "^6.5.0",
     "eslint-config-standard": "^12.0.0",
     "eslint-plugin-import": "2.18.1",
     "eslint-plugin-json": "^1.2.1",
