@@ -65,7 +65,7 @@
     "jsdoc": "^3.5.5",
     "marked": "^0.7.0",
     "mocha": "^6.1.4",
-    "nyc": "^13.1.0",
+    "nyc": "^15.0.0",
     "semantic-release": "^15.12.5",
     "travis-deploy-once": "^5.0.10"
   },
