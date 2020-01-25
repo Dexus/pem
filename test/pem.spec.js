@@ -504,31 +504,31 @@ describe('General Tests', function () {
             if (data[k]) { delete data[k] }
           })
           hlp.checkCertificateData(data, {
-            'commonName': 'Описание сайта',
-            'country': 'RU',
-            'dc': '',
-            'emailAddress': 'envek@envek.name',
-            'issuer': {
-              'commonName': 'Описание сайта',
-              'country': 'RU',
-              'dc': '',
-              'locality': 'Москва',
-              'organization': 'Моя компания',
-              'organizationUnit': 'Моё подразделение',
-              'state': ''
+            commonName: 'Описание сайта',
+            country: 'RU',
+            dc: '',
+            emailAddress: 'envek@envek.name',
+            issuer: {
+              commonName: 'Описание сайта',
+              country: 'RU',
+              dc: '',
+              locality: 'Москва',
+              organization: 'Моя компания',
+              organizationUnit: 'Моё подразделение',
+              state: ''
             },
-            'locality': 'Москва',
-            'organization': 'Моя компания',
-            'organizationUnit': 'Моё подразделение',
-            'san': {
-              'dns': [
+            locality: 'Москва',
+            organization: 'Моя компания',
+            organizationUnit: 'Моё подразделение',
+            san: {
+              dns: [
                 'example.com',
                 '*.example.com'
               ],
-              'email': [],
-              'ip': []
+              email: [],
+              ip: []
             },
-            'state': ''
+            state: ''
           })
           hlp.checkTmpEmpty()
           done()

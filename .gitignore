@@ -19,5 +19,4 @@ tmp
 .idea
 .npmrc
 
-docs
 test/fixtures/tmp.*
