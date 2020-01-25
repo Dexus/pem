@@ -1,3 +1,11 @@
+## [1.14.4](https://github.com/Dexus/pem/compare/v1.14.3...v1.14.4) (2020-01-25)
+
+
+### Bug Fixes
+
+* travis.yaml ([0768ade](https://github.com/Dexus/pem/commit/0768ade631033c1bb35d0bd207d80cc87b5f1813))
+* update readme and deps ([59c17d1](https://github.com/Dexus/pem/commit/59c17d15674787f3a7ef9a38c9660b9ee77e770f))
+
 ## [1.14.3](https://github.com/Dexus/pem/compare/v1.14.2...v1.14.3) (2019-09-17)
 
 
