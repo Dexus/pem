@@ -46,7 +46,7 @@
     "@deineagenturug/docdash": "^0.4.2",
     "@semantic-release/changelog": "^5.0.0",
     "@semantic-release/git": "^9.0.0",
-    "@semantic-release/github": "^6.0.2",
+    "@semantic-release/github": "^7.0.0",
     "@semantic-release/npm": "^7.0.0",
     "ajv": "^6.11.0",
     "auto-changelog": "^1.16.2",
