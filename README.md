@@ -27,7 +27,7 @@ pem.createCertificate({ days: 1, selfSigned: true }, function (err, keys) {
   if (err) {
     throw err
   }
-  https.createServer({ key: keys.serviceKey, cert: keys.certificate }, function (req, res) {
+  https.createServer({ key: keys.clientKey, cert: keys.certificate }, function (req, res) {
     res.end('o hai!')
   }).listen(443)
 })
@@ -49,7 +49,7 @@ pem.createCertificate({ days: 1, selfSigned: true }, function (err, keys) {
     res.send('o hai!')
   })
 
-  https.createServer({ key: keys.serviceKey, cert: keys.certificate }, app).listen(443)
+  https.createServer({ key: keys.clientKey, cert: keys.certificate }, app).listen(443)
 })
 ```
 
