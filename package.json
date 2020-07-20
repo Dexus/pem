@@ -49,7 +49,7 @@
     "@semantic-release/github": "^7.0.0",
     "@semantic-release/npm": "^7.0.0",
     "ajv": "^6.11.0",
-    "auto-changelog": "^1.16.2",
+    "auto-changelog": "^2.0.0",
     "chai": "^4.1.2",
     "cross-env": "^7.0.0",
     "dirty-chai": "^2.0.1",
