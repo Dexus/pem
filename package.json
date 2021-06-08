@@ -50,6 +50,7 @@
     "@semantic-release/npm": "^7.0.0",
     "ajv": "^6.11.0",
     "auto-changelog": "^1.16.2",
+    "bluebird": "^3.7.2",
     "chai": "^4.1.2",
     "cross-env": "^7.0.0",
     "dirty-chai": "^2.0.1",
