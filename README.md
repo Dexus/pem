@@ -323,7 +323,7 @@ pem.config({
 // do something with the pem module
 ```
 
-### Specialthanks to
+### Special thanks to
 
 - Andris Reinman (@andris9) - Initiator of pem
 
