@@ -714,6 +714,11 @@ describe('General Tests', function () {
           commonName: 'Intermediate CA Certificate',
           serviceKey: ca.serviceKey,
           serviceCertificate: ca.certificate,
+          config:
+              `
+              [v3_req]
+              basicConstraints = critical,CA:TRUE
+              `,
           serial: Date.now()
         }, function (error, intermediate) {
           hlp.checkError(error)
@@ -723,6 +728,11 @@ describe('General Tests', function () {
           pem.createCertificate({
             serviceKey: intermediate.clientKey,
             serviceCertificate: intermediate.certificate,
+            config:
+                `
+                [v3_req]
+                basicConstraints = critical,CA:TRUE
+                `,
             serial: Date.now()
             // days: 1024
           }, function (error, cert) {
@@ -731,7 +741,7 @@ describe('General Tests', function () {
             hlp.checkTmpEmpty()
 
             // chain check ok
-            pem.verifySigningChain([intermediate.certificate, cert.certificate], [
+            pem.verifySigningChain([cert.certificate, intermediate.certificate, ca.certificate], [
               ca.certificate, intermediate.certificate
             ], function (error, valid) {
               hlp.checkError(error)
