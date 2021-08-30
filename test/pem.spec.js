@@ -728,11 +728,6 @@ describe('General Tests', function () {
           pem.createCertificate({
             serviceKey: intermediate.clientKey,
             serviceCertificate: intermediate.certificate,
-            config:
-                `
-                [v3_req]
-                basicConstraints = critical,CA:TRUE
-                `,
             serial: Date.now()
             // days: 1024
           }, function (error, cert) {
@@ -766,6 +761,81 @@ describe('General Tests', function () {
                     done()
                   })
               })
+            })
+          })
+        })
+      })
+      it('Verify same Root CA trust', function (done) {
+        // Verify TLS cert [Leaf, Int CA 2, Root CA] is valid
+        // to the trust store [Int CA 1, Root CA] since it has
+        // the same Root CA in the trust chain
+        pem.createCertificate({
+          commonName: 'Intermediate CA 1 Certificate',
+          serviceKey: ca.serviceKey,
+          serviceCertificate: ca.certificate,
+          config:
+              `
+              [v3_req]
+              basicConstraints = critical,CA:TRUE
+              `,
+          serial: Date.now()
+        }, function (error, intCa1) {
+          hlp.checkError(error)
+          hlp.checkCertificate(intCa1)
+          hlp.checkTmpEmpty()
+
+          pem.createCertificate({
+            commonName: 'Intermediate CA 2 Certificate',
+            serviceKey: ca.serviceKey,
+            serviceCertificate: ca.certificate,
+            config:
+                `
+                [v3_req]
+                basicConstraints = critical,CA:TRUE
+                `,
+            serial: Date.now()
+          }, function (error, intCa2) {
+            hlp.checkError(error)
+            hlp.checkCertificate(intCa2)
+            hlp.checkTmpEmpty()
+
+            pem.createCertificate({
+              serviceKey: intCa2.clientKey,
+              serviceCertificate: intCa2.certificate,
+              serial: Date.now()
+            }, function (error, cert) {
+              hlp.checkError(error)
+              hlp.checkCertificate(cert)
+              hlp.checkTmpEmpty()
+
+              // chain check ok
+              pem.verifySigningChain(
+                [cert.certificate, intCa2.certificate, ca.certificate],
+                [ca.certificate, intCa1.certificate],
+                function (error, valid) {
+                  hlp.checkError(error)
+                  expect(valid).to.be.true()
+
+                  // chain check fails -> missing ca cert in chain
+                  pem.verifySigningChain(
+                    [cert.certificate, intCa2.certificate],
+                    [intCa1.certificate],
+                    function (error, valid) {
+                      hlp.checkError(error)
+                      expect(valid).to.be.false()
+
+                      // chain check fails -> missing intermediate cert in chain
+                      pem.verifySigningChain(
+                        cert.certificate, [
+                          ca.certificate
+                        ],
+                        function (error, valid) {
+                          hlp.checkError(error)
+                          expect(valid).to.be.false()
+                          done()
+                        })
+                    })
+                })
             })
           })
         })
