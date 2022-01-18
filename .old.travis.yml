@@ -7,6 +7,8 @@ notifications:
     on_success: change
     on_failure: change
 node_js:
+  - "16"
+  - "14"
   - "12"
   - "10"
   - "8"
@@ -19,18 +21,20 @@ env:
   matrix:
     - LIBRARY=openssl VERSION=0.9.8zh
     - LIBRARY=openssl VERSION=1.0.1u
-    - LIBRARY=openssl VERSION=1.0.2p
-    - LIBRARY=openssl VERSION=1.1.0i
+    - LIBRARY=openssl VERSION=1.0.2u
+    - LIBRARY=openssl VERSION=1.1.0l
+    - LIBRARY=openssl VERSION=1.1.1l
+    - LIBRARY=openssl VERSION=3.0.0
     - LIBRARY=libressl VERSION=2.4.5
     - LIBRARY=libressl VERSION=2.6.5
     - LIBRARY=libressl VERSION=2.7.4
     - LIBRARY=libressl VERSION=2.8.0
 matrix:
   exclude:
-    - node_js: "10"
+    - node_js: "14"
     - node_js: "8"
   include:
-    - node_js: "10"
+    - node_js: "14"
       env:
         - OPENSSL_DIR=""
     - node_js: "8"

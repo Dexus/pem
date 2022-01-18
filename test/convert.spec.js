@@ -6,6 +6,7 @@ var fs = require('fs')
 var hlp = require('./pem.helper.js')
 var chai = require('chai')
 var dirtyChai = require('dirty-chai')
+const {debug} = require('../lib/debug.js')
 var expect = chai.expect
 chai.use(dirtyChai)
 
@@ -32,24 +33,28 @@ describe('convert.js tests', function () {
     })
     it('#.PEM2DER()', function (done) {
       pem.convert.PEM2DER('./test/fixtures/nopkey.pem', './test/fixtures/tmp.der', function (error, result) {
+        debug("TEST pem.convert.PEM2DER",{error, result} )
         hlp.checkError(error, true)
         done()
       })
     })
     it('#.DER2PEM()', function (done) {
       pem.convert.DER2PEM('./test/fixtures/tmp.der', './test/fixtures/tmp.pem', function (error, result) {
+        debug("TEST pem.convert.PEM2DER",{error, result} )
         hlp.checkError(error, true)
         done()
       })
     })
     it('#.PEM2P7B()', function (done) {
       pem.convert.PEM2P7B({ cert: './test/fixtures/nopkey.pem' }, './test/fixtures/tmp.p7b', function (error, result) {
+        debug("TEST pem.convert.PEM2DER",{error, result} )
         hlp.checkError(error, true)
         done()
       })
     })
     it('#.P7B2PEM()', function (done) {
       pem.convert.P7B2PEM('./test/fixtures/tmp.p7b', './test/fixtures/tmp.pem', function (error, result) {
+        debug("TEST pem.convert.PEM2DER",{error, result} )
         hlp.checkError(error, true)
         done()
       })
@@ -61,18 +66,21 @@ describe('convert.js tests', function () {
       }
       // password is required to encrypt the .pfx file; enforced by openssl
       pem.convert.PEM2PFX(pathIN, './test/fixtures/tmp.pfx', 'password', function (error, result) {
+        debug("TEST pem.convert.PEM2DER",{error, result} )
         hlp.checkError(error, true)
         done()
       })
     })
     it('#.PFX2PEM()', function (done) {
       pem.convert.PFX2PEM('./test/fixtures/tmp.pfx', './test/fixtures/tmp.pem', 'password', function (error, result) {
+        debug("TEST pem.convert.PEM2DER",{error, result} )
         hlp.checkError(error, true)
         done()
       })
     })
     it('#.P7B2PFX() [error in 1st step]', function (done) {
       pem.convert.P7B2PFX({ cert: './test/fixtures/test.p7b', key: './test/fixtures/test.key', ca: './test/fixtures/GeoTrust_Primary_CA.pem' }, './test/fixtures/tmp.pfx', 'password', function (error, result) {
+        debug("TEST pem.convert.PEM2DER",{error, result} )
         hlp.checkError(error, true)
         done()
       })
@@ -82,6 +90,7 @@ describe('convert.js tests', function () {
         pathOpenSSL: process.env.OPENSSL_BIN || 'openssl'
       })
       pem.convert.P7B2PFX({ cert: './test/fixtures/test.p7b', key: './test/fixtures/test404.key', ca: './test/fixtures/ca404.pem' }, './test/fixtures/tmp.pfx', 'password', function (error, result) {
+        debug("TEST pem.convert.PEM2DER",{error, result} )
         hlp.checkError(error, true)
         done()
       })

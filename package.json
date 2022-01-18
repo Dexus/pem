@@ -15,16 +15,21 @@
     "type": "git",
     "url": "https://github.com/Dexus/pem.git"
   },
-  "main": "lib/pem",
+  "main": "./dist/index.js",
+  "files": [
+    "dist"
+  ],
+  "type": "commonjs",
   "scripts": {
-    "documentation": "npm run docco --silent && npm run jsdoc --silent",
+    "documentation": "yarn run docco --silent && yarn run jsdoc --silent",
     "docco": "docco -l parallel -o docs/docco lib/helper.js lib/openssl.js lib/pem.js",
     "jsdoc": "jsdoc -c jsdoc.json",
+    "build": "ncc build -m -s lib/pem.js -o dist",
     "changelog": "auto-changelog --output HISTORY.md",
-    "coverage": "cross-env NODE_ENV=development nyc ./node_modules/.bin/_mocha --opts mocha.opts $(find . -type f -name '*.spec.js'  ! -path './nyc_output/*' ! -path './coverage/*' ! -path './node_modules/*')",
+    "coverage": "cross-env NODE_ENV=development nyc ./node_modules/.bin/_mocha --recursive --bail --inline-diffs --reporter spec --check-leaks --use_strict $(find . -type f -name '*.spec.js'  ! -path './nyc_output/*' ! -path './coverage/*' ! -path './node_modules/*')",
     "semantic-release": "semantic-release",
     "lint": "eslint --fix --config=./.eslintrc.js lib/*.js *.md *.json lib/*.js test/*.js test/*.spec.js",
-    "test": "npm run lint --silent && npm run coverage --silent"
+    "test": "yarn run lint && yarn run coverage"
   },
   "nyc": {
     "reporter": [
@@ -37,9 +42,9 @@
     ]
   },
   "dependencies": {
-    "es6-promisify": "^6.0.0",
-    "md5": "^2.2.1",
-    "os-tmpdir": "^1.0.1",
+    "es6-promisify": "^7.0.0",
+    "md5": "^2.3.0",
+    "os-tmpdir": "^1.0.2",
     "which": "^2.0.2"
   },
   "devDependencies": {
@@ -48,20 +53,24 @@
     "@semantic-release/git": "^9.0.0",
     "@semantic-release/github": "^7.0.0",
     "@semantic-release/npm": "^7.0.0",
+    "@types/chai": "^4.3.0",
+    "@types/dirty-chai": "^2.0.2",
+    "@vercel/ncc": "^0.33.1",
     "ajv": "^6.11.0",
     "auto-changelog": "^1.16.2",
     "chai": "^4.1.2",
     "cross-env": "^7.0.0",
     "dirty-chai": "^2.0.1",
     "docco": "^0.8.0",
-    "eslint": "^6.8.0",
-    "eslint-config-standard": "^14.1.0",
+    "eslint": "^8.7.0",
+    "eslint-plugin-chai-friendly": "^0.7.2",
+    "eslint-plugin-eslint-plugin": "^4.1.0",
     "eslint-plugin-import": "^2.20.0",
-    "eslint-plugin-json": "^2.0.1",
-    "eslint-plugin-markdown": "^1.0.1",
-    "eslint-plugin-node": "^11.0.0",
-    "eslint-plugin-promise": "^4.0.1",
-    "eslint-plugin-standard": "^4.0.0",
+    "eslint-plugin-json": "^3.1.0",
+    "eslint-plugin-markdown": "^2.2.1",
+    "eslint-plugin-mocha": "^10.0.3",
+    "eslint-plugin-n": "^14.0.0",
+    "eslint-plugin-promise": "^6.0.0",
     "jsdoc": "^3.5.5",
     "marked": "^0.8.0",
     "mocha": "^7.0.0",
@@ -70,7 +79,7 @@
     "travis-deploy-once": "^5.0.10"
   },
   "engines": {
-    "node": ">=6.0.0"
+    "node": ">=14.0.0"
   },
   "release": {
     "debug": false,
