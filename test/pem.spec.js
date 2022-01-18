@@ -3,6 +3,7 @@
 var pem = require('..')
 var fs = require('fs')
 var hlp = require('./pem.helper.js')
+const {debug} = require('../lib/debug.js')
 var chai = require('chai')
 var dirtyChai = require('dirty-chai')
 var expect = chai.expect
@@ -62,7 +63,7 @@ describe('General Tests', function () {
     it('Create default ecparam key', function (done) {
       pem.createEcparam(function (error, data) {
         hlp.checkError(error)
-        hlp.checkEcparam(data, 430, 470)
+        hlp.checkEcparam(data, 430, 530)
         hlp.checkTmpEmpty()
         done()
       })
@@ -176,7 +177,7 @@ describe('General Tests', function () {
           password: 'min4chars'
         }, function (error, data) {
           hlp.checkError(error)
-          hlp.checkPrivateKey(data, 1700, 1800, true)
+          hlp.checkPrivateKey(data, 1700, 1900, true)
           hlp.checkTmpEmpty()
           pwkey = data
           done()
@@ -400,7 +401,7 @@ describe('General Tests', function () {
 
       it('get its modulus [not hashed]', function (done) {
         pem.getModulus(cert.certificate, function (error,
-          data) {
+                                                   data) {
           hlp.checkError(error)
           hlp.checkModulus(data)
           hlp.checkTmpEmpty()
@@ -425,7 +426,9 @@ describe('General Tests', function () {
           ['validity', 'serial', 'signatureAlgorithm',
             'publicKeySize', 'publicKeyAlgorithm'
           ].forEach(function (k) {
-            if (data[k]) { delete data[k] }
+            if (data[k]) {
+              delete data[k]
+            }
           })
           hlp.checkCertificateData(data, {
             issuer: {
@@ -456,7 +459,7 @@ describe('General Tests', function () {
       var cert
       it('Create default certificate', function (done) {
         var d = fs.readFileSync('./test/fixtures/ru_openssl.csr').toString()
-        pem.createCertificate({ csr: d }, function (error, data) {
+        pem.createCertificate({csr: d}, function (error, data) {
           hlp.checkError(error)
           hlp.checkCertificate(data)
           hlp.checkTmpEmpty()
@@ -476,7 +479,7 @@ describe('General Tests', function () {
 
       it('get its modulus [not hashed]', function (done) {
         pem.getModulus(cert.certificate, function (error,
-          data) {
+                                                   data) {
           hlp.checkError(error)
           hlp.checkModulus(data)
           hlp.checkTmpEmpty()
@@ -501,7 +504,9 @@ describe('General Tests', function () {
           ['validity', 'serial', 'signatureAlgorithm',
             'publicKeySize', 'publicKeyAlgorithm'
           ].forEach(function (k) {
-            if (data[k]) { delete data[k] }
+            if (data[k]) {
+              delete data[k]
+            }
           })
           hlp.checkCertificateData(data, {
             commonName: 'Описание сайта',
@@ -540,103 +545,103 @@ describe('General Tests', function () {
       var ca
       it('create ca certificate', function (done) {
         pem.createCertificate({
-          commonName: 'CA Certificate'
-        },
-        function (error, data) {
-          hlp.checkError(error)
-          hlp.checkCertificate(data)
-          hlp.checkTmpEmpty()
-          ca = data
-          done()
-        })
+            commonName: 'CA Certificate'
+          },
+          function (error, data) {
+            hlp.checkError(error)
+            hlp.checkCertificate(data)
+            hlp.checkTmpEmpty()
+            ca = data
+            done()
+          })
       })
       it('create certificate with text serial "demo-serial"', function (done) {
         pem.createCertificate({
-          serviceKey: ca.serviceKey,
-          serviceCertificate: ca.certificate,
-          serial: 'demo-serial'
-        },
-        function (error, data) {
-          hlp.checkError(error)
-          hlp.checkCertificate(data)
-          hlp.checkTmpEmpty()
-          pem.readCertificateInfo(data.certificate, function (error, data) {
-            hlp.checkError(error);
-            ['validity', 'serial'].forEach(function (k) {
-              if (data[k]) {
-                delete data[k]
-              }
-            })
+            serviceKey: ca.serviceKey,
+            serviceCertificate: ca.certificate,
+            serial: 'demo-serial'
+          },
+          function (error, data) {
+            hlp.checkError(error)
+            hlp.checkCertificate(data)
             hlp.checkTmpEmpty()
-            done()
+            pem.readCertificateInfo(data.certificate, function (error, data) {
+              hlp.checkError(error);
+              ['validity', 'serial'].forEach(function (k) {
+                if (data[k]) {
+                  delete data[k]
+                }
+              })
+              hlp.checkTmpEmpty()
+              done()
+            })
           })
-        })
       })
       it('create certificate with hex serial "0x1234567890abcdef"', function (done) {
         pem.createCertificate({
-          serviceKey: ca.serviceKey,
-          serviceCertificate: ca.certificate,
-          serial: '0x1234567890abcdef'
-        },
-        function (error, data) {
-          hlp.checkError(error)
-          hlp.checkCertificate(data)
-          hlp.checkTmpEmpty()
-          pem.readCertificateInfo(data.certificate, function (error, data) {
-            hlp.checkError(error);
-            ['validity', 'serial'].forEach(function (k) {
-              if (data[k]) {
-                delete data[k]
-              }
-            })
+            serviceKey: ca.serviceKey,
+            serviceCertificate: ca.certificate,
+            serial: '0x1234567890abcdef'
+          },
+          function (error, data) {
+            hlp.checkError(error)
+            hlp.checkCertificate(data)
             hlp.checkTmpEmpty()
-            done()
+            pem.readCertificateInfo(data.certificate, function (error, data) {
+              hlp.checkError(error);
+              ['validity', 'serial'].forEach(function (k) {
+                if (data[k]) {
+                  delete data[k]
+                }
+              })
+              hlp.checkTmpEmpty()
+              done()
+            })
           })
-        })
       })
       it('create certificate with hex serial "1234567890abcdef"', function (done) {
         pem.createCertificate({
-          serviceKey: ca.serviceKey,
-          serviceCertificate: ca.certificate,
-          serial: '1234567890abcdef'
-        },
-        function (error, data) {
-          hlp.checkError(error)
-          hlp.checkCertificate(data)
-          hlp.checkTmpEmpty()
-          pem.readCertificateInfo(data.certificate, function (error, data) {
-            hlp.checkError(error);
-            ['validity', 'serial'].forEach(function (k) {
-              if (data[k]) {
-                delete data[k]
-              }
-            })
+            serviceKey: ca.serviceKey,
+            serviceCertificate: ca.certificate,
+            serial: '1234567890abcdef'
+          },
+          function (error, data) {
+            hlp.checkError(error)
+            hlp.checkCertificate(data)
             hlp.checkTmpEmpty()
-            done()
+            pem.readCertificateInfo(data.certificate, function (error, data) {
+              hlp.checkError(error);
+              ['validity', 'serial'].forEach(function (k) {
+                if (data[k]) {
+                  delete data[k]
+                }
+              })
+              hlp.checkTmpEmpty()
+              done()
+            })
           })
-        })
       })
       it('create certificate with number serial "1234567890"', function (done) {
         pem.createCertificate({
-          serviceKey: ca.serviceKey,
-          serviceCertificate: ca.certificate,
-          serial: 1234567890
-        },
-        function (error, data) {
-          hlp.checkError(error)
-          hlp.checkCertificate(data)
-          hlp.checkTmpEmpty()
-          pem.readCertificateInfo(data.certificate, function (error, data) {
-            hlp.checkError(error);
-            ['validity', 'serial'].forEach(function (k) {
-              if (data[k]) {
-                delete data[k]
-              }
-            })
+            serviceKey: ca.serviceKey,
+            serviceCertificate: ca.certificate,
+            serial: 1234567890
+          },
+          function (error, data) {
+            hlp.checkError(error)
+            hlp.checkCertificate(data)
             hlp.checkTmpEmpty()
-            done()
+            pem.readCertificateInfo(data.certificate, function (error, data) {
+              hlp.checkError(error);
+              ['validity', 'serial'].forEach(function (k) {
+                if (data[k]) {
+                  delete data[k]
+                }
+              })
+              hlp.checkTmpEmpty()
+              done()
+            })
           })
-        })
       })
       it('verify signing chain; create and read PKCS12', function (done) {
         pem.createCertificate({
@@ -665,6 +670,10 @@ describe('General Tests', function () {
 
                   pem.readPkcs12(d.pkcs12,
                     function (error, keystore) {
+                      debug("verify signing chain; create and read PKCS12 - pem.readPkcs12", {
+                        error: error,
+                        keystore: keystore
+                      })
                       hlp.checkError(error)
                       expect(keystore).to.be.an('object')
                       expect(keystore).to.have.property('ca')
@@ -695,6 +704,10 @@ describe('General Tests', function () {
           pem.verifySigningChain(data.certificate,
             data.certificate,
             function (error, valid) {
+              debug("Fail to verify invalid sigining chain - verifySigningChain", {
+                error: error,
+                valid: valid
+              })
               hlp.checkError(error)
               expect(valid).to.be.false()
               done()
@@ -702,8 +715,12 @@ describe('General Tests', function () {
         })
       })
       it('Verify google.com certificate without provided CA certificates', function (done) {
-        var certificate = fs.readFileSync('./test/fixtures/google.com.pem').toString()
+        var certificate = fs.readFileSync('./test/fixtures/google.com-old.pem').toString()
         pem.verifySigningChain(certificate, function (error, valid) {
+          debug("Verify google.com certificate without provided CA certificates - verifySigningChain", {
+            error: error,
+            valid: valid
+          })
           hlp.checkError(error)
           expect(valid).to.be.false()
           done()
@@ -715,7 +732,7 @@ describe('General Tests', function () {
           serviceKey: ca.serviceKey,
           serviceCertificate: ca.certificate,
           config:
-              `
+            `
               [v3_req]
               basicConstraints = critical,CA:TRUE
               `,
@@ -755,7 +772,7 @@ describe('General Tests', function () {
                     ca.certificate
                   ],
                   function (error,
-                    valid) {
+                            valid) {
                     hlp.checkError(error)
                     expect(valid).to.be.false()
                     done()
@@ -774,7 +791,7 @@ describe('General Tests', function () {
           serviceKey: ca.serviceKey,
           serviceCertificate: ca.certificate,
           config:
-              `
+            `
               [v3_req]
               basicConstraints = critical,CA:TRUE
               `,
@@ -789,7 +806,7 @@ describe('General Tests', function () {
             serviceKey: ca.serviceKey,
             serviceCertificate: ca.certificate,
             config:
-                `
+              `
                 [v3_req]
                 basicConstraints = critical,CA:TRUE
                 `,
@@ -901,7 +918,9 @@ describe('General Tests', function () {
         pem.readCertificateInfo(data.certificate, function (error, data) {
           hlp.checkError(error);
           ['validity', 'serial'].forEach(function (k) {
-            if (data[k]) { delete data[k] }
+            if (data[k]) {
+              delete data[k]
+            }
           })
           hlp.checkCertificateData(data, certInfo)
           hlp.checkTmpEmpty()

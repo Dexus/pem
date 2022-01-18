@@ -1,0 +1,92 @@
+name: "Test Different Outputs"
+on:
+  workflow_dispatch:
+env:
+  TARGET: "x86_64-unknown-linux-gnu"
+jobs:
+  build:
+    if: github.ref != 'refs/heads/master'
+    name: "RuN!!!!"
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        OPENSSL_DIR: [""]
+        LIBRARY: [""]
+        VERSION: [""]
+        include:
+          - LIBRARY: openssl
+            VERSION: 0.9.8zh
+            OPENSSL_DIR: "/openssl"
+          - LIBRARY: openssl
+            VERSION: 1.0.1u
+            OPENSSL_DIR: "/openssl"
+          - LIBRARY: openssl
+            VERSION: 1.0.2u
+            OPENSSL_DIR: "/openssl"
+          - LIBRARY: openssl
+            VERSION: 1.1.0l
+            OPENSSL_DIR: "/openssl"
+          - LIBRARY: openssl
+            VERSION: 1.1.1l
+            OPENSSL_DIR: "/openssl"
+          - LIBRARY: openssl
+            VERSION: 3.0.0
+            OPENSSL_DIR: "/openssl"
+          - LIBRARY: libressl
+            VERSION: 2.4.5
+            OPENSSL_DIR: "/openssl"
+          - LIBRARY: libressl
+            VERSION: 2.5.5
+            OPENSSL_DIR: "/openssl"
+          - LIBRARY: libressl
+            VERSION: 2.6.5
+            OPENSSL_DIR: "/openssl"
+          - LIBRARY: libressl
+            VERSION: 2.7.5
+            OPENSSL_DIR: "/openssl"
+          - LIBRARY: libressl
+            VERSION: 2.8.3
+            OPENSSL_DIR: "/openssl"
+          - LIBRARY: libressl
+            VERSION: 2.9.2
+            OPENSSL_DIR: "/openssl"
+          - LIBRARY: libressl
+            VERSION: 3.0.2
+            OPENSSL_DIR: "/openssl"
+          - LIBRARY: libressl
+            VERSION: 3.1.5
+            OPENSSL_DIR: "/openssl"
+          - LIBRARY: libressl
+            VERSION: 3.2.7
+            OPENSSL_DIR: "/openssl"
+          - LIBRARY: libressl
+            VERSION: 3.3.5
+            OPENSSL_DIR: "/openssl"
+          - LIBRARY: libressl
+            VERSION: 3.4.2
+            OPENSSL_DIR: "/openssl"
+    steps:
+      - uses: actions/checkout@v2
+      - run: sudo apt-get install -y haveged ca-certificates
+      - run: |
+          sudo haveged -w 2048
+          mkdir openssl
+      - name: Cache OpenSSL Binary
+        uses: actions/cache@v2
+        with:
+          path: ./openssl/
+          key: ${{ runner.os }}-build-openssl-output-v1-${{ matrix.LIBRARY }}-${{ matrix.VERSION }}
+      - name: "Build and run command"
+        run: |
+          set +e -x
+          if [[ "$OPENSSL_DIR" != "" ]]; then "./bin/test_build_openssl.sh" ; fi
+          if [[ "$CI" == 'true' ]] && [[ -f "./openssl/bin/openssl" ]]; then 
+            ./openssl/bin/openssl version
+          else 
+            openssl version
+          fi
+        env:
+          OPENSSL_DIR: ${{ matrix.OPENSSL_DIR }}
+          LIBRARY: ${{ matrix.LIBRARY }}
+          VERSION: ${{ matrix.VERSION }}

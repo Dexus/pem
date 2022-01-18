@@ -1,0 +1,15 @@
+.idea/
+.github/
+.nyc_output/
+openssl/
+bin/
+node_modules/
+
+/.eslintignore
+/.eslintrc.js
+/.gitignore
+/.mocharc.yaml
+/.npmignore
+/tsconfig.json
+
+test/**.spec.js

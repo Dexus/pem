@@ -18,5 +18,6 @@ npm-debug.log*
 tmp
 .idea
 .npmrc
+openssl/
 
 test/fixtures/tmp.*
