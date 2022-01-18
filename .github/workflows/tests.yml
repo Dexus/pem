@@ -38,9 +38,6 @@ jobs:
             VERSION: 2.8.0
           - node_js: '14'
             openssl_dir: ''
-    env:
-      LIBRARY: ${{ matrix.LIBRARY }}
-      VERSION: ${{ matrix.VERSION }}
     steps:
       - uses: actions/checkout@v2
       - run: sudo apt-get install -y haveged
@@ -48,6 +45,7 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node_js }}
+          cache: 'yarn'
       - run: |
           yarn install
           sudo haveged -w 2048
@@ -56,3 +54,5 @@ jobs:
           yarn run test
         env:
           OPENSSL_DIR: ${{ matrix.openssl_dir }}
+          LIBRARY: ${{ matrix.LIBRARY }}
+          VERSION: ${{ matrix.VERSION }}
