@@ -24,7 +24,7 @@
     "coverage": "cross-env NODE_ENV=development nyc ./node_modules/.bin/_mocha --opts mocha.opts $(find . -type f -name '*.spec.js'  ! -path './nyc_output/*' ! -path './coverage/*' ! -path './node_modules/*')",
     "semantic-release": "semantic-release",
     "lint": "eslint --fix --config=./.eslintrc.js lib/*.js *.md *.json lib/*.js test/*.js test/*.spec.js",
-    "test": "yarn run lint --silent && yarn run coverage --silent"
+    "test": "yarn run lint && yarn run coverage"
   },
   "nyc": {
     "reporter": [
