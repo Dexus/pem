@@ -37,8 +37,6 @@ jobs:
             VERSION: 2.8.0
           - node_js: '14'
             openssl_dir: ''
-        exclude:
-          - node_js:  '14'
     env:
       LIBRARY: ${{ matrix.LIBRARY }}
       VERSION: ${{ matrix.VERSION }}
