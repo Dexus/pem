@@ -11,6 +11,7 @@ jobs:
     name: "Build and Test"
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         node_js: ['12', '14', '16' ]
         openssl_dir: ["/openssl"]
