@@ -35,11 +35,11 @@ jobs:
             VERSION: 2.7.4
           - LIBRARY: libressl
             VERSION: 2.8.0
+          - node_js: '14'
+            openssl_dir: ''
         exclude:
           - node_js:  '14'
-            openssl_dir: ''
     env:
-      OPENSSL_DIR: ${{ matrix.openssl_dir }}
       LIBRARY: ${{ matrix.LIBRARY }}
       VERSION: ${{ matrix.VERSION }}
     steps:
@@ -55,3 +55,5 @@ jobs:
       - run: |
           if [[ "$OPENSSL_DIR" != "" ]]; then "./bin/test_build_openssl.sh" ; fi
           yarn run test
+        env:
+          OPENSSL_DIR: ${{ matrix.openssl_dir }}
