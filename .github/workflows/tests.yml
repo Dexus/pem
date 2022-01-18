@@ -1,0 +1,56 @@
+name: "Test PEM module"
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+env:
+  TARGET: "x86_64-unknown-linux-gnu"
+jobs:
+  build:
+    name: "Build and Test"
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node_js: [ '8', '10', '12', '14', '16' ]
+        openssl_dir: ["/openssl", ""]
+        include:
+          - LIBRARY: openssl
+            VERSION: 0.9.8zh
+          - LIBRARY: openssl
+            VERSION: 1.0.1u
+          - LIBRARY: openssl
+            VERSION: 1.0.2u
+          - LIBRARY: openssl
+            VERSION: 1.1.0l
+          - LIBRARY: openssl
+            VERSION: 1.1.1l
+          - LIBRARY: openssl
+            VERSION: 3.0.0
+          - LIBRARY: libressl
+            VERSION: 2.4.5
+          - LIBRARY: libressl
+            VERSION: 2.6.5
+          - LIBRARY: libressl
+            VERSION: 2.7.4
+          - LIBRARY: libressl
+            VERSION: 2.8.0
+        exclude:
+          - node_js: [ '8', '14' ]
+    env:
+      OPENSSL_DIR: ${{ matrix.openssl_dir }}
+      LIBRARY: ${{ matrix.LIBRARY }}
+      VERSION: ${{ matrix.VERSION }}
+    steps:
+      - uses: actions/checkout@v2
+      - run: sudo apt-get install -y haveged
+      - name: Setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node_js }}
+      - run: |
+          yarn install
+          sudo haveged -w 2048
+      - run: |
+          if [[ "$OPENSSL_DIR" != "" ]]; then "./bin/test_build_openssl.sh" ; fi
+          yarn run test
