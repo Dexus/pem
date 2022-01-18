@@ -13,7 +13,7 @@ jobs:
     strategy:
       matrix:
         node_js: ['12', '14', '16' ]
-        openssl_dir: ["/openssl", ""]
+        openssl_dir: ["/openssl"]
         include:
           - LIBRARY: openssl
             VERSION: 0.9.8zh
@@ -37,6 +37,7 @@ jobs:
             VERSION: 2.8.0
         exclude:
           - node_js:  '14'
+            openssl_dir: ''
     env:
       OPENSSL_DIR: ${{ matrix.openssl_dir }}
       LIBRARY: ${{ matrix.LIBRARY }}
