@@ -2,7 +2,7 @@ name: "Test PEM module"
 on:
   push:
     branches:
-      - main
+      - master
   workflow_dispatch:
 env:
   TARGET: "x86_64-unknown-linux-gnu"
@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node_js: [ '8', '10', '12', '14', '16' ]
+        node_js: ['12', '14', '16' ]
         openssl_dir: ["/openssl", ""]
         include:
           - LIBRARY: openssl
@@ -36,7 +36,7 @@ jobs:
           - LIBRARY: libressl
             VERSION: 2.8.0
         exclude:
-          - node_js: [ '8', '14' ]
+          - node_js:  '14'
     env:
       OPENSSL_DIR: ${{ matrix.openssl_dir }}
       LIBRARY: ${{ matrix.LIBRARY }}
