@@ -1,4 +1,4 @@
-name: "Release NPM Package"
+name: "Release v1 NPM Package"
 on:
   workflow_dispatch:
     inputs:
@@ -10,13 +10,6 @@ on:
           Use minor (0.x.0) for new actions.
         type: string
         required: true
-      branch:
-        description: |
-          Specify the branch to push to.
-          Default will be `v1`
-        type: string
-        required: true
-        default: v1
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: false
@@ -50,12 +43,15 @@ jobs:
           yarn version --new-version ${{ github.event.inputs.tag }}
           git push
           git push --tags
+          git checkout master
+          git merge --ff-only v1
+          git push
       - run: yarn publish
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.YARN_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - uses: actions/setup-node@v2
         with:
           registry-url: 'https://npm.pkg.github.com'
       - run: yarn publish
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.BOT_PIPELINE_TOKEN }}
