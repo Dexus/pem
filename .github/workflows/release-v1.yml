@@ -40,10 +40,11 @@ jobs:
       - name: Generate new tag, push tag and branch
         run: |
           yarn run build
-          git add dist/
           yarn version --non-interactive --no-git-tag-version --new-version ${{ github.event.inputs.tag }}
           yarn run changelog
-          git add HISTORY.md
+          yarn run documentation
+          git add -a
+          yarn version --non-interactive --no-git-tag-version --new-version 0.0.0
           yarn version --non-interactive --new-version ${{ github.event.inputs.tag }}
           git push
           git push --tags
