@@ -51,105 +51,132 @@
         
         <li id="section-1">
             <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-1">&#182;</a>
-              </div>
-              
+
+                <div class="sswrap ">
+                    <a class="ss" href="#section-1">&#x00a7;</a>
+                </div>
+
             </div>
-            
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> helper = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./helper.js'</span>)
-<span class="hljs-keyword">var</span> cpspawn = <span class="hljs-built_in">require</span>(<span class="hljs-string">'child_process'</span>).spawn
-<span class="hljs-keyword">var</span> pathlib = <span class="hljs-built_in">require</span>(<span class="hljs-string">'path'</span>)
-<span class="hljs-keyword">var</span> fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">'fs'</span>)
-<span class="hljs-keyword">var</span> osTmpdir = <span class="hljs-built_in">require</span>(<span class="hljs-string">'os-tmpdir'</span>)
-<span class="hljs-keyword">var</span> crypto = <span class="hljs-built_in">require</span>(<span class="hljs-string">'crypto'</span>)
-<span class="hljs-keyword">var</span> which = <span class="hljs-built_in">require</span>(<span class="hljs-string">'which'</span>)
+
+            <div class="content">
+                <div class='highlight'><pre><span class="hljs-keyword">var</span> helper = <span class="hljs-built_in">require</span>(<span
+                        class="hljs-string">&#x27;./helper.js&#x27;</span>)
+<span class="hljs-keyword">var</span> {debug} = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;./debug.js&#x27;</span>)
+<span class="hljs-keyword">var</span> cpspawn = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;child_process&#x27;</span>).<span
+                            class="hljs-property">spawn</span>
+<span class="hljs-keyword">var</span> pathlib = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;path&#x27;</span>)
+<span class="hljs-keyword">var</span> fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;fs&#x27;</span>)
+<span class="hljs-keyword">var</span> osTmpdir = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;os-tmpdir&#x27;</span>)
+<span class="hljs-keyword">var</span> crypto = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;crypto&#x27;</span>)
+<span class="hljs-keyword">var</span> which = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;which&#x27;</span>)
 <span class="hljs-keyword">var</span> settings = {}
-<span class="hljs-keyword">var</span> tempDir = process.env.PEMJS_TMPDIR || osTmpdir()
+<span class="hljs-keyword">var</span> tempDir = process.<span class="hljs-property">env</span>.<span
+                            class="hljs-property">PEMJS_TMPDIR</span> || <span
+                            class="hljs-title function_">osTmpdir</span>()
+
+<span class="hljs-keyword">const</span> versionRegEx = <span class="hljs-keyword">new</span> <span
+                            class="hljs-title class_">RegExp</span>(<span class="hljs-string">&#x27;^(OpenSSL|LibreSSL) (((\\d+).(\\d+)).(\\d+))([a-z]+)?&#x27;</span>)
 
 <span class="hljs-comment">/**
  * pem openssl module
  *
- * @module openssl
+ * <span class="hljs-doctag">@module</span> <span class="hljs-variable">openssl</span>
  */</span>
 
 <span class="hljs-comment">/**
  * configue this openssl module
  *
- * @static
- * @param {String} option name e.g. pathOpenSSL, openSslVersion; TODO rethink nomenclature
- * @param {*} value value
+ * <span class="hljs-doctag">@static</span>
+ * <span class="hljs-doctag">@param</span> {<span class="hljs-type">String</span>} option name e.g. pathOpenSSL, openSslVersion; TODO rethink nomenclature
+ * <span class="hljs-doctag">@param</span> {<span class="hljs-type">*</span>} value value
  */</span>
-<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">set</span> (<span class="hljs-params">option, value</span>) </span>{
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">set</span>(<span class="hljs-params">option, value</span>) {
   settings[option] = value
 }
 
 <span class="hljs-comment">/**
  * get configuration setting value
  *
- * @static
- * @param {String} option name
+ * <span class="hljs-doctag">@static</span>
+ * <span class="hljs-doctag">@param</span> {<span class="hljs-type">String</span>} option name
  */</span>
-<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">get</span> (<span class="hljs-params">option</span>) </span>{
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">get</span>(<span class="hljs-params">option</span>) {
   <span class="hljs-keyword">return</span> settings[option] || <span class="hljs-literal">null</span>
 }
 
 <span class="hljs-comment">/**
  * Spawn an openssl command
  *
- * @static
- * @param {Array} params Array of openssl command line parameters
- * @param {String} searchStr String to use to find data
- * @param {Array} [tmpfiles] list of temporary files
- * @param {Function} callback Called with (error, stdout-substring)
+ * <span class="hljs-doctag">@static</span>
+ * <span class="hljs-doctag">@param</span> {<span class="hljs-type">Array</span>} params Array of openssl command line parameters
+ * <span class="hljs-doctag">@param</span> {<span class="hljs-type">String</span>} searchStr String to use to find data
+ * <span class="hljs-doctag">@param</span> {<span class="hljs-type">Array</span>} [tmpfiles] list of temporary files
+ * <span class="hljs-doctag">@param</span> {<span class="hljs-type">Function</span>} callback Called with (error, stdout-substring)
  */</span>
-<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">exec</span> (<span class="hljs-params">params, searchStr, tmpfiles, callback</span>) </span>{
-  <span class="hljs-keyword">if</span> (!callback &amp;&amp; <span class="hljs-keyword">typeof</span> tmpfiles === <span class="hljs-string">'function'</span>) {
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">exec</span>(<span class="hljs-params">params, searchStr, tmpfiles, callback</span>) {
+  <span class="hljs-keyword">if</span> (!callback &amp;&amp; <span class="hljs-keyword">typeof</span> tmpfiles === <span
+                            class="hljs-string">&#x27;function&#x27;</span>) {
     callback = tmpfiles
     tmpfiles = <span class="hljs-literal">false</span>
   }
 
-  spawnWrapper(params, tmpfiles, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">err, code, stdout, stderr</span>) </span>{
+  <span class="hljs-title function_">spawnWrapper</span>(params, tmpfiles, <span
+                            class="hljs-keyword">function</span> (<span
+                            class="hljs-params">err, code, stdout, stderr</span>) {
     <span class="hljs-keyword">var</span> start, end
 
     <span class="hljs-keyword">if</span> (err) {
-      <span class="hljs-keyword">return</span> callback(err)
+      <span class="hljs-keyword">return</span> <span class="hljs-title function_">callback</span>(err)
     }
 
-    <span class="hljs-keyword">if</span> ((start = stdout.match(<span class="hljs-keyword">new</span> <span class="hljs-built_in">RegExp</span>(<span class="hljs-string">'\\-+BEGIN '</span> + searchStr + <span class="hljs-string">'\\-+$'</span>, <span class="hljs-string">'m'</span>)))) {
-      start = start.index
+    <span class="hljs-keyword">if</span> ((start = stdout.<span class="hljs-title function_">match</span>(<span
+                            class="hljs-keyword">new</span> <span class="hljs-title class_">RegExp</span>(<span
+                            class="hljs-string">&#x27;-+BEGIN &#x27;</span> + searchStr + <span class="hljs-string">&#x27;-+$&#x27;</span>, <span
+                            class="hljs-string">&#x27;mu&#x27;</span>)))) {
+      start = start.<span class="hljs-property">index</span>
     } <span class="hljs-keyword">else</span> {
-      start = <span class="hljs-number">-1</span>
+      start = -<span class="hljs-number">1</span>
     }</pre></div></div>
             
         </li>
-        
-        
+
+
         <li id="section-2">
             <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-2">&#182;</a>
-              </div>
-              <p>To get the full EC key with parameters and private key</p>
+
+                <div class="sswrap ">
+                    <a class="ss" href="#section-2">&#x00a7;</a>
+                </div>
+                <p>To get the full EC key with parameters and private key</p>
 
             </div>
-            
-            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> (searchStr === <span class="hljs-string">'EC PARAMETERS'</span>) {
-      searchStr = <span class="hljs-string">'EC PRIVATE KEY'</span>
+
+            <div class="content">
+                <div class='highlight'><pre>    <span class="hljs-keyword">if</span> (searchStr === <span
+                        class="hljs-string">&#x27;EC PARAMETERS&#x27;</span>) {
+      searchStr = <span class="hljs-string">&#x27;EC PRIVATE KEY&#x27;</span>
     }
 
-    <span class="hljs-keyword">if</span> ((end = stdout.match(<span class="hljs-keyword">new</span> <span class="hljs-built_in">RegExp</span>(<span class="hljs-string">'^\\-+END '</span> + searchStr + <span class="hljs-string">'\\-+'</span>, <span class="hljs-string">'m'</span>)))) {
-      end = end.index + end[<span class="hljs-number">0</span>].length
+    <span class="hljs-keyword">if</span> ((end = stdout.<span class="hljs-title function_">match</span>(<span
+                            class="hljs-keyword">new</span> <span class="hljs-title class_">RegExp</span>(<span
+                            class="hljs-string">&#x27;^\\-+END &#x27;</span> + searchStr + <span class="hljs-string">&#x27;\\-+&#x27;</span>, <span
+                            class="hljs-string">&#x27;m&#x27;</span>)))) {
+      end = end.<span class="hljs-property">index</span> + end[<span class="hljs-number">0</span>].<span
+                            class="hljs-property">length</span>
     } <span class="hljs-keyword">else</span> {
-      end = <span class="hljs-number">-1</span>
+      end = -<span class="hljs-number">1</span>
     }
 
-    <span class="hljs-keyword">if</span> (start &gt;= <span class="hljs-number">0</span> &amp;&amp; end &gt;= <span class="hljs-number">0</span>) {
-      <span class="hljs-keyword">return</span> callback(<span class="hljs-literal">null</span>, stdout.substring(start, end))
+    <span class="hljs-keyword">if</span> (start &gt;= <span class="hljs-number">0</span> &amp;&amp; end &gt;= <span
+                            class="hljs-number">0</span>) {
+      <span class="hljs-keyword">return</span> <span class="hljs-title function_">callback</span>(<span
+                            class="hljs-literal">null</span>, stdout.<span class="hljs-title function_">substring</span>(start, end))
     } <span class="hljs-keyword">else</span> {
-      <span class="hljs-keyword">return</span> callback(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(searchStr + <span class="hljs-string">' not found from openssl output:\n---stdout---\n'</span> + stdout + <span class="hljs-string">'\n---stderr---\n'</span> + stderr + <span class="hljs-string">'\ncode: '</span> + code))
+      <span class="hljs-keyword">return</span> <span class="hljs-title function_">callback</span>(<span
+                            class="hljs-keyword">new</span> <span
+                            class="hljs-title class_">Error</span>(searchStr + <span class="hljs-string">&#x27; not found from openssl output:\n---stdout---\n&#x27;</span> + stdout + <span
+                            class="hljs-string">&#x27;\n---stderr---\n&#x27;</span> + stderr + <span
+                            class="hljs-string">&#x27;\ncode: &#x27;</span> + code))
     }
   })
 }
@@ -157,53 +184,71 @@
 <span class="hljs-comment">/**
  *  Spawn an openssl command and get binary output
  *
- * @static
- * @param {Array} params Array of openssl command line parameters
- * @param {Array} [tmpfiles] list of temporary files
- * @param {Function} callback Called with (error, stdout)
-*/</span>
-<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">execBinary</span> (<span class="hljs-params">params, tmpfiles, callback</span>) </span>{
-  <span class="hljs-keyword">if</span> (!callback &amp;&amp; <span class="hljs-keyword">typeof</span> tmpfiles === <span class="hljs-string">'function'</span>) {
+ * <span class="hljs-doctag">@static</span>
+ * <span class="hljs-doctag">@param</span> {<span class="hljs-type">Array</span>} params Array of openssl command line parameters
+ * <span class="hljs-doctag">@param</span> {<span class="hljs-type">Array</span>} [tmpfiles] list of temporary files
+ * <span class="hljs-doctag">@param</span> {<span class="hljs-type">Function</span>} callback Called with (error, stdout)
+ */</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">execBinary</span>(<span
+                            class="hljs-params">params, tmpfiles, callback</span>) {
+  <span class="hljs-keyword">if</span> (!callback &amp;&amp; <span class="hljs-keyword">typeof</span> tmpfiles === <span
+                            class="hljs-string">&#x27;function&#x27;</span>) {
     callback = tmpfiles
     tmpfiles = <span class="hljs-literal">false</span>
   }
-  spawnWrapper(params, tmpfiles, <span class="hljs-literal">true</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">err, code, stdout, stderr</span>) </span>{
+  <span class="hljs-title function_">spawnWrapper</span>(params, tmpfiles, <span class="hljs-literal">true</span>, <span
+                            class="hljs-keyword">function</span> (<span
+                            class="hljs-params">err, code, stdout, stderr</span>) {
+    <span class="hljs-title function_">debug</span>(<span class="hljs-string">&quot;execBinary&quot;</span>, {err, code, stdout, stderr})
     <span class="hljs-keyword">if</span> (err) {
-      <span class="hljs-keyword">return</span> callback(err)
+      <span class="hljs-keyword">return</span> <span class="hljs-title function_">callback</span>(err)
     }
-    <span class="hljs-keyword">return</span> callback(<span class="hljs-literal">null</span>, stdout)
+    <span class="hljs-keyword">return</span> <span class="hljs-title function_">callback</span>(<span
+                            class="hljs-literal">null</span>, stdout)
   })
 }
 
 <span class="hljs-comment">/**
  * Generically spawn openSSL, without processing the result
  *
- * @static
- * @param {Array}        params   The parameters to pass to openssl
- * @param {Boolean}      binary   Output of openssl is binary or text
- * @param {Function}     callback Called with (error, exitCode, stdout, stderr)
+ * <span class="hljs-doctag">@static</span>
+ * <span class="hljs-doctag">@param</span> {<span class="hljs-type">Array</span>}        params   The parameters to pass to openssl
+ * <span class="hljs-doctag">@param</span> {<span class="hljs-type">Boolean</span>}      binary   Output of openssl is binary or text
+ * <span class="hljs-doctag">@param</span> {<span class="hljs-type">Function</span>}     callback Called with (error, exitCode, stdout, stderr)
  */</span>
-<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">spawn</span> (<span class="hljs-params">params, binary, callback</span>) </span>{
-  <span class="hljs-keyword">var</span> pathBin = <span class="hljs-keyword">get</span>('pathOpenSSL') || process.env.OPENSSL_BIN || 'openssl'
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">spawn</span>(<span class="hljs-params">params, binary, callback</span>) {
+  <span class="hljs-keyword">var</span> pathBin = <span class="hljs-title function_">get</span>(<span
+                            class="hljs-string">&#x27;pathOpenSSL&#x27;</span>) || process.<span class="hljs-property">env</span>.<span
+                            class="hljs-property">OPENSSL_BIN</span> || <span
+                            class="hljs-string">&#x27;openssl&#x27;</span>
 
-  testOpenSSLPath(pathBin, function (err) {
+  <span class="hljs-title function_">testOpenSSLPath</span>(pathBin, <span class="hljs-keyword">function</span> (<span
+                            class="hljs-params">err</span>) {
     <span class="hljs-keyword">if</span> (err) {
-      <span class="hljs-keyword">return</span> callback(err)
+      <span class="hljs-keyword">return</span> <span class="hljs-title function_">callback</span>(err)
     }
-    <span class="hljs-keyword">var</span> openssl = cpspawn(pathBin, params)
-    <span class="hljs-keyword">var</span> stderr = <span class="hljs-string">''</span>
+    <span class="hljs-keyword">var</span> openssl = <span class="hljs-title function_">cpspawn</span>(pathBin, params)
+    <span class="hljs-keyword">var</span> stderr = <span class="hljs-string">&#x27;&#x27;</span>
 
-    <span class="hljs-keyword">var</span> stdout = (binary ? Buffer.alloc(<span class="hljs-number">0</span>) : <span class="hljs-string">''</span>)
-    openssl.stdout.on(<span class="hljs-string">'data'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">data</span>) </span>{
+    <span class="hljs-keyword">var</span> stdout = (binary ? <span class="hljs-title class_">Buffer</span>.<span
+                            class="hljs-title function_">alloc</span>(<span class="hljs-number">0</span>) : <span
+                            class="hljs-string">&#x27;&#x27;</span>)
+    openssl.<span class="hljs-property">stdout</span>.<span class="hljs-title function_">on</span>(<span
+                            class="hljs-string">&#x27;data&#x27;</span>, <span
+                            class="hljs-keyword">function</span> (<span class="hljs-params">data</span>) {
       <span class="hljs-keyword">if</span> (!binary) {
-        stdout += data.toString(<span class="hljs-string">'binary'</span>)
+        stdout += data.<span class="hljs-title function_">toString</span>(<span
+                            class="hljs-string">&#x27;binary&#x27;</span>)
       } <span class="hljs-keyword">else</span> {
-        stdout = Buffer.concat([stdout, data])
+        stdout = <span class="hljs-title class_">Buffer</span>.<span class="hljs-title function_">concat</span>([stdout, data])
       }
     })
 
-    openssl.stderr.on(<span class="hljs-string">'data'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">data</span>) </span>{
-      stderr += data.toString(<span class="hljs-string">'binary'</span>)
+    openssl.<span class="hljs-property">stderr</span>.<span class="hljs-title function_">on</span>(<span
+                            class="hljs-string">&#x27;data&#x27;</span>, <span
+                            class="hljs-keyword">function</span> (<span class="hljs-params">data</span>) {
+      stderr += data.<span class="hljs-title function_">toString</span>(<span
+                            class="hljs-string">&#x27;binary&#x27;</span>)
     })</pre></div></div>
             
         </li>
@@ -211,53 +256,72 @@
         
         <li id="section-3">
             <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-3">&#182;</a>
-              </div>
-              <p>We need both the return code and access to all of stdout.  Stdout isn’t
-<em>really</em> available until the close event fires; the timing nuance was
-making this fail periodically.</p>
+
+                <div class="sswrap ">
+                    <a class="ss" href="#section-3">&#x00a7;</a>
+                </div>
+                <p>We need both the return code and access to all of stdout. Stdout isn’t
+                    <em>really</em> available until the close event fires; the timing nuance was
+                    making this fail periodically.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">var</span> needed = <span class="hljs-number">2</span> <span class="hljs-comment">// wait for both exit and close.</span>
-    <span class="hljs-keyword">var</span> code = <span class="hljs-number">-1</span>
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">var</span> needed = <span
+                    class="hljs-number">2</span> <span class="hljs-comment">// wait for both exit and close.</span>
+    <span class="hljs-keyword">var</span> code = -<span class="hljs-number">1</span>
     <span class="hljs-keyword">var</span> finished = <span class="hljs-literal">false</span>
-    <span class="hljs-keyword">var</span> done = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">err</span>) </span>{
+    <span class="hljs-keyword">var</span> done = <span class="hljs-keyword">function</span> (<span class="hljs-params">err</span>) {
       <span class="hljs-keyword">if</span> (finished) {
         <span class="hljs-keyword">return</span>
       }
 
       <span class="hljs-keyword">if</span> (err) {
         finished = <span class="hljs-literal">true</span>
-        <span class="hljs-keyword">return</span> callback(err)
+        <span class="hljs-keyword">return</span> <span class="hljs-title function_">callback</span>(err)
       }
 
       <span class="hljs-keyword">if</span> (--needed &lt; <span class="hljs-number">1</span>) {
         finished = <span class="hljs-literal">true</span>
-        <span class="hljs-keyword">if</span> (code) {
-          <span class="hljs-keyword">if</span> (code === <span class="hljs-number">2</span> &amp;&amp; (stderr === <span class="hljs-string">''</span> || <span class="hljs-regexp">/depth lookup: unable to/</span>.test(stderr))) {
-            <span class="hljs-keyword">return</span> callback(<span class="hljs-literal">null</span>, code, stdout, stderr)
+        <span class="hljs-keyword">if</span> (code !== <span class="hljs-number">0</span>) {
+          <span class="hljs-keyword">if</span> (code === <span class="hljs-number">2</span> &amp;&amp; (stderr === <span
+                        class="hljs-string">&#x27;&#x27;</span> || <span
+                        class="hljs-regexp">/depth lookup: unable to/</span>.<span
+                        class="hljs-title function_">test</span>(stderr) || <span class="hljs-regexp">/depth lookup: self(-|\s)signed certificate/</span>.<span
+                        class="hljs-title function_">test</span>(stderr))) {
+            <span class="hljs-keyword">return</span> <span class="hljs-title function_">callback</span>(<span
+                        class="hljs-literal">null</span>, code, stdout, stderr)
           }
-          <span class="hljs-keyword">return</span> callback(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'Invalid openssl exit code: '</span> + code + <span class="hljs-string">'\n% openssl '</span> + params.join(<span class="hljs-string">' '</span>) + <span class="hljs-string">'\n'</span> + stderr), code)
+          <span class="hljs-keyword">return</span> <span class="hljs-title function_">callback</span>(<span
+                        class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span
+                        class="hljs-string">&#x27;Invalid openssl exit code: &#x27;</span> + code + <span
+                        class="hljs-string">&#x27;\n% openssl &#x27;</span> + params.<span class="hljs-title function_">join</span>(<span
+                        class="hljs-string">&#x27; &#x27;</span>) + <span class="hljs-string">&#x27;\n&#x27;</span> + stderr), code)
         } <span class="hljs-keyword">else</span> {
-          <span class="hljs-keyword">return</span> callback(<span class="hljs-literal">null</span>, code, stdout, stderr)
+          <span class="hljs-keyword">return</span> <span class="hljs-title function_">callback</span>(<span
+                        class="hljs-literal">null</span>, code, stdout, stderr)
         }
       }
     }
 
-    openssl.on(<span class="hljs-string">'error'</span>, done)
+    openssl.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;error&#x27;</span>, done)
 
-    openssl.on(<span class="hljs-string">'exit'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">ret</span>) </span>{
+    openssl.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;exit&#x27;</span>, <span
+                        class="hljs-keyword">function</span> (<span class="hljs-params">ret</span>) {
       code = ret
-      done()
+      <span class="hljs-title function_">done</span>()
     })
 
-    openssl.on(<span class="hljs-string">'close'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
-      stdout = (binary ? stdout : Buffer.from(stdout, <span class="hljs-string">'binary'</span>).toString(<span class="hljs-string">'utf-8'</span>))
-      stderr = Buffer.from(stderr, <span class="hljs-string">'binary'</span>).toString(<span class="hljs-string">'utf-8'</span>)
-      done()
+    openssl.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;close&#x27;</span>, <span
+                        class="hljs-keyword">function</span> (<span class="hljs-params"></span>) {
+      stdout = (binary ? stdout : <span class="hljs-title class_">Buffer</span>.<span
+                        class="hljs-title function_">from</span>(stdout, <span
+                        class="hljs-string">&#x27;binary&#x27;</span>).<span
+                        class="hljs-title function_">toString</span>(<span class="hljs-string">&#x27;utf-8&#x27;</span>))
+      stderr = <span class="hljs-title class_">Buffer</span>.<span
+                        class="hljs-title function_">from</span>(stderr, <span
+                        class="hljs-string">&#x27;binary&#x27;</span>).<span
+                        class="hljs-title function_">toString</span>(<span class="hljs-string">&#x27;utf-8&#x27;</span>)
+      <span class="hljs-title function_">done</span>()
     })
   })
 }
@@ -265,14 +329,16 @@ making this fail periodically.</p>
 <span class="hljs-comment">/**
  * Wrapper for spawn method
  *
- * @static
- * @param {Array} params The parameters to pass to openssl
- * @param {Array} [tmpfiles] list of temporary files
- * @param {Boolean} [binary] Output of openssl is binary or text
- * @param {Function} callback Called with (error, exitCode, stdout, stderr)
+ * <span class="hljs-doctag">@static</span>
+ * <span class="hljs-doctag">@param</span> {<span class="hljs-type">Array</span>} params The parameters to pass to openssl
+ * <span class="hljs-doctag">@param</span> {<span class="hljs-type">Array</span>} [tmpfiles] list of temporary files
+ * <span class="hljs-doctag">@param</span> {<span class="hljs-type">Boolean</span>} [binary] Output of openssl is binary or text
+ * <span class="hljs-doctag">@param</span> {<span class="hljs-type">Function</span>} callback Called with (error, exitCode, stdout, stderr)
  */</span>
-<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">spawnWrapper</span> (<span class="hljs-params">params, tmpfiles, binary, callback</span>) </span>{
-  <span class="hljs-keyword">if</span> (!callback &amp;&amp; <span class="hljs-keyword">typeof</span> binary === <span class="hljs-string">'function'</span>) {
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">spawnWrapper</span>(<span
+                        class="hljs-params">params, tmpfiles, binary, callback</span>) {
+  <span class="hljs-keyword">if</span> (!callback &amp;&amp; <span class="hljs-keyword">typeof</span> binary === <span
+                        class="hljs-string">&#x27;function&#x27;</span>) {
     callback = binary
     binary = <span class="hljs-literal">false</span>
   }
@@ -281,30 +347,44 @@ making this fail periodically.</p>
   <span class="hljs-keyword">var</span> delTempPWFiles = []
 
   <span class="hljs-keyword">if</span> (tmpfiles) {
-    tmpfiles = [].concat(tmpfiles)
+    tmpfiles = [].<span class="hljs-title function_">concat</span>(tmpfiles)
     <span class="hljs-keyword">var</span> fpath, i
-    <span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; params.length; i++) {
-      <span class="hljs-keyword">if</span> (params[i] === <span class="hljs-string">'--TMPFILE--'</span>) {
-        fpath = pathlib.join(tempDir, crypto.randomBytes(<span class="hljs-number">20</span>).toString(<span class="hljs-string">'hex'</span>))
-        files.push({
+    <span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; params.<span
+                        class="hljs-property">length</span>; i++) {
+      <span class="hljs-keyword">if</span> (params[i] === <span class="hljs-string">&#x27;--TMPFILE--&#x27;</span>) {
+        fpath = pathlib.<span class="hljs-title function_">join</span>(tempDir, crypto.<span
+                        class="hljs-title function_">randomBytes</span>(<span class="hljs-number">20</span>).<span
+                        class="hljs-title function_">toString</span>(<span class="hljs-string">&#x27;hex&#x27;</span>))
+        files.<span class="hljs-title function_">push</span>({
           <span class="hljs-attr">path</span>: fpath,
-          <span class="hljs-attr">contents</span>: tmpfiles.shift()
+          <span class="hljs-attr">contents</span>: tmpfiles.<span class="hljs-title function_">shift</span>()
         })
         params[i] = fpath
-        delTempPWFiles.push(fpath)
+        delTempPWFiles.<span class="hljs-title function_">push</span>(fpath)
       }
     }
   }
 
   <span class="hljs-keyword">var</span> file
-  <span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; files.length; i++) {
+  <span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; files.<span
+                        class="hljs-property">length</span>; i++) {
     file = files[i]
-    fs.writeFileSync(file.path, file.contents)
+    fs.<span class="hljs-title function_">writeFileSync</span>(file.<span class="hljs-property">path</span>, file.<span
+                        class="hljs-property">contents</span>)
   }
 
-  spawn(params, binary, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">err, code, stdout, stderr</span>) </span>{
-    helper.deleteTempFiles(delTempPWFiles, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">fsErr</span>) </span>{
-      callback(err || fsErr, code, stdout, stderr)
+  <span class="hljs-title function_">spawn</span>(params, binary, <span class="hljs-keyword">function</span> (<span
+                        class="hljs-params">err, code, stdout, stderr</span>) {
+    helper.<span class="hljs-title function_">deleteTempFiles</span>(delTempPWFiles, <span
+                        class="hljs-keyword">function</span> (<span class="hljs-params">fsErr</span>) {
+      <span class="hljs-title function_">debug</span>(params[<span class="hljs-number">0</span>], {
+        <span class="hljs-attr">err</span>: err,
+        <span class="hljs-attr">fsErr</span>: fsErr,
+        <span class="hljs-attr">code</span>: code,
+        <span class="hljs-attr">stdout</span>: stdout,
+        <span class="hljs-attr">stderr</span>: stderr
+      })
+      <span class="hljs-title function_">callback</span>(err || fsErr, code, stdout, stderr)
     })
   })
 }
@@ -312,33 +392,64 @@ making this fail periodically.</p>
 <span class="hljs-comment">/**
  * Validates the pathBin for the openssl command
  *
- * @private
- * @param {String} pathBin The path to OpenSSL Bin
- * @param {Function} callback Callback function with an error object
+ * <span class="hljs-doctag">@private</span>
+ * <span class="hljs-doctag">@param</span> {<span class="hljs-type">String</span>} pathBin The path to OpenSSL Bin
+ * <span class="hljs-doctag">@param</span> {<span class="hljs-type">Function</span>} callback Callback function with an error object
  */</span>
-<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">testOpenSSLPath</span> (<span class="hljs-params">pathBin, callback</span>) </span>{
-  which(pathBin, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">error</span>) </span>{
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">testOpenSSLPath</span>(<span
+                        class="hljs-params">pathBin, callback</span>) {
+  <span class="hljs-title function_">which</span>(pathBin, <span class="hljs-keyword">function</span> (<span
+                        class="hljs-params">error</span>) {
     <span class="hljs-keyword">if</span> (error) {
-      <span class="hljs-keyword">return</span> callback(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'Could not find openssl on your system on this path: '</span> + pathBin))
+      <span class="hljs-keyword">return</span> <span class="hljs-title function_">callback</span>(<span
+                        class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span
+                        class="hljs-string">&#x27;Could not find openssl on your system on this path: &#x27;</span> + pathBin))
     }
-    callback()
+    <span class="hljs-title function_">callback</span>()
   })
 }
 
 <span class="hljs-comment">/* Once PEM is imported, the openSslVersion is set with this function. */</span>
-spawn([<span class="hljs-string">'version'</span>], <span class="hljs-literal">false</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">err, code, stdout, stderr</span>) </span>{
-  <span class="hljs-keyword">var</span> text = <span class="hljs-built_in">String</span>(stdout) + <span class="hljs-string">'\n'</span> + <span class="hljs-built_in">String</span>(stderr) + <span class="hljs-string">'\n'</span> + <span class="hljs-built_in">String</span>(err)
-  <span class="hljs-keyword">var</span> tmp = text.match(<span class="hljs-regexp">/^LibreSSL/i</span>)
-  <span class="hljs-keyword">set</span>('openSslVersion', (tmp &amp;&amp; tmp[0] ? 'LibreSSL' : 'openssl').toUpperCase())
+<span class="hljs-title function_">spawn</span>([<span class="hljs-string">&#x27;version&#x27;</span>], <span
+                        class="hljs-literal">false</span>, <span class="hljs-keyword">function</span> (<span
+                        class="hljs-params">err, code, stdout, stderr</span>) {
+  <span class="hljs-keyword">var</span> text = <span class="hljs-title class_">String</span>(stdout) + <span
+                        class="hljs-string">&#x27;\n&#x27;</span> + <span class="hljs-title class_">String</span>(stderr) + <span
+                        class="hljs-string">&#x27;\n&#x27;</span> + <span class="hljs-title class_">String</span>(err)
+  <span class="hljs-keyword">let</span> version = versionRegEx.<span class="hljs-title function_">exec</span>(text)
+  <span class="hljs-keyword">if</span> (version === <span class="hljs-literal">null</span> || version.<span
+                        class="hljs-property">length</span> &lt;= <span class="hljs-number">7</span>) <span
+                        class="hljs-keyword">return</span>
+  <span class="hljs-title function_">set</span>(<span
+                        class="hljs-string">&#x27;openSslVersion&#x27;</span>, (version[<span
+                        class="hljs-number">1</span>]).<span class="hljs-title function_">toUpperCase</span>())
+  <span class="hljs-title function_">set</span>(<span class="hljs-string">&#x27;Vendor&#x27;</span>, (version[<span
+                        class="hljs-number">1</span>]).<span class="hljs-title function_">toUpperCase</span>())
+  <span class="hljs-title function_">set</span>(<span
+                        class="hljs-string">&#x27;VendorVersion&#x27;</span>, version[<span class="hljs-number">2</span>])
+  <span class="hljs-title function_">set</span>(<span class="hljs-string">&#x27;VendorVersionMajorMinor&#x27;</span>, version[<span
+                        class="hljs-number">3</span>])
+  <span class="hljs-title function_">set</span>(<span class="hljs-string">&#x27;VendorVersionMajor&#x27;</span>, version[<span
+                        class="hljs-number">4</span>])
+  <span class="hljs-title function_">set</span>(<span class="hljs-string">&#x27;VendorVersionMinor&#x27;</span>, version[<span
+                        class="hljs-number">5</span>])
+  <span class="hljs-title function_">set</span>(<span class="hljs-string">&#x27;VendorVersionPatch&#x27;</span>, version[<span
+                        class="hljs-number">6</span>])
+  <span class="hljs-title function_">set</span>(<span
+                        class="hljs-string">&#x27;VendorVersionBuildChar&#x27;</span>, <span
+                        class="hljs-keyword">typeof</span> version[<span class="hljs-number">7</span>] === <span
+                        class="hljs-string">&#x27;undefined&#x27;</span> ? <span class="hljs-string">&#x27;&#x27;</span> : version[<span
+                        class="hljs-number">7</span>])
 })
 
-module.exports = {
-  exec: exec,
+<span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span> = {
+  <span class="hljs-attr">exec</span>: exec,
   <span class="hljs-attr">execBinary</span>: execBinary,
   <span class="hljs-attr">spawn</span>: spawn,
   <span class="hljs-attr">spawnWrapper</span>: spawnWrapper,
-  <span class="hljs-attr">set</span>: <span class="hljs-keyword">set</span>,
-  <span class="hljs-keyword">get</span>: <span class="hljs-keyword">get</span>
+  <span class="hljs-attr">settings</span>: settings,
+  <span class="hljs-attr">set</span>: set,
+  <span class="hljs-attr">get</span>: get
 }</pre></div></div>
             
         </li>
