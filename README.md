@@ -3,8 +3,7 @@ pem
 
 Create private keys and certificates with node.js
 
-[![Build Status](https://secure.travis-ci.org/Dexus/pem.png)](http://travis-ci.org/Dexus/pem) [![npm version](https://badge.fury.io/js/pem.svg)](http://badge.fury.io/js/pem) [![npm downloads](https://img.shields.io/npm/dt/pem.svg)](https://www.npmjs.com/package/pem) [![pem documentation](https://img.shields.io/badge/pem-documentation-0099ff.svg?style=flat)](https://dexus.github.io/pem/jsdoc/) [![Greenkeeper badge](https://badges.greenkeeper.io/Dexus/pem.svg)](https://greenkeeper.io/)
-
+[![Build Status](https://secure.travis-ci.org/Dexus/pem.png)](http://travis-ci.org/Dexus/pem) [![npm version](https://badge.fury.io/js/pem.svg)](http://badge.fury.io/js/pem) [![npm downloads](https://img.shields.io/npm/dt/pem.svg)](https://www.npmjs.com/package/pem) [![pem documentation](https://img.shields.io/badge/pem-documentation-0099ff.svg?style=flat)](https://dexus.github.io/pem/jsdoc/)
 
 [![JavaScript Style Guide](https://cdn.rawgit.com/standard/standard/master/badge.svg)](https://github.com/standard/standard)
 

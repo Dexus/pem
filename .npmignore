@@ -1,6 +1,7 @@
 .idea/
 .github/
 .nyc_output/
+docs/
 openssl/
 bin/
 node_modules/
@@ -8,6 +9,7 @@ node_modules/
 /.eslintignore
 /.eslintrc.js
 /.gitignore
+/HISTORY.md
 /.mocharc.yaml
 /.npmignore
 /tsconfig.json

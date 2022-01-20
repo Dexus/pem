@@ -41,20 +41,17 @@ jobs:
         run: |
           yarn run build
           git add dist/
-          yarn version --new-version ${{ github.event.inputs.tag }}
+          yarn version --non-interactive --no-git-tag-version --new-version ${{ github.event.inputs.tag }}
+          yarn run changelog
+          git add HISTORY.md
+          yarn version --non-interactive --new-version ${{ github.event.inputs.tag }}
           git push
           git push --tags
           git checkout master
           git merge --ff-only v1
           git push
+          git subtree split --prefix docs -b gh-pages
+          git push -f origin gh-pages:gh-pages
       - run: yarn publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-      - uses: actions/setup-node@v2
-        with:
-          node-version: '14'
-          cache: 'yarn'
-          registry-url: 'https://npm.pkg.github.com'
-      - run: yarn publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.BOT_PIPELINE_TOKEN }}

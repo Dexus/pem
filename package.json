@@ -21,13 +21,12 @@
   ],
   "type": "commonjs",
   "scripts": {
-    "documentation": "yarn run docco --silent && yarn run jsdoc --silent",
+    "documentation": "yarn run docco && yarn run jsdoc",
     "docco": "docco -l parallel -o docs/docco lib/helper.js lib/openssl.js lib/pem.js",
     "jsdoc": "jsdoc -c jsdoc.json",
     "build": "ncc build -m -s lib/pem.js -o dist",
     "changelog": "auto-changelog --output HISTORY.md",
     "coverage": "cross-env NODE_ENV=development nyc ./node_modules/.bin/_mocha --recursive --bail --inline-diffs --reporter spec --check-leaks --use_strict $(find . -type f -name '*.spec.js'  ! -path './nyc_output/*' ! -path './coverage/*' ! -path './node_modules/*')",
-    "semantic-release": "semantic-release",
     "lint": "eslint --fix --config=./.eslintrc.js lib/*.js *.md *.json lib/*.js test/*.js test/*.spec.js",
     "test": "yarn run lint && yarn run coverage"
   },
@@ -49,19 +48,14 @@
   },
   "devDependencies": {
     "@deineagenturug/docdash": "^0.4.2",
-    "@semantic-release/changelog": "^5.0.0",
-    "@semantic-release/git": "^9.0.0",
-    "@semantic-release/github": "^7.0.0",
-    "@semantic-release/npm": "^7.0.0",
     "@types/chai": "^4.3.0",
     "@types/dirty-chai": "^2.0.2",
     "@vercel/ncc": "^0.33.1",
-    "ajv": "^6.11.0",
-    "auto-changelog": "^1.16.2",
+    "auto-changelog": "^2.3.0",
     "chai": "^4.1.2",
     "cross-env": "^7.0.0",
     "dirty-chai": "^2.0.1",
-    "docco": "^0.8.0",
+    "docco": "^0.9.1",
     "eslint": "^8.7.0",
     "eslint-plugin-chai-friendly": "^0.7.2",
     "eslint-plugin-eslint-plugin": "^4.1.0",
@@ -71,42 +65,12 @@
     "eslint-plugin-mocha": "^10.0.3",
     "eslint-plugin-n": "^14.0.0",
     "eslint-plugin-promise": "^6.0.0",
-    "jsdoc": "^3.5.5",
-    "marked": "^0.8.0",
+    "jsdoc": "^3.6.7",
+    "marked": "^4.0.10",
     "mocha": "^7.0.0",
-    "nyc": "^15.0.0",
-    "semantic-release": "^17.0.0",
-    "travis-deploy-once": "^5.0.10"
+    "nyc": "^15.0.0"
   },
   "engines": {
     "node": ">=14.0.0"
-  },
-  "release": {
-    "debug": false,
-    "verifyConditions": [
-      "@semantic-release/changelog",
-      "@semantic-release/npm",
-      "@semantic-release/git",
-      "@semantic-release/github"
-    ],
-    "prepare": [
-      "@semantic-release/changelog",
-      "@semantic-release/npm",
-      {
-        "path": "@semantic-release/git",
-        "assets": [
-          "CHANGELOG.md",
-          "HISTORY.md",
-          "package.json",
-          "package-lock.json",
-          "npm-shrinkwrap.json"
-        ],
-        "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
-      }
-    ],
-    "publish": [
-      "@semantic-release/npm",
-      "@semantic-release/github"
-    ]
   }
 }

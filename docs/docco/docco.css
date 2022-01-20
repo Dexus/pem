@@ -213,7 +213,9 @@ ul.sections > li > div {
 
 /*---------------------- Low resolutions (> 320px) ---------------------*/
 @media only screen and (min-width: 320px) {
-  .pilwrap { display: none; }
+  .sswrap {
+      display: none;
+  }
 
   ul.sections > li > div {
     display: block;
@@ -330,31 +332,34 @@ ul.sections > li > div {
     box-shadow: none;
   }
 
-  .pilwrap {
-    position: relative;
-    display: inline;
-  }
-
-  .pilcrow {
-    font: 12px Arial;
-    text-decoration: none;
-    color: #454545;
-    position: absolute;
-    top: 3px; left: -20px;
-    padding: 1px 2px;
-    opacity: 0;
-    -webkit-transition: opacity 0.2s linear;
-  }
-    .for-h1 .pilcrow {
-      top: 47px;
-    }
-    .for-h2 .pilcrow, .for-h3 .pilcrow, .for-h4 .pilcrow {
-      top: 35px;
+    .sswrap {
+        position: relative;
+        display: inline;
     }
 
-  ul.sections > li > div.annotation:hover .pilcrow {
-    opacity: 1;
-  }
+    .ss {
+        font: 12px Arial;
+        text-decoration: none;
+        color: #454545;
+        position: absolute;
+        top: 3px;
+        left: -20px;
+        padding: 1px 2px;
+        opacity: 0;
+        -webkit-transition: opacity 0.2s linear;
+    }
+
+    .for-h1 .ss {
+        top: 47px;
+    }
+
+    .for-h2 .ss, .for-h3 .ss, .for-h4 .ss {
+        top: 35px;
+    }
+
+    ul.sections > li > div.annotation:hover .ss {
+        opacity: 1;
+    }
 }
 
 /*---------------------- (> 1025px) ---------------------*/
