@@ -13,11 +13,21 @@ Install with npm
 
     npm install pem
 
+or use yarn
+
+    yarn add pem
+
+:warning: Please make sure you have `openssl` or `libressl` already installed on your system/container, without
+them `pem` will not work.
+
 ## Examples
 
-Here are some examples for creating an SSL key/cert on the fly, and running an HTTPS server on port 443.  443 is the standard HTTPS port, but requires root permissions on most systems.  To get around this, you could use a higher port number, like 4300, and use https://localhost:4300 to access your server.
+Here are some examples for creating an SSL key/cert on the fly, and running an HTTPS server on port 443. 443 is the
+standard HTTPS port, but requires root permissions on most systems. To get around this, you could use a higher port
+number, like 4300, and use https://localhost:4300 to access your server.
 
 ### Basic https
+
 ```javascript
 var https = require('https')
 var pem = require('pem')
@@ -308,7 +318,7 @@ While the following would specify subjectAltNames in the resulting certificate:
 
 Note that `createCertificate` and `createCSR` supports the `altNames` option which would be easier to use in most cases.
 
-**Warning: If you specify `altNames` the custom extensions file will not be passed to OpenSSL.**
+:warning: **Warning: If you specify `altNames` the custom extensions file will not be passed to OpenSSL.**
 
 ### Setting openssl location
 
