@@ -7,7 +7,7 @@
     <script src="/pem/jsdoc/scripts/prettify/prettify.js"></script>
     <script src="/pem/jsdoc/scripts/prettify/lang-css.js"></script>
     <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
     <link type="text/css" rel="stylesheet" href="/pem/jsdoc/styles/prettify.css">
     <link type="text/css" rel="stylesheet" href="/pem/jsdoc/styles/jsdoc.css">
@@ -15,1002 +15,1590 @@
 </head>
 <body>
 
-<input type="checkbox" id="nav-trigger" class="nav-trigger"/>
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
 <label for="nav-trigger" class="navicon-button x">
-    <div class="navicon"></div>
+  <div class="navicon"></div>
 </label>
 
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2>
-    <h3>Modules</h3>
-    <ul>
-        <li><a href="module-convert.html">convert</a>
-            <ul class='methods'>
-                <li data-type='method'><a href="module-convert.html#.DER2PEM">DER2PEM</a></li>
-                <li data-type='method'><a href="module-convert.html#.P7B2PEM">P7B2PEM</a></li>
-                <li data-type='method'><a href="module-convert.html#.P7B2PFX">P7B2PFX</a></li>
-                <li data-type='method'><a href="module-convert.html#.PEM2DER">PEM2DER</a></li>
-                <li data-type='method'><a href="module-convert.html#.PEM2P7B">PEM2P7B</a></li>
-                <li data-type='method'><a href="module-convert.html#.PEM2PFX">PEM2PFX</a></li>
-                <li data-type='method'><a href="module-convert.html#.PFX2PEM">PFX2PEM</a></li>
-            </ul>
-        </li>
-        <li><a href="module-helper.html">helper</a>
-            <ul class='members'>
-                <li data-type='member'><a href="module-helper.html#.ciphers">ciphers</a></li>
-            </ul>
-            <ul class='methods'>
-                <li data-type='method'><a href="module-helper.html#.createPasswordFile">createPasswordFile</a></li>
-                <li data-type='method'><a href="module-helper.html#.deleteTempFiles">deleteTempFiles</a></li>
-                <li data-type='method'><a href="module-helper.html#.isHex">isHex</a></li>
-                <li data-type='method'><a href="module-helper.html#.isNumber">isNumber</a></li>
-                <li data-type='method'><a href="module-helper.html#.toHex">toHex</a></li>
-            </ul>
-        </li>
-        <li><a href="module-openssl.html">openssl</a>
-            <ul class='methods'>
-                <li data-type='method'><a href="module-openssl.html#.exec">exec</a></li>
-                <li data-type='method'><a href="module-openssl.html#.execBinary">execBinary</a></li>
-                <li data-type='method'><a href="module-openssl.html#.get">get</a></li>
-                <li data-type='method'><a href="module-openssl.html#.set">set</a></li>
-                <li data-type='method'><a href="module-openssl.html#.spawn">spawn</a></li>
-                <li data-type='method'><a href="module-openssl.html#.spawnWrapper">spawnWrapper</a></li>
-            </ul>
-        </li>
-        <li><a href="module-pem.html">pem</a>
-            <ul class='members'>
-                <li data-type='member'><a href="module-pem.html#.convert">convert</a></li>
-            </ul>
-            <ul class='methods'>
-                <li data-type='method'><a href="module-pem.html#.checkCertificate">checkCertificate</a></li>
-                <li data-type='method'><a href="module-pem.html#.checkPkcs12">checkPkcs12</a></li>
-                <li data-type='method'><a href="module-pem.html#.config">config</a></li>
-                <li data-type='method'><a href="module-pem.html#.createCertificate">createCertificate</a></li>
-                <li data-type='method'><a href="module-pem.html#.createCSR">createCSR</a></li>
-                <li data-type='method'><a href="module-pem.html#.createDhparam">createDhparam</a></li>
-                <li data-type='method'><a href="module-pem.html#.createEcparam">createEcparam</a></li>
-                <li data-type='method'><a href="module-pem.html#.createPkcs12">createPkcs12</a></li>
-                <li data-type='method'><a href="module-pem.html#.createPrivateKey">createPrivateKey</a></li>
-                <li data-type='method'><a href="module-pem.html#.getDhparamInfo">getDhparamInfo</a></li>
-                <li data-type='method'><a href="module-pem.html#.getFingerprint">getFingerprint</a></li>
-                <li data-type='method'><a href="module-pem.html#.getModulus">getModulus</a></li>
-                <li data-type='method'><a href="module-pem.html#.getPublicKey">getPublicKey</a></li>
-                <li data-type='method'><a href="module-pem.html#.readCertificateInfo">readCertificateInfo</a></li>
-                <li data-type='method'><a href="module-pem.html#.readPkcs12">readPkcs12</a></li>
-                <li data-type='method'><a href="module-pem.html#.verifySigningChain">verifySigningChain</a></li>
-            </ul>
-        </li>
-    </ul>
-    <h3>Namespaces</h3>
-    <ul>
-        <li><a href="module-pem-promisified.html">promisified</a></li>
-    </ul>
-    <h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-convert.html">convert</a><ul class='methods'><li data-type='method'><a href="module-convert.html#.DER2PEM">DER2PEM</a></li><li data-type='method'><a href="module-convert.html#.P7B2PEM">P7B2PEM</a></li><li data-type='method'><a href="module-convert.html#.P7B2PFX">P7B2PFX</a></li><li data-type='method'><a href="module-convert.html#.PEM2DER">PEM2DER</a></li><li data-type='method'><a href="module-convert.html#.PEM2P7B">PEM2P7B</a></li><li data-type='method'><a href="module-convert.html#.PEM2PFX">PEM2PFX</a></li><li data-type='method'><a href="module-convert.html#.PFX2PEM">PFX2PEM</a></li></ul></li><li><a href="module-helper.html">helper</a><ul class='members'><li data-type='member'><a href="module-helper.html#.ciphers">ciphers</a></li></ul><ul class='methods'><li data-type='method'><a href="module-helper.html#.createPasswordFile">createPasswordFile</a></li><li data-type='method'><a href="module-helper.html#.deleteTempFiles">deleteTempFiles</a></li><li data-type='method'><a href="module-helper.html#.isHex">isHex</a></li><li data-type='method'><a href="module-helper.html#.isNumber">isNumber</a></li><li data-type='method'><a href="module-helper.html#.toHex">toHex</a></li></ul></li><li><a href="module-openssl.html">openssl</a><ul class='methods'><li data-type='method'><a href="module-openssl.html#.exec">exec</a></li><li data-type='method'><a href="module-openssl.html#.execBinary">execBinary</a></li><li data-type='method'><a href="module-openssl.html#.get">get</a></li><li data-type='method'><a href="module-openssl.html#.set">set</a></li><li data-type='method'><a href="module-openssl.html#.spawn">spawn</a></li><li data-type='method'><a href="module-openssl.html#.spawnWrapper">spawnWrapper</a></li></ul></li><li><a href="module-pem.html">pem</a><ul class='members'><li data-type='member'><a href="module-pem.html#.convert">convert</a></li></ul><ul class='methods'><li data-type='method'><a href="module-pem.html#.checkCertificate">checkCertificate</a></li><li data-type='method'><a href="module-pem.html#.checkPkcs12">checkPkcs12</a></li><li data-type='method'><a href="module-pem.html#.config">config</a></li><li data-type='method'><a href="module-pem.html#.createCertificate">createCertificate</a></li><li data-type='method'><a href="module-pem.html#.createCSR">createCSR</a></li><li data-type='method'><a href="module-pem.html#.createDhparam">createDhparam</a></li><li data-type='method'><a href="module-pem.html#.createEcparam">createEcparam</a></li><li data-type='method'><a href="module-pem.html#.createPkcs12">createPkcs12</a></li><li data-type='method'><a href="module-pem.html#.createPrivateKey">createPrivateKey</a></li><li data-type='method'><a href="module-pem.html#.getDhparamInfo">getDhparamInfo</a></li><li data-type='method'><a href="module-pem.html#.getFingerprint">getFingerprint</a></li><li data-type='method'><a href="module-pem.html#.getModulus">getModulus</a></li><li data-type='method'><a href="module-pem.html#.getPublicKey">getPublicKey</a></li><li data-type='method'><a href="module-pem.html#.readCertificateInfo">readCertificateInfo</a></li><li data-type='method'><a href="module-pem.html#.readPkcs12">readPkcs12</a></li><li data-type='method'><a href="module-pem.html#.verifySigningChain">verifySigningChain</a></li></ul></li></ul><h3>Namespaces</h3><ul><li><a href="module-pem-promisified.html">promisified</a></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <div id="main">
-
+    
     <h1 class="page-title">convert</h1>
+    
 
+    
 
-    <section>
 
-        <header>
 
 
-        </header>
+<section>
 
-        <article>
-            <div class="container-overview">
+<header>
+    
+        
+            
+        
+    
+</header>
 
+<article>
+    <div class="container-overview">
+    
+        
+            <div class="description"><p>pem convert module</p></div>
+        
 
-                <div class="description"><p>pem convert module</p></div>
+        
+            
 
 
-                <dl class="details">
 
 
-                    <dt class="tag-source">Source:</dt>
-                    <dd class="tag-source">
-                        <ul class="dummy">
-                            <li>
-                                <a href="convert.js.html">convert.js</a>, <a href="convert.js.html#line20">line 20</a>
-                            </li>
-                        </ul>
-                    </dd>
+<dl class="details">
 
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="convert.js.html">convert.js</a>, <a href="convert.js.html#line20">line 20</a>
+    </li></ul></dd>
+    
 
-                </dl>
+    
 
+    
 
-            </div>
+    
 
+    
 
-            <h3 class="subsection-title">Methods</h3>
+    
 
+    
 
-            <h4 class="name" id=".DER2PEM"><span class="type-signature">(static) </span>DER2PEM<span class="signature">(pathIN, pathOUT, type<span
-                    class="signature-attributes">opt</span>, callback)</span><span class="type-signature"></span></h4>
+    
 
+    
 
-            <dl class="details">
+    
 
+    
 
-                <dt class="tag-source">Source:</dt>
-                <dd class="tag-source">
-                    <ul class="dummy">
-                        <li>
-                            <a href="convert.js.html">convert.js</a>, <a href="convert.js.html#line65">line 65</a>
-                        </li>
-                    </ul>
-                </dd>
+    
 
+    
 
-            </dl>
+    
 
+    
 
-            <div class="description">
-                <p>conversion from DER to PEM format</p>
-            </div>
+    
+</dl>
 
 
-            <h5>Parameters:</h5>
 
 
-            <table class="params">
-                <thead>
-                <tr>
 
-                    <th>Name</th>
 
 
-                    <th>Type</th>
 
 
-                    <th>Attributes</th>
 
 
-                    <th class="last">Description</th>
-                </tr>
-                </thead>
 
-                <tbody>
 
 
-                <tr>
 
-                    <td class="name"><code>pathIN</code></td>
 
 
-                    <td class="type">
 
 
-                        <span class="param-type">String</span>
 
 
-                    </td>
 
 
-                    <td class="attributes">
 
 
-                    </td>
 
 
-                    <td class="description last"><p>path of the DER encoded certificate file</p></td>
-                </tr>
 
 
-                <tr>
+        
+    
+    </div>
 
-                    <td class="name"><code>pathOUT</code></td>
+    
 
+    
 
-                    <td class="type">
+    
 
+     
 
-                        <span class="param-type">String</span>
+    
 
+    
 
-                    </td>
+    
+        <h3 class="subsection-title">Methods</h3>
 
+        
+            
 
-                    <td class="attributes">
+    
 
+    <h4 class="name" id=".DER2PEM"><span class="type-signature">(static) </span>DER2PEM<span class="signature">(pathIN, pathOUT, type<span class="signature-attributes">opt</span>, callback)</span><span class="type-signature"></span></h4>
 
-                    </td>
+    
 
 
-                    <td class="description last"><p>path of the PEM encoded certificate file to generate</p></td>
-                </tr>
 
 
-                <tr>
+<dl class="details">
 
-                    <td class="name"><code>type</code></td>
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="convert.js.html">convert.js</a>, <a href="convert.js.html#line65">line 65</a>
+    </li></ul></dd>
+    
 
+    
 
-                    <td class="type">
+    
 
+    
 
-                        <span class="param-type">String</span>
+    
 
+    
 
-                    </td>
+    
 
+    
 
-                    <td class="attributes">
+    
 
-                        &lt;optional><br>
+    
 
+    
 
-                    </td>
+    
 
+    
 
-                    <td class="description last"><p>type of file, use 'rsa' for key file, 'x509' otherwise or leave this
-                        parameter out</p></td>
-                </tr>
+    
 
+    
 
-                <tr>
+    
+</dl>
 
-                    <td class="name"><code>callback</code></td>
 
 
-                    <td class="type">
 
 
-                        <span class="param-type">function</span>
+<div class="description">
+    <p>conversion from DER to PEM format</p>
+</div>
 
 
-                    </td>
 
 
-                    <td class="attributes">
 
 
-                    </td>
 
 
-                    <td class="description last"><p>callback method called with error, boolean result</p></td>
-                </tr>
 
 
-                </tbody>
-            </table>
 
+    <h5>Parameters:</h5>
+    
 
-            <h4 class="name" id=".P7B2PEM"><span class="type-signature">(static) </span>P7B2PEM<span class="signature">(pathIN, pathOUT, callback)</span><span
-                    class="type-signature"></span></h4>
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
 
+        <th>Type</th>
 
-            <dl class="details">
+        
+        <th>Attributes</th>
+        
 
+        
 
-                <dt class="tag-source">Source:</dt>
-                <dd class="tag-source">
-                    <ul class="dummy">
-                        <li>
-                            <a href="convert.js.html">convert.js</a>, <a href="convert.js.html#line127">line 127</a>
-                        </li>
-                    </ul>
-                </dd>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
 
+    <tbody>
+    
 
-            </dl>
+        <tr>
+            
+                <td class="name"><code>pathIN</code></td>
+            
 
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
 
-            <div class="description">
-                <p>conversion from P7B to PEM format</p>
-            </div>
 
+            
+            </td>
 
-            <h5>Parameters:</h5>
+            
+                <td class="attributes">
+                
 
+                
 
-            <table class="params">
-                <thead>
-                <tr>
+                
+                </td>
+            
 
-                    <th>Name</th>
+            
 
+            <td class="description last"><p>path of the DER encoded certificate file</p></td>
+        </tr>
 
-                    <th>Type</th>
+    
 
+        <tr>
+            
+                <td class="name"><code>pathOUT</code></td>
+            
 
-                    <th class="last">Description</th>
-                </tr>
-                </thead>
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
 
-                <tbody>
 
+            
+            </td>
 
-                <tr>
+            
+                <td class="attributes">
+                
 
-                    <td class="name"><code>pathIN</code></td>
+                
 
+                
+                </td>
+            
 
-                    <td class="type">
+            
 
+            <td class="description last"><p>path of the PEM encoded certificate file to generate</p></td>
+        </tr>
 
-                        <span class="param-type">String</span>
+    
 
+        <tr>
+            
+                <td class="name"><code>type</code></td>
+            
 
-                    </td>
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
 
 
-                    <td class="description last"><p>path of the P7B encoded certificate file</p></td>
-                </tr>
+            
+            </td>
 
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
 
-                <tr>
+                
 
-                    <td class="name"><code>pathOUT</code></td>
+                
+                </td>
+            
 
+            
 
-                    <td class="type">
+            <td class="description last"><p>type of file, use 'rsa' for key file, 'x509' otherwise or leave this parameter out</p></td>
+        </tr>
 
+    
 
-                        <span class="param-type">String</span>
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
 
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
 
-                    </td>
 
+            
+            </td>
 
-                    <td class="description last"><p>path of the PEM encoded certificate file to generate</p></td>
-                </tr>
+            
+                <td class="attributes">
+                
 
+                
 
-                <tr>
+                
+                </td>
+            
 
-                    <td class="name"><code>callback</code></td>
+            
 
+            <td class="description last"><p>callback method called with error, boolean result</p></td>
+        </tr>
 
-                    <td class="type">
+    
+    </tbody>
+</table>
 
 
-                        <span class="param-type">function</span>
 
 
-                    </td>
 
 
-                    <td class="description last"><p>callback method called with error, boolean result</p></td>
-                </tr>
 
 
-                </tbody>
-            </table>
 
 
-            <h4 class="name" id=".P7B2PFX"><span class="type-signature">(static) </span>P7B2PFX<span class="signature">(pathBundleIN, pathOUT, password, callback)</span><span
-                    class="type-signature"></span></h4>
 
 
-            <dl class="details">
 
 
-                <dt class="tag-source">Source:</dt>
-                <dd class="tag-source">
-                    <ul class="dummy">
-                        <li>
-                            <a href="convert.js.html">convert.js</a>, <a href="convert.js.html#line229">line 229</a>
-                        </li>
-                    </ul>
-                </dd>
 
 
-            </dl>
+        
+            
 
+    
 
-            <div class="description">
-                <p>conversion from P7B to PFX/PKCS#12</p>
-            </div>
+    <h4 class="name" id=".P7B2PEM"><span class="type-signature">(static) </span>P7B2PEM<span class="signature">(pathIN, pathOUT, callback)</span><span class="type-signature"></span></h4>
 
+    
 
-            <h5>Parameters:</h5>
 
 
-            <table class="params">
-                <thead>
-                <tr>
 
-                    <th>Name</th>
+<dl class="details">
 
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="convert.js.html">convert.js</a>, <a href="convert.js.html#line127">line 127</a>
+    </li></ul></dd>
+    
 
-                    <th>Type</th>
+    
 
+    
 
-                    <th class="last">Description</th>
-                </tr>
-                </thead>
+    
 
-                <tbody>
+    
 
+    
 
-                <tr>
+    
 
-                    <td class="name"><code>pathBundleIN</code></td>
+    
 
+    
 
-                    <td class="type">
+    
 
+    
 
-                        <span class="param-type">Object</span>
+    
 
+    
 
-                    </td>
+    
 
+    
 
-                    <td class="description last"><p>paths of the PEM encoded certificate files ({cert: '...', key:
-                        '...', ca: '...' or ['...', ...]})</p></td>
-                </tr>
+    
+</dl>
 
 
-                <tr>
 
-                    <td class="name"><code>pathOUT</code></td>
 
 
-                    <td class="type">
+<div class="description">
+    <p>conversion from P7B to PEM format</p>
+</div>
 
 
-                        <span class="param-type">String</span>
 
 
-                    </td>
 
 
-                    <td class="description last"><p>path of the PFX certificate file to generate</p></td>
-                </tr>
 
 
-                <tr>
 
-                    <td class="name"><code>password</code></td>
 
 
-                    <td class="type">
+    <h5>Parameters:</h5>
+    
 
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
 
-                        <span class="param-type">String</span>
+        <th>Type</th>
 
+        
 
-                    </td>
+        
 
+        <th class="last">Description</th>
+    </tr>
+    </thead>
 
-                    <td class="description last"><p>password to be set for the PFX file and to be used to access the key
-                        file</p></td>
-                </tr>
+    <tbody>
+    
 
+        <tr>
+            
+                <td class="name"><code>pathIN</code></td>
+            
 
-                <tr>
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
 
-                    <td class="name"><code>callback</code></td>
 
+            
+            </td>
 
-                    <td class="type">
+            
 
+            
 
-                        <span class="param-type">function</span>
+            <td class="description last"><p>path of the P7B encoded certificate file</p></td>
+        </tr>
 
+    
 
-                    </td>
+        <tr>
+            
+                <td class="name"><code>pathOUT</code></td>
+            
 
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
 
-                    <td class="description last"><p>callback method called with error, boolean result</p></td>
-                </tr>
 
+            
+            </td>
 
-                </tbody>
-            </table>
+            
 
+            
 
-            <h4 class="name" id=".PEM2DER"><span class="type-signature">(static) </span>PEM2DER<span class="signature">(pathIN, pathOUT, type<span
-                    class="signature-attributes">opt</span>, callback)</span><span class="type-signature"></span></h4>
+            <td class="description last"><p>path of the PEM encoded certificate file to generate</p></td>
+        </tr>
 
+    
 
-            <dl class="details">
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
 
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
 
-                <dt class="tag-source">Source:</dt>
-                <dd class="tag-source">
-                    <ul class="dummy">
-                        <li>
-                            <a href="convert.js.html">convert.js</a>, <a href="convert.js.html#line35">line 35</a>
-                        </li>
-                    </ul>
-                </dd>
 
+            
+            </td>
 
-            </dl>
+            
 
+            
 
-            <div class="description">
-                <p>conversion from PEM to DER format<br>
-                    if private key is included in PEM encoded file, it won't be included in DER file<br>
-                    use this method with type 'rsa' to export private key in that case</p>
-            </div>
+            <td class="description last"><p>callback method called with error, boolean result</p></td>
+        </tr>
 
+    
+    </tbody>
+</table>
 
-            <h5>Parameters:</h5>
 
 
-            <table class="params">
-                <thead>
-                <tr>
 
-                    <th>Name</th>
 
 
-                    <th>Type</th>
 
 
-                    <th>Attributes</th>
 
 
-                    <th class="last">Description</th>
-                </tr>
-                </thead>
 
-                <tbody>
 
 
-                <tr>
 
-                    <td class="name"><code>pathIN</code></td>
 
 
-                    <td class="type">
+        
+            
 
+    
 
-                        <span class="param-type">String</span>
+    <h4 class="name" id=".P7B2PFX"><span class="type-signature">(static) </span>P7B2PFX<span class="signature">(pathBundleIN, pathOUT, password, callback)</span><span class="type-signature"></span></h4>
 
+    
 
-                    </td>
 
 
-                    <td class="attributes">
 
+<dl class="details">
 
-                    </td>
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="convert.js.html">convert.js</a>, <a href="convert.js.html#line229">line 229</a>
+    </li></ul></dd>
+    
 
+    
 
-                    <td class="description last"><p>path of the PEM encoded certificate file</p></td>
-                </tr>
+    
 
+    
 
-                <tr>
+    
 
-                    <td class="name"><code>pathOUT</code></td>
+    
 
+    
 
-                    <td class="type">
+    
 
+    
 
-                        <span class="param-type">String</span>
+    
 
+    
 
-                    </td>
+    
 
+    
 
-                    <td class="attributes">
+    
 
+    
 
-                    </td>
+    
+</dl>
 
 
-                    <td class="description last"><p>path of the DER encoded certificate file to generate</p></td>
-                </tr>
 
 
-                <tr>
 
-                    <td class="name"><code>type</code></td>
+<div class="description">
+    <p>conversion from P7B to PFX/PKCS#12</p>
+</div>
 
 
-                    <td class="type">
 
 
-                        <span class="param-type">String</span>
 
 
-                    </td>
 
 
-                    <td class="attributes">
 
-                        &lt;optional><br>
 
 
-                    </td>
+    <h5>Parameters:</h5>
+    
 
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
 
-                    <td class="description last"><p>type of file, use 'rsa' for key file, 'x509' otherwise or leave this
-                        parameter out</p></td>
-                </tr>
+        <th>Type</th>
 
+        
 
-                <tr>
+        
 
-                    <td class="name"><code>callback</code></td>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
 
+    <tbody>
+    
 
-                    <td class="type">
+        <tr>
+            
+                <td class="name"><code>pathBundleIN</code></td>
+            
 
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
 
-                        <span class="param-type">function</span>
 
+            
+            </td>
 
-                    </td>
+            
 
+            
 
-                    <td class="attributes">
+            <td class="description last"><p>paths of the PEM encoded certificate files ({cert: '...', key: '...', ca: '...' or ['...', ...]})</p></td>
+        </tr>
 
+    
 
-                    </td>
+        <tr>
+            
+                <td class="name"><code>pathOUT</code></td>
+            
 
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
 
-                    <td class="description last"><p>callback method called with error, boolean result</p></td>
-                </tr>
 
+            
+            </td>
 
-                </tbody>
-            </table>
+            
 
+            
 
-            <h4 class="name" id=".PEM2P7B"><span class="type-signature">(static) </span>PEM2P7B<span class="signature">(pathBundleIN, pathOUT, callback)</span><span
-                    class="type-signature"></span></h4>
+            <td class="description last"><p>path of the PFX certificate file to generate</p></td>
+        </tr>
 
+    
 
-            <dl class="details">
+        <tr>
+            
+                <td class="name"><code>password</code></td>
+            
 
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
 
-                <dt class="tag-source">Source:</dt>
-                <dd class="tag-source">
-                    <ul class="dummy">
-                        <li>
-                            <a href="convert.js.html">convert.js</a>, <a href="convert.js.html#line94">line 94</a>
-                        </li>
-                    </ul>
-                </dd>
 
+            
+            </td>
 
-            </dl>
+            
 
+            
 
-            <div class="description">
-                <p>conversion from PEM to P7B format</p>
-            </div>
+            <td class="description last"><p>password to be set for the PFX file and to be used to access the key file</p></td>
+        </tr>
 
+    
 
-            <h5>Parameters:</h5>
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
 
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
 
-            <table class="params">
-                <thead>
-                <tr>
 
-                    <th>Name</th>
+            
+            </td>
 
+            
 
-                    <th>Type</th>
+            
 
+            <td class="description last"><p>callback method called with error, boolean result</p></td>
+        </tr>
 
-                    <th class="last">Description</th>
-                </tr>
-                </thead>
+    
+    </tbody>
+</table>
 
-                <tbody>
 
 
-                <tr>
 
-                    <td class="name"><code>pathBundleIN</code></td>
 
 
-                    <td class="type">
 
 
-                        <span class="param-type">Object</span>
 
 
-                    </td>
 
 
-                    <td class="description last"><p>paths of the PEM encoded certificate files ({cert: '...', ca: '...'
-                        or ['...', ...]})</p></td>
-                </tr>
 
 
-                <tr>
 
-                    <td class="name"><code>pathOUT</code></td>
 
+        
+            
 
-                    <td class="type">
+    
 
+    <h4 class="name" id=".PEM2DER"><span class="type-signature">(static) </span>PEM2DER<span class="signature">(pathIN, pathOUT, type<span class="signature-attributes">opt</span>, callback)</span><span class="type-signature"></span></h4>
 
-                        <span class="param-type">String</span>
+    
 
 
-                    </td>
 
 
-                    <td class="description last"><p>path of the P7B encoded certificate file to generate</p></td>
-                </tr>
+<dl class="details">
 
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="convert.js.html">convert.js</a>, <a href="convert.js.html#line35">line 35</a>
+    </li></ul></dd>
+    
 
-                <tr>
+    
 
-                    <td class="name"><code>callback</code></td>
+    
 
+    
 
-                    <td class="type">
+    
 
+    
 
-                        <span class="param-type">function</span>
+    
 
+    
 
-                    </td>
+    
 
+    
 
-                    <td class="description last"><p>callback method called with error, boolean result</p></td>
-                </tr>
+    
 
+    
 
-                </tbody>
-            </table>
+    
 
+    
 
-            <h4 class="name" id=".PEM2PFX"><span class="type-signature">(static) </span>PEM2PFX<span class="signature">(pathBundleIN, pathOUT, password, callback)</span><span
-                    class="type-signature"></span></h4>
+    
 
+    
+</dl>
 
-            <dl class="details">
 
 
-                <dt class="tag-source">Source:</dt>
-                <dd class="tag-source">
-                    <ul class="dummy">
-                        <li>
-                            <a href="convert.js.html">convert.js</a>, <a href="convert.js.html#line152">line 152</a>
-                        </li>
-                    </ul>
-                </dd>
 
 
-            </dl>
+<div class="description">
+    <p>conversion from PEM to DER format<br>
+if private key is included in PEM encoded file, it won't be included in DER file<br>
+use this method with type 'rsa' to export private key in that case</p>
+</div>
 
 
-            <div class="description">
-                <p>conversion from PEM to PFX</p>
-            </div>
 
 
-            <h5>Parameters:</h5>
 
 
-            <table class="params">
-                <thead>
-                <tr>
 
-                    <th>Name</th>
 
 
-                    <th>Type</th>
 
 
-                    <th class="last">Description</th>
-                </tr>
-                </thead>
+    <h5>Parameters:</h5>
+    
 
-                <tbody>
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
 
+        <th>Type</th>
 
-                <tr>
+        
+        <th>Attributes</th>
+        
 
-                    <td class="name"><code>pathBundleIN</code></td>
+        
 
+        <th class="last">Description</th>
+    </tr>
+    </thead>
 
-                    <td class="type">
+    <tbody>
+    
 
+        <tr>
+            
+                <td class="name"><code>pathIN</code></td>
+            
 
-                        <span class="param-type">Object</span>
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
 
 
-                    </td>
+            
+            </td>
 
+            
+                <td class="attributes">
+                
 
-                    <td class="description last"><p>paths of the PEM encoded certificate files ({cert: '...', key:
-                        '...', ca: '...' or ['...', ...]})</p></td>
-                </tr>
+                
 
+                
+                </td>
+            
 
-                <tr>
+            
 
-                    <td class="name"><code>pathOUT</code></td>
+            <td class="description last"><p>path of the PEM encoded certificate file</p></td>
+        </tr>
 
+    
 
-                    <td class="type">
+        <tr>
+            
+                <td class="name"><code>pathOUT</code></td>
+            
 
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
 
-                        <span class="param-type">String</span>
 
+            
+            </td>
 
-                    </td>
+            
+                <td class="attributes">
+                
 
+                
 
-                    <td class="description last"><p>path of the PFX encoded certificate file to generate</p></td>
-                </tr>
+                
+                </td>
+            
 
+            
 
-                <tr>
+            <td class="description last"><p>path of the DER encoded certificate file to generate</p></td>
+        </tr>
 
-                    <td class="name"><code>password</code></td>
+    
 
+        <tr>
+            
+                <td class="name"><code>type</code></td>
+            
 
-                    <td class="type">
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
 
 
-                        <span class="param-type">String</span>
+            
+            </td>
 
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
 
-                    </td>
+                
 
+                
+                </td>
+            
 
-                    <td class="description last"><p>password to set for accessing the PFX file</p></td>
-                </tr>
+            
 
+            <td class="description last"><p>type of file, use 'rsa' for key file, 'x509' otherwise or leave this parameter out</p></td>
+        </tr>
 
-                <tr>
+    
 
-                    <td class="name"><code>callback</code></td>
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
 
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
 
-                    <td class="type">
 
+            
+            </td>
 
-                        <span class="param-type">function</span>
+            
+                <td class="attributes">
+                
 
+                
 
-                    </td>
+                
+                </td>
+            
 
+            
 
-                    <td class="description last"><p>callback method called with error, boolean result</p></td>
-                </tr>
+            <td class="description last"><p>callback method called with error, boolean result</p></td>
+        </tr>
 
+    
+    </tbody>
+</table>
 
-                </tbody>
-            </table>
 
 
-            <h4 class="name" id=".PFX2PEM"><span class="type-signature">(static) </span>PFX2PEM<span class="signature">(pathIN, pathOUT, password, callback)</span><span
-                    class="type-signature"></span></h4>
 
 
-            <dl class="details">
 
 
-                <dt class="tag-source">Source:</dt>
-                <dd class="tag-source">
-                    <ul class="dummy">
-                        <li>
-                            <a href="convert.js.html">convert.js</a>, <a href="convert.js.html#line196">line 196</a>
-                        </li>
-                    </ul>
-                </dd>
 
 
-            </dl>
 
 
-            <div class="description">
-                <p>conversion from PFX to PEM</p>
-            </div>
 
 
-            <h5>Parameters:</h5>
 
 
-            <table class="params">
-                <thead>
-                <tr>
 
-                    <th>Name</th>
+        
+            
 
+    
 
-                    <th>Type</th>
+    <h4 class="name" id=".PEM2P7B"><span class="type-signature">(static) </span>PEM2P7B<span class="signature">(pathBundleIN, pathOUT, callback)</span><span class="type-signature"></span></h4>
 
+    
 
-                    <th class="last">Description</th>
-                </tr>
-                </thead>
 
-                <tbody>
 
 
-                <tr>
+<dl class="details">
 
-                    <td class="name"><code>pathIN</code></td>
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="convert.js.html">convert.js</a>, <a href="convert.js.html#line94">line 94</a>
+    </li></ul></dd>
+    
 
+    
 
-                    <td class="type">
+    
 
+    
 
-                        <span class="param-type">Object</span>
+    
 
+    
 
-                    </td>
+    
 
+    
 
-                    <td class="description last"><p>path of the PFX encoded certificate file</p></td>
-                </tr>
+    
 
+    
 
-                <tr>
+    
 
-                    <td class="name"><code>pathOUT</code></td>
+    
 
+    
 
-                    <td class="type">
+    
 
+    
 
-                        <span class="param-type">String</span>
+    
+</dl>
 
 
-                    </td>
 
 
-                    <td class="description last"><p>path of the PEM encoded certificate file to generate</p></td>
-                </tr>
 
+<div class="description">
+    <p>conversion from PEM to P7B format</p>
+</div>
 
-                <tr>
 
-                    <td class="name"><code>password</code></td>
 
 
-                    <td class="type">
 
 
-                        <span class="param-type">String</span>
 
 
-                    </td>
 
 
-                    <td class="description last"><p>password to set for accessing the PFX file</p></td>
-                </tr>
 
+    <h5>Parameters:</h5>
+    
 
-                <tr>
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
 
-                    <td class="name"><code>callback</code></td>
+        <th>Type</th>
 
+        
 
-                    <td class="type">
+        
 
+        <th class="last">Description</th>
+    </tr>
+    </thead>
 
-                        <span class="param-type">function</span>
+    <tbody>
+    
 
+        <tr>
+            
+                <td class="name"><code>pathBundleIN</code></td>
+            
 
-                    </td>
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
 
 
-                    <td class="description last"><p>callback method called with error, boolean result</p></td>
-                </tr>
+            
+            </td>
 
+            
 
-                </tbody>
-            </table>
+            
 
+            <td class="description last"><p>paths of the PEM encoded certificate files ({cert: '...', ca: '...' or ['...', ...]})</p></td>
+        </tr>
 
-        </article>
+    
 
-    </section>
+        <tr>
+            
+                <td class="name"><code>pathOUT</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>path of the P7B encoded certificate file to generate</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>callback method called with error, boolean result</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".PEM2PFX"><span class="type-signature">(static) </span>PEM2PFX<span class="signature">(pathBundleIN, pathOUT, password, callback)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="convert.js.html">convert.js</a>, <a href="convert.js.html#line152">line 152</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>conversion from PEM to PFX</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>pathBundleIN</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>paths of the PEM encoded certificate files ({cert: '...', key: '...', ca: '...' or ['...', ...]})</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>pathOUT</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>path of the PFX encoded certificate file to generate</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>password</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>password to set for accessing the PFX file</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>callback method called with error, boolean result</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".PFX2PEM"><span class="type-signature">(static) </span>PFX2PEM<span class="signature">(pathIN, pathOUT, password, callback)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="convert.js.html">convert.js</a>, <a href="convert.js.html#line196">line 196</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>conversion from PFX to PEM</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>pathIN</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>path of the PFX encoded certificate file</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>pathOUT</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>path of the PEM encoded certificate file to generate</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>password</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>password to set for accessing the PFX file</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>callback method called with error, boolean result</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
 
 
 </div>
@@ -1018,8 +1606,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.7</a> on Thu Jan 20 2022 19:32:49
-    GMT+0100 (Central European Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.7</a> on Thu Jan 20 2022 19:28:43 GMT+0000 (Coordinated Universal Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>
