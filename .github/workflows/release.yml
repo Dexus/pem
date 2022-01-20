@@ -1,0 +1,61 @@
+name: "Release NPM Package"
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: |
+          Enter the version for the release tag.
+          Must be larger than last tag.
+          Use patch (0.0.x) for bug fixes.
+          Use minor (0.x.0) for new actions.
+        type: string
+        required: true
+      branch:
+        description: |
+          Specify the branch to push to.
+          Default will be `v1`
+        type: string
+        required: true
+        default: v1
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  merge-to-v1-branch:
+    name: Create release by rebasing master to v1 and create a new tag
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+          registry-url: https://registry.npmjs.org
+      - run: yarn install
+      - name: Set git name, mail and origin
+        run: |
+          git config --global user.name "Josef Fröhle"
+          git config --global user.email "github@josef-froehle.de"
+          git remote set-url origin https://${{ secrets.BOT_PIPELINE_TOKEN }}@github.com/${{ github.repository }}
+      - name: Checkout v1 branch and merge
+        run: |
+          git checkout v1
+          git merge --ff-only master
+      - name: Generate new tag, push tag and branch
+        run: |
+          yarn run build
+          git add dist/
+          yarn version --new-version ${{ github.event.inputs.tag }}
+          git push
+          git push --tags
+      - run: yarn publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.YARN_TOKEN }}
+      - uses: actions/setup-node@v2
+        with:
+          registry-url: 'https://npm.pkg.github.com'
+      - run: yarn publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
