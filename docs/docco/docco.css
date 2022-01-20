@@ -213,9 +213,7 @@ ul.sections > li > div {
 
 /*---------------------- Low resolutions (> 320px) ---------------------*/
 @media only screen and (min-width: 320px) {
-  .sswrap {
-      display: none;
-  }
+  .sswrap { display: none; }
 
   ul.sections > li > div {
     display: block;
@@ -332,34 +330,31 @@ ul.sections > li > div {
     box-shadow: none;
   }
 
-    .sswrap {
-        position: relative;
-        display: inline;
-    }
+  .sswrap {
+    position: relative;
+    display: inline;
+  }
 
-    .ss {
-        font: 12px Arial;
-        text-decoration: none;
-        color: #454545;
-        position: absolute;
-        top: 3px;
-        left: -20px;
-        padding: 1px 2px;
-        opacity: 0;
-        -webkit-transition: opacity 0.2s linear;
-    }
-
+  .ss {
+    font: 12px Arial;
+    text-decoration: none;
+    color: #454545;
+    position: absolute;
+    top: 3px; left: -20px;
+    padding: 1px 2px;
+    opacity: 0;
+    -webkit-transition: opacity 0.2s linear;
+  }
     .for-h1 .ss {
-        top: 47px;
+      top: 47px;
     }
-
     .for-h2 .ss, .for-h3 .ss, .for-h4 .ss {
-        top: 35px;
+      top: 35px;
     }
 
-    ul.sections > li > div.annotation:hover .ss {
-        opacity: 1;
-    }
+  ul.sections > li > div.annotation:hover .ss {
+    opacity: 1;
+  }
 }
 
 /*---------------------- (> 1025px) ---------------------*/
