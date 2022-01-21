@@ -10,7 +10,7 @@ NORMALPATH=$(pwd)
 
 checkDebInstalled() {
   REQUIRED_PKG="$1"
-  PKG_OK=$(dpkg-query -W --showformat='${Status}\n' "${REQUIRED_PKG}" | grep "install ok installed")
+  PKG_OK=$(dpkg-query -W --showformat='${Status}\n' "${REQUIRED_PKG}" | grep "install ok installed" || true)
   echo "Checking for ${REQUIRED_PKG}: ${PKG_OK}"
   if [ "" = "${PKG_OK}" ]; then
     echo "No ${REQUIRED_PKG}. Setting up ${REQUIRED_PKG}."
