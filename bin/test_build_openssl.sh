@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set -ex
 
 if [ -z "${OPENSSL_DIR}" ]; then
   exit 0
@@ -19,9 +19,9 @@ checkDebInstalled() {
 
 if [[ ! -f "${OPENSSL_DIR}/bin/openssl" ]]; then
 
-for pkg in "curl" "build-essential" "checkinstall" "zlib1g-dev" "libtemplate-perl"; do
-  checkDebInstalled "$pkg"
-done
+  for pkg in "curl" "build-essential" "ca-certificates" "ca-certificates-java" "gnutls-bin" "libnss3-tools" "ca-certificates-mono" "checkinstall" "zlib1g-dev" "libtemplate-perl"; do
+    checkDebInstalled "$pkg"
+  done
 
   case "${LIBRARY}" in
   "libressl")
@@ -80,7 +80,6 @@ done
     if [[ ! -f "${OPENSSL_DIR}/ssl/openssl.cnf" ]] && [[ -f "apps/openssl/openssl.cnf" ]]; then mkdir -p "${OPENSSL_DIR}/ssl" && cp apps/openssl/openssl.cnf "${OPENSSL_DIR}/ssl/openssl.cnf"; fi
     ;;
   esac
-
 
   sudo update-ca-certificates || true
   sudo cp -a /etc/ssl/certs/. "${OPENSSL_DIR}/ssl/certs/"
