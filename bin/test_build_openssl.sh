@@ -18,6 +18,8 @@ checkDebInstalled() {
   fi
 }
 
+sudo apt-get update && sudo apt-get upgrade
+
 for pkg in "curl" "build-essential" "ca-certificates" "ca-certificates-java" "gnutls-bin" "libnss3-tools" "ca-certificates-mono" "checkinstall" "zlib1g-dev" "libtemplate-perl"; do
   checkDebInstalled "$pkg"
 done
