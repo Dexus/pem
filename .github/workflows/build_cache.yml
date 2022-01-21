@@ -1,107 +1,109 @@
-name: "Build OpenSSL Binaries"
+name: Build OpenSSL Binaries
 on:
   push:
     branches:
-      - master
-      - devel/v1
+    - master
+    - devel/v1
     paths:
-      - .github/workflows/build.yml
-      - bin/**.sh
+    - .github/workflows/build.yml
+    - bin/**.sh
   workflow_dispatch:
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 env:
-  TARGET: "x86_64-unknown-linux-gnu"
+  TARGET: x86_64-unknown-linux-gnu
 jobs:
   build:
     if: github.ref != 'refs/heads/master'
-    name: "Build and Test"
+    name: Build and Test
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
         include:
-          - LIBRARY: openssl
-            VERSION: 0.9.8zh
-            OPENSSL_DIR: "/openssl"
-          - LIBRARY: openssl
-            VERSION: 1.0.1u
-            OPENSSL_DIR: "/openssl"
-          - LIBRARY: openssl
-            VERSION: 1.0.2u
-            OPENSSL_DIR: "/openssl"
-          - LIBRARY: openssl
-            VERSION: 1.1.0l
-            OPENSSL_DIR: "/openssl"
-          - LIBRARY: openssl
-            VERSION: 1.1.1l
-            OPENSSL_DIR: "/openssl"
-          - LIBRARY: openssl
-            VERSION: 3.0.0
-            OPENSSL_DIR: "/openssl"
-          - LIBRARY: libressl
-            VERSION: 2.4.5
-            OPENSSL_DIR: "/openssl"
-          - LIBRARY: libressl
-            VERSION: 2.5.5
-            OPENSSL_DIR: "/openssl"
-          - LIBRARY: libressl
-            VERSION: 2.6.5
-            OPENSSL_DIR: "/openssl"
-          - LIBRARY: libressl
-            VERSION: 2.7.5
-            OPENSSL_DIR: "/openssl"
-          - LIBRARY: libressl
-            VERSION: 2.8.3
-            OPENSSL_DIR: "/openssl"
-          - LIBRARY: libressl
-            VERSION: 2.9.2
-            OPENSSL_DIR: "/openssl"
-          - LIBRARY: libressl
-            VERSION: 3.0.2
-            OPENSSL_DIR: "/openssl"
-          - LIBRARY: libressl
-            VERSION: 3.1.5
-            OPENSSL_DIR: "/openssl"
-          - LIBRARY: libressl
-            VERSION: 3.2.7
-            OPENSSL_DIR: "/openssl"
-          - LIBRARY: libressl
-            VERSION: 3.3.5
-            OPENSSL_DIR: "/openssl"
-          - LIBRARY: libressl
-            VERSION: 3.4.2
-            OPENSSL_DIR: "/openssl"
+        - LIBRARY: openssl
+          VERSION: 0.9.8zh
+          OPENSSL_DIR: /openssl
+        - LIBRARY: openssl
+          VERSION: 1.0.1u
+          OPENSSL_DIR: /openssl
+        - LIBRARY: openssl
+          VERSION: 1.0.2u
+          OPENSSL_DIR: /openssl
+        - LIBRARY: openssl
+          VERSION: 1.1.0l
+          OPENSSL_DIR: /openssl
+        - LIBRARY: openssl
+          VERSION: 1.1.1l
+          OPENSSL_DIR: /openssl
+        - LIBRARY: openssl
+          VERSION: 3.0.1
+          OPENSSL_DIR: /openssl
+        - LIBRARY: libressl
+          VERSION: 2.4.5
+          OPENSSL_DIR: /openssl
+        - LIBRARY: libressl
+          VERSION: 2.5.5
+          OPENSSL_DIR: /openssl
+        - LIBRARY: libressl
+          VERSION: 2.6.5
+          OPENSSL_DIR: /openssl
+        - LIBRARY: libressl
+          VERSION: 2.7.5
+          OPENSSL_DIR: /openssl
+        - LIBRARY: libressl
+          VERSION: 2.8.3
+          OPENSSL_DIR: /openssl
+        - LIBRARY: libressl
+          VERSION: 2.9.2
+          OPENSSL_DIR: /openssl
+        - LIBRARY: libressl
+          VERSION: 3.0.2
+          OPENSSL_DIR: /openssl
+        - LIBRARY: libressl
+          VERSION: 3.1.5
+          OPENSSL_DIR: /openssl
+        - LIBRARY: libressl
+          VERSION: 3.2.7
+          OPENSSL_DIR: /openssl
+        - LIBRARY: libressl
+          VERSION: 3.3.5
+          OPENSSL_DIR: /openssl
+        - LIBRARY: libressl
+          VERSION: 3.4.2
+          OPENSSL_DIR: /openssl
     steps:
-      - uses: actions/checkout@v2
-      - run: |
-          sudo apt-get install -y haveged ca-certificates
-          sudo haveged -w 2048
-          mkdir openssl
-      - name: Cache OpenSSL Binary - ${{ runner.os }}-build-openssl-tests-v2-${{ matrix.LIBRARY }}-${{ matrix.VERSION }}
-        id: openssl_cache
-        uses: actions/cache@v2
-        with:
-          path: ./openssl/
-          key: ${{ runner.os }}-build-openssl-tests-v2-${{ matrix.LIBRARY }}-${{ matrix.VERSION }}
-      - name: Set ENV
-        shell: "bash"
-        run: |
-          set -x
-          if [[ -d "$GITHUB_WORKSPACE${{ matrix.OPENSSL_DIR }}" ]] && [[ "${{ matrix.OPENSSL_DIR }}" == "/openssl" ]] ; then echo "OPENSSL_DIR=$GITHUB_WORKSPACE${{ matrix.OPENSSL_DIR }}" >> $GITHUB_ENV ; echo "OPENSSL_BIN=$GITHUB_WORKSPACE${{ matrix.OPENSSL_DIR }}/bin/openssl" >> $GITHUB_ENV ; fi
-          echo "LIBRARY=$(echo ${LIBRARY})" >> $GITHUB_ENV
-          echo "VERSION=$(echo ${VERSION})" >> $GITHUB_ENV
-        env:
-          LIBRARY: ${{ matrix.LIBRARY }}
-          VERSION: ${{ matrix.VERSION }}
-      - name: Run Prepare
-        if: steps.openssl_cache.outputs.cache-hit != 'true'
-        shell: "bash"
-        run: |
-          set +e
-          echo $PWD
-          openssl version
-          echo "OPENSSL_DIR=$OPENSSL_DIR"
-          if [[ ! -z "$OPENSSL_DIR" ]] ; then "./bin/test_build_openssl.sh" ; fi
-          if [[ "$CI" == 'true' ]] && [[ -f "$OPENSSL_BIN" ]]; then $OPENSSL_BIN version; else openssl version; fi
+    - uses: actions/checkout@v2
+    - run: |
+        sudo apt-get install -y haveged ca-certificates
+        sudo haveged -w 2048
+        mkdir openssl
+    - name: Cache OpenSSL Binary - ${{ runner.os }}-build-openssl-tests-v2-${{ matrix.LIBRARY
+        }}-${{ matrix.VERSION }}
+      id: openssl_cache
+      uses: actions/cache@v2
+      with:
+        path: ./openssl/
+        key: ${{ runner.os }}-build-openssl-tests-v2-${{ matrix.LIBRARY }}-${{ matrix.VERSION
+          }}
+    - name: Set ENV
+      shell: bash
+      run: |
+        set -x
+        if [[ -d "$GITHUB_WORKSPACE${{ matrix.OPENSSL_DIR }}" ]] && [[ "${{ matrix.OPENSSL_DIR }}" == "/openssl" ]] ; then echo "OPENSSL_DIR=$GITHUB_WORKSPACE${{ matrix.OPENSSL_DIR }}" >> $GITHUB_ENV ; echo "OPENSSL_BIN=$GITHUB_WORKSPACE${{ matrix.OPENSSL_DIR }}/bin/openssl" >> $GITHUB_ENV ; fi
+        echo "LIBRARY=$(echo ${LIBRARY})" >> $GITHUB_ENV
+        echo "VERSION=$(echo ${VERSION})" >> $GITHUB_ENV
+      env:
+        LIBRARY: ${{ matrix.LIBRARY }}
+        VERSION: ${{ matrix.VERSION }}
+    - name: Run Prepare
+      if: steps.openssl_cache.outputs.cache-hit != 'true'
+      shell: bash
+      run: |
+        set +e
+        echo $PWD
+        openssl version
+        echo "OPENSSL_DIR=$OPENSSL_DIR"
+        if [[ ! -z "$OPENSSL_DIR" ]] ; then "./bin/test_build_openssl.sh" ; fi
+        if [[ "$CI" == 'true' ]] && [[ -f "$OPENSSL_BIN" ]]; then $OPENSSL_BIN version; else openssl version; fi

@@ -7,9 +7,21 @@ fi
 
 NORMALPATH=$(pwd)
 
+checkDebInstalled() {
+  REQUIRED_PKG="$1"
+  PKG_OK=$(dpkg-query -W --showformat='${Status}\n' "${REQUIRED_PKG}" | grep "install ok installed")
+  echo "Checking for ${REQUIRED_PKG}: ${PKG_OK}"
+  if [ "" = "${PKG_OK}" ]; then
+    echo "No ${REQUIRED_PKG}. Setting up ${REQUIRED_PKG}."
+    sudo apt-get --yes --no-install-recommends install "${REQUIRED_PKG}"
+  fi
+}
+
 if [[ ! -f "${OPENSSL_DIR}/bin/openssl" ]]; then
 
-  sudo apt-get install -y --no-install-recommends curl
+for pkg in "curl" "build-essential" "checkinstall" "zlib1g-dev" "libtemplate-perl"; do
+  checkDebInstalled "$pkg"
+done
 
   case "${LIBRARY}" in
   "libressl")
@@ -57,22 +69,23 @@ if [[ ! -f "${OPENSSL_DIR}/bin/openssl" ]]; then
     ;;
   esac
 
-  make -s "-j$(nproc)"
-  sudo make -s install_sw
+  make -s -j$(nproc)
+  make -s install_sw
 
   case "${LIBRARY}" in
   "openssl")
-    if [[ ! -f "${OPENSSL_DIR}/ssl/openssl.cnf" ]]; then sudo mkdir -p "${OPENSSL_DIR}/ssl" && sudo cp apps/openssl.cnf "${OPENSSL_DIR}/ssl/openssl.cnf"; fi
+    if [[ ! -f "${OPENSSL_DIR}/ssl/openssl.cnf" ]]; then mkdir -p "${OPENSSL_DIR}/ssl" && cp apps/openssl.cnf "${OPENSSL_DIR}/ssl/openssl.cnf"; fi
     ;;
   "libressl")
-    if [[ ! -f "${OPENSSL_DIR}/ssl/openssl.cnf" ]]; then sudo mkdir -p "${OPENSSL_DIR}/ssl" && sudo cp apps/openssl/openssl.cnf "${OPENSSL_DIR}/ssl/openssl.cnf"; fi
+    if [[ ! -f "${OPENSSL_DIR}/ssl/openssl.cnf" ]] && [[ -f "apps/openssl/openssl.cnf" ]]; then mkdir -p "${OPENSSL_DIR}/ssl" && cp apps/openssl/openssl.cnf "${OPENSSL_DIR}/ssl/openssl.cnf"; fi
     ;;
   esac
 
-  sudo update-ca-certificates || true
 
+  sudo update-ca-certificates || true
   sudo cp -a /etc/ssl/certs/. "${OPENSSL_DIR}/ssl/certs/"
-  sudo chown -R $USER:$GROUPS "${OPENSSL_DIR}"
+  sudo chown -R $(id -u):$(id -g) "${OPENSSL_DIR}"
   sudo chmod -Rf 0755 /openssl
 fi
+
 cd "${NORMALPATH}"
