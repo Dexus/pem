@@ -79,14 +79,12 @@ jobs:
         sudo apt-get install -y haveged ca-certificates
         sudo haveged -w 2048
         mkdir openssl
-    - name: Cache OpenSSL Binary - ${{ runner.os }}-build-openssl-tests-v2-${{ matrix.LIBRARY
-        }}-${{ matrix.VERSION }}
+    - name: Cache OpenSSL Binary - ${{ runner.os }}-build-openssl-tests-v2-${{ matrix.LIBRARY}}-${{ matrix.VERSION }}
       id: openssl_cache
       uses: actions/cache@v2
       with:
         path: ./openssl/
-        key: ${{ runner.os }}-build-openssl-tests-v2-${{ matrix.LIBRARY }}-${{ matrix.VERSION
-          }}
+        key: ${{ runner.os }}-build-openssl-tests-v2-${{ matrix.LIBRARY }}-${{ matrix.VERSION}}
     - name: Set ENV
       shell: bash
       run: |
@@ -98,7 +96,6 @@ jobs:
         LIBRARY: ${{ matrix.LIBRARY }}
         VERSION: ${{ matrix.VERSION }}
     - name: Run Prepare
-      if: steps.openssl_cache.outputs.cache-hit != 'true'
       shell: bash
       run: |
         set +e
