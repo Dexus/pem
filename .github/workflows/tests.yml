@@ -3,7 +3,7 @@ on:
   push:
     branches:
     - master
-    - devel/v1
+    - devel/*
     paths:
     - .github/workflows/tests.yml
     - package.json
@@ -18,7 +18,6 @@ env:
   TARGET: x86_64-unknown-linux-gnu
 jobs:
   build:
-    if: github.ref != 'refs/heads/master'
     name: Build and Test
     runs-on: ubuntu-latest
     strategy:
