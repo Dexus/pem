@@ -1,5 +1,6 @@
 #!/bin/bash
 set -ex
+export DEBIAN_FRONTEND=noninteractive
 
 if [ -z "${OPENSSL_DIR}" ]; then
   exit 0
