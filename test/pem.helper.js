@@ -1,6 +1,7 @@
 'use strict'
 
 const {debug} = require('../lib/debug.js')
+const openssl = require('../lib/openssl.js')
 var fs = require('fs')
 var chai = require('chai')
 var dirtyChai = require('dirty-chai')
@@ -140,5 +141,6 @@ module.exports = {
   checkCertificateData: checkCertificateData,
   checkPublicKey: checkPublicKey,
   checkFingerprint: checkFingerprint,
-  checkModulus: checkModulus
+  checkModulus: checkModulus,
+  openssl: openssl
 }
