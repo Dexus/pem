@@ -1,0 +1,26 @@
+[ req ]
+default_bits           = 4096
+days                   = 9999
+distinguished_name     = req_distinguished_name
+attributes             = req_attributes
+prompt                 = no
+x509_extensions        = v3_ca
+
+[ req_distinguished_name ]
+C                      = DE
+ST                     = Niedersachsen
+L                      = Bramsche
+O                      = DeineAgentur UG
+OU                     = node.js PEM Module
+CN                     = ${ENV::PEM_BUILD}.pem.module.github.josef-froehle.de
+emailAddress           = github@josef-froehle.de
+
+[ req_attributes ]
+challengePassword      = challengePass
+
+[ v3_ca ]
+authorityInfoAccess = @issuer_info
+
+[ issuer_info ]
+OCSP;URI.0 = http://pem.module.github.josef-froehle.de/
+caIssuers;URI.0 = http://pem.module.github.josef-froehle.de/ca.cert

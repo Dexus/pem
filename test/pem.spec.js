@@ -458,7 +458,7 @@ describe('General Tests', function () {
     describe('SAN certificate', function () {
       var cert
       it('Create default certificate', function (done) {
-        var d = fs.readFileSync('./test/fixtures/ru_openssl.csr').toString()
+        var d = fs.readFileSync('./test/fixtures/ru_openssl.csr').toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
         pem.createCertificate({csr: d}, function (error, data) {
           hlp.checkError(error)
           hlp.checkCertificate(data)
@@ -691,6 +691,64 @@ describe('General Tests', function () {
             })
         })
       })
+      context('pkcs12 -export -out "$pfx" -inkey "$key" -in "$cert" -certfile "$ca_bundle" -passout "pass:"', function () {
+        it('verify right order of chains; read PKCS12', function (done) {
+          let pkcs12_5_file_pfx = fs.readFileSync('./test/fixtures/rsa_pkcs12_5_keyStore.p12')
+          let pkcs12_5_file_key_rsa = fs.readFileSync('./test/fixtures/rsa_pkcs12_5_key_RSA.pem').toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
+          let pkcs12_4_file_cert = fs.readFileSync('./test/fixtures/rsa_pkcs12_4_cert.pem').toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
+          let pkcs12_5_file_cert = fs.readFileSync('./test/fixtures/rsa_pkcs12_5_cert.pem').toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
+          let geotrust_primary_ca_cert = fs.readFileSync('./test/fixtures/GeoTrust_Primary_CA.pem').toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
+          pem.readPkcs12(pkcs12_5_file_pfx,
+            function (error, keystore) {
+              debug("verify right order of chains; read PKCS12 - pem.readPkcs12", {
+                error: error,
+                keystore: keystore
+              })
+              hlp.checkError(error)
+              expect(keystore).to.be.an('object')
+              expect(keystore).to.have.property('ca')
+              expect(keystore).to.have.property('cert')
+              expect(keystore).to.have.property('key')
+              expect(keystore.ca).to.be.an('array')
+              expect(keystore.cert).to.be.an('string')
+              expect(keystore.key).to.be.an('string')
+              expect(keystore.ca[0]).to.equal(pkcs12_4_file_cert)
+              expect(keystore.ca[1]).to.equal(geotrust_primary_ca_cert)
+              expect(keystore.cert).to.equal(pkcs12_5_file_cert)
+              expect(keystore.key).to.equal(pkcs12_5_file_key_rsa)
+              done()
+            })
+        })
+      })
+      context('pkcs12 -export -out "pfx" -inkey "$key" -in "$cert + $ca_bundle" -passout "pass:"', function () {
+        it('verify right order of chains; read PKCS12', function (done) {
+          let pkcs12_5_file_pfx = fs.readFileSync('./test/fixtures/rsa_pkcs12_5_keyStore2.p12')
+          let pkcs12_5_file_key_rsa = fs.readFileSync('./test/fixtures/rsa_pkcs12_5_key_RSA.pem').toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
+          let pkcs12_4_file_cert = fs.readFileSync('./test/fixtures/rsa_pkcs12_4_cert.pem').toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
+          let pkcs12_5_file_cert = fs.readFileSync('./test/fixtures/rsa_pkcs12_5_cert.pem').toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
+          let geotrust_primary_ca_cert = fs.readFileSync('./test/fixtures/GeoTrust_Primary_CA.pem').toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
+          pem.readPkcs12(pkcs12_5_file_pfx,
+            function (error, keystore) {
+              debug("verify right order of chains; read PKCS12 - pem.readPkcs12", {
+                error: error,
+                keystore: keystore
+              })
+              hlp.checkError(error)
+              expect(keystore).to.be.an('object')
+              expect(keystore).to.have.property('ca')
+              expect(keystore).to.have.property('cert')
+              expect(keystore).to.have.property('key')
+              expect(keystore.ca).to.be.an('array')
+              expect(keystore.cert).to.be.an('string')
+              expect(keystore.key).to.be.an('string')
+              expect(keystore.ca[0]).to.equal(pkcs12_4_file_cert)
+              expect(keystore.ca[1]).to.equal(geotrust_primary_ca_cert)
+              expect(keystore.cert).to.equal(pkcs12_5_file_cert)
+              expect(keystore.key).to.equal(pkcs12_5_file_key_rsa)
+              done()
+            })
+        })
+      })
       it('Fail to verify invalid sigining chain', function (done) {
         pem.createCertificate({
           serviceKey: ca.serviceKey,
@@ -715,7 +773,7 @@ describe('General Tests', function () {
         })
       })
       it('Verify google.com certificate without provided CA certificates', function (done) {
-        var certificate = fs.readFileSync('./test/fixtures/google.com-old.pem').toString()
+        var certificate = fs.readFileSync('./test/fixtures/google.com-old.pem').toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
         pem.verifySigningChain(certificate, function (error, valid) {
           debug("Verify google.com certificate without provided CA certificates - verifySigningChain", {
             error: error,
@@ -960,7 +1018,7 @@ describe('General Tests', function () {
         publicKeyAlgorithm: 'rsaEncryption'
       }
 
-      var d = fs.readFileSync('./test/fixtures/pem196.pem').toString()
+      var d = fs.readFileSync('./test/fixtures/pem196.pem').toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
       pem.readCertificateInfo(d, function (error, data) {
         if (data.serial) delete data.serial
         if (certInfo.serial) delete certInfo.serial
@@ -1008,7 +1066,7 @@ describe('General Tests', function () {
         publicKeyAlgorithm: 'rsaEncryption'
       }
 
-      var d = fs.readFileSync('./test/fixtures/ru_openssl.crt').toString()
+      var d = fs.readFileSync('./test/fixtures/ru_openssl.crt').toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
       pem.readCertificateInfo(d, function (error, data) {
         if (data.serial) delete data.serial
         if (certInfo.serial) delete certInfo.serial
@@ -1057,7 +1115,7 @@ describe('General Tests', function () {
         publicKeyAlgorithm: 'rsaEncryption'
       }
 
-      var d = fs.readFileSync('./test/fixtures/cn_openssl.crt').toString()
+      var d = fs.readFileSync('./test/fixtures/cn_openssl.crt').toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
       pem.readCertificateInfo(d, function (error, data) {
         if (data.serial) delete data.serial
         if (certInfo.serial) delete certInfo.serial
@@ -1071,7 +1129,7 @@ describe('General Tests', function () {
 
   describe('#.checkCertificate tests', function () {
     it('Check certificate file @ ./test/fixtures/test.key', function (done) {
-      var d = fs.readFileSync('./test/fixtures/test.key').toString()
+      var d = fs.readFileSync('./test/fixtures/test.key').toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
       pem.checkCertificate(d, 'password', function (error, result) {
         hlp.checkError(error)
         expect(result).to.be.ok()
@@ -1079,7 +1137,7 @@ describe('General Tests', function () {
       })
     })
     it('Check certificate file @ ./test/fixtures/test.crt', function (done) {
-      var d = fs.readFileSync('./test/fixtures/test.crt').toString()
+      var d = fs.readFileSync('./test/fixtures/test.crt').toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
       pem.checkCertificate(d, function (error, result) {
         hlp.checkError(error)
         expect(result).to.be.ok()
@@ -1087,7 +1145,7 @@ describe('General Tests', function () {
       })
     })
     it('Check certificate file @ ./test/fixtures/test.csr', function (done) {
-      var d = fs.readFileSync('./test/fixtures/test.csr').toString()
+      var d = fs.readFileSync('./test/fixtures/test.csr').toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
       pem.checkCertificate(d, function (error, result) {
         hlp.checkError(error)
         expect(result).to.be.ok()
@@ -1098,13 +1156,13 @@ describe('General Tests', function () {
 
   describe('#.getModulus tests', function () {
     it('Check matching modulus of  key and cert file', function (done) {
-      var f = fs.readFileSync('./test/fixtures/test.crt').toString()
+      var f = fs.readFileSync('./test/fixtures/test.crt').toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
       pem.getModulus(f, function (error, data1) {
         hlp.checkError(error)
         hlp.checkModulus(data1)
         hlp.checkTmpEmpty()
 
-        f = fs.readFileSync('./test/fixtures/test.key').toString()
+        f = fs.readFileSync('./test/fixtures/test.key').toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
         pem.getModulus(f, 'password', function (error, data2) {
           hlp.checkError(error)
           hlp.checkModulus(data2)
@@ -1118,7 +1176,7 @@ describe('General Tests', function () {
 
   describe('#.getDhparamInfo tests', function () {
     it('Get DH param info', function (done) {
-      var dh = fs.readFileSync('./test/fixtures/test.dh').toString()
+      var dh = fs.readFileSync('./test/fixtures/test.dh').toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
       pem.getDhparamInfo(dh, function (error, data) {
         hlp.checkError(error)
         var size = (data && data.size) || 0
