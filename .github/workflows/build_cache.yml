@@ -47,5 +47,9 @@ jobs:
         echo $PWD
         openssl version
         echo "OPENSSL_DIR=$OPENSSL_DIR"
-        if [[ ! -z "$OPENSSL_DIR" ]] ; then "./bin/local_build_openssl.sh" ; fi
-        if [[ "$CI" == 'true' ]] && [[ -f "$OPENSSL_BIN" ]]; then $OPENSSL_BIN version; else openssl version; fi
+        ./bin/local_build_openssl.sh"
+        exec <"./versions"
+        while read line; do
+          parseLibVersion=(${line//:/ })
+          printf "%s\0%s\0" "${parseLibVersion[0]}" "${parseLibVersion[1]}"
+        done | xargs -0 bash -c "./openssl/\$1_v\$2/bin/openssl version"
