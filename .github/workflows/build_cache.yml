@@ -18,61 +18,6 @@ jobs:
     if: github.ref == 'refs/heads/master'
     name: Build and Test
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-        - LIBRARY: openssl
-          VERSION: 0.9.8zh
-          OPENSSL_DIR: /openssl
-        - LIBRARY: openssl
-          VERSION: 1.0.1u
-          OPENSSL_DIR: /openssl
-        - LIBRARY: openssl
-          VERSION: 1.0.2u
-          OPENSSL_DIR: /openssl
-        - LIBRARY: openssl
-          VERSION: 1.1.0l
-          OPENSSL_DIR: /openssl
-        - LIBRARY: openssl
-          VERSION: 1.1.1l
-          OPENSSL_DIR: /openssl
-        - LIBRARY: openssl
-          VERSION: 3.0.1
-          OPENSSL_DIR: /openssl
-        - LIBRARY: libressl
-          VERSION: 2.4.5
-          OPENSSL_DIR: /openssl
-        - LIBRARY: libressl
-          VERSION: 2.5.5
-          OPENSSL_DIR: /openssl
-        - LIBRARY: libressl
-          VERSION: 2.6.5
-          OPENSSL_DIR: /openssl
-        - LIBRARY: libressl
-          VERSION: 2.7.5
-          OPENSSL_DIR: /openssl
-        - LIBRARY: libressl
-          VERSION: 2.8.3
-          OPENSSL_DIR: /openssl
-        - LIBRARY: libressl
-          VERSION: 2.9.2
-          OPENSSL_DIR: /openssl
-        - LIBRARY: libressl
-          VERSION: 3.0.2
-          OPENSSL_DIR: /openssl
-        - LIBRARY: libressl
-          VERSION: 3.1.5
-          OPENSSL_DIR: /openssl
-        - LIBRARY: libressl
-          VERSION: 3.2.7
-          OPENSSL_DIR: /openssl
-        - LIBRARY: libressl
-          VERSION: 3.3.5
-          OPENSSL_DIR: /openssl
-        - LIBRARY: libressl
-          VERSION: 3.4.2
-          OPENSSL_DIR: /openssl
     steps:
     - uses: actions/checkout@v2
     - run: |
@@ -102,5 +47,5 @@ jobs:
         echo $PWD
         openssl version
         echo "OPENSSL_DIR=$OPENSSL_DIR"
-        if [[ ! -z "$OPENSSL_DIR" ]] ; then "./bin/test_build_openssl.sh" ; fi
+        if [[ ! -z "$OPENSSL_DIR" ]] ; then "./bin/local_build_openssl.sh" ; fi
         if [[ "$CI" == 'true' ]] && [[ -f "$OPENSSL_BIN" ]]; then $OPENSSL_BIN version; else openssl version; fi

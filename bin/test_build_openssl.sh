@@ -63,7 +63,7 @@ fi
 
 case "${LIBRARY}" in
 "openssl")
-  ./Configure --prefix="${OPENSSL_DIR}" ${OS_COMPILER} -fPIC -g ${OS_FLAGS} no-shared -static
+  ./Configure --prefix="${OPENSSL_DIR}" --prefix="${OPENSSL_DIR}/ssl/" no-shared ${OS_COMPILER} -fPIC -g ${OS_FLAGS} -static
   ;;
 "libressl")
   ./configure --prefix="${OPENSSL_DIR}" --disable-shared --with-pic

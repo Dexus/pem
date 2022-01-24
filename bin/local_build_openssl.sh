@@ -28,7 +28,7 @@ if [ -n "$1" ] && [ -n "$2" ]; then
   OPENSSL_DIR="${NORMAL_PATH}/openssl/${LIBRARY}_v${VERSION}"
   OPENSSL_BUILD_DIR="${OPENSSL_DIR}_build"
 
-  if [ -f "${OPENSSL_DIR}/bin/openssl" ]; then
+  if [ -f "${OPENSSL_DIR}/bin/openssl" ] && [ "$FORCE" != "true" ]; then
     exit 0
   fi
 
@@ -79,7 +79,7 @@ if [ -n "$1" ] && [ -n "$2" ]; then
 
   case "${LIBRARY}" in
   "openssl")
-    ./Configure --prefix="${OPENSSL_DIR}" --openssldir="${OPENSSL_DIR}" no-shared ${OS_COMPILER} -fPIC -g ${OS_FLAGS} -static
+    ./Configure --prefix="${OPENSSL_DIR}" --openssldir="${OPENSSL_DIR}/ssl" no-shared ${OS_COMPILER} -fPIC -g ${OS_FLAGS} -static
     ;;
   "libressl")
     ./configure --prefix="${OPENSSL_DIR}" --disable-shared --with-pic
