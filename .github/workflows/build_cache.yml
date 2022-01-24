@@ -5,7 +5,7 @@ on:
     - master
     - devel/v1
     paths:
-    - .github/workflows/build.yml
+    - .github/workflows/build_cache.yml
     - bin/**.sh
   workflow_dispatch:
 concurrency:
@@ -23,33 +23,35 @@ jobs:
     - run: |
         sudo apt-get install -y haveged ca-certificates
         sudo haveged -w 2048
-        mkdir openssl
-    - name: Cache OpenSSL Binary - ${{ runner.os }}-build-openssl-tests-v2-${{ matrix.LIBRARY}}-${{ matrix.VERSION }}
-      id: openssl_cache
-      uses: actions/cache@v2
-      with:
-        path: ./openssl/
-        key: ${{ runner.os }}-build-openssl-tests-v2-${{ matrix.LIBRARY }}-${{ matrix.VERSION}}
-    - name: Set ENV
+        mkdir -p openssl
+    - name: test me
       shell: bash
-      run: |
-        set -x
-        if [[ -d "$GITHUB_WORKSPACE${{ matrix.OPENSSL_DIR }}" ]] && [[ "${{ matrix.OPENSSL_DIR }}" == "/openssl" ]] ; then echo "OPENSSL_DIR=$GITHUB_WORKSPACE${{ matrix.OPENSSL_DIR }}" >> $GITHUB_ENV ; echo "OPENSSL_BIN=$GITHUB_WORKSPACE${{ matrix.OPENSSL_DIR }}/bin/openssl" >> $GITHUB_ENV ; fi
-        echo "LIBRARY=$(echo ${LIBRARY})" >> $GITHUB_ENV
-        echo "VERSION=$(echo ${VERSION})" >> $GITHUB_ENV
-      env:
-        LIBRARY: ${{ matrix.LIBRARY }}
-        VERSION: ${{ matrix.VERSION }}
+      run: | 
+        touch openssl/.test
+        tar cfJ all_versions.tar.xz openssl/
+        ls -lahR openssl/
     - name: Run Prepare
       shell: bash
       run: |
         set +e
+        set -x
         echo $PWD
         openssl version
-        echo "OPENSSL_DIR=$OPENSSL_DIR"
-        ./bin/local_build_openssl.sh"
+        ./bin/local_build_openssl.sh
+    - name: Pack Build
+      shell: bash
+      run: |
+        set +e
+        set -x
+        echo $PWD
+        ls -lahR $PWD
         exec <"./versions"
         while read line; do
           parseLibVersion=(${line//:/ })
           printf "%s\0%s\0" "${parseLibVersion[0]}" "${parseLibVersion[1]}"
-        done | xargs -0 bash -c "./openssl/\$1_v\$2/bin/openssl version"
+        done | xargs -0 -n 2 -P 1 bash -c "./openssl/\${1}_v\${2}/bin/openssl version" --
+        tar cfJ all_versions.tar.xz openssl/
+    - uses: actions/upload-artifact@v2
+      with:
+        name: openssl_build
+        path: all_versions.tar.xz

@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set -ex
 [ -z "$TARGET" ] && TARGET="x86_64-unknown-linux-gnu"
 
 OWN_BINARY=$(basename $0)
@@ -12,7 +12,7 @@ NORMAL_PATH=$(pwd)
 
 checkDebInstalled() {
   REQUIRED_PKG="$1"
-  PKG_OK=$(dpkg-query -W --showformat='${Status}\n' "${REQUIRED_PKG}" | grep "install ok installed")
+  PKG_OK=$(dpkg-query -W --showformat='${Status}\n' "${REQUIRED_PKG}" | grep "install ok installed" || true)
   echo "Checking for ${REQUIRED_PKG}: ${PKG_OK}"
   if [ "" = "${PKG_OK}" ]; then
     echo "No ${REQUIRED_PKG}. Setting up ${REQUIRED_PKG}."
@@ -91,7 +91,7 @@ if [ -n "$1" ] && [ -n "$2" ]; then
 
   case "${LIBRARY}" in
   "openssl")
-    if [[ ! -f "${OPENSSL_DIR}/ssl/openssl.cnf" ]]; then mkdir -p "${OPENSSL_DIR}/ssl" && cp apps/openssl.cnf "${OPENSSL_DIR}/ssl/openssl.cnf"; fi
+    if [[ ! -f "${OPENSSL_DIR}/ssl/openssl.cnf" ]] && [[ -f "apps/openssl.cnf" ]]; then mkdir -p "${OPENSSL_DIR}/ssl" && cp apps/openssl.cnf "${OPENSSL_DIR}/ssl/openssl.cnf"; fi
     ;;
   "libressl")
     if [[ ! -f "${OPENSSL_DIR}/ssl/openssl.cnf" ]] && [[ -f "apps/openssl/openssl.cnf" ]]; then mkdir -p "${OPENSSL_DIR}/ssl" && cp apps/openssl/openssl.cnf "${OPENSSL_DIR}/ssl/openssl.cnf"; fi

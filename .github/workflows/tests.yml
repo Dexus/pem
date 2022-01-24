@@ -90,35 +90,27 @@ jobs:
     - run: |
         sudo haveged -w 2048
         mkdir openssl
-    - name: Cache OpenSSL Binary - ${{ runner.os }}-build-openssl-tests-v2-${{ matrix.LIBRARY
-        }}-${{ matrix.VERSION }}
-      id: openssl_cache
-      uses: actions/cache@v2
+    - name: Download OpenSSL Artifacts
+      uses: greenbone/actions/artifacts-download-trigger@v1
       with:
+        workflow: build_cache.yml
+        gh-token: ${{ secrets.BOT_PIPELINE_TOKEN }}
+        download-artifacts: true
+        wait-for-completion-interval: 60s
+        wait-for-completion-timeout: 45m
+        name: openssl_build
         path: ./openssl/
-        key: ${{ runner.os }}-build-openssl-tests-v2-${{ matrix.LIBRARY }}-${{ matrix.VERSION
-          }}
-
     - name: Set ENV
       shell: bash
       run: |
         set -x
-        if [[ -d "$GITHUB_WORKSPACE${{ matrix.OPENSSL_DIR }}" ]] && [[ "${{ matrix.OPENSSL_DIR }}" == "/openssl" ]] ; then echo "OPENSSL_DIR=$GITHUB_WORKSPACE${{ matrix.OPENSSL_DIR }}" >> $GITHUB_ENV ; echo "OPENSSL_BIN=$GITHUB_WORKSPACE${{ matrix.OPENSSL_DIR }}/bin/openssl" >> $GITHUB_ENV ; fi
+        ls -lah ./openssl
+        tar xf ./openssl/all_versions.tar.xz --strip-components=1 -C ./openssl
         echo "LIBRARY=$(echo ${LIBRARY})" >> $GITHUB_ENV
         echo "VERSION=$(echo ${VERSION})" >> $GITHUB_ENV
       env:
         LIBRARY: ${{ matrix.LIBRARY }}
         VERSION: ${{ matrix.VERSION }}
-    - name: Run Prepare
-      if: steps.openssl_cache.outputs.cache-hit != 'true'
-      shell: bash
-      run: |
-        set +e
-        echo $PWD
-        openssl version
-        echo "OPENSSL_DIR=$OPENSSL_DIR"
-        if [[ ! -z "$OPENSSL_DIR" ]] ; then "./bin/test_build_openssl.sh" ; fi
-        if [[ "$CI" == 'true' ]] && [[ -f "$OPENSSL_BIN" ]]; then $OPENSSL_BIN version; else openssl version; fi
     - name: Run Tests
       shell: bash
       run: |
