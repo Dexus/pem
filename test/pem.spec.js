@@ -338,6 +338,49 @@ describe('General Tests', function () {
       })
     })
 
+    it('Create CSR with specialchars config file', function (done) {
+      pem.createCSR({
+        issuer: {},
+        country: 'EE',
+        state: 'Harjumaa',
+        locality: 'Tallinn',
+        organization: ['Node2.ee', 'Node/ee'],
+        organizationUnit: ['test:test2', 'test test2', 'test-!$%^&*()_+|~=`{}[]:/;<>?,.@#'],
+        commonName: 'www.node.ee',
+        emailAddress: 'andris@node.ee',
+        dc: '',
+        signatureAlgorithm: 'sha256WithRSAEncryption',
+        publicKeyAlgorithm: 'rsaEncryption',
+        publicKeySize: '2048 bit'
+      }, function (error, data) {
+        debug('createCSR', {error: error, data: data})
+        hlp.checkError(error)
+        hlp.checkCSR(data)
+        hlp.checkTmpEmpty()
+
+        pem.readCertificateInfo(data.csr, function (error, data) {
+          debug('readCertificateInfo', {error: error, data: data})
+          hlp.checkError(error)
+          hlp.checkCertificateData(data, {
+            issuer: {},
+            country: 'EE',
+            state: 'Harjumaa',
+            locality: 'Tallinn',
+            organization: ['Node/ee', 'Node2.ee'],
+            organizationUnit: ['test test2', 'test:test2', "test-!$%^&*()_\\+|~=`{}[]:/\\;\\<\\>?\\,.@#"],
+            commonName: 'www.node.ee',
+            emailAddress: 'andris@node.ee',
+            dc: '',
+            signatureAlgorithm: 'sha256WithRSAEncryption',
+            publicKeyAlgorithm: 'rsaEncryption',
+            publicKeySize: '2048 bit'
+          })
+          hlp.checkTmpEmpty()
+          done()
+        })
+      })
+    })
+
     it('Read edited cert data from CSR', function (done) {
       var certInfo = {
         issuer: {},
