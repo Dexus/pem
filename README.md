@@ -332,6 +332,19 @@ pem.config({
 // do something with the pem module
 ```
 
+### :warning: CSR/Certificates with special chars
+For more details, search in `test/pem.spec.js`: `Create CSR with specialchars config file`
+
+If you use special chars like:
+
+```
+-!$%^&*()_+|~=`{}[]:/;<>?,.@#
+```
+
+You should know that the result mey have escaped characters when you read it in your application.
+Will try to fix this in the future, but not sure.
+
+
 ### Special thanks to
 
 - Andris Reinman (@andris9) - Initiator of pem
