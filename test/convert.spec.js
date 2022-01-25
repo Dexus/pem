@@ -1,6 +1,6 @@
 'use strict'
 
-var pem = require('..')
+var pem = require('../lib/pem')
 var pemHelper = require('../lib/helper.js')
 var fs = require('fs')
 var hlp = require('./pem.helper.js')

@@ -1,6 +1,6 @@
 'use strict'
 
-var pem = require('..')
+var pem = require('../lib/pem')
 var fs = require('fs')
 var hlp = require('./pem.helper.js')
 const {debug} = require('../lib/debug.js')
@@ -757,6 +757,19 @@ describe('General Tests', function () {
               }
               done()
             })
+        })
+      })
+      it('Create Certificate without CSR and use Password for PKey', function (done) {
+        pem.createCertificate({
+          cipher: 'aes256',
+          clientKeyPassword: '1234AbCd',
+          serial: Date.now()
+        }, function (error, data) {
+          debug("Create Certificate without CSR and use Password for PKey", {error, data})
+          hlp.checkError(error)
+          hlp.checkCertificate(data)
+          hlp.checkTmpEmpty()
+          done()
         })
       })
       it('Fail to verify invalid sigining chain', function (done) {
