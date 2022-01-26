@@ -3,8 +3,8 @@
         "allowUnknownTags": false
     },
     "source": {
-      "include": "./lib",
-       "includePattern": ".js$",
+      "include": ["./lib","./src"],
+       "includePattern": ".(ts|js)$",
        "excludePattern": "(node_modules/|test/|docs)"
     },
     "plugins": ["plugins/markdown"],

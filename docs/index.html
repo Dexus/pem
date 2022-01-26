@@ -1,0 +1,303 @@
+<!DOCTYPE html><html class="default"><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>pem</title><meta name="description" content="Documentation for pem"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="assets/style.css"/><link rel="stylesheet" href="assets/highlight.css"/><script async src="assets/search.js" id="search-script"></script></head><body><script>document.body.classList.add(localStorage.getItem("tsd-theme") || "os")</script><header><div class="tsd-page-toolbar"><div class="container"><div class="table-wrap"><div class="table-cell" id="tsd-search" data-base="."><div class="field"><label for="tsd-search-field" class="tsd-widget search no-caption">Search</label><input type="text" id="tsd-search-field"/></div><ul class="results"><li class="state loading">Preparing search index...</li><li class="state failure">The search index is not available</li></ul><a href="index.html" class="title">pem</a></div><div class="table-cell" id="tsd-widgets"><div id="tsd-filter"><a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a><div class="tsd-filter-group"><div class="tsd-select" id="tsd-filter-visibility"><span class="tsd-select-label">All</span><ul class="tsd-select-list"><li data-value="public">Public</li><li data-value="protected">Public/Protected</li><li data-value="private" class="selected">All</li></ul></div> <input type="checkbox" id="tsd-filter-inherited" checked/><label class="tsd-widget" for="tsd-filter-inherited">Inherited</label><input type="checkbox" id="tsd-filter-externals" checked/><label class="tsd-widget" for="tsd-filter-externals">Externals</label></div></div><a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a></div></div></div></div><div class="tsd-page-title"><div class="container"><h1> pem</h1></div></div></header><div class="container container-main"><div class="row"><div class="col-8 col-content"><div class="tsd-panel tsd-typography">
+<a href="#pem" id="pem" style="color: inherit; text-decoration: none;">
+  <h1>pem</h1>
+</a>
+<p>Create private keys and certificates with node.js</p>
+<p><a href="http://travis-ci.org/Dexus/pem"><img src="https://secure.travis-ci.org/Dexus/pem.png" alt="Build Status"></a> <a href="http://badge.fury.io/js/pem"><img src="https://badge.fury.io/js/pem.svg" alt="npm version"></a> <a href="https://www.npmjs.com/package/pem"><img src="https://img.shields.io/npm/dt/pem.svg" alt="npm downloads"></a> <a href="https://dexus.github.io/pem/jsdoc/"><img src="https://img.shields.io/badge/pem-documentation-0099ff.svg?style=flat" alt="pem documentation"></a></p>
+<p><a href="https://github.com/standard/standard"><img src="https://cdn.rawgit.com/standard/standard/master/badge.svg" alt="JavaScript Style Guide"></a></p>
+
+<a href="#installation" id="installation" style="color: inherit; text-decoration: none;">
+  <h2>Installation</h2>
+</a>
+<p>Install with npm</p>
+<pre><code><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-0">install</span><span class="hl-1"> </span><span class="hl-0">pem</span>
+</code></pre>
+<p>or use yarn</p>
+<pre><code><span class="hl-0">yarn</span><span class="hl-1"> </span><span class="hl-0">add</span><span class="hl-1"> </span><span class="hl-0">pem</span>
+</code></pre>
+<p>:warning: Please make sure you have <code>openssl</code> or <code>libressl</code> already installed on your system/container, without
+them <code>pem</code> will not work.</p>
+
+<a href="#examples" id="examples" style="color: inherit; text-decoration: none;">
+  <h2>Examples</h2>
+</a>
+<p>Here are some examples for creating an SSL key/cert on the fly, and running an HTTPS server on port 443. 443 is the
+standard HTTPS port, but requires root permissions on most systems. To get around this, you could use a higher port
+number, like 4300, and use <a href="https://localhost:4300">https://localhost:4300</a> to access your server.</p>
+
+<a href="#basic-https" id="basic-https" style="color: inherit; text-decoration: none;">
+  <h3>Basic https</h3>
+</a>
+<pre><code class="language-javascript"><span class="hl-2">var</span><span class="hl-1"> </span><span class="hl-0">https</span><span class="hl-1"> = </span><span class="hl-3">require</span><span class="hl-1">(</span><span class="hl-4">&#39;https&#39;</span><span class="hl-1">)</span><br/><span class="hl-2">var</span><span class="hl-1"> </span><span class="hl-0">pem</span><span class="hl-1"> = </span><span class="hl-3">require</span><span class="hl-1">(</span><span class="hl-4">&#39;pem&#39;</span><span class="hl-1">)</span><br/><br/><span class="hl-0">pem</span><span class="hl-1">.</span><span class="hl-3">createCertificate</span><span class="hl-1">({ </span><span class="hl-0">days:</span><span class="hl-1"> </span><span class="hl-5">1</span><span class="hl-1">, </span><span class="hl-0">selfSigned:</span><span class="hl-1"> </span><span class="hl-2">true</span><span class="hl-1"> }, </span><span class="hl-2">function</span><span class="hl-1"> (</span><span class="hl-0">err</span><span class="hl-1">, </span><span class="hl-0">keys</span><span class="hl-1">) {</span><br/><span class="hl-1">  </span><span class="hl-6">if</span><span class="hl-1"> (</span><span class="hl-0">err</span><span class="hl-1">) {</span><br/><span class="hl-1">    </span><span class="hl-6">throw</span><span class="hl-1"> </span><span class="hl-0">err</span><br/><span class="hl-1">  }</span><br/><span class="hl-1">  </span><span class="hl-0">https</span><span class="hl-1">.</span><span class="hl-3">createServer</span><span class="hl-1">({ </span><span class="hl-0">key:</span><span class="hl-1"> </span><span class="hl-0">keys</span><span class="hl-1">.</span><span class="hl-0">clientKey</span><span class="hl-1">, </span><span class="hl-0">cert:</span><span class="hl-1"> </span><span class="hl-0">keys</span><span class="hl-1">.</span><span class="hl-0">certificate</span><span class="hl-1"> }, </span><span class="hl-2">function</span><span class="hl-1"> (</span><span class="hl-0">req</span><span class="hl-1">, </span><span class="hl-0">res</span><span class="hl-1">) {</span><br/><span class="hl-1">    </span><span class="hl-0">res</span><span class="hl-1">.</span><span class="hl-3">end</span><span class="hl-1">(</span><span class="hl-4">&#39;o hai!&#39;</span><span class="hl-1">)</span><br/><span class="hl-1">  }).</span><span class="hl-3">listen</span><span class="hl-1">(</span><span class="hl-5">443</span><span class="hl-1">)</span><br/><span class="hl-1">})</span>
+</code></pre>
+
+<a href="#express" id="express" style="color: inherit; text-decoration: none;">
+  <h3>Express</h3>
+</a>
+<pre><code class="language-javascript"><span class="hl-2">var</span><span class="hl-1"> </span><span class="hl-0">https</span><span class="hl-1"> = </span><span class="hl-3">require</span><span class="hl-1">(</span><span class="hl-4">&#39;https&#39;</span><span class="hl-1">)</span><br/><span class="hl-2">var</span><span class="hl-1"> </span><span class="hl-0">pem</span><span class="hl-1"> = </span><span class="hl-3">require</span><span class="hl-1">(</span><span class="hl-4">&#39;pem&#39;</span><span class="hl-1">)</span><br/><span class="hl-2">var</span><span class="hl-1"> </span><span class="hl-0">express</span><span class="hl-1"> = </span><span class="hl-3">require</span><span class="hl-1">(</span><span class="hl-4">&#39;express&#39;</span><span class="hl-1">)</span><br/><br/><span class="hl-0">pem</span><span class="hl-1">.</span><span class="hl-3">createCertificate</span><span class="hl-1">({ </span><span class="hl-0">days:</span><span class="hl-1"> </span><span class="hl-5">1</span><span class="hl-1">, </span><span class="hl-0">selfSigned:</span><span class="hl-1"> </span><span class="hl-2">true</span><span class="hl-1"> }, </span><span class="hl-2">function</span><span class="hl-1"> (</span><span class="hl-0">err</span><span class="hl-1">, </span><span class="hl-0">keys</span><span class="hl-1">) {</span><br/><span class="hl-1">  </span><span class="hl-6">if</span><span class="hl-1"> (</span><span class="hl-0">err</span><span class="hl-1">) {</span><br/><span class="hl-1">    </span><span class="hl-6">throw</span><span class="hl-1"> </span><span class="hl-0">err</span><br/><span class="hl-1">  }</span><br/><span class="hl-1">  </span><span class="hl-2">var</span><span class="hl-1"> </span><span class="hl-0">app</span><span class="hl-1"> = </span><span class="hl-3">express</span><span class="hl-1">()</span><br/><br/><span class="hl-1">  </span><span class="hl-0">app</span><span class="hl-1">.</span><span class="hl-3">get</span><span class="hl-1">(</span><span class="hl-4">&#39;/&#39;</span><span class="hl-1">, </span><span class="hl-2">function</span><span class="hl-1"> (</span><span class="hl-0">req</span><span class="hl-1">, </span><span class="hl-0">res</span><span class="hl-1">) {</span><br/><span class="hl-1">    </span><span class="hl-0">res</span><span class="hl-1">.</span><span class="hl-3">send</span><span class="hl-1">(</span><span class="hl-4">&#39;o hai!&#39;</span><span class="hl-1">)</span><br/><span class="hl-1">  })</span><br/><br/><span class="hl-1">  </span><span class="hl-0">https</span><span class="hl-1">.</span><span class="hl-3">createServer</span><span class="hl-1">({ </span><span class="hl-0">key:</span><span class="hl-1"> </span><span class="hl-0">keys</span><span class="hl-1">.</span><span class="hl-0">clientKey</span><span class="hl-1">, </span><span class="hl-0">cert:</span><span class="hl-1"> </span><span class="hl-0">keys</span><span class="hl-1">.</span><span class="hl-0">certificate</span><span class="hl-1"> }, </span><span class="hl-0">app</span><span class="hl-1">).</span><span class="hl-3">listen</span><span class="hl-1">(</span><span class="hl-5">443</span><span class="hl-1">)</span><br/><span class="hl-1">})</span>
+</code></pre>
+
+<a href="#api" id="api" style="color: inherit; text-decoration: none;">
+  <h2>API</h2>
+</a>
+<p>Please have a look into the <a href="https://dexus.github.io/pem/jsdoc/">API documentation</a>.</p>
+<p><em>we had to clean up a bit</em></p>
+<!--
+### Create a dhparam key
+
+Use `createDhparam` for creating dhparam keys
+
+    pem.createDhparam(keyBitsize, callback)
+
+Where
+
+  * **keyBitsize** is an optional size of the key, defaults to 512 (bit)
+  * **callback** is a callback function with an error object and `{dhparam}`
+
+### Create a ecparam key
+
+Use `createEcparam` for creating ecparam keys
+
+    pem.createEcparam(keyName, callback)
+
+Where
+
+  * **keyName** is an optional name of the key curves name, defaults to secp256k1
+  * **callback** is a callback function with an error object and `{ecparam}`
+
+### Create a private key
+
+Use `createPrivateKey` for creating private keys
+
+    pem.createPrivateKey(keyBitsize, [options,] callback)
+
+Where
+
+  * **keyBitsize** is an optional size of the key, defaults to 2048 (bit)
+  * **options** is an optional object of the cipher and password (both required for encryption), defaults {cipher:'',password:''}
+  (ciphers:["aes128", "aes192", "aes256", "camellia128", "camellia192", "camellia256", "des", "des3", "idea"])
+  * **callback** is a callback function with an error object and `{key}`
+
+### Create a Certificate Signing Request
+
+Use `createCSR` for creating certificate signing requests
+
+    pem.createCSR(options, callback)
+
+Where
+
+  * **options** is an optional options object
+  * **callback** is a callback function with an error object and `{csr, clientKey}`
+
+Possible options are the following
+
+  * **clientKey** is an optional client key to use
+  * **clientKeyPassword** the optional password for `clientKey`
+  * **keyBitsize** - if `clientKey` is undefined, bit size to use for generating a new key (defaults to 2048)
+  * **hash** is a hash function to use (either `md5`, `sha1` or `sha256`, defaults to `sha256`)
+  * **country** is a CSR country field
+  * **state** is a CSR state field
+  * **locality** is a CSR locality field
+  * **organization** is a CSR organization field
+  * **organizationUnit** is a CSR organizational unit field
+  * **commonName** is a CSR common name field (defaults to `localhost`)
+  * **altNames** is a list (`Array`) of subjectAltNames in the subjectAltName field (optional)
+  * **emailAddress** is a CSR email address field
+  * **csrConfigFile** is a CSR config file
+
+### Create a certificate
+
+Use `createCertificate` for creating private keys
+
+    pem.createCertificate(options, callback)
+
+Where
+
+  * **options** is an optional options object
+  * **callback** is a callback function with an error object and `{certificate, csr, clientKey, serviceKey}`
+
+Possible options include all the options for `createCSR` - in case `csr` parameter is not defined and a new
+CSR needs to be generated.
+
+In addition, possible options are the following
+
+  * **serviceKey** is a private key for signing the certificate, if not defined a new one is generated
+  * **serviceKeyPassword** Password of the service key
+  * **serviceCertificate** is the optional certificate for the `serviceKey`
+  * **serial** is the unique serial number for the signed certificate, required if `serviceCertificate` is defined
+  * **selfSigned** - if set to true and `serviceKey` is not defined, use `clientKey` for signing
+  * **csr** is a CSR for the certificate, if not defined a new one is generated
+  * **days** is the certificate expire time in days
+  * **extFile** extension config file - **without** `-extensions v3_req`
+  * **config** extension config file - **with** `-extensions v3_req`
+
+### Export a public key
+
+Use `getPublicKey` for exporting a public key from a private key, CSR or certificate
+
+    pem.getPublicKey(certificate, callback)
+
+Where
+
+  * **certificate** is a PEM encoded private key, CSR or certificate
+  * **callback** is a callback function with an error object and `{publicKey}`
+
+### Read certificate info
+
+Use `readCertificateInfo` for reading subject data from a certificate or a CSR
+
+    pem.readCertificateInfo(certificate, callback)
+
+Where
+
+  * **certificate** is a PEM encoded CSR or a certificate
+  * **callback** is a callback function with an error object and `{serial, country, state, locality, organization, organizationUnit, commonName, emailAddress, validity{start, end}, san{dns, ip, email}?, issuer{country, state, locality, organization, organizationUnit}, signatureAlgorithm, publicKeyAlgorithm, publicKeySize }`
+
+? *san* is only present if the CSR or certificate has SAN entries.
+
+*signatureAlgorithm, publicKeyAlgorithm and publicKeySize* only available if supportet and can parsed form openssl output
+
+### Get fingerprint
+
+Use `getFingerprint` to get the default SHA1 fingerprint for a certificate
+
+    pem.getFingerprint(certificate, [hash], callback)
+
+Where
+
+  * **certificate** is a PEM encoded certificate
+  * **hash** is a hash function to use (either `md5`, `sha1` or `sha256`, defaults to `sha1`)
+  * **callback** is a callback function with an error object and `{fingerprint}`
+
+### Get modulus
+
+Use `getModulus` to get the modulus for a certificate, a CSR or a private key. Modulus can be useful to check that a Private Key Matches a Certificate
+
+    pem.getModulus(certificate, [password], [hash], callback)
+
+Where
+
+  * **certificate** is a PEM encoded certificate, CSR or private key
+  * **password** is an optional passphrase for passpharse protected certificates
+  * **hash** is an optional hash function to use (up to now `md5` supported) (default: none)
+  * **callback** is a callback function with an error object and `{modulus}`
+
+### Get DH parameter information
+
+Use `getDhparamInfo` to get the size and prime of DH parameters.
+
+    pem.getDhparamInfo(dhparam, callback)
+
+Where
+
+  * **dhparam** is a PEM encoded DH parameters string
+  * **callback** is a callback function with an error object and `{size, prime}`
+
+
+### Export to a PKCS12 keystore
+
+Use `createPkcs12` to export a certificate, the private key and optionally any signing or intermediate CA certificates to a PKCS12 keystore.
+
+    pem.createPkcs12(clientKey, certificate, p12Password, [options], callback)
+
+Where
+
+* **clientKey** is a PEM encoded private key
+* **certificate** is a PEM encoded certificate
+* **p12Password** is the password of the exported keystore
+* **options** is an optional options object with `cipher`, (one of "aes128", "aes192", "aes256", "camellia128", "camellia192", "camellia256", "des", "des3" or "idea"), `clientKeyPassword` and `certFiles` (an array of additional certificates to include - e.g. CA certificates)
+* **callback** is a callback function with an error object and `{pkcs12}` (binary)
+
+### Read a PKCS12 keystore
+
+Use `readPkcs12` to read a certificate, private key and CA certificates from a PKCS12 keystore.
+
+    pem.readPkcs12(bufferOrPath, [options], callback)
+
+Where
+
+* **bufferOrPath** is a PKCS12 keystore as a [Buffer](https://nodejs.org/api/buffer.html) or the path to a file
+* **options** is an optional options object with `clientKeyPassword` which will be used to encrypt the stored key and `p12Password` which will be used to open the keystore
+* **callback** is a callback function with an error object and `{key: String, cert: String, ca: Array}`
+
+### Check a PKCS12 keystore
+
+Use `checkPkcs12` to check a PKCS12 keystore.
+
+    pem.checkPkcs12(bufferOrPath, [passphrase], callback)
+
+Where
+
+* **bufferOrPath** is a PKCS12 keystore as a [Buffer](https://nodejs.org/api/buffer.html) or the path to a file
+* **passphrase** is an optional passphrase which will be used to open the keystore
+* **callback** is a callback function with an error object and a boolean as arguments
+
+### Verify a certificate signing chain
+
+Use `verifySigningChain` to assert that a given certificate has a valid signing chain.
+
+    pem.verifySigningChain(certificate, ca, callback)
+
+Where
+
+* **certificate** is a PEM encoded certificate string
+* **ca** is a PEM encoded CA certificate string or an array of certificate strings
+* **callback** is a callback function with an error object and a boolean as arguments
+
+### Check a certificate file
+
+Use `checkCertificate` to check / verify consistency of a certificate.
+
+    pem.checkCertificate(certificate, callback)
+
+Where
+
+* **certificate** is a PEM encoded certificate string
+* **callback** is a callback function with an error object and a boolean as arguments
+-->
+
+
+<a href="#custom-extensions-config-file" id="custom-extensions-config-file" style="color: inherit; text-decoration: none;">
+  <h3>Custom extensions config file</h3>
+</a>
+<p>You can specify custom OpenSSL extensions using the <code>config</code> or <code>extFile</code> options for <code>createCertificate</code> (or using <code>csrConfigFile</code> with <code>createCSR</code>).</p>
+<p><code>extFile</code> and <code>csrConfigFile</code> should be paths to the extension files. While <code>config</code> will generate a temporary file from the supplied file contents.</p>
+<p>If you specify <code>config</code> then the <code>v3_req</code> section of your config file will be used.</p>
+<p>The following would be an example of a Certificate Authority extensions file:</p>
+<pre><code><span class="hl-1">[</span><span class="hl-0">req</span><span class="hl-1">]</span><br/><span class="hl-0">req_extensions</span><span class="hl-1"> = </span><span class="hl-0">v3_req</span><br/><span class="hl-0">distinguished_name</span><span class="hl-1"> = </span><span class="hl-0">req_distinguished_name</span><br/><br/><span class="hl-1">[</span><span class="hl-0">req_distinguished_name</span><span class="hl-1">]</span><br/><span class="hl-0">commonName</span><span class="hl-1"> = </span><span class="hl-0">Common</span><span class="hl-1"> </span><span class="hl-0">Name</span><br/><span class="hl-0">commonName_max</span><span class="hl-1"> = </span><span class="hl-5">64</span><br/><br/><span class="hl-1">[</span><span class="hl-0">v3_req</span><span class="hl-1">]</span><br/><span class="hl-0">basicConstraints</span><span class="hl-1"> = </span><span class="hl-0">critical</span><span class="hl-1">,</span><span class="hl-7">CA</span><span class="hl-1">:</span><span class="hl-8">TRUE</span>
+</code></pre>
+<p>While the following would specify subjectAltNames in the resulting certificate:</p>
+<pre><code><span class="hl-1">[</span><span class="hl-0">req</span><span class="hl-1">]</span><br/><span class="hl-0">req_extensions</span><span class="hl-1"> = </span><span class="hl-0">v3_req</span><br/><br/><span class="hl-1">[ </span><span class="hl-0">v3_req</span><span class="hl-1"> ]</span><br/><span class="hl-0">basicConstraints</span><span class="hl-1"> = </span><span class="hl-7">CA</span><span class="hl-1">:</span><span class="hl-8">FALSE</span><br/><span class="hl-0">keyUsage</span><span class="hl-1"> = </span><span class="hl-0">nonRepudiation</span><span class="hl-1">, </span><span class="hl-0">digitalSignature</span><span class="hl-1">, </span><span class="hl-0">keyEncipherment</span><br/><span class="hl-0">subjectAltName</span><span class="hl-1"> = @</span><span class="hl-0">alt_names</span><br/><br/><span class="hl-1">[</span><span class="hl-0">alt_names</span><span class="hl-1">]</span><br/><span class="hl-8">DNS</span><span class="hl-1">.</span><span class="hl-5">1</span><span class="hl-1"> = </span><span class="hl-0">host1</span><span class="hl-1">.</span><span class="hl-0">example</span><span class="hl-1">.</span><span class="hl-0">com</span><br/><span class="hl-8">DNS</span><span class="hl-1">.</span><span class="hl-5">2</span><span class="hl-1"> = </span><span class="hl-0">host2</span><span class="hl-1">.</span><span class="hl-0">example</span><span class="hl-1">.</span><span class="hl-0">com</span><br/><span class="hl-8">DNS</span><span class="hl-1">.</span><span class="hl-5">3</span><span class="hl-1"> = </span><span class="hl-0">host3</span><span class="hl-1">.</span><span class="hl-0">example</span><span class="hl-1">.</span><span class="hl-0">com</span>
+</code></pre>
+<p>Note that <code>createCertificate</code> and <code>createCSR</code> supports the <code>altNames</code> option which would be easier to use in most cases.</p>
+<p>:warning: <strong>Warning: If you specify <code>altNames</code> the custom extensions file will not be passed to OpenSSL.</strong></p>
+
+<a href="#setting-openssl-location" id="setting-openssl-location" style="color: inherit; text-decoration: none;">
+  <h3>Setting openssl location</h3>
+</a>
+<p>In some systems the <code>openssl</code> executable might not be available by the default name or it is not included in $PATH. In this case you can define the location of the executable yourself as a one time action after you have loaded the pem module:</p>
+<pre><code class="language-javascript"><span class="hl-2">var</span><span class="hl-1"> </span><span class="hl-0">pem</span><span class="hl-1"> = </span><span class="hl-3">require</span><span class="hl-1">(</span><span class="hl-4">&#39;pem&#39;</span><span class="hl-1">)</span><br/><span class="hl-0">pem</span><span class="hl-1">.</span><span class="hl-3">config</span><span class="hl-1">({</span><br/><span class="hl-1">  </span><span class="hl-0">pathOpenSSL:</span><span class="hl-1"> </span><span class="hl-4">&#39;/usr/local/bin/openssl&#39;</span><br/><span class="hl-1">})</span><br/><span class="hl-9">// do something with the pem module</span>
+</code></pre>
+
+<a href="#warning-csrcertificates-with-special-chars" id="warning-csrcertificates-with-special-chars" style="color: inherit; text-decoration: none;">
+  <h3>:warning: CSR/Certificates with special chars</h3>
+</a>
+<p>For more details, search in <code>test/pem.spec.js</code>: <code>Create CSR with specialchars config file</code></p>
+<p>If you use special chars like:</p>
+<pre><code><span class="hl-1">-!</span><span class="hl-0">$</span><span class="hl-1">%^&amp;*()</span><span class="hl-0">_</span><span class="hl-1">+|~=</span><span class="hl-4">`{}[]:/;&lt;&gt;?,.@#</span>
+</code></pre>
+<p>You should know that the result mey have escaped characters when you read it in your application.
+Will try to fix this in the future, but not sure.</p>
+
+<a href="#special-thanks-to" id="special-thanks-to" style="color: inherit; text-decoration: none;">
+  <h3>Special thanks to</h3>
+</a>
+<ul>
+<li>Andris Reinman (@andris9) - Initiator of pem</li>
+</ul>
+
+<a href="#license" id="license" style="color: inherit; text-decoration: none;">
+  <h2>License</h2>
+</a>
+<p><strong>MIT</strong></p>
+</div></div><div class="col-4 col-menu menu-sticky-wrap menu-highlight"><nav class="tsd-navigation primary"><ul><li class="current"><a href="modules.html">Modules</a></li><li class=" tsd-kind-module"><a href="modules/ca.html">ca</a></li><li class=" tsd-kind-module"><a href="modules/convert.html">convert</a></li><li class=" tsd-kind-module"><a href="modules/debug.html">debug</a></li><li class=" tsd-kind-module"><a href="modules/helper.html">helper</a></li><li class=" tsd-kind-module"><a href="modules/interfaces.html">interfaces</a></li><li class=" tsd-kind-module"><a href="modules/openssl.html">openssl</a></li></ul></nav></div></div></div><footer class="with-border-bottom"><div class="container"><h2>Legend</h2><div class="tsd-legend-group"><ul class="tsd-legend"><li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li><li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li></ul><ul class="tsd-legend"><li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li></ul></div><h2>Settings</h2><p>Theme <select id="theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></p></div></footer><div class="container tsd-generator"><p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></div><div class="overlay"></div><script src="assets/main.js"></script></body></html>

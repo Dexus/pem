@@ -15,16 +15,21 @@
     "type": "git",
     "url": "https://github.com/Dexus/pem.git"
   },
+  "engines": {
+    "node": ">=8.0.0"
+  },
   "main": "./dist/index.js",
   "files": [
     "dist"
   ],
+  "types": "types",
   "type": "commonjs",
   "scripts": {
     "documentation": "yarn run docco && yarn run jsdoc",
     "docco": "docco -l parallel -o docs/docco lib/helper.js lib/openssl.js lib/pem.js",
     "jsdoc": "jsdoc -c jsdoc.json",
     "build": "ncc build -m -s lib/pem.js -o dist",
+    "build:d.ts": "npx -p typescript tsc",
     "changelog": "auto-changelog -p --output HISTORY.md",
     "coverage": "cross-env NODE_ENV=development nyc ./node_modules/.bin/_mocha --recursive --bail --inline-diffs --reporter spec --check-leaks --use_strict $(find . -type f -name '*.spec.js'  ! -path './nyc_output/*' ! -path './coverage/*' ! -path './node_modules/*')",
     "lint": "eslint --fix --config=./.eslintrc.js lib/*.js *.md *.json lib/*.js test/*.js test/*.spec.js",
@@ -45,12 +50,18 @@
     "es6-promisify": "^7.0.0",
     "md5": "^2.3.0",
     "os-tmpdir": "^1.0.2",
-    "which": "^2.0.2"
+    "which": "^2.0.2",
+    "yarn": "^1.22.17"
   },
   "devDependencies": {
     "@deineagenturug/docdash": "^0.4.2",
     "@types/chai": "^4.3.0",
     "@types/dirty-chai": "^2.0.2",
+    "@types/node": "^17.0.12",
+    "@types/os-tmpdir": "^1.0.0",
+    "@types/which": "^2.0.1",
+    "@typescript-eslint/eslint-plugin": "^5.10.1",
+    "@typescript-eslint/parser": "^5.10.1",
     "@vercel/ncc": "^0.33.1",
     "auto-changelog": "^2.3.0",
     "chai": "^4.1.2",
@@ -69,9 +80,8 @@
     "jsdoc": "^3.6.7",
     "marked": "^4.0.10",
     "mocha": "^7.0.0",
-    "nyc": "^15.0.0"
-  },
-  "engines": {
-    "node": ">=14.0.0"
+    "nyc": "^15.0.0",
+    "typedoc": "^0.22.11",
+    "typescript": "^4.5.5"
   }
 }
