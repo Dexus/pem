@@ -151,7 +151,3 @@ export function isError(error: Error): error is NodeJS.ErrnoException {
  * @callback errorCallback
  * @param {Error} err - An Error Object or null
  */
-
-interface Func4WithError {
-    (err: Error|null, code?: number, stdout?: string|NodeJS.ArrayBufferView, stderr?: string|NodeJS.ArrayBufferView): void;
-}

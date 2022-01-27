@@ -53,4 +53,8 @@ export declare function deleteTempFiles(files: string[], callback: Function): an
  * @returns if given error object is a NodeJS error.
  */
 export declare function isError(error: Error): error is NodeJS.ErrnoException;
-//# sourceMappingURL=helper.d.ts.map
+/**
+ * Callback for return an error object.
+ * @callback errorCallback
+ * @param {Error} err - An Error Object or null
+ */

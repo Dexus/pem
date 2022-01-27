@@ -1,15 +1,16 @@
 export const name: string = "openssl"
 import * as helper from './helper'
-import {Func4WithError} from './interfaces'
+import {CallbackErrCodeStdoutSdrerr, CallbackErrStdout, CallbackErr} from './interfaces'
+import type {Code, ErrNull, StdOutErr } from './types'
 import {debug} from './debug'
 import {spawn as cpspawn} from 'child_process'
-import * as pathlib from 'path'
+import pathlib from 'path'
 import fs from 'fs'
 import osTmpdir from 'os-tmpdir'
 import crypto from 'crypto'
 import which from 'which'
 
-export const settings: any = {}
+const settings: any = {}
 const tempDir = process.env.PEMJS_TMPDIR || osTmpdir()
 
 const versionRegEx = new RegExp('^(OpenSSL|LibreSSL) (((\\d+).(\\d+)).(\\d+))([a-z]+)?')
@@ -54,15 +55,15 @@ export function get(option: string) {
  * Spawn an openssl command
  *
  * @static
- * @param {Array} params Array of openssl command line parameters
+ * @param {CallbackErrStdout} callback Called with (error, stdout-substring)
+ * @param {Array<string>} params Array of openssl command line parameters
  * @param {String} searchStr String to use to find data
- * @param {Array} [tmpfiles] list of temporary files
- * @param {Function} callback Called with (error, stdout-substring)
+ * @param {Array<string>} [tmpfiles] list of temporary files
  */
-export function exec(callback: Func4WithError, params: string[], searchStr: string): void;
-export function exec(callback: Func4WithError, params: string[], searchStr: string, tmpfiles?: string[]): void {
+export function exec(callback: CallbackErrStdout, params: string[], searchStr: string): void;
+export function exec(callback: CallbackErrStdout, params: string[], searchStr: string, tmpfiles?: string[]): void {
 
-    spawnWrapper(function (err: Error|null, code?: number, stdout?: string|NodeJS.ArrayBufferView, stderr?: string|NodeJS.ArrayBufferView): void {
+    spawnWrapper(function (err: ErrNull, code?: Code, stdout?: StdOutErr, stderr?: StdOutErr): void {
         if (err) {
             return callback(err)
         }
@@ -100,13 +101,13 @@ export function exec(callback: Func4WithError, params: string[], searchStr: stri
  *  Spawn an openssl command and get binary output
  *
  * @static
- * @param {Array} params Array of openssl command line parameters
- * @param {Array} [tmpfiles] list of temporary files
- * @param {Function} callback Called with (error, stdout)
+ * @param {CallbackErrStdout} callback Called with (error, stdout)
+ * @param {Array<string>} params Array of openssl command line parameters
+ * @param {Array<string>} [tmpfiles] list of temporary files
  */
-export function execBinary(callback: Function, params: string[]): void
-export function execBinary(callback: Function, params: string[], tmpfiles?: string[]): void {
-    spawnWrapper(function (err: Error, code: number, stdout: string, stderr: string) {
+export function execBinary(callback: CallbackErrStdout, params: string[]): void
+export function execBinary(callback: CallbackErrStdout, params: string[], tmpfiles?: string[]): void {
+    spawnWrapper(function (err: ErrNull, code?: Code, stdout?: StdOutErr, stderr?: StdOutErr) {
         debug("execBinary", {err, code, stdout, stderr})
         if (err) {
             return callback(err)
@@ -119,14 +120,14 @@ export function execBinary(callback: Function, params: string[], tmpfiles?: stri
  * Generically spawn openSSL, without processing the result
  *
  * @static
- * @param {Function}     callback Called with (error, exitCode, stdout, stderr)
- * @param {Array}        params   The parameters to pass to openssl
+ * @param {CallbackErrCodeStdoutSdrerr}     callback Called with (error, exitCode, stdout, stderr)
+ * @param {Array<string>}        params   The parameters to pass to openssl
  * @param {Boolean}      binary   Output of openssl is binary or text
  */
-export function spawn(callback: Function, params: string[], binary: boolean): void {
+export function spawn(callback: CallbackErrCodeStdoutSdrerr, params: string[], binary: boolean): void {
     var pathBin = get('pathOpenSSL') || process.env.OPENSSL_BIN || 'openssl'
 
-    testOpenSSLPath(pathBin, function (err: Error) {
+    testOpenSSLPath(pathBin, function (err: ErrNull) {
         if (err) {
             return callback(err)
         }
@@ -149,9 +150,9 @@ export function spawn(callback: Function, params: string[], binary: boolean): vo
         // *really* available until the close event fires; the timing nuance was
         // making this fail periodically.
         var needed = 2 // wait for both exit and close.
-        var code: number|null = -1
+        var code: Code = -1
         var finished = false
-        var done = function (err?:Error) {
+        var done = function (err?: ErrNull) {
             if (finished) {
                 return
             }
@@ -193,14 +194,14 @@ export function spawn(callback: Function, params: string[], binary: boolean): vo
  * Wrapper for spawn method
  *
  * @static
- * @param {Function} callback Called with (error, exitCode, stdout, stderr)
- * @param {Array} params The parameters to pass to openssl
- * @param {Array} [tmpfiles] list of temporary files
+ * @param {CallbackErrCodeStdoutSdrerr} callback Called with (error, exitCode, stdout, stderr)
+ * @param {Array<string>} params The parameters to pass to openssl
+ * @param {Array<string>} [tmpfiles] list of temporary files
  * @param {Boolean} [binary] Output of openssl is binary or text
  */
-export function spawnWrapper(callback: Function, params: string[], tmpfiles?: Array<string | NodeJS.ArrayBufferView>, binary?: boolean): void {
-    if (binary === undefined){
-        binary= false
+export function spawnWrapper(callback: CallbackErrCodeStdoutSdrerr, params: string[], tmpfiles?: Array<string | NodeJS.ArrayBufferView>, binary?: boolean): void {
+    if (binary === undefined) {
+        binary = false
     }
 
     var files: Array<{ path: string, contents: string | NodeJS.ArrayBufferView }> = []
@@ -228,12 +229,12 @@ export function spawnWrapper(callback: Function, params: string[], tmpfiles?: Ar
         fs.writeFileSync(file.path, file.contents)
     }
 
-    spawn(function (err: Error, code: number, stdout: string, stderr: string) {
-        helper.deleteTempFiles(delTempPWFiles, function (fsErr:Error) {
+    spawn(function (err: ErrNull, code?: Code, stdout?: StdOutErr, stderr?: StdOutErr) {
+        helper.deleteTempFiles(delTempPWFiles, function (fsErr: ErrNull) {
             debug(params[0], {
                 err: err,
                 fsErr: fsErr,
-                code: code,
+                code: code !,
                 stdout: stdout,
                 stderr: stderr
             })
@@ -249,17 +250,17 @@ export function spawnWrapper(callback: Function, params: string[], tmpfiles?: Ar
  * @param {String} pathBin The path to OpenSSL Bin
  * @param {Function} callback Callback function with an error object
  */
-function testOpenSSLPath(pathBin: string, callback: Function): void {
-    which(pathBin, function (error) {
+function testOpenSSLPath(pathBin: string, callback: CallbackErr): void {
+    which(pathBin, function (error: ErrNull) {
         if (error) {
             return callback(new Error('Could not find openssl on your system on this path: ' + pathBin))
         }
-        callback()
+        callback(error)
     })
 }
 
 /* Once PEM is imported, the openSslVersion is set with this function. */
-spawn(function (err: Error, code: number, stdout: string, stderr: string): void {
+spawn(function (err: ErrNull, code?: Code, stdout?: StdOutErr, stderr?: StdOutErr): void {
     var text = String(stdout) + '\n' + String(stderr) + '\n' + String(err)
     let version = versionRegEx.exec(text)
     if (version === null || version.length <= 7) return
