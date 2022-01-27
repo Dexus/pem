@@ -1,9 +1,11 @@
 'use strict'
-const {debug} = require('../lib/debug.js')
-var openssl = require('../lib/openssl.js')
+import {debug} from '../src/debug'
+import * as openssl from '../src/openssl'
+import * as chai from 'chai'
+
 var hlp = require('./pem.helper.js')
-var {expect} = require('chai')
 var dirtyChai = require('dirty-chai')
+const expect = chai.expect
 chai.use(dirtyChai)
 
 // NOTE: we cover here only the test cases left in coverage report
@@ -13,21 +15,21 @@ describe('openssl.js tests', function () {
 
     describe('#.exec()', function () {
         it('search string not found', function (done) {
-            openssl.exec([
+            openssl.exec(function (error) {
+                hlp.checkError(error, true)
+                done()
+            }, [
                 'dhparam',
                 '-outform',
                 'PEM',
                 1024
-            ], 'DH PARAMETERS 1024', function (error) {
-                hlp.checkError(error, true)
-                done()
-            })
+            ], 'DH PARAMETERS 1024')
         })
     })
 
     describe('#.get("openSslVersion")', function () {
         it('get Version', function (done) {
-            debug('Settings', openssl.settings)
+            debug('Settings', openssl.get())
             if (process.env.LIBRARY && process.env.VERSION) {
                 expect(process.env.LIBRARY.toUpperCase()).to.equal(openssl.get('Vendor'))
                 expect(process.env.VERSION).to.equal(openssl.get('VendorVersion') + (openssl.get('VendorVersionBuildChar') || ''))
@@ -38,16 +40,16 @@ describe('openssl.js tests', function () {
 
     describe('#.execBinary()', function () {
         it('no tmpfiles parameter', function (done) {
-            openssl.execBinary([
+            openssl.execBinary(function (error, result) {
+                hlp.checkError(error)
+                expect(result).to.be.ok()
+                done()
+            }, [
                 'dhparam',
                 '-outform',
                 'PEM',
                 1024
-            ], function (error, result) {
-                hlp.checkError(error)
-                expect(result).to.be.ok()
-                done()
-            })
+            ])
         })
     })
 

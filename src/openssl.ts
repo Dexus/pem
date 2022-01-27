@@ -1,7 +1,7 @@
 export const name: string = "openssl"
 import * as helper from './helper'
 import {CallbackErrCodeStdoutSdrerr, CallbackErrStdout, CallbackErr} from './interfaces'
-import type {Code, ErrNull, StdOutErr } from './types'
+import type {Code, ErrNull, Params, StdOutErr, TempFiles } from './types'
 import {debug} from './debug'
 import {spawn as cpspawn} from 'child_process'
 import pathlib from 'path'
@@ -37,7 +37,7 @@ if ("CI" in process.env && process.env.CI === 'true') {
  * @param {String} option name e.g. pathOpenSSL, openSslVersion; TODO rethink nomenclature
  * @param {*} value value
  */
-export function set(option: string, value: any) {
+export function set(option: string, value: any):void {
     settings[option] = value
 }
 
@@ -47,8 +47,11 @@ export function set(option: string, value: any) {
  * @static
  * @param {String} option name
  */
-export function get(option: string) {
+export function get(option?: string): any {
+    if (option) {
     return settings[option] || undefined
+    }
+    return settings
 }
 
 /**
@@ -60,8 +63,8 @@ export function get(option: string) {
  * @param {String} searchStr String to use to find data
  * @param {Array<string>} [tmpfiles] list of temporary files
  */
-export function exec(callback: CallbackErrStdout, params: string[], searchStr: string): void;
-export function exec(callback: CallbackErrStdout, params: string[], searchStr: string, tmpfiles?: string[]): void {
+export function exec(callback: CallbackErrStdout, params: Params, searchStr: string): void;
+export function exec(callback: CallbackErrStdout, params: Params, searchStr: string, tmpfiles?: TempFiles): void {
 
     spawnWrapper(function (err: ErrNull, code?: Code, stdout?: StdOutErr, stderr?: StdOutErr): void {
         if (err) {
@@ -105,8 +108,8 @@ export function exec(callback: CallbackErrStdout, params: string[], searchStr: s
  * @param {Array<string>} params Array of openssl command line parameters
  * @param {Array<string>} [tmpfiles] list of temporary files
  */
-export function execBinary(callback: CallbackErrStdout, params: string[]): void
-export function execBinary(callback: CallbackErrStdout, params: string[], tmpfiles?: string[]): void {
+export function execBinary(callback: CallbackErrStdout, params: Params): void
+export function execBinary(callback: CallbackErrStdout, params: Params, tmpfiles?: TempFiles): void {
     spawnWrapper(function (err: ErrNull, code?: Code, stdout?: StdOutErr, stderr?: StdOutErr) {
         debug("execBinary", {err, code, stdout, stderr})
         if (err) {
@@ -124,14 +127,14 @@ export function execBinary(callback: CallbackErrStdout, params: string[], tmpfil
  * @param {Array<string>}        params   The parameters to pass to openssl
  * @param {Boolean}      binary   Output of openssl is binary or text
  */
-export function spawn(callback: CallbackErrCodeStdoutSdrerr, params: string[], binary: boolean): void {
+export function spawn(callback: CallbackErrCodeStdoutSdrerr, params: Params, binary: boolean): void {
     var pathBin = get('pathOpenSSL') || process.env.OPENSSL_BIN || 'openssl'
 
     testOpenSSLPath(pathBin, function (err: ErrNull) {
         if (err) {
             return callback(err)
         }
-        var openssl = cpspawn(pathBin, params)
+        var openssl = cpspawn(pathBin, (params as Array<string>))
 
         var stderr = (binary ? Buffer.alloc(0) : '')
         var stdout = (binary ? Buffer.alloc(0) : '')
@@ -199,7 +202,7 @@ export function spawn(callback: CallbackErrCodeStdoutSdrerr, params: string[], b
  * @param {Array<string>} [tmpfiles] list of temporary files
  * @param {Boolean} [binary] Output of openssl is binary or text
  */
-export function spawnWrapper(callback: CallbackErrCodeStdoutSdrerr, params: string[], tmpfiles?: Array<string | NodeJS.ArrayBufferView>, binary?: boolean): void {
+export function spawnWrapper(callback: CallbackErrCodeStdoutSdrerr, params: Params, tmpfiles?: TempFiles, binary?: boolean): void {
     if (binary === undefined) {
         binary = false
     }
@@ -208,7 +211,7 @@ export function spawnWrapper(callback: CallbackErrCodeStdoutSdrerr, params: stri
     var delTempPWFiles: Array<string> = []
 
     if (tmpfiles !== undefined) {
-        tmpfiles = ([] as Array<string | NodeJS.ArrayBufferView>).concat(tmpfiles)
+        tmpfiles = ([] as TempFiles).concat(tmpfiles)
         var fpath, i
         for (i = 0; i < params.length; i++) {
             if (params[i] === '--TMPFILE--') {
@@ -231,7 +234,7 @@ export function spawnWrapper(callback: CallbackErrCodeStdoutSdrerr, params: stri
 
     spawn(function (err: ErrNull, code?: Code, stdout?: StdOutErr, stderr?: StdOutErr) {
         helper.deleteTempFiles(delTempPWFiles, function (fsErr: ErrNull) {
-            debug(params[0], {
+            debug((params[0] as string), {
                 err: err,
                 fsErr: fsErr,
                 code: code !,
