@@ -60,6 +60,31 @@ describe('openssl.js tests', function () {
             done()
         })
         // TODO; I expect some more cases in here or code cleanup required
+        /**
+         *
+         *
+         * The exit codes for smime are as follows:
+         *
+         * 0   The operation was completely successful.
+         * 1   An error occurred parsing the command options.
+         * 2   One of the input files could not be read.
+         * 3   An error occurred creating the file or when reading the message.
+         * 4   An error occurred decrypting or verifying the message.
+         * 5   An error occurred writing certificates.
+         *
+         * The exit codes for cms are as follows:
+         *
+         * 0   The operation was completely successful.
+         * 1   An error occurred parsing the command options.
+         * 2   One of the input files could not be read.
+         * 3   An error occurred creating the CMS file or when reading the MIME message.
+         * 4   An error occurred decrypting or verifying the message.
+         * 5   The message was verified correctly but an error occurred writing out the signer's certificates.
+         * 6   An error occurred writing the output file.
+         * 32+ A verify error occurred while -verify_retcode is specified.
+         *
+         * 
+         */
     })
 
 })
