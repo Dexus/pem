@@ -49,6 +49,8 @@
     ]
   },
   "dependencies": {
+    "@types/error-cause": "^1.0.1",
+    "error-cause": "^1.0.3",
     "es6-promisify": "^7.0.0",
     "md5": "^2.3.0",
     "os-tmpdir": "^1.0.2",

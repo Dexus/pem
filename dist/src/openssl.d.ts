@@ -59,3 +59,4 @@ export declare function spawn(callback: CallbackErrCodeStdoutSdrerr, params: Par
  * @param {Boolean} [binary] Output of openssl is binary or text
  */
 export declare function spawnWrapper(callback: CallbackErrCodeStdoutSdrerr, params: Params, tmpfiles?: TempFiles, binary?: boolean): void;
+//# sourceMappingURL=openssl.d.ts.map

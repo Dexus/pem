@@ -3,11 +3,16 @@
     "src/**/*"
   ],
   "compilerOptions": {
+    "baseUrl": ".",
     "module": "commonjs",
     "target": "es2016",
     "lib": [
       "ES2016",
-      "ES2016.Array.Include"
+      "ES2016.Array.Include",
+      "ES2021",
+      "ES2021.Promise",
+      "ES2021.String",
+      "ES2021.WeakRef"
     ],
     "strict": true,
     "esModuleInterop": true,
@@ -17,12 +22,15 @@
     "noImplicitAny": true,
     "noImplicitReturns": true,
     "noUnusedLocals": true,
+    "allowSyntheticDefaultImports": true,
     "noUnusedParameters": true,
     "moduleResolution": "node",
     "sourceMap": true,
+    "inlineSources": true,
     "declaration": true,
     "outDir": "dist",
-    "declarationMap": true
+    "declarationMap": true,
+    "resolveJsonModule": true
   },
   "exclude": [
     "./tests/",

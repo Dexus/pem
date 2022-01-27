@@ -1,0 +1,1 @@
+{"version":3,"file":"convert.js","sourceRoot":"","sources":["../src/convert.ts"],"names":[],"mappings":";;;AAAa,QAAA,IAAI,GAAW,SAAS,CAAA","sourcesContent":["export const name: string = \"convert\"\n"]}

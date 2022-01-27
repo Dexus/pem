@@ -1,24 +1,25 @@
 'use strict'
 
-const {debug} = require('../lib/debug.js')
-const openssl = require('../lib/openssl.js')
-var fs = require('fs')
-var chai = require('chai')
-var dirtyChai = require('dirty-chai')
-var expect = chai.expect
+import path_lib from "path"
+import {debug} from "../src/debug"
+import * as openssl from "../src/openssl"
+import * as fs from "fs"
+import {env} from "process"
+
+import chai, {expect} from "chai"
+import dirtyChai from "dirty-chai"
 chai.use(dirtyChai)
 
-process.env.PEMJS_TMPDIR = './tmp'
-debug("ENVs:", process.env)
-if ((process.env.TRAVIS === 'true' || process.env.CI === 'true') && "OPENSSL_DIR" in process.env && !("OPENSSL_BIN" in process.env)) {
-  process.env.OPENSSL_BIN = process.env.GITHUB_WORKSPACE+'/openssl/bin/openssl'
+env.PEMJS_TMPDIR = path_lib.resolve('./tmp')
+debug("ENVs:", env)
+if ((env.TRAVIS === 'true' || env.CI === 'true') && "OPENSSL_DIR" in env && !("OPENSSL_BIN" in env)) {
+  env.OPENSSL_BIN = env.GITHUB_WORKSPACE+'/openssl/bin/openssl'
 }
-
 function checkTmpEmpty() {
-  expect(fs.readdirSync(process.env.PEMJS_TMPDIR)).to.be.empty()
+  expect(fs.readdirSync(env.PEMJS_TMPDIR !)).to.be.empty()
 }
 
-function checkError(error, expectError) {
+function checkError(error:Error, expectError?: boolean|object) {
   if (expectError) {
     expect(error).to.be.ok()
     if (expectError !== true) { // object

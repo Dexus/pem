@@ -4,3 +4,4 @@ export declare type Code = number | string | null | undefined;
 export declare type StdOutErr = string | NodeJS.ArrayBufferView;
 export declare type Params = Array<string | number>;
 export declare type TempFiles = Array<StdOutErr>;
+//# sourceMappingURL=types.d.ts.map

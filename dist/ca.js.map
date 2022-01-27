@@ -1,0 +1,1 @@
+{"version":3,"file":"ca.js","sourceRoot":"","sources":["../src/ca.ts"],"names":[],"mappings":";;;AAAa,QAAA,IAAI,GAAW,IAAI,CAAA","sourcesContent":["export const name: string = \"ca\"\n"]}

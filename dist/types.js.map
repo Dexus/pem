@@ -1,0 +1,1 @@
+{"version":3,"file":"types.js","sourceRoot":"","sources":["../src/types.ts"],"names":[],"mappings":"","sourcesContent":["export type ErrNull = Error | null\nexport type Code = number | string | null | undefined\nexport type StdOutErr = string | NodeJS.ArrayBufferView\nexport type Params = Array<string|number>\nexport type TempFiles = Array<StdOutErr>\n"]}

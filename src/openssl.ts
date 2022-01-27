@@ -4,22 +4,23 @@ import {CallbackErrCodeStdoutSdrerr, CallbackErrStdout, CallbackErr} from './int
 import type {Code, ErrNull, Params, StdOutErr, TempFiles } from './types'
 import {debug} from './debug'
 import {spawn as cpspawn} from 'child_process'
-import pathlib from 'path'
+import path_lib from 'path'
+import {env} from "process"
 import fs from 'fs'
-import osTmpdir from 'os-tmpdir'
+import osTmpdir from "os-tmpdir"
 import crypto from 'crypto'
 import which from 'which'
 
 const settings: any = {}
-const tempDir = process.env.PEMJS_TMPDIR || osTmpdir()
+const tempDir = env.PEMJS_TMPDIR || osTmpdir()
 
 const versionRegEx = new RegExp('^(OpenSSL|LibreSSL) (((\\d+).(\\d+)).(\\d+))([a-z]+)?')
 
-if ("CI" in process.env && process.env.CI === 'true') {
-    if ("LIBRARY" in process.env && "VERSION" in process.env && process.env.LIBRARY != "" && process.env.VERSION != "") {
-        const filePathOpenSSL = `./openssl/${process.env.LIBRARY}_v${process.env.VERSION}/bin/openssl`
+if ("CI" in env && env.CI === 'true') {
+    if ("LIBRARY" in env && "VERSION" in env && env.LIBRARY != "" && env.VERSION != "") {
+        const filePathOpenSSL = `./openssl/${env.LIBRARY}_v${env.VERSION}/bin/openssl`
         if (fs.existsSync(filePathOpenSSL)) {
-            process.env.OPENSSL_BIN = filePathOpenSSL
+            env.OPENSSL_BIN = filePathOpenSSL
         }
     }
 }
@@ -128,7 +129,7 @@ export function execBinary(callback: CallbackErrStdout, params: Params, tmpfiles
  * @param {Boolean}      binary   Output of openssl is binary or text
  */
 export function spawn(callback: CallbackErrCodeStdoutSdrerr, params: Params, binary: boolean): void {
-    var pathBin = get('pathOpenSSL') || process.env.OPENSSL_BIN || 'openssl'
+    var pathBin = get('pathOpenSSL') || env.OPENSSL_BIN || 'openssl'
 
     testOpenSSLPath(pathBin, function (err: ErrNull) {
         if (err) {
@@ -215,7 +216,7 @@ export function spawnWrapper(callback: CallbackErrCodeStdoutSdrerr, params: Para
         var fpath, i
         for (i = 0; i < params.length; i++) {
             if (params[i] === '--TMPFILE--') {
-                fpath = pathlib.join(tempDir, crypto.randomBytes(20).toString('hex'))
+                fpath = path_lib.join(tempDir, crypto.randomBytes(20).toString('hex'))
                 files.push({
                     path: fpath,
                     contents: tmpfiles.shift() !
