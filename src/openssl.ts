@@ -263,7 +263,7 @@ function testOpenSSLPath(pathBin: string, callback: CallbackErr): void {
 }
 
 /* Once PEM is imported, the openSslVersion is set with this function. */
-spawn(function (err: ErrNull, code?: Code, stdout?: StdOutErr, stderr?: StdOutErr): void {
+spawn(function (err: ErrNull, _code?: Code, stdout?: StdOutErr, stderr?: StdOutErr): void {
     var text = String(stdout) + '\n' + String(stderr) + '\n' + String(err)
     let version = versionRegEx.exec(text)
     if (version === null || version.length <= 7) return

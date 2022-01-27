@@ -1,12 +1,13 @@
 'use strict'
 import {debug} from '../src/debug'
 import * as openssl from '../src/openssl'
-import * as chai from 'chai'
-
 var hlp = require('./pem.helper.js')
-var dirtyChai = require('dirty-chai')
-const expect = chai.expect
+import chai, {expect} from "chai"
+import dirtyChai from "dirty-chai"
 chai.use(dirtyChai)
+
+
+
 
 // NOTE: we cover here only the test cases left in coverage report
 describe('openssl.js tests', function () {
@@ -83,7 +84,7 @@ describe('openssl.js tests', function () {
          * 6   An error occurred writing the output file.
          * 32+ A verify error occurred while -verify_retcode is specified.
          *
-         * 
+         *
          */
     })
 
