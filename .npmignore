@@ -1,15 +1,19 @@
 .idea/
 .github/
 .nyc_output/
+man/
 docs/
 openssl/
 bin/
 node_modules/
+coverage/
 
 /.eslintignore
 /.eslintrc.js
 /.gitignore
 /HISTORY.md
+/versions
+/versions.json
 /.mocharc.yaml
 /.npmignore
 /tsconfig.json
