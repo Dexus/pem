@@ -1,0 +1,83 @@
+C_REHASH(1)                         OpenSSL                        C_REHASH(1)
+
+
+
+NNAAMMEE
+       c_rehash - Create symbolic links to files named by the hash values
+
+SSYYNNOOPPSSIISS
+       cc__rreehhaasshh [[--oolldd]] [[--hh]] [[--nn]] [[--vv]] [ _d_i_r_e_c_t_o_r_y...]
+
+DDEESSCCRRIIPPTTIIOONN
+       cc__rreehhaasshh scans directories and calculates a hash value of each ".pem",
+       ".crt", ".cer", or ".crl" file in the specified directory list and
+       creates symbolic links for each file, where the name of the link is the
+       hash value.  (If the platform does not support symbolic links, a copy
+       is made.)  This utility is useful as many programs that use OpenSSL
+       require directories to be set up like this in order to find
+       certificates.
+
+       If any directories are named on the command line, then those are
+       processed in turn. If not, then the SSSSLL__CCEERRTT__DDIIRR environment variable
+       is consulted; this shold be a colon-separated list of directories, like
+       the Unix PPAATTHH variable.  If that is not set then the default directory
+       (installation-specific but often //uussrr//llooccaall//ssssll//cceerrttss) is processed.
+
+       In order for a directory to be processed, the user must have write
+       permissions on that directory, otherwise it will be skipped.  The links
+       created are of the form "HHHHHHHH.D", where each HH is a hexadecimal
+       character and DD is a single decimal digit.  When processing a
+       directory, cc__rreehhaasshh will first remove all links that have a name in
+       that syntax. If you have links in that format used for other purposes,
+       they will be removed.  To skip the removal step, use the --nn flag.
+       Hashes for CRL's look similar except the letter rr appears after the
+       period, like this: "HHHHHHHH.rD".
+
+       Multiple objects may have the same hash; they will be indicated by
+       incrementing the DD value. Duplicates are found by comparing the full
+       SHA-1 fingerprint. A warning will be displayed if a duplicate is found.
+
+       A warning will also be displayed if there are files that cannot be
+       parsed as either a certificate or a CRL.
+
+       The program uses the ooppeennssssll program to compute the hashes and
+       fingerprints. If not found in the user's PPAATTHH, then set the OOPPEENNSSSSLL
+       environment variable to the full pathname.  Any program can be used, it
+       will be invoked as follows for either a certificate or CRL:
+
+         $OPENSSL x509 -hash -fingerprint -noout -in FILENAME
+         $OPENSSL crl -hash -fingerprint -noout -in FILENAME
+
+       where FFIILLEENNAAMMEE is the filename. It must output the hash of the file on
+       the first line, and the fingerprint on the second, optionally prefixed
+       with some text and an equals sign.
+
+OOPPTTIIOONNSS
+       --oolldd
+           Use old-style hashing (MD5, as opposed to SHA-1) for generating
+           links for releases before 1.0.0.  Note that current versions will
+           not use the old style.
+
+       --hh  Display a brief usage message.
+
+       --nn  Do not remove existing links.  This is needed when keeping new and
+           old-style links in the same directory.
+
+       --vv  Print messages about old links removed and new links created.  By
+           default, cc__rreehhaasshh only lists each directory as it is processed.
+
+EENNVVIIRROONNMMEENNTT
+       OOPPEENNSSSSLL
+           The path to an executable to use to generate hashes and
+           fingerprints (see above).
+
+       SSSSLL__CCEERRTT__DDIIRR
+           Colon separated list of directories to operate on.  Ignored if
+           directories are listed on the command line.
+
+SSEEEE AALLSSOO
+       ooppeennssssll(1), ccrrll(1).  xx550099(1).
+
+
+
+1.0.2u                            2019-12-20                       C_REHASH(1)

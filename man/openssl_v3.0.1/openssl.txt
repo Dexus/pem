@@ -1,0 +1,610 @@
+OPENSSL(1ossl)                      OpenSSL                     OPENSSL(1ossl)
+
+
+
+NNAAMMEE
+       openssl - OpenSSL command line program
+
+SSYYNNOOPPSSIISS
+       ooppeennssssll _c_o_m_m_a_n_d [ _o_p_t_i_o_n_s ... ] [ _p_a_r_a_m_e_t_e_r_s ... ]
+
+       ooppeennssssll lliisstt ssttaannddaarrdd--ccoommmmaannddss | ddiiggeesstt--ccoommmmaannddss | cciipphheerr--ccoommmmaannddss |
+       cciipphheerr--aallggoorriitthhmmss | ddiiggeesstt--aallggoorriitthhmmss | mmaacc--aallggoorriitthhmmss | ppuubblliicc--kkeeyy--
+       aallggoorriitthhmmss
+
+       ooppeennssssll nnoo--_X_X_X [ _o_p_t_i_o_n_s ]
+
+DDEESSCCRRIIPPTTIIOONN
+       OpenSSL is a cryptography toolkit implementing the Secure Sockets Layer
+       (SSL v2/v3) and Transport Layer Security (TLS v1) network protocols and
+       related cryptography standards required by them.
+
+       The ooppeennssssll program is a command line program for using the various
+       cryptography functions of OpenSSL's ccrryyppttoo library from the shell.  It
+       can be used for
+
+        o  Creation and management of private keys, public keys and parameters
+        o  Public key cryptographic operations
+        o  Creation of X.509 certificates, CSRs and CRLs
+        o  Calculation of Message Digests and Message Authentication Codes
+        o  Encryption and Decryption with Ciphers
+        o  SSL/TLS Client and Server Tests
+        o  Handling of S/MIME signed or encrypted mail
+        o  Timestamp requests, generation and verification
+
+CCOOMMMMAANNDD SSUUMMMMAARRYY
+       The ooppeennssssll program provides a rich variety of commands (_c_o_m_m_a_n_d in the
+       "SYNOPSIS" above).  Each command can have many options and argument
+       parameters, shown above as _o_p_t_i_o_n_s and _p_a_r_a_m_e_t_e_r_s.
+
+       Detailed documentation and use cases for most standard subcommands are
+       available (e.g., ooppeennssssll--xx550099(1)).
+
+       The list options --ssttaannddaarrdd--ccoommmmaannddss, --ddiiggeesstt--ccoommmmaannddss, and
+       --cciipphheerr--ccoommmmaannddss output a list (one entry per line) of the names of all
+       standard commands, message digest commands, or cipher commands,
+       respectively, that are available.
+
+       The list parameters --cciipphheerr--aallggoorriitthhmmss, --ddiiggeesstt--aallggoorriitthhmmss, and
+       --mmaacc--aallggoorriitthhmmss list all cipher, message digest, and message
+       authentication code names, one entry per line. Aliases are listed as:
+
+        from => to
+
+       The list parameter --ppuubblliicc--kkeeyy--aallggoorriitthhmmss lists all supported public
+       key algorithms.
+
+       The command nnoo--_X_X_X tests whether a command of the specified name is
+       available.  If no command named _X_X_X exists, it returns 0 (success) and
+       prints nnoo--_X_X_X; otherwise it returns 1 and prints _X_X_X.  In both cases,
+       the output goes to ssttddoouutt and nothing is printed to ssttddeerrrr.  Additional
+       command line arguments are always ignored.  Since for each cipher there
+       is a command of the same name, this provides an easy way for shell
+       scripts to test for the availability of ciphers in the ooppeennssssll program.
+       (nnoo--_X_X_X is not able to detect pseudo-commands such as qquuiitt, lliisstt, or
+       nnoo--_X_X_X itself.)
+
+   CCoonnffiigguurraattiioonn OOppttiioonn
+       Many commands use an external configuration file for some or all of
+       their arguments and have a --ccoonnffiigg option to specify that file.  The
+       default name of the file is _o_p_e_n_s_s_l_._c_n_f in the default certificate
+       storage area, which can be determined from the ooppeennssssll--vveerrssiioonn(1)
+       command using the --dd or --aa option.  The environment variable
+       OOPPEENNSSSSLL__CCOONNFF can be used to specify a different file location or to
+       disable loading a configuration (using the empty string).
+
+       Among others, the configuration file can be used to load modules and to
+       specify parameters for generating certificates and random numbers.  See
+       ccoonnffiigg(5) for details.
+
+   SSttaannddaarrdd CCoommmmaannddss
+       aassnn11ppaarrssee
+           Parse an ASN.1 sequence.
+
+       ccaa  Certificate Authority (CA) Management.
+
+       cciipphheerrss
+           Cipher Suite Description Determination.
+
+       ccmmss CMS (Cryptographic Message Syntax) command.
+
+       ccrrll Certificate Revocation List (CRL) Management.
+
+       ccrrll22ppkkccss77
+           CRL to PKCS#7 Conversion.
+
+       ddggsstt
+           Message Digest calculation. MAC calculations are superseded by
+           ooppeennssssll--mmaacc(1).
+
+       ddhhppaarraamm
+           Generation and Management of Diffie-Hellman Parameters. Superseded
+           by ooppeennssssll--ggeennppkkeeyy(1) and ooppeennssssll--ppkkeeyyppaarraamm(1).
+
+       ddssaa DSA Data Management.
+
+       ddssaappaarraamm
+           DSA Parameter Generation and Management. Superseded by
+           ooppeennssssll--ggeennppkkeeyy(1) and ooppeennssssll--ppkkeeyyppaarraamm(1).
+
+       eecc  EC (Elliptic curve) key processing.
+
+       eeccppaarraamm
+           EC parameter manipulation and generation.
+
+       eenncc Encryption, decryption, and encoding.
+
+       eennggiinnee
+           Engine (loadable module) information and manipulation.
+
+       eerrrrssttrr
+           Error Number to Error String Conversion.
+
+       ffiippssiinnssttaallll
+           FIPS configuration installation.
+
+       ggeennddssaa
+           Generation of DSA Private Key from Parameters. Superseded by
+           ooppeennssssll--ggeennppkkeeyy(1) and ooppeennssssll--ppkkeeyy(1).
+
+       ggeennppkkeeyy
+           Generation of Private Key or Parameters.
+
+       ggeennrrssaa
+           Generation of RSA Private Key. Superseded by ooppeennssssll--ggeennppkkeeyy(1).
+
+       hheellpp
+           Display information about a command's options.
+
+       iinnffoo
+           Display diverse information built into the OpenSSL libraries.
+
+       kkddff Key Derivation Functions.
+
+       lliisstt
+           List algorithms and features.
+
+       mmaacc Message Authentication Code Calculation.
+
+       nnsseeqq
+           Create or examine a Netscape certificate sequence.
+
+       ooccsspp
+           Online Certificate Status Protocol command.
+
+       ppaasssswwdd
+           Generation of hashed passwords.
+
+       ppkkccss1122
+           PKCS#12 Data Management.
+
+       ppkkccss77
+           PKCS#7 Data Management.
+
+       ppkkccss88
+           PKCS#8 format private key conversion command.
+
+       ppkkeeyy
+           Public and private key management.
+
+       ppkkeeyyppaarraamm
+           Public key algorithm parameter management.
+
+       ppkkeeyyuuttll
+           Public key algorithm cryptographic operation command.
+
+       pprriimmee
+           Compute prime numbers.
+
+       rraanndd
+           Generate pseudo-random bytes.
+
+       rreehhaasshh
+           Create symbolic links to certificate and CRL files named by the
+           hash values.
+
+       rreeqq PKCS#10 X.509 Certificate Signing Request (CSR) Management.
+
+       rrssaa RSA key management.
+
+       rrssaauuttll
+           RSA command for signing, verification, encryption, and decryption.
+           Superseded by  ooppeennssssll--ppkkeeyyuuttll(1).
+
+       ss__cclliieenntt
+           This implements a generic SSL/TLS client which can establish a
+           transparent connection to a remote server speaking SSL/TLS. It's
+           intended for testing purposes only and provides only rudimentary
+           interface functionality but internally uses mostly all
+           functionality of the OpenSSL ssssll library.
+
+       ss__sseerrvveerr
+           This implements a generic SSL/TLS server which accepts connections
+           from remote clients speaking SSL/TLS. It's intended for testing
+           purposes only and provides only rudimentary interface functionality
+           but internally uses mostly all functionality of the OpenSSL ssssll
+           library.  It provides both an own command line oriented protocol
+           for testing SSL functions and a simple HTTP response facility to
+           emulate an SSL/TLS-aware webserver.
+
+       ss__ttiimmee
+           SSL Connection Timer.
+
+       sseessss__iidd
+           SSL Session Data Management.
+
+       ssmmiimmee
+           S/MIME mail processing.
+
+       ssppeeeedd
+           Algorithm Speed Measurement.
+
+       ssppkkaacc
+           SPKAC printing and generating command.
+
+       ssrrpp Maintain SRP password file. This command is deprecated.
+
+       ssttoorreeuuttll
+           Command to list and display certificates, keys, CRLs, etc.
+
+       ttss  Time Stamping Authority command.
+
+       vveerriiffyy
+           X.509 Certificate Verification.  See also the
+           ooppeennssssll--vveerriiffiiccaattiioonn--ooppttiioonnss(1) manual page.
+
+       vveerrssiioonn
+           OpenSSL Version Information.
+
+       xx550099
+           X.509 Certificate Data Management.
+
+   MMeessssaaggee DDiiggeesstt CCoommmmaannddss
+       bbllaakkee22bb551122
+           BLAKE2b-512 Digest
+
+       bbllaakkee22ss225566
+           BLAKE2s-256 Digest
+
+       mmdd22 MD2 Digest
+
+       mmdd44 MD4 Digest
+
+       mmdd55 MD5 Digest
+
+       mmddcc22
+           MDC2 Digest
+
+       rrmmdd116600
+           RMD-160 Digest
+
+       sshhaa11
+           SHA-1 Digest
+
+       sshhaa222244
+           SHA-2 224 Digest
+
+       sshhaa225566
+           SHA-2 256 Digest
+
+       sshhaa338844
+           SHA-2 384 Digest
+
+       sshhaa551122
+           SHA-2 512 Digest
+
+       sshhaa33--222244
+           SHA-3 224 Digest
+
+       sshhaa33--225566
+           SHA-3 256 Digest
+
+       sshhaa33--338844
+           SHA-3 384 Digest
+
+       sshhaa33--551122
+           SHA-3 512 Digest
+
+       sshhaakkee112288
+           SHA-3 SHAKE128 Digest
+
+       sshhaakkee225566
+           SHA-3 SHAKE256 Digest
+
+       ssmm33 SM3 Digest
+
+   EEnnccrryyppttiioonn,, DDeeccrryyppttiioonn,, aanndd EEnnccooddiinngg CCoommmmaannddss
+       The following aliases provide convenient access to the most used
+       encodings and ciphers.
+
+       Depending on how OpenSSL was configured and built, not all ciphers
+       listed here may be present. See ooppeennssssll--eenncc(1) for more information.
+
+       aaeess112288, aaeess--112288--ccbbcc, aaeess--112288--ccffbb, aaeess--112288--ccttrr, aaeess--112288--eeccbb, aaeess--112288--ooffbb
+           AES-128 Cipher
+
+       aaeess119922, aaeess--119922--ccbbcc, aaeess--119922--ccffbb, aaeess--119922--ccttrr, aaeess--119922--eeccbb, aaeess--119922--ooffbb
+           AES-192 Cipher
+
+       aaeess225566, aaeess--225566--ccbbcc, aaeess--225566--ccffbb, aaeess--225566--ccttrr, aaeess--225566--eeccbb, aaeess--225566--ooffbb
+           AES-256 Cipher
+
+       aarriiaa112288, aarriiaa--112288--ccbbcc, aarriiaa--112288--ccffbb, aarriiaa--112288--ccttrr, aarriiaa--112288--eeccbb,
+       aarriiaa--112288--ooffbb
+           Aria-128 Cipher
+
+       aarriiaa119922, aarriiaa--119922--ccbbcc, aarriiaa--119922--ccffbb, aarriiaa--119922--ccttrr, aarriiaa--119922--eeccbb,
+       aarriiaa--119922--ooffbb
+           Aria-192 Cipher
+
+       aarriiaa225566, aarriiaa--225566--ccbbcc, aarriiaa--225566--ccffbb, aarriiaa--225566--ccttrr, aarriiaa--225566--eeccbb,
+       aarriiaa--225566--ooffbb
+           Aria-256 Cipher
+
+       bbaassee6644
+           Base64 Encoding
+
+       bbff, bbff--ccbbcc, bbff--ccffbb, bbff--eeccbb, bbff--ooffbb
+           Blowfish Cipher
+
+       ccaammeelllliiaa112288, ccaammeelllliiaa--112288--ccbbcc, ccaammeelllliiaa--112288--ccffbb, ccaammeelllliiaa--112288--ccttrr,
+       ccaammeelllliiaa--112288--eeccbb, ccaammeelllliiaa--112288--ooffbb
+           Camellia-128 Cipher
+
+       ccaammeelllliiaa119922, ccaammeelllliiaa--119922--ccbbcc, ccaammeelllliiaa--119922--ccffbb, ccaammeelllliiaa--119922--ccttrr,
+       ccaammeelllliiaa--119922--eeccbb, ccaammeelllliiaa--119922--ooffbb
+           Camellia-192 Cipher
+
+       ccaammeelllliiaa225566, ccaammeelllliiaa--225566--ccbbcc, ccaammeelllliiaa--225566--ccffbb, ccaammeelllliiaa--225566--ccttrr,
+       ccaammeelllliiaa--225566--eeccbb, ccaammeelllliiaa--225566--ooffbb
+           Camellia-256 Cipher
+
+       ccaasstt, ccaasstt--ccbbcc
+           CAST Cipher
+
+       ccaasstt55--ccbbcc, ccaasstt55--ccffbb, ccaasstt55--eeccbb, ccaasstt55--ooffbb
+           CAST5 Cipher
+
+       cchhaacchhaa2200
+           Chacha20 Cipher
+
+       ddeess, ddeess--ccbbcc, ddeess--ccffbb, ddeess--eeccbb, ddeess--eeddee, ddeess--eeddee--ccbbcc, ddeess--eeddee--ccffbb, ddeess--
+       eeddee--ooffbb, ddeess--ooffbb
+           DES Cipher
+
+       ddeess33, ddeessxx, ddeess--eeddee33, ddeess--eeddee33--ccbbcc, ddeess--eeddee33--ccffbb, ddeess--eeddee33--ooffbb
+           Triple-DES Cipher
+
+       iiddeeaa, iiddeeaa--ccbbcc, iiddeeaa--ccffbb, iiddeeaa--eeccbb, iiddeeaa--ooffbb
+           IDEA Cipher
+
+       rrcc22, rrcc22--ccbbcc, rrcc22--ccffbb, rrcc22--eeccbb, rrcc22--ooffbb
+           RC2 Cipher
+
+       rrcc44 RC4 Cipher
+
+       rrcc55, rrcc55--ccbbcc, rrcc55--ccffbb, rrcc55--eeccbb, rrcc55--ooffbb
+           RC5 Cipher
+
+       sseeeedd, sseeeedd--ccbbcc, sseeeedd--ccffbb, sseeeedd--eeccbb, sseeeedd--ooffbb
+           SEED Cipher
+
+       ssmm44, ssmm44--ccbbcc, ssmm44--ccffbb, ssmm44--ccttrr, ssmm44--eeccbb, ssmm44--ooffbb
+           SM4 Cipher
+
+OOPPTTIIOONNSS
+       Details of which options are available depend on the specific command.
+       This section describes some common options with common behavior.
+
+   CCoommmmoonn OOppttiioonnss
+       --hheellpp
+           Provides a terse summary of all options.  If an option takes an
+           argument, the "type" of argument is also given.
+
+       ----  This terminates the list of options. It is mostly useful if any
+           filename parameters start with a minus sign:
+
+            openssl verify [flags...] -- -cert1.pem...
+
+   FFoorrmmaatt OOppttiioonnss
+       See ooppeennssssll--ffoorrmmaatt--ooppttiioonnss(1) for manual page.
+
+   PPaassss PPhhrraassee OOppttiioonnss
+       See the ooppeennssssll--ppaasssspphhrraassee--ooppttiioonnss(1) manual page.
+
+   RRaannddoomm SSttaattee OOppttiioonnss
+       Prior to OpenSSL 1.1.1, it was common for applications to store
+       information about the state of the random-number generator in a file
+       that was loaded at startup and rewritten upon exit. On modern operating
+       systems, this is generally no longer necessary as OpenSSL will seed
+       itself from a trusted entropy source provided by the operating system.
+       These flags are still supported for special platforms or circumstances
+       that might require them.
+
+       It is generally an error to use the same seed file more than once and
+       every use of --rraanndd should be paired with --wwrriitteerraanndd.
+
+       --rraanndd _f_i_l_e_s
+           A file or files containing random data used to seed the random
+           number generator.  Multiple files can be specified separated by an
+           OS-dependent character.  The separator is ";" for MS-Windows, ","
+           for OpenVMS, and ":" for all others. Another way to specify
+           multiple files is to repeat this flag with different filenames.
+
+       --wwrriitteerraanndd _f_i_l_e
+           Writes the seed data to the specified _f_i_l_e upon exit.  This file
+           can be used in a subsequent command invocation.
+
+   CCeerrttiiffiiccaattee VVeerriiffiiccaattiioonn OOppttiioonnss
+       See the ooppeennssssll--vveerriiffiiccaattiioonn--ooppttiioonnss(1) manual page.
+
+   NNaammee FFoorrmmaatt OOppttiioonnss
+       See the ooppeennssssll--nnaammeeddiissppllaayy--ooppttiioonnss(1) manual page.
+
+   TTLLSS VVeerrssiioonn OOppttiioonnss
+       Several commands use SSL, TLS, or DTLS. By default, the commands use
+       TLS and clients will offer the lowest and highest protocol version they
+       support, and servers will pick the highest version that the client
+       offers that is also supported by the server.
+
+       The options below can be used to limit which protocol versions are
+       used, and whether TCP (SSL and TLS) or UDP (DTLS) is used.  Note that
+       not all protocols and flags may be available, depending on how OpenSSL
+       was built.
+
+       --ssssll33, --ttllss11, --ttllss11__11, --ttllss11__22, --ttllss11__33, --nnoo__ssssll33, --nnoo__ttllss11,
+       --nnoo__ttllss11__11, --nnoo__ttllss11__22, --nnoo__ttllss11__33
+           These options require or disable the use of the specified SSL or
+           TLS protocols.  When a specific TLS version is required, only that
+           version will be offered or accepted.  Only one specific protocol
+           can be given and it cannot be combined with any of the nnoo__ options.
+
+       --ddttllss, --ddttllss11, --ddttllss11__22
+           These options specify to use DTLS instead of DLTS.  With --ddttllss,
+           clients will negotiate any supported DTLS protocol version.  Use
+           the --ddttllss11 or --ddttllss11__22 options to support only DTLS1.0 or DTLS1.2,
+           respectively.
+
+   EEnnggiinnee OOppttiioonnss
+       --eennggiinnee _i_d
+           Load the engine identified by _i_d and use all the methods it
+           implements (algorithms, key storage, etc.), unless specified
+           otherwise in the command-specific documentation or it is configured
+           to do so, as described in "Engine Configuration" in ccoonnffiigg(5).
+
+           The engine will be used for key ids specified with --kkeeyy and similar
+           options when an option like --kkeeyyffoorrmm eennggiinnee is given.
+
+           A special case is the "loader_attic" engine, which is meant just
+           for internal OpenSSL testing purposes and supports loading keys,
+           parameters, certificates, and CRLs from files.  When this engine is
+           used, files with such credentials are read via this engine.  Using
+           the "file:" schema is optional; a plain file (path) name will do.
+
+       Options specifying keys, like --kkeeyy and similar, can use the generic
+       OpenSSL engine key loading URI scheme "org.openssl.engine:" to retrieve
+       private keys and public keys.  The URI syntax is as follows, in
+       simplified form:
+
+           org.openssl.engine:{engineid}:{keyid}
+
+       Where "{engineid}" is the identity/name of the engine, and "{keyid}" is
+       a key identifier that's acceptable by that engine.  For example, when
+       using an engine that interfaces against a PKCS#11 implementation, the
+       generic key URI would be something like this (this happens to be an
+       example for the PKCS#11 engine that's part of OpenSC):
+
+           -key org.openssl.engine:pkcs11:label_some-private-key
+
+       As a third possibility, for engines and providers that have implemented
+       their own OOSSSSLL__SSTTOORREE__LLOOAADDEERR(3), "org.openssl.engine:" should not be
+       necessary.  For a PKCS#11 implementation that has implemented such a
+       loader, the PKCS#11 URI as defined in RFC 7512 should be possible to
+       use directly:
+
+           -key pkcs11:object=some-private-key;pin-value=1234
+
+   PPrroovviiddeerr OOppttiioonnss
+       --pprroovviiddeerr _n_a_m_e
+           Load and initialize the provider identified by _n_a_m_e. The _n_a_m_e can
+           be also a path to the provider module. In that case the provider
+           name will be the specified path and not just the provider module
+           name.  Interpretation of relative paths is platform specific. The
+           configured "MODULESDIR" path, OOPPEENNSSSSLL__MMOODDUULLEESS environment variable,
+           or the path specified by --pprroovviiddeerr--ppaatthh is prepended to relative
+           paths.  See pprroovviiddeerr(7) for a more detailed description.
+
+       --pprroovviiddeerr--ppaatthh _p_a_t_h
+           Specifies the search path that is to be used for looking for
+           providers.  Equivalently, the OOPPEENNSSSSLL__MMOODDUULLEESS environment variable
+           may be set.
+
+       --pprrooppqquueerryy _p_r_o_p_q
+           Specifies the _p_r_o_p_e_r_t_y _q_u_e_r_y _c_l_a_u_s_e to be used when fetching
+           algorithms from the loaded providers.  See pprrooppeerrttyy(7) for a more
+           detailed description.
+
+EENNVVIIRROONNMMEENNTT
+       The OpenSSL library can be take some configuration parameters from the
+       environment.  Some of these variables are listed below.  For
+       information about specific commands, see ooppeennssssll--eennggiinnee(1),
+       ooppeennssssll--rreehhaasshh(1), and ttssggeett(1).
+
+       For information about the use of environment variables in
+       configuration, see "ENVIRONMENT" in ccoonnffiigg(5).
+
+       For information about querying or specifying CPU architecture flags,
+       see OOPPEENNSSSSLL__iiaa3322ccaapp(3), and OOPPEENNSSSSLL__ss339900xxccaapp(3).
+
+       For information about all environment variables used by the OpenSSL
+       libraries, see ooppeennssssll--eennvv(7).
+
+       OOPPEENNSSSSLL__TTRRAACCEE==_n_a_m_e[,...]
+           Enable tracing output of OpenSSL library, by name.  This output
+           will only make sense if you know OpenSSL internals well.  Also, it
+           might not give you any output at all, depending on how OpenSSL was
+           built.
+
+           The value is a comma separated list of names, with the following
+           available:
+
+           TTRRAACCEE
+               The tracing functionality.
+
+           TTLLSS General SSL/TLS.
+
+           TTLLSS__CCIIPPHHEERR
+               SSL/TLS cipher.
+
+           CCOONNFF
+               Show details about provider and engine configuration.
+
+           EENNGGIINNEE__TTAABBLLEE
+               The function that is used by RSA, DSA (etc) code to select
+               registered ENGINEs, cache defaults and functional references
+               (etc), will generate debugging summaries.
+
+           EENNGGIINNEE__RREEFF__CCOOUUNNTT
+               Reference counts in the ENGINE structure will be monitored with
+               a line of generated for each change.
+
+           PPKKCCSS55VV22
+               PKCS#5 v2 keygen.
+
+           PPKKCCSS1122__KKEEYYGGEENN
+               PKCS#12 key generation.
+
+           PPKKCCSS1122__DDEECCRRYYPPTT
+               PKCS#12 decryption.
+
+           XX550099VV33__PPOOLLIICCYY
+               Generates the complete policy tree at various point during
+               X.509 v3 policy evaluation.
+
+           BBNN__CCTTXX
+               BIGNUM context.
+
+SSEEEE AALLSSOO
+       ooppeennssssll--aassnn11ppaarrssee(1), ooppeennssssll--ccaa(1), ooppeennssssll--cciipphheerrss(1),
+       ooppeennssssll--ccmmss(1), ooppeennssssll--ccrrll(1), ooppeennssssll--ccrrll22ppkkccss77(1), ooppeennssssll--ddggsstt(1),
+       ooppeennssssll--ddhhppaarraamm(1), ooppeennssssll--ddssaa(1), ooppeennssssll--ddssaappaarraamm(1), ooppeennssssll--eecc(1),
+       ooppeennssssll--eeccppaarraamm(1), ooppeennssssll--eenncc(1), ooppeennssssll--eennggiinnee(1),
+       ooppeennssssll--eerrrrssttrr(1), ooppeennssssll--ggeennddssaa(1), ooppeennssssll--ggeennppkkeeyy(1),
+       ooppeennssssll--ggeennrrssaa(1), ooppeennssssll--kkddff(1), ooppeennssssll--mmaacc(1), ooppeennssssll--nnsseeqq(1),
+       ooppeennssssll--ooccsspp(1), ooppeennssssll--ppaasssswwdd(1), ooppeennssssll--ppkkccss1122(1),
+       ooppeennssssll--ppkkccss77(1), ooppeennssssll--ppkkccss88(1), ooppeennssssll--ppkkeeyy(1),
+       ooppeennssssll--ppkkeeyyppaarraamm(1), ooppeennssssll--ppkkeeyyuuttll(1), ooppeennssssll--pprriimmee(1),
+       ooppeennssssll--rraanndd(1), ooppeennssssll--rreehhaasshh(1), ooppeennssssll--rreeqq(1), ooppeennssssll--rrssaa(1),
+       ooppeennssssll--rrssaauuttll(1), ooppeennssssll--ss__cclliieenntt(1), ooppeennssssll--ss__sseerrvveerr(1),
+       ooppeennssssll--ss__ttiimmee(1), ooppeennssssll--sseessss__iidd(1), ooppeennssssll--ssmmiimmee(1),
+       ooppeennssssll--ssppeeeedd(1), ooppeennssssll--ssppkkaacc(1), ooppeennssssll--ssrrpp(1),
+       ooppeennssssll--ssttoorreeuuttll(1), ooppeennssssll--ttss(1), ooppeennssssll--vveerriiffyy(1),
+       ooppeennssssll--vveerrssiioonn(1), ooppeennssssll--xx550099(1), ccoonnffiigg(5), ccrryyppttoo(7),
+       ooppeennssssll--eennvv(7).  ssssll(7), xx550099vv33__ccoonnffiigg(5)
+
+HHIISSTTOORRYY
+       The lliisstt -_X_X_X--aallggoorriitthhmmss options were added in OpenSSL 1.0.0; For notes
+       on the availability of other commands, see their individual manual
+       pages.
+
+       The --iissssuueerr__cchheecckkss option is deprecated as of OpenSSL 1.1.0 and is
+       silently ignored.
+
+       The --xxcceerrttffoorrmm and --xxkkeeyyffoorrmm options are obsolete since OpenSSL 3.0 and
+       have no effect.
+
+       The interactive mode, which could be invoked by running "openssl" with
+       no further arguments, was removed in OpenSSL 3.0, and running that
+       program with no arguments is now equivalent to "openssl help".
+
+CCOOPPYYRRIIGGHHTT
+       Copyright 2000-2021 The OpenSSL Project Authors. All Rights Reserved.
+
+       Licensed under the Apache License 2.0 (the "License").  You may not use
+       this file except in compliance with the License.  You can obtain a copy
+       in the file LICENSE in the source distribution or at
+       <https://www.openssl.org/source/license.html>.
+
+
+
+3.0.1                             2021-12-14                    OPENSSL(1ossl)

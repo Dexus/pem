@@ -1,0 +1,181 @@
+<!-- Creator     : groff version 1.22.4 -->
+<!-- CreationDate: Mon Jan 31 16:14:36 2022 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>PKCS7</title>
+
+</head>
+<body>
+
+<h1 align="center">PKCS7</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#COMMAND OPTIONS">COMMAND OPTIONS</a><br>
+<a href="#EXAMPLES">EXAMPLES</a><br>
+<a href="#NOTES">NOTES</a><br>
+<a href="#RESTRICTIONS">RESTRICTIONS</a><br>
+<a href="#SEE ALSO">SEE ALSO</a><br>
+
+<hr>
+
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">pkcs7 - PKCS#7
+utility</p>
+
+<h2>SYNOPSIS
+<a name="SYNOPSIS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>openssl
+pkcs7</b> [<b>-inform PEM|DER</b>] [<b>-outform PEM|DER</b>]
+[<b>-in filename</b>] [<b>-out filename</b>]
+[<b>-print_certs</b>] [<b>-text</b>] [<b>-noout</b>]
+[<b>-engine id</b>]</p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The
+<b>pkcs7</b> command processes PKCS#7 files in
+<small>DER</small> or <small>PEM</small> format.</p>
+
+<h2>COMMAND OPTIONS
+<a name="COMMAND OPTIONS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>-inform
+DER|PEM</b></p>
+
+<p style="margin-left:17%;">This specifies the input
+format. <b><small>DER</small></b> format is
+<small>DER</small> encoded PKCS#7 v1.5 structure.
+<b><small>PEM</small></b> (the default) is a base64 encoded
+version of the <small>DER</small> form with header and
+footer lines.</p>
+
+<p style="margin-left:11%;"><b>-outform DER|PEM</b></p>
+
+<p style="margin-left:17%;">This specifies the output
+format, the options have the same meaning as the
+<b>-inform</b> option.</p>
+
+<p style="margin-left:11%;"><b>-in filename</b></p>
+
+<p style="margin-left:17%;">This specifies the input
+filename to read from or standard input if this option is
+not specified.</p>
+
+<p style="margin-left:11%;"><b>-out filename</b></p>
+
+<p style="margin-left:17%;">specifies the output filename
+to write to or standard output by default.</p>
+
+<p style="margin-left:11%;"><b>-print_certs</b></p>
+
+<p style="margin-left:17%;">prints out any certificates or
+CRLs contained in the file. They are preceded by their
+subject and issuer names in one line format.</p>
+
+<p style="margin-left:11%;"><b>-text</b></p>
+
+<p style="margin-left:17%;">prints out certificates details
+in full rather than just subject and issuer names.</p>
+
+<p style="margin-left:11%;"><b>-noout</b></p>
+
+<p style="margin-left:17%;">don&rsquo;t output the encoded
+version of the PKCS#7 structure (or certificates is
+<b>-print_certs</b> is set).</p>
+
+<p style="margin-left:11%;"><b>-engine id</b></p>
+
+<p style="margin-left:17%;">specifying an engine (by its
+unique <b>id</b> string) will cause <b>pkcs7</b> to attempt
+to obtain a functional reference to the specified engine,
+thus initialising it if needed. The engine will then be set
+as the default for all available algorithms.</p>
+
+<h2>EXAMPLES
+<a name="EXAMPLES"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Convert a
+PKCS#7 file from <small>PEM</small> to
+<small>DER:</small></p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl pkcs7
+-in file.pem -outform DER -out file.der</p>
+
+<p style="margin-left:11%; margin-top: 1em">Output all
+certificates in a file:</p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl pkcs7
+-in file.pem -print_certs -out certs.pem</p>
+
+<h2>NOTES
+<a name="NOTES"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The
+<small>PEM</small> PKCS#7 format uses the header and footer
+lines:</p>
+
+<p style="margin-left:11%; margin-top: 1em">-----BEGIN
+PKCS7----- <br>
+-----END PKCS7-----</p>
+
+<p style="margin-left:11%; margin-top: 1em">For
+compatibility with some CAs it will also accept:</p>
+
+<p style="margin-left:11%; margin-top: 1em">-----BEGIN
+CERTIFICATE----- <br>
+-----END CERTIFICATE-----</p>
+
+<h2>RESTRICTIONS
+<a name="RESTRICTIONS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">There is no
+option to print out all the fields of a PKCS#7 file.</p>
+
+<p style="margin-left:11%; margin-top: 1em">This PKCS#7
+routines only understand PKCS#7 v 1.5 as specified in
+<small>RFC2315</small> they cannot currently parse, for
+example, the new <small>CMS</small> as described in
+<small>RFC2630.</small></p>
+
+<h2>SEE ALSO
+<a name="SEE ALSO"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>crl2pkcs7</b>(1)</p>
+<hr>
+</body>
+</html>

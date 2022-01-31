@@ -1,0 +1,158 @@
+RSA(1)                              OpenSSL                             RSA(1)
+
+
+
+NNAAMMEE
+       openssl-rsa, rsa - RSA key processing tool
+
+SSYYNNOOPPSSIISS
+       ooppeennssssll rrssaa [--hheellpp] [--iinnffoorrmm PPEEMM||DDEERR] [--oouuttffoorrmm PPEEMM||DDEERR] [--iinn ffiilleennaammee]
+       [--ppaassssiinn aarrgg] [--oouutt ffiilleennaammee] [--ppaassssoouutt aarrgg] [--aaeess112288] [--aaeess119922]
+       [--aaeess225566] [--aarriiaa112288] [--aarriiaa119922] [--aarriiaa225566] [--ccaammeelllliiaa112288]
+       [--ccaammeelllliiaa119922] [--ccaammeelllliiaa225566] [--ddeess] [--ddeess33] [--iiddeeaa] [--tteexxtt] [--nnoooouutt]
+       [--mmoodduulluuss] [--cchheecckk] [--ppuubbiinn] [--ppuubboouutt] [--RRSSAAPPuubblliiccKKeeyy__iinn]
+       [--RRSSAAPPuubblliiccKKeeyy__oouutt] [--eennggiinnee iidd]
+
+DDEESSCCRRIIPPTTIIOONN
+       The rrssaa command processes RSA keys. They can be converted between
+       various forms and their components printed out. NNoottee this command uses
+       the traditional SSLeay compatible format for private key encryption:
+       newer applications should use the more secure PKCS#8 format using the
+       ppkkccss88 utility.
+
+OOPPTTIIOONNSS
+       --hheellpp
+           Print out a usage message.
+
+       --iinnffoorrmm DDEERR||PPEEMM
+           This specifies the input format. The DDEERR option uses an ASN1 DER
+           encoded form compatible with the PKCS#1 RSAPrivateKey or
+           SubjectPublicKeyInfo format.  The PPEEMM form is the default format:
+           it consists of the DDEERR format base64 encoded with additional header
+           and footer lines. On input PKCS#8 format private keys are also
+           accepted.
+
+       --oouuttffoorrmm DDEERR||PPEEMM
+           This specifies the output format, the options have the same meaning
+           and default as the --iinnffoorrmm option.
+
+       --iinn ffiilleennaammee
+           This specifies the input filename to read a key from or standard
+           input if this option is not specified. If the key is encrypted a
+           pass phrase will be prompted for.
+
+       --ppaassssiinn aarrgg
+           The input file password source. For more information about the
+           format of aarrgg see "Pass Phrase Options" in ooppeennssssll(1).
+
+       --oouutt ffiilleennaammee
+           This specifies the output filename to write a key to or standard
+           output if this option is not specified. If any encryption options
+           are set then a pass phrase will be prompted for. The output
+           filename should nnoott be the same as the input filename.
+
+       --ppaassssoouutt ppaasssswwoorrdd
+           The output file password source. For more information about the
+           format of aarrgg see "Pass Phrase Options" in ooppeennssssll(1).
+
+       --aaeess112288, --aaeess119922, --aaeess225566, --aarriiaa112288, --aarriiaa119922, --aarriiaa225566, --ccaammeelllliiaa112288,
+       --ccaammeelllliiaa119922, --ccaammeelllliiaa225566, --ddeess, --ddeess33, --iiddeeaa
+           These options encrypt the private key with the specified cipher
+           before outputting it. A pass phrase is prompted for.  If none of
+           these options is specified the key is written in plain text. This
+           means that using the rrssaa utility to read in an encrypted key with
+           no encryption option can be used to remove the pass phrase from a
+           key, or by setting the encryption options it can be use to add or
+           change the pass phrase.  These options can only be used with PEM
+           format output files.
+
+       --tteexxtt
+           Prints out the various public or private key components in plain
+           text in addition to the encoded version.
+
+       --nnoooouutt
+           This option prevents output of the encoded version of the key.
+
+       --mmoodduulluuss
+           This option prints out the value of the modulus of the key.
+
+       --cchheecckk
+           This option checks the consistency of an RSA private key.
+
+       --ppuubbiinn
+           By default a private key is read from the input file: with this
+           option a public key is read instead.
+
+       --ppuubboouutt
+           By default a private key is output: with this option a public key
+           will be output instead. This option is automatically set if the
+           input is a public key.
+
+       --RRSSAAPPuubblliiccKKeeyy__iinn, --RRSSAAPPuubblliiccKKeeyy__oouutt
+           Like --ppuubbiinn and --ppuubboouutt except RRSSAAPPuubblliiccKKeeyy format is used instead.
+
+       --eennggiinnee iidd
+           Specifying an engine (by its unique iidd string) will cause rrssaa to
+           attempt to obtain a functional reference to the specified engine,
+           thus initialising it if needed. The engine will then be set as the
+           default for all available algorithms.
+
+NNOOTTEESS
+       The PEM private key format uses the header and footer lines:
+
+        -----BEGIN RSA PRIVATE KEY-----
+        -----END RSA PRIVATE KEY-----
+
+       The PEM public key format uses the header and footer lines:
+
+        -----BEGIN PUBLIC KEY-----
+        -----END PUBLIC KEY-----
+
+       The PEM RRSSAAPPuubblliiccKKeeyy format uses the header and footer lines:
+
+        -----BEGIN RSA PUBLIC KEY-----
+        -----END RSA PUBLIC KEY-----
+
+EEXXAAMMPPLLEESS
+       To remove the pass phrase on an RSA private key:
+
+        openssl rsa -in key.pem -out keyout.pem
+
+       To encrypt a private key using triple DES:
+
+        openssl rsa -in key.pem -des3 -out keyout.pem
+
+       To convert a private key from PEM to DER format:
+
+        openssl rsa -in key.pem -outform DER -out keyout.der
+
+       To print out the components of a private key to standard output:
+
+        openssl rsa -in key.pem -text -noout
+
+       To just output the public part of a private key:
+
+        openssl rsa -in key.pem -pubout -out pubkey.pem
+
+       Output the public part of a private key in RRSSAAPPuubblliiccKKeeyy format:
+
+        openssl rsa -in key.pem -RSAPublicKey_out -out pubkey.pem
+
+BBUUGGSS
+       There should be an option that automatically handles .key files,
+       without having to manually edit them.
+
+SSEEEE AALLSSOO
+       ppkkccss88(1), ddssaa(1), ggeennrrssaa(1), ggeennddssaa(1)
+
+CCOOPPYYRRIIGGHHTT
+       Copyright 2000-2021 The OpenSSL Project Authors. All Rights Reserved.
+
+       Licensed under the OpenSSL license (the "License").  You may not use
+       this file except in compliance with the License.  You can obtain a copy
+       in the file LICENSE in the source distribution or at
+       <https://www.openssl.org/source/license.html>.
+
+
+
+1.1.1l                            2021-08-24                            RSA(1)

@@ -1,0 +1,548 @@
+OPENSSL-TS(1ossl)                   OpenSSL                  OPENSSL-TS(1ossl)
+
+
+
+NNAAMMEE
+       openssl-ts - Time Stamping Authority command
+
+SSYYNNOOPPSSIISS
+       ooppeennssssll ttss --hheellpp
+
+       ooppeennssssll ttss --qquueerryy [--ccoonnffiigg _c_o_n_f_i_g_f_i_l_e] [--ddaattaa _f_i_l_e___t_o___h_a_s_h] [--ddiiggeesstt
+       _d_i_g_e_s_t___b_y_t_e_s] [--_dd_ii_gg_ee_ss_tt] [--ttssppoolliiccyy _o_b_j_e_c_t___i_d] [--nnoo__nnoonnccee] [--cceerrtt] [--iinn
+       _r_e_q_u_e_s_t_._t_s_q] [--oouutt _r_e_q_u_e_s_t_._t_s_q] [--tteexxtt] [--rraanndd _f_i_l_e_s] [--wwrriitteerraanndd _f_i_l_e]
+       [--pprroovviiddeerr _n_a_m_e] [--pprroovviiddeerr--ppaatthh _p_a_t_h] [--pprrooppqquueerryy _p_r_o_p_q]
+
+       ooppeennssssll ttss --rreeppllyy [--ccoonnffiigg _c_o_n_f_i_g_f_i_l_e] [--sseeccttiioonn _t_s_a___s_e_c_t_i_o_n]
+       [--qquueerryyffiillee _r_e_q_u_e_s_t_._t_s_q] [--ppaassssiinn _p_a_s_s_w_o_r_d___s_r_c] [--ssiiggnneerr _t_s_a___c_e_r_t_._p_e_m]
+       [--iinnkkeeyy _f_i_l_e_n_a_m_e|_u_r_i] [--_dd_ii_gg_ee_ss_tt] [--cchhaaiinn _c_e_r_t_s___f_i_l_e_._p_e_m] [--ttssppoolliiccyy
+       _o_b_j_e_c_t___i_d] [--iinn _r_e_s_p_o_n_s_e_._t_s_r] [--ttookkeenn__iinn] [--oouutt _r_e_s_p_o_n_s_e_._t_s_r]
+       [--ttookkeenn__oouutt] [--tteexxtt] [--eennggiinnee _i_d] [--pprroovviiddeerr _n_a_m_e] [--pprroovviiddeerr--ppaatthh
+       _p_a_t_h] [--pprrooppqquueerryy _p_r_o_p_q]
+
+       ooppeennssssll ttss --vveerriiffyy [--ddaattaa _f_i_l_e___t_o___h_a_s_h] [--ddiiggeesstt _d_i_g_e_s_t___b_y_t_e_s]
+       [--qquueerryyffiillee _r_e_q_u_e_s_t_._t_s_q] [--iinn _r_e_s_p_o_n_s_e_._t_s_r] [--ttookkeenn__iinn] [--uunnttrruusstteedd
+       _f_i_l_e_s|_u_r_i_s] [--CCAAffiillee _f_i_l_e] [--CCAAppaatthh _d_i_r] [--CCAAssttoorree _u_r_i]
+       [--aallllooww__pprrooxxyy__cceerrttss] [--aattttiimmee _t_i_m_e_s_t_a_m_p] [--nnoo__cchheecckk__ttiimmee]
+       [--cchheecckk__ssss__ssiigg] [--ccrrll__cchheecckk] [--ccrrll__cchheecckk__aallll] [--eexxpplliicciitt__ppoolliiccyy]
+       [--eexxtteennddeedd__ccrrll] [--iiggnnoorree__ccrriittiiccaall] [--iinnhhiibbiitt__aannyy] [--iinnhhiibbiitt__mmaapp]
+       [--ppaarrttiiaall__cchhaaiinn] [--ppoolliiccyy _a_r_g] [--ppoolliiccyy__cchheecckk] [--ppoolliiccyy__pprriinntt]
+       [--ppuurrppoossee _p_u_r_p_o_s_e] [--ssuuiitteeBB__112288] [--ssuuiitteeBB__112288__oonnllyy] [--ssuuiitteeBB__119922]
+       [--ttrruusstteedd__ffiirrsstt] [--nnoo__aalltt__cchhaaiinnss] [--uussee__ddeellttaass] [--aauutthh__lleevveell _n_u_m]
+       [--vveerriiffyy__ddeepptthh _n_u_m] [--vveerriiffyy__eemmaaiill _e_m_a_i_l] [--vveerriiffyy__hhoossttnnaammee _h_o_s_t_n_a_m_e]
+       [--vveerriiffyy__iipp _i_p] [--vveerriiffyy__nnaammee _n_a_m_e] [--xx550099__ssttrriicctt] [--iissssuueerr__cchheecckkss]
+       [--pprroovviiddeerr _n_a_m_e] [--pprroovviiddeerr--ppaatthh _p_a_t_h] [--pprrooppqquueerryy _p_r_o_p_q]
+
+DDEESSCCRRIIPPTTIIOONN
+       This command is a basic Time Stamping Authority (TSA) client and server
+       application as specified in RFC 3161 (Time-Stamp Protocol, TSP). A TSA
+       can be part of a PKI deployment and its role is to provide long term
+       proof of the existence of a certain datum before a particular time.
+       Here is a brief description of the protocol:
+
+       1.  The TSA client computes a one-way hash value for a data file and
+           sends the hash to the TSA.
+
+       2.  The TSA attaches the current date and time to the received hash
+           value, signs them and sends the timestamp token back to the client.
+           By creating this token the TSA certifies the existence of the
+           original data file at the time of response generation.
+
+       3.  The TSA client receives the timestamp token and verifies the
+           signature on it. It also checks if the token contains the same hash
+           value that it had sent to the TSA.
+
+       There is one DER encoded protocol data unit defined for transporting a
+       timestamp request to the TSA and one for sending the timestamp response
+       back to the client. This command has three main functions: creating a
+       timestamp request based on a data file, creating a timestamp response
+       based on a request, verifying if a response corresponds to a particular
+       request or a data file.
+
+       There is no support for sending the requests/responses automatically
+       over HTTP or TCP yet as suggested in RFC 3161. The users must send the
+       requests either by ftp or e-mail.
+
+OOPPTTIIOONNSS
+       --hheellpp
+           Print out a usage message.
+
+       --qquueerryy
+           Generate a TS query. For details see "Timestamp Request
+           generation".
+
+       --rreeppllyy
+           Generate a TS reply. For details see "Timestamp Response
+           generation".
+
+       --vveerriiffyy
+           Verify a TS response. For details see "Timestamp Response
+           verification".
+
+   TTiimmeessttaammpp RReeqquueesstt ggeenneerraattiioonn
+       The --qquueerryy command can be used for creating and printing a timestamp
+       request with the following options:
+
+       --ccoonnffiigg _c_o_n_f_i_g_f_i_l_e
+           The configuration file to use.  Optional; for a description of the
+           default value, see "COMMAND SUMMARY" in ooppeennssssll(1).
+
+       --ddaattaa _f_i_l_e___t_o___h_a_s_h
+           The data file for which the timestamp request needs to be created.
+           stdin is the default if neither the --ddaattaa nor the --ddiiggeesstt parameter
+           is specified. (Optional)
+
+       --ddiiggeesstt _d_i_g_e_s_t___b_y_t_e_s
+           It is possible to specify the message imprint explicitly without
+           the data file. The imprint must be specified in a hexadecimal
+           format, two characters per byte, the bytes optionally separated by
+           colons (e.g. 1A:F6:01:... or 1AF601...). The number of bytes must
+           match the message digest algorithm in use. (Optional)
+
+       --_dd_ii_gg_ee_ss_tt
+           The message digest to apply to the data file.  Any digest supported
+           by the ooppeennssssll--ddggsstt(1) command can be used.  The default is
+           SHA-256. (Optional)
+
+       --ttssppoolliiccyy _o_b_j_e_c_t___i_d
+           The policy that the client expects the TSA to use for creating the
+           timestamp token. Either the dotted OID notation or OID names
+           defined in the config file can be used. If no policy is requested
+           the TSA will use its own default policy. (Optional)
+
+       --nnoo__nnoonnccee
+           No nonce is specified in the request if this option is given.
+           Otherwise a 64 bit long pseudo-random none is included in the
+           request. It is recommended to use nonce to protect against replay-
+           attacks. (Optional)
+
+       --cceerrtt
+           The TSA is expected to include its signing certificate in the
+           response. (Optional)
+
+       --iinn _r_e_q_u_e_s_t_._t_s_q
+           This option specifies a previously created timestamp request in DER
+           format that will be printed into the output file. Useful when you
+           need to examine the content of a request in human-readable format.
+           (Optional)
+
+       --oouutt _r_e_q_u_e_s_t_._t_s_q
+           Name of the output file to which the request will be written.
+           Default is stdout. (Optional)
+
+       --tteexxtt
+           If this option is specified the output is human-readable text
+           format instead of DER. (Optional)
+
+       --rraanndd _f_i_l_e_s, --wwrriitteerraanndd _f_i_l_e
+           See "Random State Options" in ooppeennssssll(1) for details.
+
+   TTiimmeessttaammpp RReessppoonnssee ggeenneerraattiioonn
+       A timestamp response (TimeStampResp) consists of a response status and
+       the timestamp token itself (ContentInfo), if the token generation was
+       successful. The --rreeppllyy command is for creating a timestamp response or
+       timestamp token based on a request and printing the response/token in
+       human-readable format. If --ttookkeenn__oouutt is not specified the output is
+       always a timestamp response (TimeStampResp), otherwise it is a
+       timestamp token (ContentInfo).
+
+       --ccoonnffiigg _c_o_n_f_i_g_f_i_l_e
+           The configuration file to use.  Optional; for a description of the
+           default value, see "COMMAND SUMMARY" in ooppeennssssll(1).  See
+           "CONFIGURATION FILE OPTIONS" for configurable variables.
+
+       --sseeccttiioonn _t_s_a___s_e_c_t_i_o_n
+           The name of the config file section containing the settings for the
+           response generation. If not specified the default TSA section is
+           used, see "CONFIGURATION FILE OPTIONS" for details. (Optional)
+
+       --qquueerryyffiillee _r_e_q_u_e_s_t_._t_s_q
+           The name of the file containing a DER encoded timestamp request.
+           (Optional)
+
+       --ppaassssiinn _p_a_s_s_w_o_r_d___s_r_c
+           Specifies the password source for the private key of the TSA. See
+           description in ooppeennssssll(1). (Optional)
+
+       --ssiiggnneerr _t_s_a___c_e_r_t_._p_e_m
+           The signer certificate of the TSA in PEM format. The TSA signing
+           certificate must have exactly one extended key usage assigned to
+           it: timeStamping. The extended key usage must also be critical,
+           otherwise the certificate is going to be refused. Overrides the
+           ssiiggnneerr__cceerrtt variable of the config file. (Optional)
+
+       --iinnkkeeyy _f_i_l_e_n_a_m_e|_u_r_i
+           The signer private key of the TSA in PEM format. Overrides the
+           ssiiggnneerr__kkeeyy config file option. (Optional)
+
+       --_dd_ii_gg_ee_ss_tt
+           Signing digest to use. Overrides the ssiiggnneerr__ddiiggeesstt config file
+           option. (Mandatory unless specified in the config file)
+
+       --cchhaaiinn _c_e_r_t_s___f_i_l_e_._p_e_m
+           The collection of certificates in PEM format that will all be
+           included in the response in addition to the signer certificate if
+           the --cceerrtt option was used for the request. This file is supposed to
+           contain the certificate chain for the signer certificate from its
+           issuer upwards. The --rreeppllyy command does not build a certificate
+           chain automatically. (Optional)
+
+       --ttssppoolliiccyy _o_b_j_e_c_t___i_d
+           The default policy to use for the response unless the client
+           explicitly requires a particular TSA policy. The OID can be
+           specified either in dotted notation or with its name. Overrides the
+           ddeeffaauulltt__ppoolliiccyy config file option. (Optional)
+
+       --iinn _r_e_s_p_o_n_s_e_._t_s_r
+           Specifies a previously created timestamp response or timestamp
+           token (if --ttookkeenn__iinn is also specified) in DER format that will be
+           written to the output file. This option does not require a request,
+           it is useful e.g. when you need to examine the content of a
+           response or token or you want to extract the timestamp token from a
+           response. If the input is a token and the output is a timestamp
+           response a default 'granted' status info is added to the token.
+           (Optional)
+
+       --ttookkeenn__iinn
+           This flag can be used together with the --iinn option and indicates
+           that the input is a DER encoded timestamp token (ContentInfo)
+           instead of a timestamp response (TimeStampResp). (Optional)
+
+       --oouutt _r_e_s_p_o_n_s_e_._t_s_r
+           The response is written to this file. The format and content of the
+           file depends on other options (see --tteexxtt, --ttookkeenn__oouutt). The default
+           is stdout. (Optional)
+
+       --ttookkeenn__oouutt
+           The output is a timestamp token (ContentInfo) instead of timestamp
+           response (TimeStampResp). (Optional)
+
+       --tteexxtt
+           If this option is specified the output is human-readable text
+           format instead of DER. (Optional)
+
+       --eennggiinnee _i_d
+           See "Engine Options" in ooppeennssssll(1).  This option is deprecated.
+
+       --pprroovviiddeerr _n_a_m_e
+       --pprroovviiddeerr--ppaatthh _p_a_t_h
+       --pprrooppqquueerryy _p_r_o_p_q
+           See "Provider Options" in ooppeennssssll(1), pprroovviiddeerr(7), and pprrooppeerrttyy(7).
+
+   TTiimmeessttaammpp RReessppoonnssee vveerriiffiiccaattiioonn
+       The --vveerriiffyy command is for verifying if a timestamp response or
+       timestamp token is valid and matches a particular timestamp request or
+       data file. The --vveerriiffyy command does not use the configuration file.
+
+       --ddaattaa _f_i_l_e___t_o___h_a_s_h
+           The response or token must be verified against file_to_hash. The
+           file is hashed with the message digest algorithm specified in the
+           token.  The --ddiiggeesstt and --qquueerryyffiillee options must not be specified
+           with this one.  (Optional)
+
+       --ddiiggeesstt _d_i_g_e_s_t___b_y_t_e_s
+           The response or token must be verified against the message digest
+           specified with this option. The number of bytes must match the
+           message digest algorithm specified in the token. The --ddaattaa and
+           --qquueerryyffiillee options must not be specified with this one. (Optional)
+
+       --qquueerryyffiillee _r_e_q_u_e_s_t_._t_s_q
+           The original timestamp request in DER format. The --ddaattaa and --ddiiggeesstt
+           options must not be specified with this one. (Optional)
+
+       --iinn _r_e_s_p_o_n_s_e_._t_s_r
+           The timestamp response that needs to be verified in DER format.
+           (Mandatory)
+
+       --ttookkeenn__iinn
+           This flag can be used together with the --iinn option and indicates
+           that the input is a DER encoded timestamp token (ContentInfo)
+           instead of a timestamp response (TimeStampResp). (Optional)
+
+       --uunnttrruusstteedd _f_i_l_e_s|_u_r_i_s
+           A set of additional untrusted certificates which may be needed when
+           building the certificate chain for the TSA's signing certificate.
+           These do not need to contain the TSA signing certificate and
+           intermediate CA certificates as far as the response already
+           includes them.  (Optional)
+
+           Multiple sources may be given, separated by commas and/or
+           whitespace.  Each file may contain multiple certificates.
+
+       --CCAAffiillee _f_i_l_e, --CCAAppaatthh _d_i_r, --CCAAssttoorree _u_r_i
+           See "Trusted Certificate Options" in
+           ooppeennssssll--vveerriiffiiccaattiioonn--ooppttiioonnss(1) for details.  At least one of
+           --CCAAffiillee, --CCAAppaatthh or --CCAAssttoorree must be specified.
+
+       --aallllooww__pprrooxxyy__cceerrttss, --aattttiimmee, --nnoo__cchheecckk__ttiimmee, --cchheecckk__ssss__ssiigg, --ccrrll__cchheecckk,
+       --ccrrll__cchheecckk__aallll, --eexxpplliicciitt__ppoolliiccyy, --eexxtteennddeedd__ccrrll, --iiggnnoorree__ccrriittiiccaall,
+       --iinnhhiibbiitt__aannyy, --iinnhhiibbiitt__mmaapp, --nnoo__aalltt__cchhaaiinnss, --ppaarrttiiaall__cchhaaiinn, --ppoolliiccyy,
+       --ppoolliiccyy__cchheecckk, --ppoolliiccyy__pprriinntt, --ppuurrppoossee, --ssuuiitteeBB__112288, --ssuuiitteeBB__112288__oonnllyy,
+       --ssuuiitteeBB__119922, --ttrruusstteedd__ffiirrsstt, --uussee__ddeellttaass, --aauutthh__lleevveell, --vveerriiffyy__ddeepptthh,
+       --vveerriiffyy__eemmaaiill, --vveerriiffyy__hhoossttnnaammee, --vveerriiffyy__iipp, --vveerriiffyy__nnaammee, --xx550099__ssttrriicctt
+       --iissssuueerr__cchheecckkss
+           Set various options of certificate chain verification.  See
+           "Verification Options" in ooppeennssssll--vveerriiffiiccaattiioonn--ooppttiioonnss(1) for
+           details.
+
+           Any verification errors cause the command to exit.
+
+CCOONNFFIIGGUURRAATTIIOONN FFIILLEE OOPPTTIIOONNSS
+       The --qquueerryy and --rreeppllyy commands make use of a configuration file.  See
+       ccoonnffiigg(5) for a general description of the syntax of the config file.
+       The --qquueerryy command uses only the symbolic OID names section and it can
+       work without it. However, the --rreeppllyy command needs the config file for
+       its operation.
+
+       When there is a command line switch equivalent of a variable the switch
+       always overrides the settings in the config file.
+
+       ttssaa section, ddeeffaauulltt__ttssaa
+           This is the main section and it specifies the name of another
+           section that contains all the options for the --rreeppllyy command. This
+           default section can be overridden with the --sseeccttiioonn command line
+           switch. (Optional)
+
+       ooiidd__ffiillee
+           This specifies a file containing additional OOBBJJEECCTT IIDDEENNTTIIFFIIEERRSS.
+           Each line of the file should consist of the numerical form of the
+           object identifier followed by whitespace then the short name
+           followed by whitespace and finally the long name. (Optional)
+
+       ooiidd__sseeccttiioonn
+           This specifies a section in the configuration file containing extra
+           object identifiers. Each line should consist of the short name of
+           the object identifier followed by == and the numerical form. The
+           short and long names are the same when this option is used.
+           (Optional)
+
+       RRAANNDDFFIILLEE
+           At startup the specified file is loaded into the random number
+           generator, and at exit 256 bytes will be written to it. (Note:
+           Using a RANDFILE is not necessary anymore, see the "HISTORY"
+           section.
+
+       sseerriiaall
+           The name of the file containing the hexadecimal serial number of
+           the last timestamp response created. This number is incremented by
+           1 for each response. If the file does not exist at the time of
+           response generation a new file is created with serial number 1.
+           (Mandatory)
+
+       ccrryyppttoo__ddeevviiccee
+           Specifies the OpenSSL engine that will be set as the default for
+           all available algorithms. The default value is built-in, you can
+           specify any other engines supported by OpenSSL (e.g. use chil for
+           the NCipher HSM).  (Optional)
+
+       ssiiggnneerr__cceerrtt
+           TSA signing certificate in PEM format. The same as the --ssiiggnneerr
+           command line option. (Optional)
+
+       cceerrttss
+           A file containing a set of PEM encoded certificates that need to be
+           included in the response. The same as the --cchhaaiinn command line
+           option. (Optional)
+
+       ssiiggnneerr__kkeeyy
+           The private key of the TSA in PEM format. The same as the --iinnkkeeyy
+           command line option. (Optional)
+
+       ssiiggnneerr__ddiiggeesstt
+           Signing digest to use. The same as the --_dd_ii_gg_ee_ss_tt command line option.
+           (Mandatory unless specified on the command line)
+
+       ddeeffaauulltt__ppoolliiccyy
+           The default policy to use when the request does not mandate any
+           policy. The same as the --ttssppoolliiccyy command line option. (Optional)
+
+       ootthheerr__ppoolliicciieess
+           Comma separated list of policies that are also acceptable by the
+           TSA and used only if the request explicitly specifies one of them.
+           (Optional)
+
+       ddiiggeessttss
+           The list of message digest algorithms that the TSA accepts. At
+           least one algorithm must be specified. (Mandatory)
+
+       aaccccuurraaccyy
+           The accuracy of the time source of the TSA in seconds, milliseconds
+           and microseconds. E.g. secs:1, millisecs:500, microsecs:100. If any
+           of the components is missing zero is assumed for that field.
+           (Optional)
+
+       cclloocckk__pprreecciissiioonn__ddiiggiittss
+           Specifies the maximum number of digits, which represent the
+           fraction of seconds, that  need to be included in the time field.
+           The trailing zeros must be removed from the time, so there might
+           actually be fewer digits, or no fraction of seconds at all.
+           Supported only on UNIX platforms.  The maximum value is 6, default
+           is 0.  (Optional)
+
+       oorrddeerriinngg
+           If this option is yes the responses generated by this TSA can
+           always be ordered, even if the time difference between two
+           responses is less than the sum of their accuracies. Default is no.
+           (Optional)
+
+       ttssaa__nnaammee
+           Set this option to yes if the subject name of the TSA must be
+           included in the TSA name field of the response. Default is no.
+           (Optional)
+
+       eessss__cceerrtt__iidd__cchhaaiinn
+           The SignedData objects created by the TSA always contain the
+           certificate identifier of the signing certificate in a signed
+           attribute (see RFC 2634, Enhanced Security Services).  If this
+           variable is set to no, only this signing certificate identifier is
+           included in the SigningCertificate signed attribute.  If this
+           variable is set to yes and the cceerrttss variable or the --cchhaaiinn option
+           is specified then the certificate identifiers of the chain will
+           also be included, where the --cchhaaiinn option overrides the cceerrttss
+           variable.  Default is no.  (Optional)
+
+       eessss__cceerrtt__iidd__aallgg
+           This option specifies the hash function to be used to calculate the
+           TSA's public key certificate identifier. Default is sha256.
+           (Optional)
+
+EEXXAAMMPPLLEESS
+       All the examples below presume that OOPPEENNSSSSLL__CCOONNFF is set to a proper
+       configuration file, e.g. the example configuration file
+       _o_p_e_n_s_s_l_/_a_p_p_s_/_o_p_e_n_s_s_l_._c_n_f will do.
+
+   TTiimmeessttaammpp RReeqquueesstt
+       To create a timestamp request for _d_e_s_i_g_n_1_._t_x_t with SHA-256 digest,
+       without nonce and policy, and without requirement for a certificate in
+       the response:
+
+         openssl ts -query -data design1.txt -no_nonce \
+               -out design1.tsq
+
+       To create a similar timestamp request with specifying the message
+       imprint explicitly:
+
+         openssl ts -query -digest b7e5d3f93198b38379852f2c04e78d73abdd0f4b \
+                -no_nonce -out design1.tsq
+
+       To print the content of the previous request in human readable format:
+
+         openssl ts -query -in design1.tsq -text
+
+       To create a timestamp request which includes the SHA-512 digest of
+       _d_e_s_i_g_n_2_._t_x_t, requests the signer certificate and nonce, and specifies a
+       policy id (assuming the tsa_policy1 name is defined in the OID section
+       of the config file):
+
+         openssl ts -query -data design2.txt -sha512 \
+               -tspolicy tsa_policy1 -cert -out design2.tsq
+
+   TTiimmeessttaammpp RReessppoonnssee
+       Before generating a response a signing certificate must be created for
+       the TSA that contains the ttiimmeeSSttaammppiinngg critical extended key usage
+       extension without any other key usage extensions. You can add this line
+       to the user certificate section of the config file to generate a proper
+       certificate;
+
+          extendedKeyUsage = critical,timeStamping
+
+       See ooppeennssssll--rreeqq(1), ooppeennssssll--ccaa(1), and ooppeennssssll--xx550099(1) for
+       instructions. The examples below assume that _c_a_c_e_r_t_._p_e_m contains the
+       certificate of the CA, _t_s_a_c_e_r_t_._p_e_m is the signing certificate issued by
+       _c_a_c_e_r_t_._p_e_m and _t_s_a_k_e_y_._p_e_m is the private key of the TSA.
+
+       To create a timestamp response for a request:
+
+         openssl ts -reply -queryfile design1.tsq -inkey tsakey.pem \
+               -signer tsacert.pem -out design1.tsr
+
+       If you want to use the settings in the config file you could just
+       write:
+
+         openssl ts -reply -queryfile design1.tsq -out design1.tsr
+
+       To print a timestamp reply to stdout in human readable format:
+
+         openssl ts -reply -in design1.tsr -text
+
+       To create a timestamp token instead of timestamp response:
+
+         openssl ts -reply -queryfile design1.tsq -out design1_token.der -token_out
+
+       To print a timestamp token to stdout in human readable format:
+
+         openssl ts -reply -in design1_token.der -token_in -text -token_out
+
+       To extract the timestamp token from a response:
+
+         openssl ts -reply -in design1.tsr -out design1_token.der -token_out
+
+       To add 'granted' status info to a timestamp token thereby creating a
+       valid response:
+
+         openssl ts -reply -in design1_token.der -token_in -out design1.tsr
+
+   TTiimmeessttaammpp VVeerriiffiiccaattiioonn
+       To verify a timestamp reply against a request:
+
+         openssl ts -verify -queryfile design1.tsq -in design1.tsr \
+               -CAfile cacert.pem -untrusted tsacert.pem
+
+       To verify a timestamp reply that includes the certificate chain:
+
+         openssl ts -verify -queryfile design2.tsq -in design2.tsr \
+               -CAfile cacert.pem
+
+       To verify a timestamp token against the original data file:
+         openssl ts -verify -data design2.txt -in design2.tsr \
+               -CAfile cacert.pem
+
+       To verify a timestamp token against a message imprint:
+         openssl ts -verify -digest b7e5d3f93198b38379852f2c04e78d73abdd0f4b \
+                -in design2.tsr -CAfile cacert.pem
+
+       You could also look at the 'test' directory for more examples.
+
+BBUUGGSS
+       • No support for timestamps over SMTP, though it is quite easy to
+         implement an automatic e-mail based TSA with pprrooccmmaaiill(1) and ppeerrll(1).
+         HTTP server support is provided in the form of a separate apache
+         module. HTTP client support is provided by ttssggeett(1). Pure TCP/IP
+         protocol is not supported.
+
+       • The file containing the last serial number of the TSA is not locked
+         when being read or written. This is a problem if more than one
+         instance of ooppeennssssll(1) is trying to create a timestamp response at
+         the same time. This is not an issue when using the apache server
+         module, it does proper locking.
+
+       • Look for the FIXME word in the source files.
+
+       • The source code should really be reviewed by somebody else, too.
+
+       • More testing is needed, I have done only some basic tests (see
+         test/testtsa).
+
+HHIISSTTOORRYY
+       OpenSSL 1.1.1 introduced a new random generator (CSPRNG) with an
+       improved seeding mechanism. The new seeding mechanism makes it
+       unnecessary to define a RANDFILE for saving and restoring randomness.
+       This option is retained mainly for compatibility reasons.
+
+       The --eennggiinnee option was deprecated in OpenSSL 3.0.
+
+SSEEEE AALLSSOO
+       ooppeennssssll(1), ttssggeett(1), ooppeennssssll--rreeqq(1), ooppeennssssll--xx550099(1), ooppeennssssll--ccaa(1),
+       ooppeennssssll--ggeennrrssaa(1), ccoonnffiigg(5), oossssll__ssttoorree--ffiillee(7)
+
+CCOOPPYYRRIIGGHHTT
+       Copyright 2006-2021 The OpenSSL Project Authors. All Rights Reserved.
+
+       Licensed under the Apache License 2.0 (the "License").  You may not use
+       this file except in compliance with the License.  You can obtain a copy
+       in the file LICENSE in the source distribution or at
+       <https://www.openssl.org/source/license.html>.
+
+
+
+3.0.1                             2022-01-31                 OPENSSL-TS(1ossl)

@@ -1,0 +1,120 @@
+<!-- Creator     : groff version 1.22.4 -->
+<!-- CreationDate: Mon Jan 31 16:15:03 2022 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>SPEED</title>
+
+</head>
+<body>
+
+<h1 align="center">SPEED</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#OPTIONS">OPTIONS</a><br>
+<a href="#COPYRIGHT">COPYRIGHT</a><br>
+
+<hr>
+
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">openssl-speed,
+speed - test library performance</p>
+
+<h2>SYNOPSIS
+<a name="SYNOPSIS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>openssl
+speed</b> [<b>-help</b>] [<b>-engine id</b>]
+[<b>-elapsed</b>] [<b>-evp algo</b>] [<b>-decrypt</b>]
+[<b>algorithm...</b>]</p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">This command is
+used to test the performance of cryptographic algorithms. To
+see the list of supported algorithms, use the <i>list
+--digest-commands</i> or <i>list --cipher-commands</i>
+command.</p>
+
+<h2>OPTIONS
+<a name="OPTIONS"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>-help</b></p>
+
+<p style="margin-left:17%;">Print out a usage message.</p>
+
+<p style="margin-left:11%;"><b>-engine id</b></p>
+
+<p style="margin-left:17%;">specifying an engine (by its
+unique <b>id</b> string) will cause <b>speed</b> to attempt
+to obtain a functional reference to the specified engine,
+thus initialising it if needed. The engine will then be set
+as the default for all available algorithms.</p>
+
+<p style="margin-left:11%;"><b>-elapsed</b></p>
+
+<p style="margin-left:17%;">Measure time in real time
+instead of <small>CPU</small> time. It can be useful when
+testing speed of hardware engines.</p>
+
+<p style="margin-left:11%;"><b>-evp algo</b></p>
+
+<p style="margin-left:17%;">Use the specified cipher or
+message digest algorithm via the <small>EVP</small>
+interface.</p>
+
+<p style="margin-left:11%;"><b>-decrypt</b></p>
+
+<p style="margin-left:17%;">Time the decryption instead of
+encryption. Affects only the <small>EVP</small> testing.</p>
+
+<p style="margin-left:11%;"><b>[zero or more test
+algorithms]</b></p>
+
+<p style="margin-left:17%;">If any options are given,
+<b>speed</b> tests those algorithms, otherwise all of the
+above are tested.</p>
+
+<h2>COPYRIGHT
+<a name="COPYRIGHT"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Copyright
+2000-2016 The OpenSSL Project Authors. All Rights
+Reserved.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Licensed under
+the OpenSSL license (the &quot;License&quot;). You may not
+use this file except in compliance with the License. You can
+obtain a copy in the file <small>LICENSE</small> in the
+source distribution or at
+&lt;https://www.openssl.org/source/license.html&gt;.</p>
+<hr>
+</body>
+</html>

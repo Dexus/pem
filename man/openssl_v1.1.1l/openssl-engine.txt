@@ -1,0 +1,84 @@
+ENGINE(1)                           OpenSSL                          ENGINE(1)
+
+
+
+NNAAMMEE
+       openssl-engine, engine - load and query engines
+
+SSYYNNOOPPSSIISS
+       ooppeennssssll eennggiinnee [ _e_n_g_i_n_e_._._. ] [--vv] [--vvvv] [--vvvvvv] [--vvvvvv] [--vvvvvv] [--cc] [--tt]
+       [--tttt] [--pprree _c_o_m_m_a_n_d] [--ppoosstt _c_o_m_m_a_n_d] [ _e_n_g_i_n_e_._._. ]
+
+DDEESSCCRRIIPPTTIIOONN
+       The eennggiinnee command is used to query the status and capabilities of the
+       specified eennggiinnee's.  Engines may be specified before and after all
+       other command-line flags.  Only those specified are queried.
+
+OOPPTTIIOONNSS
+       --vv --vvvv --vvvvvv --vvvvvvvv
+           Provides information about each specified engine. The first flag
+           lists all the possible run-time control commands; the second adds a
+           description of each command; the third adds the input flags, and
+           the final option adds the internal input flags.
+
+       --cc  Lists the capabilities of each engine.
+
+       --tt  Tests if each specified engine is available, and displays the
+           answer.
+
+       --tttt Displays an error trace for any unavailable engine.
+
+       --pprree _c_o_m_m_a_n_d
+       --ppoosstt _c_o_m_m_a_n_d
+           Command-line configuration of engines.  The --pprree command is given
+           to the engine before it is loaded and the --ppoosstt command is given
+           after the engine is loaded.  The _c_o_m_m_a_n_d is of the form _c_m_d_:_v_a_l
+           where _c_m_d is the command, and _v_a_l is the value for the command.
+           See the example below.
+
+EEXXAAMMPPLLEESS
+       To list all the commands available to a dynamic engine:
+
+        $ openssl engine -t -tt -vvvv dynamic
+        (dynamic) Dynamic engine loading support
+             [ unavailable ]
+             SO_PATH: Specifies the path to the new ENGINE shared library
+                  (input flags): STRING
+             NO_VCHECK: Specifies to continue even if version checking fails (boolean)
+                  (input flags): NUMERIC
+             ID: Specifies an ENGINE id name for loading
+                  (input flags): STRING
+             LIST_ADD: Whether to add a loaded ENGINE to the internal list (0=no,1=yes,2=mandatory)
+                  (input flags): NUMERIC
+             DIR_LOAD: Specifies whether to load from 'DIR_ADD' directories (0=no,1=yes,2=mandatory)
+                  (input flags): NUMERIC
+             DIR_ADD: Adds a directory from which ENGINEs can be loaded
+                  (input flags): STRING
+             LOAD: Load up the ENGINE specified by other settings
+                  (input flags): NO_INPUT
+
+       To list the capabilities of the _r_s_a_x engine:
+
+        $ openssl engine -c
+        (rsax) RSAX engine support
+         [RSA]
+        (dynamic) Dynamic engine loading support
+
+EENNVVIIRROONNMMEENNTT
+       OOPPEENNSSSSLL__EENNGGIINNEESS
+           The path to the engines directory.
+
+SSEEEE AALLSSOO
+       ccoonnffiigg(5)
+
+CCOOPPYYRRIIGGHHTT
+       Copyright 2016-2019 The OpenSSL Project Authors. All Rights Reserved.
+
+       Licensed under the OpenSSL license (the "License").  You may not use
+       this file except in compliance with the License.  You can obtain a copy
+       in the file LICENSE in the source distribution or at
+       <https://www.openssl.org/source/license.html>.
+
+
+
+1.1.1l                            2021-08-24                         ENGINE(1)

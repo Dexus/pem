@@ -1,0 +1,199 @@
+OPENSSL-FIPSINSTALL(1ossl)          OpenSSL         OPENSSL-FIPSINSTALL(1ossl)
+
+
+
+NNAAMMEE
+       openssl-fipsinstall - perform FIPS configuration installation
+
+SSYYNNOOPPSSIISS
+       ooppeennssssll ffiippssiinnssttaallll [--hheellpp] [--iinn _c_o_n_f_i_g_f_i_l_e_n_a_m_e] [--oouutt _c_o_n_f_i_g_f_i_l_e_n_a_m_e]
+       [--mmoodduullee _m_o_d_u_l_e_f_i_l_e_n_a_m_e] [--pprroovviiddeerr__nnaammee _p_r_o_v_i_d_e_r_n_a_m_e] [--sseeccttiioonn__nnaammee
+       _s_e_c_t_i_o_n_n_a_m_e] [--vveerriiffyy] [--mmaacc__nnaammee _m_a_c_n_a_m_e] [--mmaaccoopptt _n_m:_v] [--nnoooouutt]
+       [--qquuiieett] [--nnoo__ccoonnddiittiioonnaall__eerrrroorrss] [--nnoo__sseeccuurriittyy__cchheecckkss]
+       [--sseellff__tteesstt__oonnllooaadd] [--ccoorrrruupptt__ddeesscc _s_e_l_f_t_e_s_t___d_e_s_c_r_i_p_t_i_o_n] [--ccoorrrruupptt__ttyyppee
+       _s_e_l_f_t_e_s_t___t_y_p_e] [--ccoonnffiigg _p_a_r_e_n_t___c_o_n_f_i_g]
+
+DDEESSCCRRIIPPTTIIOONN
+       This command is used to generate a FIPS module configuration file.
+       This configuration file can be used each time a FIPS module is loaded
+       in order to pass data to the FIPS module self tests. The FIPS module
+       always verifies its MAC, but optionally only needs to run the KAT's
+       once, at installation.
+
+       The generated configuration file consists of:
+
+       - A MAC of the FIPS module file.
+       - A test status indicator.
+           This indicates if the Known Answer Self Tests (KAT's) have
+           successfully run.
+
+       - A MAC of the status indicator.
+       - A control for conditional self tests errors.
+           By default if a continuous test (e.g a key pair test) fails then
+           the FIPS module will enter an error state, and no services or
+           cryptographic algorithms will be able to be accessed after this
+           point.  The default value of '1' will cause the fips module error
+           state to be entered.  If the value is '0' then the module error
+           state will not be entered.  Regardless of whether the error state
+           is entered or not, the current operation (e.g. key generation) will
+           return an error. The user is responsible for retrying the operation
+           if the module error state is not entered.
+
+       - A control to indicate whether run-time security checks are done.
+           This indicates if run-time checks related to enforcement of
+           security parameters such as minimum security strength of keys and
+           approved curve names are used.  The default value of '1' will
+           perform the checks.  If the value is '0' the checks are not
+           performed and FIPS compliance must be done by procedures documented
+           in the relevant Security Policy.
+
+       This file is described in ffiippss__ccoonnffiigg(5).
+
+OOPPTTIIOONNSS
+       --hheellpp
+           Print a usage message.
+
+       --mmoodduullee _f_i_l_e_n_a_m_e
+           Filename of the FIPS module to perform an integrity check on.  The
+           path provided in the filename is used to load the module when it is
+           activated, and this overrides the environment variable
+           OOPPEENNSSSSLL__MMOODDUULLEESS.
+
+       --oouutt _c_o_n_f_i_g_f_i_l_e_n_a_m_e
+           Filename to output the configuration data to; the default is
+           standard output.
+
+       --iinn _c_o_n_f_i_g_f_i_l_e_n_a_m_e
+           Input filename to load configuration data from.  Must be used if
+           the --vveerriiffyy option is specified.
+
+       --vveerriiffyy
+           Verify that the input configuration file contains the correct
+           information.
+
+       --pprroovviiddeerr__nnaammee _p_r_o_v_i_d_e_r_n_a_m_e
+           Name of the provider inside the configuration file.  The default
+           value is "fips".
+
+       --sseeccttiioonn__nnaammee _s_e_c_t_i_o_n_n_a_m_e
+           Name of the section inside the configuration file.  The default
+           value is "fips_sect".
+
+       --mmaacc__nnaammee _n_a_m_e
+           Specifies the name of a supported MAC algorithm which will be used.
+           The MAC mechanisms that are available will depend on the options
+           used when building OpenSSL.  To see the list of supported MAC's use
+           the command "openssl list -mac-algorithms".  The default is HHMMAACC.
+
+       --mmaaccoopptt _n_m:_v
+           Passes options to the MAC algorithm.  A comprehensive list of
+           controls can be found in the EVP_MAC implementation documentation.
+           Common control strings used for this command are:
+
+           kkeeyy:_s_t_r_i_n_g
+               Specifies the MAC key as an alphanumeric string (use if the key
+               contains printable characters only).  The string length must
+               conform to any restrictions of the MAC algorithm.  A key must
+               be specified for every MAC algorithm.  If no key is provided,
+               the default that was specified when OpenSSL was configured is
+               used.
+
+           hheexxkkeeyy:_s_t_r_i_n_g
+               Specifies the MAC key in hexadecimal form (two hex digits per
+               byte).  The key length must conform to any restrictions of the
+               MAC algorithm.  A key must be specified for every MAC
+               algorithm.  If no key is provided, the default that was
+               specified when OpenSSL was configured is used.
+
+           ddiiggeesstt:_s_t_r_i_n_g
+               Used by HMAC as an alphanumeric string (use if the key contains
+               printable characters only).  The string length must conform to
+               any restrictions of the MAC algorithm.  To see the list of
+               supported digests, use the command "openssl list
+               -digest-commands".  The default digest is SHA-256.
+
+       --nnoooouutt
+           Disable logging of the self tests.
+
+       --nnoo__ccoonnddiittiioonnaall__eerrrroorrss
+           Configure the module to not enter an error state if a conditional
+           self test fails as described above.
+
+       --nnoo__sseeccuurriittyy__cchheecckkss
+           Configure the module to not perform run-time security checks as
+           described above.
+
+       --sseellff__tteesstt__oonnllooaadd
+           Do not write the two fields related to the "test status indicator"
+           and "MAC status indicator" to the output configuration file.
+           Without these fields the self tests KATS will run each time the
+           module is loaded. This option could be used for cross compiling,
+           since the self tests need to run at least once on each target
+           machine. Once the self tests have run on the target machine the
+           user could possibly then add the 2 fields into the configuration
+           using some other mechanism.
+
+       --qquuiieett
+           Do not output pass/fail messages. Implies --nnoooouutt.
+
+       --ccoorrrruupptt__ddeesscc _s_e_l_f_t_e_s_t___d_e_s_c_r_i_p_t_i_o_n, --ccoorrrruupptt__ttyyppee _s_e_l_f_t_e_s_t___t_y_p_e
+           The corrupt options can be used to test failure of one or more self
+           tests by name.  Either option or both may be used to select the
+           tests to corrupt.  Refer to the entries for sstt--ddeesscc and sstt--ttyyppee in
+           OOSSSSLL__PPRROOVVIIDDEERR--FFIIPPSS(7) for values that can be used.
+
+       --ccoonnffiigg _p_a_r_e_n_t___c_o_n_f_i_g
+           Test that a FIPS provider can be loaded from the specified
+           configuration file.  A previous call to this application needs to
+           generate the extra configuration data that is included by the base
+           "parent_config" configuration file.  See ccoonnffiigg(5) for further
+           information on how to set up a provider section.  All other options
+           are ignored if '-config' is used.
+
+NNOOTTEESS
+       Self tests results are logged by default if the options --qquuiieett and
+       --nnoooouutt are not specified, or if either of the options --ccoorrrruupptt__ddeesscc or
+       --ccoorrrruupptt__ttyyppee are used.  If the base configuration file is set up to
+       autoload the fips module, then the fips module will be loaded and self
+       tested BEFORE the fipsinstall application has a chance to set up its
+       own self test callback. As a result of this the self test output and
+       the options --ccoorrrruupptt__ddeesscc and --ccoorrrruupptt__ttyyppee will be ignored.  For
+       normal usage the base configuration file should use the default
+       provider when generating the fips configuration file.
+
+EEXXAAMMPPLLEESS
+       Calculate the mac of a FIPS module _f_i_p_s_._s_o and run a FIPS self test for
+       the module, and save the _f_i_p_s_._c_n_f configuration file:
+
+        openssl fipsinstall -module ./fips.so -out fips.cnf -provider_name fips
+
+       Verify that the configuration file _f_i_p_s_._c_n_f contains the correct info:
+
+        openssl fipsinstall -module ./fips.so -in fips.cnf  -provider_name fips -verify
+
+       Corrupt any self tests which have the description "SHA1":
+
+        openssl fipsinstall -module ./fips.so -out fips.cnf -provider_name fips \
+                -corrupt_desc 'SHA1'
+
+       Validate that the fips module can be loaded from a base configuration
+       file:
+
+        export OPENSSL_CONF_INCLUDE=<path of configuration files>
+        export OPENSSL_MODULES=<provider-path>
+        openssl fipsinstall -config' 'default.cnf'
+
+SSEEEE AALLSSOO
+       ccoonnffiigg(5), ffiippss__ccoonnffiigg(5), OOSSSSLL__PPRROOVVIIDDEERR--FFIIPPSS(7), EEVVPP__MMAACC(3)
+
+CCOOPPYYRRIIGGHHTT
+       Copyright 2019-2021 The OpenSSL Project Authors. All Rights Reserved.
+
+       Licensed under the Apache License 2.0 (the "License").  You may not use
+       this file except in compliance with the License.  You can obtain a copy
+       in the file LICENSE in the source distribution or at
+       <https://www.openssl.org/source/license.html>.
+
+
+
+3.0.1                             2022-01-31        OPENSSL-FIPSINSTALL(1ossl)

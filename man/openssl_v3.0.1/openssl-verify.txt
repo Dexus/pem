@@ -1,0 +1,147 @@
+OPENSSL-VERIFY(1ossl)               OpenSSL              OPENSSL-VERIFY(1ossl)
+
+
+
+NNAAMMEE
+       openssl-verify - certificate verification command
+
+SSYYNNOOPPSSIISS
+       ooppeennssssll vveerriiffyy [--hheellpp] [--CCRRLLffiillee _f_i_l_e_n_a_m_e|_u_r_i] [--ccrrll__ddoowwnnllooaadd]
+       [--sshhooww__cchhaaiinn] [--vveerrbboossee] [--ttrruusstteedd _f_i_l_e_n_a_m_e|_u_r_i] [--uunnttrruusstteedd
+       _f_i_l_e_n_a_m_e|_u_r_i] [--vvffyyoopptt _n_m:_v] [--nnaammeeoopptt _o_p_t_i_o_n] [--CCAAffiillee _f_i_l_e]
+       [--nnoo--CCAAffiillee] [--CCAAppaatthh _d_i_r] [--nnoo--CCAAppaatthh] [--CCAAssttoorree _u_r_i] [--nnoo--CCAAssttoorree]
+       [--eennggiinnee _i_d] [--aallllooww__pprrooxxyy__cceerrttss] [--aattttiimmee _t_i_m_e_s_t_a_m_p] [--nnoo__cchheecckk__ttiimmee]
+       [--cchheecckk__ssss__ssiigg] [--ccrrll__cchheecckk] [--ccrrll__cchheecckk__aallll] [--eexxpplliicciitt__ppoolliiccyy]
+       [--eexxtteennddeedd__ccrrll] [--iiggnnoorree__ccrriittiiccaall] [--iinnhhiibbiitt__aannyy] [--iinnhhiibbiitt__mmaapp]
+       [--ppaarrttiiaall__cchhaaiinn] [--ppoolliiccyy _a_r_g] [--ppoolliiccyy__cchheecckk] [--ppoolliiccyy__pprriinntt]
+       [--ppuurrppoossee _p_u_r_p_o_s_e] [--ssuuiitteeBB__112288] [--ssuuiitteeBB__112288__oonnllyy] [--ssuuiitteeBB__119922]
+       [--ttrruusstteedd__ffiirrsstt] [--nnoo__aalltt__cchhaaiinnss] [--uussee__ddeellttaass] [--aauutthh__lleevveell _n_u_m]
+       [--vveerriiffyy__ddeepptthh _n_u_m] [--vveerriiffyy__eemmaaiill _e_m_a_i_l] [--vveerriiffyy__hhoossttnnaammee _h_o_s_t_n_a_m_e]
+       [--vveerriiffyy__iipp _i_p] [--vveerriiffyy__nnaammee _n_a_m_e] [--xx550099__ssttrriicctt] [--iissssuueerr__cchheecckkss]
+       [--pprroovviiddeerr _n_a_m_e] [--pprroovviiddeerr--ppaatthh _p_a_t_h] [--pprrooppqquueerryy _p_r_o_p_q] [----]
+       [_c_e_r_t_i_f_i_c_a_t_e ...]
+
+DDEESSCCRRIIPPTTIIOONN
+       This command verifies certificate chains. If a certificate chain has
+       multiple problems, this program attempts to display all of them.
+
+OOPPTTIIOONNSS
+       --hheellpp
+           Print out a usage message.
+
+       --CCRRLLffiillee _f_i_l_e_n_a_m_e|_u_r_i
+           The file or URI should contain one or more CRLs in PEM or DER
+           format.  This option can be specified more than once to include
+           CRLs from multiple sources.
+
+       --ccrrll__ddoowwnnllooaadd
+           Attempt to download CRL information for certificates via their CDP
+           entries.
+
+       --sshhooww__cchhaaiinn
+           Display information about the certificate chain that has been built
+           (if successful). Certificates in the chain that came from the
+           untrusted list will be flagged as "untrusted".
+
+       --vveerrbboossee
+           Print extra information about the operations being performed.
+
+       --ttrruusstteedd _f_i_l_e_n_a_m_e|_u_r_i
+           A file or URI of (more or less) trusted certificates.  See
+           ooppeennssssll--vveerriiffiiccaattiioonn--ooppttiioonnss(1) for more information on trust
+           settings.
+
+           This option can be specified more than once to load certificates
+           from multiple sources.
+
+       --uunnttrruusstteedd _f_i_l_e_n_a_m_e|_u_r_i
+           A file or URI of untrusted certificates to use for chain building.
+           This option can be specified more than once to load certificates
+           from multiple sources.
+
+       --vvffyyoopptt _n_m:_v
+           Pass options to the signature algorithm during verify operations.
+           Names and values of these options are algorithm-specific.
+
+       --nnaammeeoopptt _o_p_t_i_o_n
+           This specifies how the subject or issuer names are displayed.  See
+           ooppeennssssll--nnaammeeddiissppllaayy--ooppttiioonnss(1) for details.
+
+       --eennggiinnee _i_d
+           See "Engine Options" in ooppeennssssll(1).  This option is deprecated.
+
+           To load certificates or CRLs that require engine support, specify
+           the --eennggiinnee option before any of the --ttrruusstteedd, --uunnttrruusstteedd or
+           --CCRRLLffiillee options.
+
+       --CCAAffiillee _f_i_l_e, --nnoo--CCAAffiillee, --CCAAppaatthh _d_i_r, --nnoo--CCAAppaatthh, --CCAAssttoorree _u_r_i,
+       --nnoo--CCAAssttoorree
+           See "Trusted Certificate Options" in
+           ooppeennssssll--vveerriiffiiccaattiioonn--ooppttiioonnss(1) for details.
+
+       --aallllooww__pprrooxxyy__cceerrttss, --aattttiimmee, --nnoo__cchheecckk__ttiimmee, --cchheecckk__ssss__ssiigg, --ccrrll__cchheecckk,
+       --ccrrll__cchheecckk__aallll, --eexxpplliicciitt__ppoolliiccyy, --eexxtteennddeedd__ccrrll, --iiggnnoorree__ccrriittiiccaall,
+       --iinnhhiibbiitt__aannyy, --iinnhhiibbiitt__mmaapp, --nnoo__aalltt__cchhaaiinnss, --ppaarrttiiaall__cchhaaiinn, --ppoolliiccyy,
+       --ppoolliiccyy__cchheecckk, --ppoolliiccyy__pprriinntt, --ppuurrppoossee, --ssuuiitteeBB__112288, --ssuuiitteeBB__112288__oonnllyy,
+       --ssuuiitteeBB__119922, --ttrruusstteedd__ffiirrsstt, --uussee__ddeellttaass, --aauutthh__lleevveell, --vveerriiffyy__ddeepptthh,
+       --vveerriiffyy__eemmaaiill, --vveerriiffyy__hhoossttnnaammee, --vveerriiffyy__iipp, --vveerriiffyy__nnaammee, --xx550099__ssttrriicctt
+       --iissssuueerr__cchheecckkss
+           Set various options of certificate chain verification.  See
+           "Verification Options" in ooppeennssssll--vveerriiffiiccaattiioonn--ooppttiioonnss(1) for
+           details.
+
+       --pprroovviiddeerr _n_a_m_e
+       --pprroovviiddeerr--ppaatthh _p_a_t_h
+       --pprrooppqquueerryy _p_r_o_p_q
+           See "Provider Options" in ooppeennssssll(1), pprroovviiddeerr(7), and pprrooppeerrttyy(7).
+
+       ----  Indicates the last option. All arguments following this are assumed
+           to be certificate files. This is useful if the first certificate
+           filename begins with a --.
+
+       _c_e_r_t_i_f_i_c_a_t_e ...
+           One or more target certificates to verify, one per file. If no
+           certificates are given, this command will attempt to read a single
+           certificate from standard input.
+
+DDIIAAGGNNOOSSTTIICCSS
+       When a verify operation fails the output messages can be somewhat
+       cryptic. The general form of the error message is:
+
+        server.pem: /C=AU/ST=Queensland/O=CryptSoft Pty Ltd/CN=Test CA (1024 bit)
+        error 24 at 1 depth lookup:invalid CA certificate
+
+       The first line contains the name of the certificate being verified
+       followed by the subject name of the certificate. The second line
+       contains the error number and the depth. The depth is number of the
+       certificate being verified when a problem was detected starting with
+       zero for the target ("leaf") certificate itself then 1 for the CA that
+       signed the target certificate and so on.  Finally a textual version of
+       the error number is presented.
+
+       A list of the error codes and messages can be found in
+       XX550099__SSTTOORREE__CCTTXX__ggeett__eerrrroorr(3); the full list is defined in the header
+       file _<_o_p_e_n_s_s_l_/_x_5_0_9___v_f_y_._h_>.
+
+       This command ignores many errors, in order to allow all the problems
+       with a certificate chain to be determined.
+
+SSEEEE AALLSSOO
+       ooppeennssssll--vveerriiffiiccaattiioonn--ooppttiioonnss(1), ooppeennssssll--xx550099(1), oossssll__ssttoorree--ffiillee(7)
+
+HHIISSTTOORRYY
+       The --sshhooww__cchhaaiinn option was added in OpenSSL 1.1.0.
+
+       The --eennggiinnee ooppttiioonn was deprecated in OpenSSL 3.0.
+
+CCOOPPYYRRIIGGHHTT
+       Copyright 2000-2021 The OpenSSL Project Authors. All Rights Reserved.
+
+       Licensed under the Apache License 2.0 (the "License").  You may not use
+       this file except in compliance with the License.  You can obtain a copy
+       in the file LICENSE in the source distribution or at
+       <https://www.openssl.org/source/license.html>.
+
+
+
+3.0.1                             2022-01-31             OPENSSL-VERIFY(1ossl)

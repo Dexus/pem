@@ -1,0 +1,313 @@
+<!-- Creator     : groff version 1.22.4 -->
+<!-- CreationDate: Mon Jan 31 16:15:20 2022 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>CA.PL</title>
+
+</head>
+<body>
+
+<h1 align="center">CA.PL</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#OPTIONS">OPTIONS</a><br>
+<a href="#EXAMPLES">EXAMPLES</a><br>
+<a href="#ENVIRONMENT">ENVIRONMENT</a><br>
+<a href="#SEE ALSO">SEE ALSO</a><br>
+<a href="#COPYRIGHT">COPYRIGHT</a><br>
+
+<hr>
+
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">CA.pl -
+friendlier interface for OpenSSL certificate programs</p>
+
+<h2>SYNOPSIS
+<a name="SYNOPSIS"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b><small>CA</small>
+.pl -?</b> | <b>-h</b> | <b>-help</b></p>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b><small>CA</small>
+.pl -newcert</b> | <b>-newreq</b> | <b>-newreq-nodes</b> |
+<b>-xsign</b> | <b>-sign</b> | <b>-signCA</b> |
+<b>-signcert</b> | <b>-crl</b> | <b>-newca</b>
+[<b>-extra-</b><b><i>cmd</i></b> <i>parameter</i>]</p>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b><small>CA</small>
+.pl -pkcs12</b> [<i>certname</i>]</p>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b><small>CA</small>
+.pl -verify</b> <i>certfile</i> ...</p>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b><small>CA</small>
+.pl -revoke</b> <i>certfile</i> [<i>reason</i>]</p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The
+<b><small>CA</small> .pl</b> script is a perl script that
+supplies the relevant command line arguments to the
+<b>openssl</b>(1) command for some common certificate
+operations. It is intended to simplify the process of
+certificate creation and management by the use of some
+simple options.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The script is
+intended as a simple front end for the <b>openssl</b>(1)
+program for use by a beginner. Its behaviour isn&rsquo;t
+always what is wanted. For more control over the behaviour
+of the certificate commands call the <b>openssl</b>(1)
+command directly.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Most of the
+filenames mentioned below can be modified by editing the
+<b><small>CA</small> .pl</b> script.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Under some
+environments it may not be possible to run the
+<b><small>CA</small> .pl</b> script directly (for example
+Win32) and the default configuration file location may be
+wrong. In this case the command:</p>
+
+<p style="margin-left:11%; margin-top: 1em">perl -S
+CA.pl</p>
+
+<p style="margin-left:11%; margin-top: 1em">can be used and
+the <b><small>OPENSSL_CONF</small></b> environment variable
+can be set to point to the correct path of the configuration
+file.</p>
+
+<h2>OPTIONS
+<a name="OPTIONS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>-?</b>,
+<b>-h</b>, <b>-help</b></p>
+
+<p style="margin-left:17%;">Prints a usage message.</p>
+
+<p style="margin-left:11%;"><b>-newcert</b></p>
+
+<p style="margin-left:17%;">Creates a new self signed
+certificate. The private key is written to the file
+<i>newkey.pem</i> and the request written to the file
+<i>newreq.pem</i>. Invokes <b>openssl-req</b>(1).</p>
+
+<p style="margin-left:11%;"><b>-newreq</b></p>
+
+<p style="margin-left:17%;">Creates a new certificate
+request. The private key is written to the file
+<i>newkey.pem</i> and the request written to the file
+<i>newreq.pem</i>. Executes <b>openssl-req</b>(1) under the
+hood.</p>
+
+<p style="margin-left:11%;"><b>-newreq-nodes</b></p>
+
+<p style="margin-left:17%;">Is like <b>-newreq</b> except
+that the private key will not be encrypted. Uses
+<b>openssl-req</b>(1).</p>
+
+<p style="margin-left:11%;"><b>-newca</b></p>
+
+<p style="margin-left:17%;">Creates a new <small>CA</small>
+hierarchy for use with the <b>ca</b> program (or the
+<b>-signcert</b> and <b>-xsign</b> options). The user is
+prompted to enter the filename of the <small>CA</small>
+certificates (which should also contain the private key) or
+by hitting <small>ENTER</small> details of the
+<small>CA</small> will be prompted for. The relevant files
+and directories are created in a directory called
+<i>demoCA</i> in the current directory. Uses
+<b>openssl-req</b>(1) and <b>openssl-ca</b>(1).</p>
+
+<p style="margin-left:17%; margin-top: 1em">If the
+<i>demoCA</i> directory already exists then the
+<b>-newca</b> command will not overwrite it and will do
+nothing. This can happen if a previous call using the
+<b>-newca</b> option terminated abnormally. To get the
+correct behaviour delete the directory if it already
+exists.</p>
+
+<p style="margin-left:11%;"><b>-pkcs12</b></p>
+
+<p style="margin-left:17%;">Create a PKCS#12 file
+containing the user certificate, private key and
+<small>CA</small> certificate. It expects the user
+certificate and private key to be in the file
+<i>newcert.pem</i> and the <small>CA</small> certificate to
+be in the file <i>demoCA/cacert.pem</i>, it creates a file
+<i>newcert.p12</i>. This command can thus be called after
+the <b>-sign</b> option. The PKCS#12 file can be imported
+directly into a browser. If there is an additional argument
+on the command line it will be used as the &quot;friendly
+name&quot; for the certificate (which is typically displayed
+in the browser list box), otherwise the name &quot;My
+Certificate&quot; is used. Delegates work to
+<b>openssl-pkcs12</b>(1).</p>
+
+<p style="margin-left:11%;"><b>-sign</b>, <b>-signcert</b>,
+<b>-xsign</b></p>
+
+<p style="margin-left:17%;">Calls the <b>openssl-ca</b>(1)
+command to sign a certificate request. It expects the
+request to be in the file <i>newreq.pem</i>. The new
+certificate is written to the file <i>newcert.pem</i> except
+in the case of the <b>-xsign</b> option when it is written
+to standard output.</p>
+
+<p style="margin-left:11%;"><b>-signCA</b></p>
+
+<p style="margin-left:17%;">This option is the same as the
+<b>-sign</b> option except it uses the configuration file
+section <b>v3_ca</b> and so makes the signed request a valid
+<small>CA</small> certificate. This is useful when creating
+intermediate <small>CA</small> from a root
+<small>CA.</small> Extra params are passed to
+<b>openssl-ca</b>(1).</p>
+
+<p style="margin-left:11%;"><b>-signcert</b></p>
+
+<p style="margin-left:17%;">This option is the same as
+<b>-sign</b> except it expects a self signed certificate to
+be present in the file <i>newreq.pem</i>. Extra params are
+passed to <b>openssl-x509</b>(1) and
+<b>openssl-ca</b>(1).</p>
+
+<p style="margin-left:11%;"><b>-crl</b></p>
+
+<p style="margin-left:17%;">Generate a <small>CRL.</small>
+Executes <b>openssl-ca</b>(1).</p>
+
+<p style="margin-left:11%;"><b>-revoke</b> <i>certfile</i>
+[<i>reason</i>]</p>
+
+<p style="margin-left:17%;">Revoke the certificate
+contained in the specified <b>certfile</b>. An optional
+reason may be specified, and must be one of:
+<b>unspecified</b>, <b>keyCompromise</b>,
+<b>CACompromise</b>, <b>affiliationChanged</b>,
+<b>superseded</b>, <b>cessationOfOperation</b>,
+<b>certificateHold</b>, or <b>removeFromCRL</b>. Leverages
+<b>openssl-ca</b>(1).</p>
+
+<p style="margin-left:11%;"><b>-verify</b></p>
+
+<p style="margin-left:17%;">Verifies certificates against
+the <small>CA</small> certificate for <i>demoCA</i>. If no
+certificates are specified on the command line it tries to
+verify the file <i>newcert.pem</i>. Invokes
+<b>openssl-verify</b>(1).</p>
+
+
+<p style="margin-left:11%;"><b>-extra-</b><b><i>cmd</i></b>
+<i>parameter</i></p>
+
+<p style="margin-left:17%;">For each option
+<b>extra-</b><b><i>cmd</i></b>, pass <i>parameter</i> to the
+<b>openssl</b>(1) sub-command with the same name as
+<i>cmd</i>, if that sub-command is invoked. For example, if
+<b>openssl-req</b>(1) is invoked, the <i>parameter</i> given
+with <b>-extra-req</b> will be passed to it. For multi-word
+parameters, either repeat the option or quote the
+<i>parameters</i> so it looks like one word to your shell.
+See the individual command documentation for more
+information.</p>
+
+<h2>EXAMPLES
+<a name="EXAMPLES"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Create a
+<small>CA</small> hierarchy:</p>
+
+<p style="margin-left:11%; margin-top: 1em">CA.pl
+-newca</p>
+
+<p style="margin-left:11%; margin-top: 1em">Complete
+certificate creation example: create a <small>CA,</small>
+create a request, sign the request and finally create a
+PKCS#12 file containing it.</p>
+
+<p style="margin-left:11%; margin-top: 1em">CA.pl -newca
+<br>
+CA.pl -newreq <br>
+CA.pl -sign <br>
+CA.pl -pkcs12 &quot;My Test Certificate&quot;</p>
+
+<h2>ENVIRONMENT
+<a name="ENVIRONMENT"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The environment
+variable <b><small>OPENSSL</small></b> may be used to
+specify the name of the OpenSSL program. It can be a full
+pathname, or a relative one.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The environment
+variable <b><small>OPENSSL_CONFIG</small></b> may be used to
+specify a configuration option and value to the <b>req</b>
+and <b>ca</b> commands invoked by this script. It&rsquo;s
+value should be the option and pathname, as in &quot;-config
+/path/to/conf-file&quot;.</p>
+
+<h2>SEE ALSO
+<a name="SEE ALSO"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>openssl</b>(1),
+<b>openssl-x509</b>(1), <b>openssl-ca</b>(1),
+<b>openssl-req</b>(1), <b>openssl-pkcs12</b>(1),
+<b>config</b>(5)</p>
+
+<h2>COPYRIGHT
+<a name="COPYRIGHT"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Copyright
+2000-2021 The OpenSSL Project Authors. All Rights
+Reserved.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Licensed under
+the Apache License 2.0 (the &quot;License&quot;). You may
+not use this file except in compliance with the License. You
+can obtain a copy in the file <small>LICENSE</small> in the
+source distribution or at
+&lt;https://www.openssl.org/source/license.html&gt;.</p>
+<hr>
+</body>
+</html>

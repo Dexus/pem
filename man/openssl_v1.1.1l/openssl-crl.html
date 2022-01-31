@@ -1,0 +1,223 @@
+<!-- Creator     : groff version 1.22.4 -->
+<!-- CreationDate: Mon Jan 31 16:15:15 2022 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>CRL</title>
+
+</head>
+<body>
+
+<h1 align="center">CRL</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#OPTIONS">OPTIONS</a><br>
+<a href="#NOTES">NOTES</a><br>
+<a href="#EXAMPLES">EXAMPLES</a><br>
+<a href="#BUGS">BUGS</a><br>
+<a href="#SEE ALSO">SEE ALSO</a><br>
+<a href="#COPYRIGHT">COPYRIGHT</a><br>
+
+<hr>
+
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">openssl-crl,
+crl - CRL utility</p>
+
+<h2>SYNOPSIS
+<a name="SYNOPSIS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>openssl
+crl</b> [<b>-help</b>] [<b>-inform PEM|DER</b>] [<b>-outform
+PEM|DER</b>] [<b>-text</b>] [<b>-in filename</b>] [<b>-out
+filename</b>] [<b>-nameopt option</b>] [<b>-noout</b>]
+[<b>-hash</b>] [<b>-issuer</b>] [<b>-lastupdate</b>]
+[<b>-nextupdate</b>] [<b>-CAfile file</b>] [<b>-CApath
+dir</b>]</p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The <b>crl</b>
+command processes <small>CRL</small> files in
+<small>DER</small> or <small>PEM</small> format.</p>
+
+<h2>OPTIONS
+<a name="OPTIONS"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>-help</b></p>
+
+<p style="margin-left:17%;">Print out a usage message.</p>
+
+<p style="margin-left:11%;"><b>-inform DER|PEM</b></p>
+
+<p style="margin-left:17%;">This specifies the input
+format. <b><small>DER</small></b> format is
+<small>DER</small> encoded <small>CRL</small> structure.
+<b><small>PEM</small></b> (the default) is a base64 encoded
+version of the <small>DER</small> form with header and
+footer lines.</p>
+
+<p style="margin-left:11%;"><b>-outform DER|PEM</b></p>
+
+<p style="margin-left:17%;">This specifies the output
+format, the options have the same meaning and default as the
+<b>-inform</b> option.</p>
+
+<p style="margin-left:11%;"><b>-in filename</b></p>
+
+<p style="margin-left:17%;">This specifies the input
+filename to read from or standard input if this option is
+not specified.</p>
+
+<p style="margin-left:11%;"><b>-out filename</b></p>
+
+<p style="margin-left:17%;">Specifies the output filename
+to write to or standard output by default.</p>
+
+<p style="margin-left:11%;"><b>-text</b></p>
+
+<p style="margin-left:17%;">Print out the
+<small>CRL</small> in text form.</p>
+
+<p style="margin-left:11%;"><b>-nameopt option</b></p>
+
+<p style="margin-left:17%;">Option which determines how the
+subject or issuer names are displayed. See the description
+of <b>-nameopt</b> in <b>x509</b>(1).</p>
+
+<p style="margin-left:11%;"><b>-noout</b></p>
+
+<p style="margin-left:17%;">Don&rsquo;t output the encoded
+version of the <small>CRL.</small></p>
+
+<p style="margin-left:11%;"><b>-hash</b></p>
+
+<p style="margin-left:17%;">Output a hash of the issuer
+name. This can be use to lookup CRLs in a directory by
+issuer name.</p>
+
+<p style="margin-left:11%;"><b>-hash_old</b></p>
+
+<p style="margin-left:17%;">Outputs the &quot;hash&quot; of
+the <small>CRL</small> issuer name using the older algorithm
+as used by OpenSSL before version 1.0.0.</p>
+
+<p style="margin-left:11%;"><b>-issuer</b></p>
+
+<p style="margin-left:17%;">Output the issuer name.</p>
+
+<p style="margin-left:11%;"><b>-lastupdate</b></p>
+
+<p style="margin-left:17%;">Output the lastUpdate
+field.</p>
+
+<p style="margin-left:11%;"><b>-nextupdate</b></p>
+
+<p style="margin-left:17%;">Output the nextUpdate
+field.</p>
+
+<p style="margin-left:11%;"><b>-CAfile file</b></p>
+
+<p style="margin-left:17%;">Verify the signature on a
+<small>CRL</small> by looking up the issuing certificate in
+<b>file</b>.</p>
+
+<p style="margin-left:11%;"><b>-CApath dir</b></p>
+
+<p style="margin-left:17%;">Verify the signature on a
+<small>CRL</small> by looking up the issuing certificate in
+<b>dir</b>. This directory must be a standard certificate
+directory: that is a hash of each subject name (using
+<b>x509 -hash</b>) should be linked to each certificate.</p>
+
+<h2>NOTES
+<a name="NOTES"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The <small>PEM
+CRL</small> format uses the header and footer lines:</p>
+
+<p style="margin-left:11%; margin-top: 1em">-----BEGIN X509
+CRL----- <br>
+-----END X509 CRL-----</p>
+
+<h2>EXAMPLES
+<a name="EXAMPLES"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Convert a
+<small>CRL</small> file from <small>PEM</small> to
+<small>DER:</small></p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl crl -in
+crl.pem -outform DER -out crl.der</p>
+
+<p style="margin-left:11%; margin-top: 1em">Output the text
+form of a <small>DER</small> encoded certificate:</p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl crl -in
+crl.der -inform DER -text -noout</p>
+
+<h2>BUGS
+<a name="BUGS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Ideally it
+should be possible to create a <small>CRL</small> using
+appropriate options and files too.</p>
+
+<h2>SEE ALSO
+<a name="SEE ALSO"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>crl2pkcs7</b>(1),
+<b>ca</b>(1), <b>x509</b>(1)</p>
+
+<h2>COPYRIGHT
+<a name="COPYRIGHT"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Copyright
+2000-2018 The OpenSSL Project Authors. All Rights
+Reserved.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Licensed under
+the OpenSSL license (the &quot;License&quot;). You may not
+use this file except in compliance with the License. You can
+obtain a copy in the file <small>LICENSE</small> in the
+source distribution or at
+&lt;https://www.openssl.org/source/license.html&gt;.</p>
+<hr>
+</body>
+</html>

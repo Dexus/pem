@@ -1,0 +1,741 @@
+<!-- Creator     : groff version 1.22.4 -->
+<!-- CreationDate: Mon Jan 31 16:14:54 2022 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>SMIME</title>
+
+</head>
+<body>
+
+<h1 align="center">SMIME</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#OPTIONS">OPTIONS</a><br>
+<a href="#NOTES">NOTES</a><br>
+<a href="#EXIT CODES">EXIT CODES</a><br>
+<a href="#EXAMPLES">EXAMPLES</a><br>
+<a href="#BUGS">BUGS</a><br>
+<a href="#HISTORY">HISTORY</a><br>
+<a href="#COPYRIGHT">COPYRIGHT</a><br>
+
+<hr>
+
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">openssl-smime,
+smime - S/MIME utility</p>
+
+<h2>SYNOPSIS
+<a name="SYNOPSIS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>openssl
+smime</b> [<b>-help</b>] [<b>-encrypt</b>] [<b>-decrypt</b>]
+[<b>-sign</b>] [<b>-resign</b>] [<b>-verify</b>]
+[<b>-pk7out</b>] [<b>-binary</b>] [<b>-crlfeol</b>]
+[<b>-[cipher]</b>] [<b>-in file</b>] [<b>-CAfile file</b>]
+[<b>-CApath dir</b>] [<b>-no-CAfile</b>] [<b>-no-CApath</b>]
+[<b>-attime timestamp</b>] [<b>-check_ss_sig</b>]
+[<b>-crl_check</b>] [<b>-crl_check_all</b>]
+[<b>-explicit_policy</b>] [<b>-extended_crl</b>]
+[<b>-ignore_critical</b>] [<b>-inhibit_any</b>]
+[<b>-inhibit_map</b>] [<b>-partial_chain</b>] [<b>-policy
+arg</b>] [<b>-policy_check</b>] [<b>-policy_print</b>]
+[<b>-purpose purpose</b>] [<b>-suiteB_128</b>]
+[<b>-suiteB_128_only</b>] [<b>-suiteB_192</b>]
+[<b>-trusted_first</b>] [<b>-no_alt_chains</b>]
+[<b>-use_deltas</b>] [<b>-auth_level num</b>]
+[<b>-verify_depth num</b>] [<b>-verify_email email</b>]
+[<b>-verify_hostname hostname</b>] [<b>-verify_ip ip</b>]
+[<b>-verify_name name</b>] [<b>-x509_strict</b>]
+[<b>-certfile file</b>] [<b>-signer file</b>] [<b>-recip
+file</b>] [<b>-inform SMIME|PEM|DER</b>] [<b>-passin
+arg</b>] [<b>-inkey file_or_id</b>] [<b>-out file</b>]
+[<b>-outform SMIME|PEM|DER</b>] [<b>-content file</b>]
+[<b>-to addr</b>] [<b>-from ad</b>] [<b>-subject s</b>]
+[<b>-text</b>] [<b>-indef</b>] [<b>-noindef</b>]
+[<b>-stream</b>] [<b>-rand file(s)</b>] [<b>-md digest</b>]
+[cert.pem]...</p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The
+<b>smime</b> command handles S/MIME mail. It can encrypt,
+decrypt, sign and verify S/MIME messages.</p>
+
+<h2>OPTIONS
+<a name="OPTIONS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">There are six
+operation options that set the type of operation to be
+performed. The meaning of the other options varies according
+to the operation type. <b><br>
+-help</b></p>
+
+<p style="margin-left:17%;">Print out a usage message.</p>
+
+<p style="margin-left:11%;"><b>-encrypt</b></p>
+
+<p style="margin-left:17%;">encrypt mail for the given
+recipient certificates. Input file is the message to be
+encrypted. The output file is the encrypted mail in
+<small>MIME</small> format.</p>
+
+<p style="margin-left:17%; margin-top: 1em">Note that no
+revocation check is done for the recipient cert, so if that
+key has been compromised, others may be able to decrypt the
+text.</p>
+
+<p style="margin-left:11%;"><b>-decrypt</b></p>
+
+<p style="margin-left:17%;">decrypt mail using the supplied
+certificate and private key. Expects an encrypted mail
+message in <small>MIME</small> format for the input file.
+The decrypted mail is written to the output file.</p>
+
+<p style="margin-left:11%;"><b>-sign</b></p>
+
+<p style="margin-left:17%;">sign mail using the supplied
+certificate and private key. Input file is the message to be
+signed. The signed message in <small>MIME</small> format is
+written to the output file.</p>
+
+<p style="margin-left:11%;"><b>-verify</b></p>
+
+<p style="margin-left:17%;">verify signed mail. Expects a
+signed mail message on input and outputs the signed data.
+Both clear text and opaque signing is supported.</p>
+
+<p style="margin-left:11%;"><b>-pk7out</b></p>
+
+<p style="margin-left:17%;">takes an input message and
+writes out a <small>PEM</small> encoded PKCS#7
+structure.</p>
+
+<p style="margin-left:11%;"><b>-resign</b></p>
+
+<p style="margin-left:17%;">resign a message: take an
+existing message and one or more new signers.</p>
+
+<p style="margin-left:11%;"><b>-in filename</b></p>
+
+<p style="margin-left:17%;">the input message to be
+encrypted or signed or the <small>MIME</small> message to be
+decrypted or verified.</p>
+
+<p style="margin-left:11%;"><b>-inform
+SMIME|PEM|DER</b></p>
+
+<p style="margin-left:17%;">this specifies the input format
+for the PKCS#7 structure. The default is
+<b><small>SMIME</small></b> which reads an S/MIME format
+message. <b><small>PEM</small></b> and
+<b><small>DER</small></b> format change this to expect
+<small>PEM</small> and <small>DER</small> format PKCS#7
+structures instead. This currently only affects the input
+format of the PKCS#7 structure, if no PKCS#7 structure is
+being input (for example with <b>-encrypt</b> or
+<b>-sign</b>) this option has no effect.</p>
+
+<p style="margin-left:11%;"><b>-out filename</b></p>
+
+<p style="margin-left:17%;">the message text that has been
+decrypted or verified or the output <small>MIME</small>
+format message that has been signed or verified.</p>
+
+<p style="margin-left:11%;"><b>-outform
+SMIME|PEM|DER</b></p>
+
+<p style="margin-left:17%;">this specifies the output
+format for the PKCS#7 structure. The default is
+<b><small>SMIME</small></b> which write an S/MIME format
+message. <b><small>PEM</small></b> and
+<b><small>DER</small></b> format change this to write
+<small>PEM</small> and <small>DER</small> format PKCS#7
+structures instead. This currently only affects the output
+format of the PKCS#7 structure, if no PKCS#7 structure is
+being output (for example with <b>-verify</b> or
+<b>-decrypt</b>) this option has no effect.</p>
+
+<p style="margin-left:11%;"><b>-stream -indef
+-noindef</b></p>
+
+<p style="margin-left:17%;">the <b>-stream</b> and
+<b>-indef</b> options are equivalent and enable streaming
+I/O for encoding operations. This permits single pass
+processing of data without the need to hold the entire
+contents in memory, potentially supporting very large files.
+Streaming is automatically set for S/MIME signing with
+detached data if the output format is
+<b><small>SMIME</small></b> it is currently off by default
+for all other operations.</p>
+
+<p style="margin-left:11%;"><b>-noindef</b></p>
+
+<p style="margin-left:17%;">disable streaming I/O where it
+would produce and indefinite length constructed encoding.
+This option currently has no effect. In future streaming
+will be enabled by default on all relevant operations and
+this option will disable it.</p>
+
+<p style="margin-left:11%;"><b>-content filename</b></p>
+
+<p style="margin-left:17%;">This specifies a file
+containing the detached content, this is only useful with
+the <b>-verify</b> command. This is only usable if the
+PKCS#7 structure is using the detached signature form where
+the content is not included. This option will override any
+content if the input format is S/MIME and it uses the
+multipart/signed <small>MIME</small> content type.</p>
+
+<p style="margin-left:11%;"><b>-text</b></p>
+
+<p style="margin-left:17%;">this option adds plain text
+(text/plain) <small>MIME</small> headers to the supplied
+message if encrypting or signing. If decrypting or verifying
+it strips off text headers: if the decrypted or verified
+message is not of <small>MIME</small> type text/plain then
+an error occurs.</p>
+
+<p style="margin-left:11%;"><b>-CAfile file</b></p>
+
+<p style="margin-left:17%;">a file containing trusted
+<small>CA</small> certificates, only used with
+<b>-verify</b>.</p>
+
+<p style="margin-left:11%;"><b>-CApath dir</b></p>
+
+<p style="margin-left:17%;">a directory containing trusted
+<small>CA</small> certificates, only used with
+<b>-verify</b>. This directory must be a standard
+certificate directory: that is a hash of each subject name
+(using <b>x509 -hash</b>) should be linked to each
+certificate.</p>
+
+<p style="margin-left:11%;"><b>-no-CAfile</b></p>
+
+<p style="margin-left:17%;">Do not load the trusted
+<small>CA</small> certificates from the default file
+location</p>
+
+<p style="margin-left:11%;"><b>-no-CApath</b></p>
+
+<p style="margin-left:17%;">Do not load the trusted
+<small>CA</small> certificates from the default directory
+location</p>
+
+<p style="margin-left:11%;"><b>-md digest</b></p>
+
+<p style="margin-left:17%;">digest algorithm to use when
+signing or resigning. If not present then the default digest
+algorithm for the signing key will be used (usually
+<small>SHA1</small> ).</p>
+
+<p style="margin-left:11%;"><b>-[cipher]</b></p>
+
+<p style="margin-left:17%;">the encryption algorithm to
+use. For example <small>DES</small> (56 bits) - <b>-des</b>,
+triple <small>DES</small> (168 bits) - <b>-des3</b>,
+<b>EVP_get_cipherbyname()</b> function) can also be used
+preceded by a dash, for example <b>-aes-128-cbc</b>. See
+<b>enc</b> for list of ciphers supported by your version of
+OpenSSL.</p>
+
+<p style="margin-left:17%; margin-top: 1em">If not
+specified triple <small>DES</small> is used. Only used with
+<b>-encrypt</b>.</p>
+
+<p style="margin-left:11%;"><b>-nointern</b></p>
+
+<p style="margin-left:17%;">when verifying a message
+normally certificates (if any) included in the message are
+searched for the signing certificate. With this option only
+the certificates specified in the <b>-certfile</b> option
+are used. The supplied certificates can still be used as
+untrusted CAs however.</p>
+
+<p style="margin-left:11%;"><b>-noverify</b></p>
+
+<p style="margin-left:17%;">do not verify the signers
+certificate of a signed message.</p>
+
+<p style="margin-left:11%;"><b>-nochain</b></p>
+
+<p style="margin-left:17%;">do not do chain verification of
+signers certificates: that is don&rsquo;t use the
+certificates in the signed message as untrusted CAs.</p>
+
+<p style="margin-left:11%;"><b>-nosigs</b></p>
+
+<p style="margin-left:17%;">don&rsquo;t try to verify the
+signatures on the message.</p>
+
+<p style="margin-left:11%;"><b>-nocerts</b></p>
+
+<p style="margin-left:17%;">when signing a message the
+signer&rsquo;s certificate is normally included with this
+option it is excluded. This will reduce the size of the
+signed message but the verifier must have a copy of the
+signers certificate available locally (passed using the
+<b>-certfile</b> option for example).</p>
+
+<p style="margin-left:11%;"><b>-noattr</b></p>
+
+<p style="margin-left:17%;">normally when a message is
+signed a set of attributes are included which include the
+signing time and supported symmetric algorithms. With this
+option they are not included.</p>
+
+<p style="margin-left:11%;"><b>-binary</b></p>
+
+<p style="margin-left:17%;">normally the input message is
+converted to &quot;canonical&quot; format which is
+effectively using <small>CR</small> and <small>LF</small> as
+end of line: as required by the S/MIME specification. When
+this option is present no translation occurs. This is useful
+when handling binary data which may not be in
+<small>MIME</small> format.</p>
+
+<p style="margin-left:11%;"><b>-crlfeol</b></p>
+
+<p style="margin-left:17%;">normally the output file uses a
+single <b><small>LF</small></b> as end of line. When this
+option is present <b><small>CRLF</small></b> is used
+instead.</p>
+
+<p style="margin-left:11%;"><b>-nodetach</b></p>
+
+<p style="margin-left:17%;">when signing a message use
+opaque signing: this form is more resistant to translation
+by mail relays but it cannot be read by mail agents that do
+not support S/MIME. Without this option cleartext signing
+with the <small>MIME</small> type multipart/signed is
+used.</p>
+
+<p style="margin-left:11%;"><b>-certfile file</b></p>
+
+<p style="margin-left:17%;">allows additional certificates
+to be specified. When signing these will be included with
+the message. When verifying these will be searched for the
+signers certificates. The certificates should be in
+<small>PEM</small> format.</p>
+
+<p style="margin-left:11%;"><b>-signer file</b></p>
+
+<p style="margin-left:17%;">a signing certificate when
+signing or resigning a message, this option can be used
+multiple times if more than one signer is required. If a
+message is being verified then the signers certificates will
+be written to this file if the verification was
+successful.</p>
+
+<p style="margin-left:11%;"><b>-recip file</b></p>
+
+<p style="margin-left:17%;">the recipients certificate when
+decrypting a message. This certificate must match one of the
+recipients of the message or an error occurs.</p>
+
+<p style="margin-left:11%;"><b>-inkey file_or_id</b></p>
+
+<p style="margin-left:17%;">the private key to use when
+signing or decrypting. This must match the corresponding
+certificate. If this option is not specified then the
+private key must be included in the certificate file
+specified with the <b>-recip</b> or <b>-signer</b> file.
+When signing this option can be used multiple times to
+specify successive keys. If no engine is used, the argument
+is taken as a file; if an engine is specified, the argument
+is given to the engine as a key identifier.</p>
+
+<p style="margin-left:11%;"><b>-passin arg</b></p>
+
+<p style="margin-left:17%;">the private key password
+source. For more information about the format of <b>arg</b>
+see the <b><small>PASS PHRASE ARGUMENTS</small></b> section
+in <b>openssl</b>(1).</p>
+
+<p style="margin-left:11%;"><b>-rand file(s)</b></p>
+
+<p style="margin-left:17%;">a file or files containing
+random data used to seed the random number generator, or an
+<small>EGD</small> socket (see <b>RAND_egd</b>(3)). Multiple
+files can be specified separated by an OS-dependent
+character. The separator is <b>;</b> for MS-Windows,
+<b>,</b> for OpenVMS, and <b>:</b> for all others.</p>
+
+<p style="margin-left:11%;"><b>cert.pem...</b></p>
+
+<p style="margin-left:17%;">one or more certificates of
+message recipients: used when encrypting a message.</p>
+
+<p style="margin-left:11%;"><b>-to, -from, -subject</b></p>
+
+<p style="margin-left:17%;">the relevant mail headers.
+These are included outside the signed portion of a message
+so they may be included manually. If signing then many
+S/MIME mail clients check the signers certificate&rsquo;s
+email address matches that specified in the From:
+address.</p>
+
+<p style="margin-left:11%;"><b>-attime</b>,
+<b>-check_ss_sig</b>, <b>-crl_check</b>,
+<b>-crl_check_all</b>, <b>-explicit_policy</b>, <b><br>
+-extended_crl</b>, <b>-ignore_critical</b>,
+<b>-inhibit_any</b>, <b>-inhibit_map</b>, <b><br>
+-no_alt_chains</b>, <b>-partial_chain</b>, <b>-policy</b>,
+<b>-policy_check</b>, <b>-policy_print</b>, <b><br>
+-purpose</b>, <b>-suiteB_128</b>, <b>-suiteB_128_only</b>,
+<b>-suiteB_192</b>, <b>-trusted_first</b>, <b><br>
+-use_deltas</b>, <b>-auth_level</b>, <b>-verify_depth</b>,
+<b>-verify_email</b>, <b><br>
+-verify_hostname</b>, <b>-verify_ip</b>,
+<b>-verify_name</b>, <b>-x509_strict</b></p>
+
+<p style="margin-left:17%;">Set various options of
+certificate chain verification. See <b>verify</b>(1) manual
+page for details.</p>
+
+<h2>NOTES
+<a name="NOTES"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The
+<small>MIME</small> message must be sent without any blank
+lines between the headers and the output. Some mail programs
+will automatically add a blank line. Piping the mail
+directly to sendmail is one way to achieve the correct
+format.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The supplied
+message to be signed or encrypted must include the necessary
+<small>MIME</small> headers or many S/MIME clients
+won&rsquo;t display it properly (if at all). You can use the
+<b>-text</b> option to automatically add plain text
+headers.</p>
+
+<p style="margin-left:11%; margin-top: 1em">A &quot;signed
+and encrypted&quot; message is one where a signed message is
+then encrypted. This can be produced by encrypting an
+already signed message: see the examples section.</p>
+
+<p style="margin-left:11%; margin-top: 1em">This version of
+the program only allows one signer per message but it will
+verify multiple signers on received messages. Some S/MIME
+clients choke if a message contains multiple signers. It is
+possible to sign messages &quot;in parallel&quot; by signing
+an already signed message.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The options
+<b>-encrypt</b> and <b>-decrypt</b> reflect common usage in
+S/MIME clients. Strictly speaking these process PKCS#7
+enveloped data: PKCS#7 encrypted data is used for other
+purposes.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The
+<b>-resign</b> option uses an existing message digest when
+adding a new signer. This means that attributes must be
+present in at least one existing signer using the same
+message digest or this operation will fail.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The
+<b>-stream</b> and <b>-indef</b> options enable streaming
+I/O support. As a result the encoding is <small>BER</small>
+using indefinite length constructed encoding and no longer
+<small>DER.</small> Streaming is supported for the
+<b>-encrypt</b> operation and the <b>-sign</b> operation if
+the content is not detached.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Streaming is
+always used for the <b>-sign</b> operation with detached
+data but since the content is no longer part of the PKCS#7
+structure the encoding remains <small>DER.</small></p>
+
+<h2>EXIT CODES
+<a name="EXIT CODES"></a>
+</h2>
+
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="1%">
+
+
+<p style="margin-top: 1em">0</p></td>
+<td width="5%"></td>
+<td width="83%">
+
+
+<p style="margin-top: 1em">the operation was completely
+successfully.</p> </td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="1%">
+
+
+<p>1</p></td>
+<td width="5%"></td>
+<td width="83%">
+
+
+<p>an error occurred parsing the command options.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="1%">
+
+
+<p>2</p></td>
+<td width="5%"></td>
+<td width="83%">
+
+
+<p>one of the input files could not be read.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="1%">
+
+
+<p>3</p></td>
+<td width="5%"></td>
+<td width="83%">
+
+
+<p>an error occurred creating the PKCS#7 file or when
+reading the <small>MIME</small> message.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="1%">
+
+
+<p>4</p></td>
+<td width="5%"></td>
+<td width="83%">
+
+
+<p>an error occurred decrypting or verifying the
+message.</p> </td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="1%">
+
+
+<p>5</p></td>
+<td width="5%"></td>
+<td width="83%">
+
+
+<p>the message was verified correctly but an error occurred
+writing out the signers certificates.</p></td></tr>
+</table>
+
+<h2>EXAMPLES
+<a name="EXAMPLES"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Create a
+cleartext signed message:</p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl smime
+-sign -in message.txt -text -out mail.msg \ <br>
+-signer mycert.pem</p>
+
+<p style="margin-left:11%; margin-top: 1em">Create an
+opaque signed message:</p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl smime
+-sign -in message.txt -text -out mail.msg -nodetach \ <br>
+-signer mycert.pem</p>
+
+<p style="margin-left:11%; margin-top: 1em">Create a signed
+message, include some additional certificates and read the
+private key from another file:</p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl smime
+-sign -in in.txt -text -out mail.msg \ <br>
+-signer mycert.pem -inkey mykey.pem -certfile
+mycerts.pem</p>
+
+<p style="margin-left:11%; margin-top: 1em">Create a signed
+message with two signers:</p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl smime
+-sign -in message.txt -text -out mail.msg \ <br>
+-signer mycert.pem -signer othercert.pem</p>
+
+<p style="margin-left:11%; margin-top: 1em">Send a signed
+message under Unix directly to sendmail, including
+headers:</p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl smime
+-sign -in in.txt -text -signer mycert.pem \ <br>
+-from steve@openssl.org -to someone@somewhere \ <br>
+-subject &quot;Signed message&quot; | sendmail
+someone@somewhere</p>
+
+<p style="margin-left:11%; margin-top: 1em">Verify a
+message and extract the signer&rsquo;s certificate if
+successful:</p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl smime
+-verify -in mail.msg -signer user.pem -out
+signedtext.txt</p>
+
+<p style="margin-left:11%; margin-top: 1em">Send encrypted
+mail using triple <small>DES:</small></p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl smime
+-encrypt -in in.txt -from steve@openssl.org \ <br>
+-to someone@somewhere -subject &quot;Encrypted message&quot;
+\ <br>
+-des3 user.pem -out mail.msg</p>
+
+<p style="margin-left:11%; margin-top: 1em">Sign and
+encrypt mail:</p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl smime
+-sign -in ml.txt -signer my.pem -text \ <br>
+| openssl smime -encrypt -out mail.msg \ <br>
+-from steve@openssl.org -to someone@somewhere \ <br>
+-subject &quot;Signed and Encrypted message&quot; -des3
+user.pem</p>
+
+<p style="margin-left:11%; margin-top: 1em">Note: the
+encryption command does not include the <b>-text</b> option
+because the message being encrypted already has
+<small>MIME</small> headers.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Decrypt
+mail:</p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl smime
+-decrypt -in mail.msg -recip mycert.pem -inkey key.pem</p>
+
+<p style="margin-left:11%; margin-top: 1em">The output from
+Netscape form signing is a PKCS#7 structure with the
+detached signature format. You can use this program to
+verify the signature by line wrapping the base64 encoded
+structure and surrounding it with:</p>
+
+<p style="margin-left:11%; margin-top: 1em">-----BEGIN
+PKCS7----- <br>
+-----END PKCS7-----</p>
+
+<p style="margin-left:11%; margin-top: 1em">and using the
+command:</p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl smime
+-verify -inform PEM -in signature.pem -content
+content.txt</p>
+
+<p style="margin-left:11%; margin-top: 1em">Alternatively
+you can base64 decode the signature and use:</p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl smime
+-verify -inform DER -in signature.der -content
+content.txt</p>
+
+<p style="margin-left:11%; margin-top: 1em">Create an
+encrypted message using 128 bit Camellia:</p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl smime
+-encrypt -in plain.txt -camellia128 -out mail.msg
+cert.pem</p>
+
+<p style="margin-left:11%; margin-top: 1em">Add a signer to
+an existing message:</p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl smime
+-resign -in mail.msg -signer newsign.pem -out mail2.msg</p>
+
+<h2>BUGS
+<a name="BUGS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The
+<small>MIME</small> parser isn&rsquo;t very clever: it seems
+to handle most messages that I&rsquo;ve thrown at it but it
+may choke on others.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The code
+currently will only write out the signer&rsquo;s certificate
+to a file: if the signer has a separate encryption
+certificate this must be manually extracted. There should be
+some heuristic that determines the correct encryption
+certificate.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Ideally a
+database should be maintained of a certificates for each
+email address.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The code
+doesn&rsquo;t currently take note of the permitted symmetric
+encryption algorithms as supplied in the SMIMECapabilities
+signed attribute. This means the user has to manually
+include the correct encryption algorithm. It should store
+the list of permitted ciphers in a database and only use
+those.</p>
+
+<p style="margin-left:11%; margin-top: 1em">No revocation
+checking is done on the signer&rsquo;s certificate.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The current
+code can only handle S/MIME v2 messages, the more complex
+S/MIME v3 structures may cause parsing errors.</p>
+
+<h2>HISTORY
+<a name="HISTORY"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The use of
+multiple <b>-signer</b> options and the <b>-resign</b>
+command were first added in OpenSSL 1.0.0</p>
+
+<p style="margin-left:11%; margin-top: 1em">The
+-no_alt_chains options was first added to OpenSSL 1.1.0.</p>
+
+<h2>COPYRIGHT
+<a name="COPYRIGHT"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Copyright
+2000-2016 The OpenSSL Project Authors. All Rights
+Reserved.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Licensed under
+the OpenSSL license (the &quot;License&quot;). You may not
+use this file except in compliance with the License. You can
+obtain a copy in the file <small>LICENSE</small> in the
+source distribution or at
+&lt;https://www.openssl.org/source/license.html&gt;.</p>
+<hr>
+</body>
+</html>

@@ -1,0 +1,131 @@
+OPENSSL-CRL(1ossl)                  OpenSSL                 OPENSSL-CRL(1ossl)
+
+
+
+NNAAMMEE
+       openssl-crl - CRL command
+
+SSYYNNOOPPSSIISS
+       ooppeennssssll ccrrll [--hheellpp] [--iinnffoorrmm DDEERR|PPEEMM] [--oouuttffoorrmm DDEERR|PPEEMM] [--kkeeyy
+       _f_i_l_e_n_a_m_e] [--kkeeyyffoorrmm DDEERR|PPEEMM|PP1122] [--ddaatteeoopptt] [--tteexxtt] [--iinn _f_i_l_e_n_a_m_e]
+       [--oouutt _f_i_l_e_n_a_m_e] [--ggeennddeellttaa _f_i_l_e_n_a_m_e] [--bbaaddssiigg] [--vveerriiffyy] [--nnoooouutt]
+       [--hhaasshh] [--hhaasshh__oolldd] [--ffiinnggeerrpprriinntt] [--ccrrllnnuummbbeerr] [--iissssuueerr] [--llaassttuuppddaattee]
+       [--nneexxttuuppddaattee] [--nnaammeeoopptt _o_p_t_i_o_n] [--CCAAffiillee _f_i_l_e] [--nnoo--CCAAffiillee] [--CCAAppaatthh
+       _d_i_r] [--nnoo--CCAAppaatthh] [--CCAAssttoorree _u_r_i] [--nnoo--CCAAssttoorree] [--pprroovviiddeerr _n_a_m_e]
+       [--pprroovviiddeerr--ppaatthh _p_a_t_h] [--pprrooppqquueerryy _p_r_o_p_q]
+
+DDEESSCCRRIIPPTTIIOONN
+       This command processes CRL files in DER or PEM format.
+
+OOPPTTIIOONNSS
+       --hheellpp
+           Print out a usage message.
+
+       --iinnffoorrmm DDEERR|PPEEMM
+           The CRL input format; unspecified by default.  See
+           ooppeennssssll--ffoorrmmaatt--ooppttiioonnss(1) for details.
+
+       --oouuttffoorrmm DDEERR|PPEEMM
+           The CRL output format; the default is PPEEMM.  See
+           ooppeennssssll--ffoorrmmaatt--ooppttiioonnss(1) for details.
+
+       --kkeeyy _f_i_l_e_n_a_m_e
+           The private key to be used to sign the CRL.
+
+       --kkeeyyffoorrmm DDEERR|PPEEMM|PP1122
+           The format of the private key file; unspecified by default.  See
+           ooppeennssssll--ffoorrmmaatt--ooppttiioonnss(1) for details.
+
+       --iinn _f_i_l_e_n_a_m_e
+           This specifies the input filename to read from or standard input if
+           this option is not specified.
+
+       --oouutt _f_i_l_e_n_a_m_e
+           Specifies the output filename to write to or standard output by
+           default.
+
+       --ggeennddeellttaa _f_i_l_e_n_a_m_e
+           Output a comparison of the main CRL and the one specified here.
+
+       --bbaaddssiigg
+           Corrupt the signature before writing it; this can be useful for
+           testing.
+
+       --ddaatteeoopptt
+           Specify the date output format. Values are: rfc_822 and iso_8601.
+           Defaults to rfc_822.
+
+       --tteexxtt
+           Print out the CRL in text form.
+
+       --vveerriiffyy
+           Verify the signature in the CRL.
+
+       --nnoooouutt
+           Don't output the encoded version of the CRL.
+
+       --ffiinnggeerrpprriinntt
+           Output the fingerprint of the CRL.
+
+       --ccrrllnnuummbbeerr
+           Output the number of the CRL.
+
+       --hhaasshh
+           Output a hash of the issuer name. This can be use to lookup CRLs in
+           a directory by issuer name.
+
+       --hhaasshh__oolldd
+           Outputs the "hash" of the CRL issuer name using the older algorithm
+           as used by OpenSSL before version 1.0.0.
+
+       --iissssuueerr
+           Output the issuer name.
+
+       --llaassttuuppddaattee
+           Output the lastUpdate field.
+
+       --nneexxttuuppddaattee
+           Output the nextUpdate field.
+
+       --nnaammeeoopptt _o_p_t_i_o_n
+           This specifies how the subject or issuer names are displayed.  See
+           ooppeennssssll--nnaammeeddiissppllaayy--ooppttiioonnss(1) for details.
+
+       --CCAAffiillee _f_i_l_e, --nnoo--CCAAffiillee, --CCAAppaatthh _d_i_r, --nnoo--CCAAppaatthh, --CCAAssttoorree _u_r_i,
+       --nnoo--CCAAssttoorree
+           See "Trusted Certificate Options" in
+           ooppeennssssll--vveerriiffiiccaattiioonn--ooppttiioonnss(1) for details.
+
+       --pprroovviiddeerr _n_a_m_e
+       --pprroovviiddeerr--ppaatthh _p_a_t_h
+       --pprrooppqquueerryy _p_r_o_p_q
+           See "Provider Options" in ooppeennssssll(1), pprroovviiddeerr(7), and pprrooppeerrttyy(7).
+
+EEXXAAMMPPLLEESS
+       Convert a CRL file from PEM to DER:
+
+        openssl crl -in crl.pem -outform DER -out crl.der
+
+       Output the text form of a DER encoded certificate:
+
+        openssl crl -in crl.der -text -noout
+
+BBUUGGSS
+       Ideally it should be possible to create a CRL using appropriate options
+       and files too.
+
+SSEEEE AALLSSOO
+       ooppeennssssll(1), ooppeennssssll--ccrrll22ppkkccss77(1), ooppeennssssll--ccaa(1), ooppeennssssll--xx550099(1),
+       oossssll__ssttoorree--ffiillee(7)
+
+CCOOPPYYRRIIGGHHTT
+       Copyright 2000-2021 The OpenSSL Project Authors. All Rights Reserved.
+
+       Licensed under the Apache License 2.0 (the "License").  You may not use
+       this file except in compliance with the License.  You can obtain a copy
+       in the file LICENSE in the source distribution or at
+       <https://www.openssl.org/source/license.html>.
+
+
+
+3.0.1                             2022-01-31                OPENSSL-CRL(1ossl)

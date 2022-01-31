@@ -1,0 +1,880 @@
+<!-- Creator     : groff version 1.22.4 -->
+<!-- CreationDate: Mon Jan 31 16:14:36 2022 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>REQ</title>
+
+</head>
+<body>
+
+<h1 align="center">REQ</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#COMMAND OPTIONS">COMMAND OPTIONS</a><br>
+<a href="#CONFIGURATION FILE FORMAT">CONFIGURATION FILE FORMAT</a><br>
+<a href="#DISTINGUISHED NAME AND ATTRIBUTE SECTION FORMAT">DISTINGUISHED NAME AND ATTRIBUTE SECTION FORMAT</a><br>
+<a href="#EXAMPLES">EXAMPLES</a><br>
+<a href="#NOTES">NOTES</a><br>
+<a href="#DIAGNOSTICS">DIAGNOSTICS</a><br>
+<a href="#ENVIRONMENT VARIABLES">ENVIRONMENT VARIABLES</a><br>
+<a href="#BUGS">BUGS</a><br>
+<a href="#SEE ALSO">SEE ALSO</a><br>
+
+<hr>
+
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">req - PKCS#10
+certificate request and certificate generating utility.</p>
+
+<h2>SYNOPSIS
+<a name="SYNOPSIS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>openssl
+req</b> [<b>-inform PEM|DER</b>] [<b>-outform PEM|DER</b>]
+[<b>-in filename</b>] [<b>-passin arg</b>] [<b>-out
+filename</b>] [<b>-passout arg</b>] [<b>-text</b>]
+[<b>-pubkey</b>] [<b>-noout</b>] [<b>-verify</b>]
+[<b>-modulus</b>] [<b>-new</b>] [<b>-rand file(s)</b>]
+[<b>-newkey rsa:bits</b>] [<b>-newkey alg:file</b>]
+[<b>-nodes</b>] [<b>-key filename</b>] [<b>-keyform
+PEM|DER</b>] [<b>-keyout filename</b>] [<b>-keygen_engine
+id</b>] [<b>-[digest]</b>] [<b>-config filename</b>]
+[<b>-subj arg</b>] [<b>-multivalue-rdn</b>] [<b>-x509</b>]
+[<b>-days n</b>] [<b>-set_serial n</b>]
+[<b>-asn1-kludge</b>] [<b>-no-asn1-kludge</b>]
+[<b>-newhdr</b>] [<b>-extensions section</b>] [<b>-reqexts
+section</b>] [<b>-utf8</b>] [<b>-nameopt</b>]
+[<b>-reqopt</b>] [<b>-subject</b>] [<b>-subj arg</b>]
+[<b>-batch</b>] [<b>-verbose</b>] [<b>-engine id</b>]</p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The <b>req</b>
+command primarily creates and processes certificate requests
+in PKCS#10 format. It can additionally create self signed
+certificates for use as root CAs for example.</p>
+
+<h2>COMMAND OPTIONS
+<a name="COMMAND OPTIONS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>-inform
+DER|PEM</b></p>
+
+<p style="margin-left:17%;">This specifies the input
+format. The <b><small>DER</small></b> option uses an
+<small>ASN1 DER</small> encoded form compatible with the
+PKCS#10. The <b><small>PEM</small></b> form is the default
+format: it consists of the <b><small>DER</small></b> format
+base64 encoded with additional header and footer lines.</p>
+
+<p style="margin-left:11%;"><b>-outform DER|PEM</b></p>
+
+<p style="margin-left:17%;">This specifies the output
+format, the options have the same meaning as the
+<b>-inform</b> option.</p>
+
+<p style="margin-left:11%;"><b>-in filename</b></p>
+
+<p style="margin-left:17%;">This specifies the input
+filename to read a request from or standard input if this
+option is not specified. A request is only read if the
+creation options (<b>-new</b> and <b>-newkey</b>) are not
+specified.</p>
+
+<p style="margin-left:11%;"><b>-passin arg</b></p>
+
+<p style="margin-left:17%;">the input file password source.
+For more information about the format of <b>arg</b> see the
+<b><small>PASS PHRASE ARGUMENTS</small></b> section in
+<b>openssl</b>(1).</p>
+
+<p style="margin-left:11%;"><b>-out filename</b></p>
+
+<p style="margin-left:17%;">This specifies the output
+filename to write to or standard output by default.</p>
+
+<p style="margin-left:11%;"><b>-passout arg</b></p>
+
+<p style="margin-left:17%;">the output file password
+source. For more information about the format of <b>arg</b>
+see the <b><small>PASS PHRASE ARGUMENTS</small></b> section
+in <b>openssl</b>(1).</p>
+
+<p style="margin-left:11%;"><b>-text</b></p>
+
+<p style="margin-left:17%;">prints out the certificate
+request in text form.</p>
+
+<p style="margin-left:11%;"><b>-subject</b></p>
+
+<p style="margin-left:17%;">prints out the request subject
+(or certificate subject if <b>-x509</b> is specified)</p>
+
+<p style="margin-left:11%;"><b>-pubkey</b></p>
+
+<p style="margin-left:17%;">outputs the public key.</p>
+
+<p style="margin-left:11%;"><b>-noout</b></p>
+
+<p style="margin-left:17%;">this option prevents output of
+the encoded version of the request.</p>
+
+<p style="margin-left:11%;"><b>-modulus</b></p>
+
+<p style="margin-left:17%;">this option prints out the
+value of the modulus of the public key contained in the
+request.</p>
+
+<p style="margin-left:11%;"><b>-verify</b></p>
+
+<p style="margin-left:17%;">verifies the signature on the
+request.</p>
+
+<p style="margin-left:11%;"><b>-new</b></p>
+
+<p style="margin-left:17%;">this option generates a new
+certificate request. It will prompt the user for the
+relevant field values. The actual fields prompted for and
+their maximum and minimum sizes are specified in the
+configuration file and any requested extensions.</p>
+
+<p style="margin-left:17%; margin-top: 1em">If the
+<b>-key</b> option is not used it will generate a new
+<small>RSA</small> private key using information specified
+in the configuration file.</p>
+
+<p style="margin-left:11%;"><b>-subj arg</b></p>
+
+<p style="margin-left:17%;">Replaces subject field of input
+request with specified data and outputs modified request.
+The arg must be formatted as
+<i>/type0=value0/type1=value1/type2=...</i>, characters may
+be escaped by \ (backslash), no spaces are skipped.</p>
+
+<p style="margin-left:11%;"><b>-rand file(s)</b></p>
+
+<p style="margin-left:17%;">a file or files containing
+random data used to seed the random number generator, or an
+<small>EGD</small> socket (see <b>RAND_egd</b>(3)). Multiple
+files can be specified separated by a OS-dependent
+character. The separator is <b>;</b> for MS-Windows,
+<b>,</b> for OpenVMS, and <b>:</b> for all others.</p>
+
+<p style="margin-left:11%;"><b>-newkey arg</b></p>
+
+<p style="margin-left:17%;">this option creates a new
+certificate request and a new private key. The argument
+takes one of several forms. <b>rsa:nbits</b>, where
+<b>nbits</b> is the number of bits, generates an
+<small>RSA</small> key <b>nbits</b> in size. If <b>nbits</b>
+is omitted, i.e. <b>-newkey rsa</b> specified, the default
+key size, specified in the configuration file is used.</p>
+
+<p style="margin-left:17%; margin-top: 1em">All other
+algorithms support the <b>-newkey alg:file</b> form, where
+file may be an algorithm parameter file, created by the
+<b>genpkey -genparam</b> command or and X.509 certificate
+for a key with approriate algorithm.</p>
+
+
+<p style="margin-left:17%; margin-top: 1em"><b>param:file</b>
+generates a key using the parameter file or certificate
+<b>file</b>, the algorithm is determined by the parameters.
+<b>algname:file</b> use algorithm <b>algname</b> and
+parameter file <b>file</b>: the two algorithms must match or
+an error occurs. <b>algname</b> just uses algorithm
+<b>algname</b>, and parameters, if neccessary should be
+specified via <b>-pkeyopt</b> parameter.</p>
+
+
+<p style="margin-left:17%; margin-top: 1em"><b>dsa:filename</b>
+generates a <small>DSA</small> key using the parameters in
+the file <b>filename</b>. <b>ec:filename</b> generates
+<small>EC</small> key (usable both with <small>ECDSA</small>
+or <small>ECDH</small> algorithms), <b>gost2001:filename</b>
+generates <small>GOST R 34.10-2001</small> key (requires
+<b>ccgost</b> engine configured in the configuration file).
+If just <b>gost2001</b> is specified a parameter set should
+be specified by <b>-pkeyopt paramset:X</b></p>
+
+<p style="margin-left:11%;"><b>-pkeyopt opt:value</b></p>
+
+<p style="margin-left:17%;">set the public key algorithm
+option <b>opt</b> to <b>value</b>. The precise set of
+options supported depends on the public key algorithm used
+and its implementation. See <b><small>KEY GENERATION
+OPTIONS</small></b> in the <b>genpkey</b> manual page for
+more details.</p>
+
+<p style="margin-left:11%;"><b>-key filename</b></p>
+
+<p style="margin-left:17%;">This specifies the file to read
+the private key from. It also accepts PKCS#8 format private
+keys for <small>PEM</small> format files.</p>
+
+<p style="margin-left:11%;"><b>-keyform PEM|DER</b></p>
+
+<p style="margin-left:17%;">the format of the private key
+file specified in the <b>-key</b> argument.
+<small>PEM</small> is the default.</p>
+
+<p style="margin-left:11%;"><b>-keyout filename</b></p>
+
+<p style="margin-left:17%;">this gives the filename to
+write the newly created private key to. If this option is
+not specified then the filename present in the configuration
+file is used.</p>
+
+<p style="margin-left:11%;"><b>-nodes</b></p>
+
+<p style="margin-left:17%;">if this option is specified
+then if a private key is created it will not be
+encrypted.</p>
+
+<p style="margin-left:11%;"><b>-[digest]</b></p>
+
+<p style="margin-left:17%;">this specifies the message
+digest to sign the request with (such as <b>-md5</b>,
+<b>-sha1</b>). This overrides the digest algorithm specified
+in the configuration file.</p>
+
+<p style="margin-left:17%; margin-top: 1em">Some public key
+algorithms may override this choice. For instance,
+<small>DSA</small> signatures always use <small>SHA1, GOST R
+34.10</small> signatures always use <small>GOST R
+34.11-94</small> (<b>-md_gost94</b>).</p>
+
+<p style="margin-left:11%;"><b>-config filename</b></p>
+
+<p style="margin-left:17%;">this allows an alternative
+configuration file to be specified, this overrides the
+compile time filename or any specified in the
+<b><small>OPENSSL_CONF</small></b> environment variable.</p>
+
+<p style="margin-left:11%;"><b>-subj arg</b></p>
+
+<p style="margin-left:17%;">sets subject name for new
+request or supersedes the subject name when processing a
+request. The arg must be formatted as
+<i>/type0=value0/type1=value1/type2=...</i>, characters may
+be escaped by \ (backslash), no spaces are skipped.</p>
+
+<p style="margin-left:11%;"><b>-multivalue-rdn</b></p>
+
+<p style="margin-left:17%;">this option causes the -subj
+argument to be interpreted with full support for multivalued
+RDNs. Example:</p>
+
+
+<p style="margin-left:17%; margin-top: 1em"><i>/DC=org/DC=OpenSSL/DC=users/UID=123456+CN=John
+Doe</i></p>
+
+<p style="margin-left:17%; margin-top: 1em">If -multi-rdn
+is not used then the <small>UID</small> value is
+<i>123456+CN=John Doe</i>.</p>
+
+<p style="margin-left:11%;"><b>-x509</b></p>
+
+<p style="margin-left:17%;">this option outputs a self
+signed certificate instead of a certificate request. This is
+typically used to generate a test certificate or a self
+signed root <small>CA.</small> The extensions added to the
+certificate (if any) are specified in the configuration
+file. Unless specified using the <b>set_serial</b> option
+<b>0</b> will be used for the serial number.</p>
+
+<p style="margin-left:11%;"><b>-days n</b></p>
+
+<p style="margin-left:17%;">when the <b>-x509</b> option is
+being used this specifies the number of days to certify the
+certificate for. The default is 30 days.</p>
+
+<p style="margin-left:11%;"><b>-set_serial n</b></p>
+
+<p style="margin-left:17%;">serial number to use when
+outputting a self signed certificate. This may be specified
+as a decimal value or a hex value if preceded by <b>0x</b>.
+It is possible to use negative serial numbers but this is
+not recommended.</p>
+
+<p style="margin-left:11%;"><b>-extensions section <br>
+-reqexts section</b></p>
+
+<p style="margin-left:17%;">these options specify
+alternative sections to include certificate extensions (if
+the <b>-x509</b> option is present) or certificate request
+extensions. This allows several different sections to be
+used in the same configuration file to specify requests for
+a variety of purposes.</p>
+
+<p style="margin-left:11%;"><b>-utf8</b></p>
+
+<p style="margin-left:17%;">this option causes field values
+to be interpreted as <small>UTF8</small> strings, by default
+they are interpreted as <small>ASCII.</small> This means
+that the field values, whether prompted from a terminal or
+obtained from a configuration file, must be valid
+<small>UTF8</small> strings.</p>
+
+<p style="margin-left:11%;"><b>-nameopt option</b></p>
+
+<p style="margin-left:17%;">option which determines how the
+subject or issuer names are displayed. The <b>option</b>
+argument can be a single option or multiple options
+separated by commas. Alternatively the <b>-nameopt</b>
+switch may be used more than once to set multiple options.
+See the <b>x509</b>(1) manual page for details.</p>
+
+<p style="margin-left:11%;"><b>-reqopt</b></p>
+
+<p style="margin-left:17%;">customise the output format
+used with <b>-text</b>. The <b>option</b> argument can be a
+single option or multiple options separated by commas.</p>
+
+<p style="margin-left:17%; margin-top: 1em">See discission
+of the <b>-certopt</b> parameter in the <b>x509</b>
+command.</p>
+
+<p style="margin-left:11%;"><b>-asn1-kludge</b></p>
+
+<p style="margin-left:17%;">by default the <b>req</b>
+command outputs certificate requests containing no
+attributes in the correct PKCS#10 format. However certain
+CAs will only accept requests containing no attributes in an
+invalid form: this option produces this invalid format.</p>
+
+<p style="margin-left:17%; margin-top: 1em">More precisely
+the <b>Attributes</b> in a PKCS#10 certificate request are
+defined as a <b><small>SET OF</small> Attribute</b>. They
+are <b>not <small>OPTIONAL</small></b> so if no attributes
+are present then they should be encoded as an empty
+<b><small>SET OF</small></b> . The invalid form does not
+include the empty <b><small>SET OF</small></b> whereas the
+correct form does.</p>
+
+<p style="margin-left:17%; margin-top: 1em">It should be
+noted that very few CAs still require the use of this
+option.</p>
+
+<p style="margin-left:11%;"><b>-no-asn1-kludge</b></p>
+
+<p style="margin-left:17%;">Reverses effect of
+<b>-asn1-kludge</b></p>
+
+<p style="margin-left:11%;"><b>-newhdr</b></p>
+
+<p style="margin-left:17%;">Adds the word
+<b><small>NEW</small></b> to the <small>PEM</small> file
+header and footer lines on the outputted request. Some
+software (Netscape certificate server) and some CAs need
+this.</p>
+
+<p style="margin-left:11%;"><b>-batch</b></p>
+
+<p style="margin-left:17%;">non-interactive mode.</p>
+
+<p style="margin-left:11%;"><b>-verbose</b></p>
+
+<p style="margin-left:17%;">print extra details about the
+operations being performed.</p>
+
+<p style="margin-left:11%;"><b>-engine id</b></p>
+
+<p style="margin-left:17%;">specifying an engine (by its
+unique <b>id</b> string) will cause <b>req</b> to attempt to
+obtain a functional reference to the specified engine, thus
+initialising it if needed. The engine will then be set as
+the default for all available algorithms.</p>
+
+<p style="margin-left:11%;"><b>-keygen_engine id</b></p>
+
+<p style="margin-left:17%;">specifies an engine (by its
+unique <b>id</b> string) which would be used for key
+generation operations.</p>
+
+<h2>CONFIGURATION FILE FORMAT
+<a name="CONFIGURATION FILE FORMAT"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The
+configuration options are specified in the <b>req</b>
+section of the configuration file. As with all configuration
+files if no value is specified in the specific section (i.e.
+<b>req</b>) then the initial unnamed or <b>default</b>
+section is searched too.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The options
+available are described in detail below. <b><br>
+input_password output_password</b></p>
+
+<p style="margin-left:17%;">The passwords for the input
+private key file (if present) and the output private key
+file (if one will be created). The command line options
+<b>passin</b> and <b>passout</b> override the configuration
+file values.</p>
+
+<p style="margin-left:11%;"><b>default_bits</b></p>
+
+<p style="margin-left:17%;">This specifies the default key
+size in bits. If not specified then 512 is used. It is used
+if the <b>-new</b> option is used. It can be overridden by
+using the <b>-newkey</b> option.</p>
+
+<p style="margin-left:11%;"><b>default_keyfile</b></p>
+
+<p style="margin-left:17%;">This is the default filename to
+write a private key to. If not specified the key is written
+to standard output. This can be overridden by the
+<b>-keyout</b> option.</p>
+
+<p style="margin-left:11%;"><b>oid_file</b></p>
+
+<p style="margin-left:17%;">This specifies a file
+containing additional <b><small>OBJECT
+IDENTIFIERS</small></b> . Each line of the file should
+consist of the numerical form of the object identifier
+followed by white space then the short name followed by
+white space and finally the long name.</p>
+
+<p style="margin-left:11%;"><b>oid_section</b></p>
+
+<p style="margin-left:17%;">This specifies a section in the
+configuration file containing extra object identifiers. Each
+line should consist of the short name of the object
+identifier followed by <b>=</b> and the numerical form. The
+short and long names are the same when this option is
+used.</p>
+
+
+<p style="margin-left:11%;"><b><small>RANDFILE</small></b></p>
+
+<p style="margin-left:17%;">This specifies a filename in
+which random number seed information is placed and read
+from, or an <small>EGD</small> socket (see
+<b>RAND_egd</b>(3)). It is used for private key
+generation.</p>
+
+<p style="margin-left:11%;"><b>encrypt_key</b></p>
+
+<p style="margin-left:17%;">If this is set to <b>no</b>
+then if a private key is generated it is <b>not</b>
+encrypted. This is equivalent to the <b>-nodes</b> command
+line option. For compatibility <b>encrypt_rsa_key</b> is an
+equivalent option.</p>
+
+<p style="margin-left:11%;"><b>default_md</b></p>
+
+<p style="margin-left:17%;">This option specifies the
+digest algorithm to use. Possible values include <b>md5 sha1
+mdc2</b>. If not present then <small>MD5</small> is used.
+This option can be overridden on the command line.</p>
+
+<p style="margin-left:11%;"><b>string_mask</b></p>
+
+<p style="margin-left:17%;">This option masks out the use
+of certain string types in certain fields. Most users will
+not need to change this option.</p>
+
+<p style="margin-left:17%; margin-top: 1em">It can be set
+to several values <b>default</b> which is also the default
+option uses PrintableStrings, T61Strings and BMPStrings if
+the <b>pkix</b> value is used then only PrintableStrings and
+BMPStrings will be used. This follows the
+<small>PKIX</small> recommendation in
+<small>RFC2459.</small> If the <b>utf8only</b> option is
+used then only UTF8Strings will be used: this is the
+<small>PKIX</small> recommendation in <small>RFC2459</small>
+after 2003. Finally the <b>nombstr</b> option just uses
+PrintableStrings and T61Strings: certain software has
+problems with BMPStrings and UTF8Strings: in particular
+Netscape.</p>
+
+<p style="margin-left:11%;"><b>req_extensions</b></p>
+
+<p style="margin-left:17%;">this specifies the
+configuration file section containing a list of extensions
+to add to the certificate request. It can be overridden by
+the <b>-reqexts</b> command line switch. See the
+<b>x509v3_config</b>(5) manual page for details of the
+extension section format.</p>
+
+<p style="margin-left:11%;"><b>x509_extensions</b></p>
+
+<p style="margin-left:17%;">this specifies the
+configuration file section containing a list of extensions
+to add to certificate generated when the <b>-x509</b> switch
+is used. It can be overridden by the <b>-extensions</b>
+command line switch.</p>
+
+<p style="margin-left:11%;"><b>prompt</b></p>
+
+<p style="margin-left:17%;">if set to the value <b>no</b>
+this disables prompting of certificate fields and just takes
+values from the config file directly. It also changes the
+expected format of the <b>distinguished_name</b> and
+<b>attributes</b> sections.</p>
+
+<p style="margin-left:11%;"><b>utf8</b></p>
+
+<p style="margin-left:17%;">if set to the value <b>yes</b>
+then field values to be interpreted as <small>UTF8</small>
+strings, by default they are interpreted as
+<small>ASCII.</small> This means that the field values,
+whether prompted from a terminal or obtained from a
+configuration file, must be valid <small>UTF8</small>
+strings.</p>
+
+<p style="margin-left:11%;"><b>attributes</b></p>
+
+<p style="margin-left:17%;">this specifies the section
+containing any request attributes: its format is the same as
+<b>distinguished_name</b>. Typically these may contain the
+challengePassword or unstructuredName types. They are
+currently ignored by OpenSSL&rsquo;s request signing
+utilities but some CAs might want them.</p>
+
+<p style="margin-left:11%;"><b>distinguished_name</b></p>
+
+<p style="margin-left:17%;">This specifies the section
+containing the distinguished name fields to prompt for when
+generating a certificate or certificate request. The format
+is described in the next section.</p>
+
+<h2>DISTINGUISHED NAME AND ATTRIBUTE SECTION FORMAT
+<a name="DISTINGUISHED NAME AND ATTRIBUTE SECTION FORMAT"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">There are two
+separate formats for the distinguished name and attribute
+sections. If the <b>prompt</b> option is set to <b>no</b>
+then these sections just consist of field names and values:
+for example,</p>
+
+<p style="margin-left:11%; margin-top: 1em">CN=My Name <br>
+OU=My Organization <br>
+emailAddress=someone@somewhere.org</p>
+
+<p style="margin-left:11%; margin-top: 1em">This allows
+external programs (e.g. <small>GUI</small> based) to
+generate a template file with all the field names and values
+and just pass it to <b>req</b>. An example of this kind of
+configuration file is contained in the
+<b><small>EXAMPLES</small></b> section.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Alternatively
+if the <b>prompt</b> option is absent or not set to
+<b>no</b> then the file contains field prompting
+information. It consists of lines of the form:</p>
+
+
+<p style="margin-left:11%; margin-top: 1em">fieldName=&quot;prompt&quot;
+<br>
+fieldName_default=&quot;default field value&quot; <br>
+fieldName_min= 2 <br>
+fieldName_max= 4</p>
+
+
+<p style="margin-left:11%; margin-top: 1em">&quot;fieldName&quot;
+is the field name being used, for example commonName (or
+<small>CN</small> ). The &quot;prompt&quot; string is used
+to ask the user to enter the relevant details. If the user
+enters nothing then the default value is used if no default
+value is present then the field is omitted. A field can
+still be omitted if a default value is present if the user
+just enters the &rsquo;.&rsquo; character.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The number of
+characters entered must be between the fieldName_min and
+fieldName_max limits: there may be additional restrictions
+based on the field being used (for example countryName can
+only ever be two characters long and must fit in a
+PrintableString).</p>
+
+<p style="margin-left:11%; margin-top: 1em">Some fields
+(such as organizationName) can be used more than once in a
+<small>DN.</small> This presents a problem because
+configuration files will not recognize the same name
+occurring twice. To avoid this problem if the fieldName
+contains some characters followed by a full stop they will
+be ignored. So for example a second organizationName can be
+input by calling it &quot;1.organizationName&quot;.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The actual
+permitted field names are any object identifier short or
+long names. These are compiled into OpenSSL and include the
+usual values such as commonName, countryName, localityName,
+organizationName, organizationalUnitName,
+stateOrProvinceName. Additionally emailAddress is include as
+well as name, surname, givenName initials and
+dnQualifier.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Additional
+object identifiers can be defined with the <b>oid_file</b>
+or <b>oid_section</b> options in the configuration file. Any
+additional fields will be treated as though they were a
+DirectoryString.</p>
+
+<h2>EXAMPLES
+<a name="EXAMPLES"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Examine and
+verify certificate request:</p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl req -in
+req.pem -text -verify -noout</p>
+
+<p style="margin-left:11%; margin-top: 1em">Create a
+private key and then generate a certificate request from
+it:</p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl genrsa
+-out key.pem 1024 <br>
+openssl req -new -key key.pem -out req.pem</p>
+
+<p style="margin-left:11%; margin-top: 1em">The same but
+just using req:</p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl req
+-newkey rsa:1024 -keyout key.pem -out req.pem</p>
+
+<p style="margin-left:11%; margin-top: 1em">Generate a self
+signed root certificate:</p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl req
+-x509 -newkey rsa:1024 -keyout key.pem -out req.pem</p>
+
+<p style="margin-left:11%; margin-top: 1em">Example of a
+file pointed to by the <b>oid_file</b> option:</p>
+
+<p style="margin-left:11%; margin-top: 1em">1.2.3.4
+shortName A longer Name <br>
+1.2.3.6 otherName Other longer Name</p>
+
+<p style="margin-left:11%; margin-top: 1em">Example of a
+section pointed to by <b>oid_section</b> making use of
+variable expansion:</p>
+
+
+<p style="margin-left:11%; margin-top: 1em">testoid1=1.2.3.5
+<br>
+testoid2=${testoid1}.6</p>
+
+<p style="margin-left:11%; margin-top: 1em">Sample
+configuration file prompting for field values:</p>
+
+<p style="margin-left:11%; margin-top: 1em">[ req ] <br>
+default_bits = 1024 <br>
+default_keyfile = privkey.pem <br>
+distinguished_name = req_distinguished_name <br>
+attributes = req_attributes <br>
+x509_extensions = v3_ca <br>
+dirstring_type = nobmp <br>
+[ req_distinguished_name ] <br>
+countryName = Country Name (2 letter code) <br>
+countryName_default = AU <br>
+countryName_min = 2 <br>
+countryName_max = 2 <br>
+localityName = Locality Name (eg, city) <br>
+organizationalUnitName = Organizational Unit Name (eg,
+section) <br>
+commonName = Common Name (eg, YOUR name) <br>
+commonName_max = 64 <br>
+emailAddress = Email Address <br>
+emailAddress_max = 40 <br>
+[ req_attributes ] <br>
+challengePassword = A challenge password <br>
+challengePassword_min = 4 <br>
+challengePassword_max = 20 <br>
+[ v3_ca ] <br>
+subjectKeyIdentifier=hash <br>
+authorityKeyIdentifier=keyid:always,issuer:always <br>
+basicConstraints = CA:true</p>
+
+<p style="margin-left:11%; margin-top: 1em">Sample
+configuration containing all field values:</p>
+
+<p style="margin-left:11%; margin-top: 1em">RANDFILE =
+$ENV::HOME/.rnd <br>
+[ req ] <br>
+default_bits = 1024 <br>
+default_keyfile = keyfile.pem <br>
+distinguished_name = req_distinguished_name <br>
+attributes = req_attributes <br>
+prompt = no <br>
+output_password = mypass <br>
+[ req_distinguished_name ] <br>
+C = GB <br>
+ST = Test State or Province <br>
+L = Test Locality <br>
+O = Organization Name <br>
+OU = Organizational Unit Name <br>
+CN = Common Name <br>
+emailAddress = test@email.address <br>
+[ req_attributes ] <br>
+challengePassword = A challenge password</p>
+
+<h2>NOTES
+<a name="NOTES"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The header and
+footer lines in the <b><small>PEM</small></b> format are
+normally:</p>
+
+<p style="margin-left:11%; margin-top: 1em">-----BEGIN
+CERTIFICATE REQUEST----- <br>
+-----END CERTIFICATE REQUEST-----</p>
+
+<p style="margin-left:11%; margin-top: 1em">some software
+(some versions of Netscape certificate server) instead
+needs:</p>
+
+<p style="margin-left:11%; margin-top: 1em">-----BEGIN NEW
+CERTIFICATE REQUEST----- <br>
+-----END NEW CERTIFICATE REQUEST-----</p>
+
+<p style="margin-left:11%; margin-top: 1em">which is
+produced with the <b>-newhdr</b> option but is otherwise
+compatible. Either form is accepted transparently on
+input.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The certificate
+requests generated by <b>Xenroll</b> with
+<small>MSIE</small> have extensions added. It includes the
+<b>keyUsage</b> extension which determines the type of key
+(signature only or general purpose) and any additional OIDs
+entered by the script in an extendedKeyUsage extension.</p>
+
+<h2>DIAGNOSTICS
+<a name="DIAGNOSTICS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The following
+messages are frequently asked about:</p>
+
+<p style="margin-left:11%; margin-top: 1em">Using
+configuration from /some/path/openssl.cnf <br>
+Unable to load config info</p>
+
+<p style="margin-left:11%; margin-top: 1em">This is
+followed some time later by...</p>
+
+<p style="margin-left:11%; margin-top: 1em">unable to find
+'distinguished_name' in config <br>
+problems making Certificate Request</p>
+
+<p style="margin-left:11%; margin-top: 1em">The first error
+message is the clue: it can&rsquo;t find the configuration
+file! Certain operations (like examining a certificate
+request) don&rsquo;t need a configuration file so its use
+isn&rsquo;t enforced. Generation of certificates or requests
+however does need a configuration file. This could be
+regarded as a bug.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Another
+puzzling message is this:</p>
+
+<p style="margin-left:11%; margin-top: 1em">Attributes:
+<br>
+a0:00</p>
+
+<p style="margin-left:11%; margin-top: 1em">this is
+displayed when no attributes are present and the request
+includes the correct empty <b><small>SET OF</small></b>
+structure (the <small>DER</small> encoding of which is 0xa0
+0x00). If you just see:</p>
+
+
+<p style="margin-left:11%; margin-top: 1em">Attributes:</p>
+
+<p style="margin-left:11%; margin-top: 1em">then the
+<b><small>SET OF</small></b> is missing and the encoding is
+technically invalid (but it is tolerated). See the
+description of the command line option <b>-asn1-kludge</b>
+for more information.</p>
+
+<h2>ENVIRONMENT VARIABLES
+<a name="ENVIRONMENT VARIABLES"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The variable
+<b><small>OPENSSL_CONF</small></b> if defined allows an
+alternative configuration file location to be specified, it
+will be overridden by the <b>-config</b> command line switch
+if it is present. For compatibility reasons the
+<b><small>SSLEAY_CONF</small></b> environment variable
+serves the same purpose but its use is discouraged.</p>
+
+<h2>BUGS
+<a name="BUGS"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em">OpenSSL&rsquo;s
+handling of T61Strings (aka TeletexStrings) is broken: it
+effectively treats them as <small>ISO-8859-1</small> (Latin
+1), Netscape and <small>MSIE</small> have similar behaviour.
+This can cause problems if you need characters that
+aren&rsquo;t available in PrintableStrings and you
+don&rsquo;t want to or can&rsquo;t use BMPStrings.</p>
+
+<p style="margin-left:11%; margin-top: 1em">As a
+consequence of the T61String handling the only correct way
+to represent accented characters in OpenSSL is to use a
+BMPString: unfortunately Netscape currently chokes on these.
+If you have to use accented characters with Netscape and
+<small>MSIE</small> then you currently need to use the
+invalid T61String form.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The current
+prompting is not very friendly. It doesn&rsquo;t allow you
+to confirm what you&rsquo;ve just entered. Other things like
+extensions in certificate requests are statically defined in
+the configuration file. Some of these: like an email address
+in subjectAltName should be input by the user.</p>
+
+<h2>SEE ALSO
+<a name="SEE ALSO"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>x509</b>(1),
+<b>ca</b>(1), <b>genrsa</b>(1), <b>gendsa</b>(1),
+<b>config</b>(5), <b>x509v3_config</b>(5)</p>
+<hr>
+</body>
+</html>

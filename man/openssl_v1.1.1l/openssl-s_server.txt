@@ -1,0 +1,613 @@
+S_SERVER(1)                         OpenSSL                        S_SERVER(1)
+
+
+
+NNAAMMEE
+       openssl-s_server, s_server - SSL/TLS server program
+
+SSYYNNOOPPSSIISS
+       ooppeennssssll ss__sseerrvveerr [--hheellpp] [--ppoorrtt ++iinntt] [--aacccceepptt vvaall] [--uunniixx vvaall] [--44]
+       [--66] [--uunnlliinnkk] [--ccoonntteexxtt vvaall] [--vveerriiffyy iinntt] [--VVeerriiffyy iinntt] [--cceerrtt
+       iinnffiillee] [--nnaammeeoopptt vvaall] [--nnaacccceepptt ++iinntt] [--sseerrvveerriinnffoo vvaall] [--cceerrttffoorrmm
+       PPEEMM||DDEERR] [--kkeeyy iinnffiillee] [--kkeeyyffoorrmm ffoorrmmaatt] [--ppaassss vvaall] [--ddcceerrtt iinnffiillee]
+       [--ddcceerrttffoorrmm PPEEMM||DDEERR] [--ddkkeeyy iinnffiillee] [--ddkkeeyyffoorrmm PPEEMM||DDEERR] [--ddppaassss vvaall]
+       [--nnbbiioo__tteesstt] [--ccrrllff] [--ddeebbuugg] [--mmssgg] [--mmssggffiillee oouuttffiillee] [--ssttaattee]
+       [--CCAAffiillee iinnffiillee] [--CCAAppaatthh ddiirr] [--nnoo--CCAAffiillee] [--nnoo--CCAAppaatthh] [--nnoocceerrtt]
+       [--qquuiieett] [--nnoo__rreessuummee__eepphheemmeerraall] [--wwwwww] [--WWWWWW] [--sseerrvveerrnnaammee]
+       [--sseerrvveerrnnaammee__ffaattaall] [--cceerrtt22 iinnffiillee] [--kkeeyy22 iinnffiillee] [--ttllsseexxttddeebbuugg]
+       [--HHTTTTPP] [--iidd__pprreeffiixx vvaall] [--rraanndd ffiillee......]  [--wwrriitteerraanndd ffiillee]
+       [--kkeeyymmaatteexxppoorrtt vvaall] [--kkeeyymmaatteexxppoorrttlleenn ++iinntt] [--CCRRLL iinnffiillee]
+       [--ccrrll__ddoowwnnllooaadd] [--cceerrtt__cchhaaiinn iinnffiillee] [--ddcceerrtt__cchhaaiinn iinnffiillee]
+       [--cchhaaiinnCCAAppaatthh ddiirr] [--vveerriiffyyCCAAppaatthh ddiirr] [--nnoo__ccaacchhee] [--eexxtt__ccaacchhee]
+       [--CCRRLLffoorrmm PPEEMM||DDEERR] [--vveerriiffyy__rreettuurrnn__eerrrroorr] [--vveerriiffyy__qquuiieett]
+       [--bbuuiilldd__cchhaaiinn] [--cchhaaiinnCCAAffiillee iinnffiillee] [--vveerriiffyyCCAAffiillee iinnffiillee] [--iiggnn__eeooff]
+       [--nnoo__iiggnn__eeooff] [--ssttaattuuss] [--ssttaattuuss__vveerrbboossee] [--ssttaattuuss__ttiimmeeoouutt iinntt]
+       [--ssttaattuuss__uurrll vvaall] [--ssttaattuuss__ffiillee iinnffiillee] [--ttrraaccee] [--sseeccuurriittyy__ddeebbuugg]
+       [--sseeccuurriittyy__ddeebbuugg__vveerrbboossee] [--bbrriieeff] [--rreevv] [--aassyynncc] [--ssssll__ccoonnffiigg vvaall]
+       [--mmaaxx__sseenndd__ffrraagg ++iinntt] [--sspplliitt__sseenndd__ffrraagg ++iinntt] [--mmaaxx__ppiippeelliinneess ++iinntt]
+       [--rreeaadd__bbuuff ++iinntt] [--nnoo__ssssll33] [--nnoo__ttllss11] [--nnoo__ttllss11__11] [--nnoo__ttllss11__22]
+       [--nnoo__ttllss11__33] [--bbuuggss] [--nnoo__ccoommpp] [--ccoommpp] [--nnoo__ttiicckkeett] [--nnuumm__ttiicckkeettss]
+       [--sseerrvveerrpprreeff] [--lleeggaaccyy__rreenneeggoottiiaattiioonn] [--nnoo__rreenneeggoottiiaattiioonn]
+       [--lleeggaaccyy__sseerrvveerr__ccoonnnneecctt] [--nnoo__rreessuummppttiioonn__oonn__rreenneegg]
+       [--nnoo__lleeggaaccyy__sseerrvveerr__ccoonnnneecctt] [--aallllooww__nnoo__ddhhee__kkeexx] [--pprriioorriittiizzee__cchhaacchhaa]
+       [--ssttrriicctt] [--ssiiggaallggss vvaall] [--cclliieenntt__ssiiggaallggss vvaall] [--ggrroouuppss vvaall] [--ccuurrvveess
+       vvaall] [--nnaammeedd__ccuurrvvee vvaall] [--cciipphheerr vvaall] [--cciipphheerrssuuiitteess vvaall] [--ddhhppaarraamm
+       iinnffiillee] [--rreeccoorrdd__ppaaddddiinngg vvaall] [--ddeebbuugg__bbrrookkeenn__pprroottooccooll] [--ppoolliiccyy vvaall]
+       [--ppuurrppoossee vvaall] [--vveerriiffyy__nnaammee vvaall] [--vveerriiffyy__ddeepptthh iinntt] [--aauutthh__lleevveell iinntt]
+       [--aattttiimmee iinnttmmaaxx] [--vveerriiffyy__hhoossttnnaammee vvaall] [--vveerriiffyy__eemmaaiill vvaall]
+       [--vveerriiffyy__iipp] [--iiggnnoorree__ccrriittiiccaall] [--iissssuueerr__cchheecckkss] [--ccrrll__cchheecckk]
+       [--ccrrll__cchheecckk__aallll] [--ppoolliiccyy__cchheecckk] [--eexxpplliicciitt__ppoolliiccyy] [--iinnhhiibbiitt__aannyy]
+       [--iinnhhiibbiitt__mmaapp] [--xx550099__ssttrriicctt] [--eexxtteennddeedd__ccrrll] [--uussee__ddeellttaass]
+       [--ppoolliiccyy__pprriinntt] [--cchheecckk__ssss__ssiigg] [--ttrruusstteedd__ffiirrsstt] [--ssuuiitteeBB__112288__oonnllyy]
+       [--ssuuiitteeBB__112288] [--ssuuiitteeBB__119922] [--ppaarrttiiaall__cchhaaiinn] [--nnoo__aalltt__cchhaaiinnss]
+       [--nnoo__cchheecckk__ttiimmee] [--aallllooww__pprrooxxyy__cceerrttss] [--xxkkeeyy] [--xxcceerrtt] [--xxcchhaaiinn]
+       [--xxcchhaaiinn__bbuuiilldd] [--xxcceerrttffoorrmm PPEEMM||DDEERR] [--xxkkeeyyffoorrmm PPEEMM||DDEERR] [--nnbbiioo]
+       [--ppsskk__iiddeennttiittyy vvaall] [--ppsskk__hhiinntt vvaall] [--ppsskk vvaall] [--ppsskk__sseessssiioonn ffiillee]
+       [--ssrrppvvffiillee iinnffiillee] [--ssrrppuusseerrsseeeedd vvaall] [--ssssll33] [--ttllss11] [--ttllss11__11]
+       [--ttllss11__22] [--ttllss11__33] [--ddttllss] [--ttiimmeeoouutt] [--mmttuu ++iinntt] [--lliisstteenn] [--ddttllss11]
+       [--ddttllss11__22] [--ssccttpp] [--ssccttpp__llaabbeell__bbuugg] [--nnoo__ddhhee] [--nneexxttpprroottoonneegg vvaall]
+       [--uussee__ssrrttpp vvaall] [--aallppnn vvaall] [--eennggiinnee vvaall] [--kkeeyyllooggffiillee oouuttffiillee]
+       [--mmaaxx__eeaarrllyy__ddaattaa iinntt] [--eeaarrllyy__ddaattaa] [--aannttii__rreeppllaayy] [--nnoo__aannttii__rreeppllaayy]
+
+DDEESSCCRRIIPPTTIIOONN
+       The ss__sseerrvveerr command implements a generic SSL/TLS server which listens
+       for connections on a given port using SSL/TLS.
+
+OOPPTTIIOONNSS
+       In addition to the options below the ss__sseerrvveerr utility also supports the
+       common and server only options documented in the "Supported Command
+       Line Commands" section of the SSSSLL__CCOONNFF__ccmmdd(3) manual page.
+
+       --hheellpp
+           Print out a usage message.
+
+       --ppoorrtt ++iinntt
+           The TCP port to listen on for connections. If not specified 4433 is
+           used.
+
+       --aacccceepptt vvaall
+           The optional TCP host and port to listen on for connections. If not
+           specified, *:4433 is used.
+
+       --uunniixx vvaall
+           Unix domain socket to accept on.
+
+       --44  Use IPv4 only.
+
+       --66  Use IPv6 only.
+
+       --uunnlliinnkk
+           For -unix, unlink any existing socket first.
+
+       --ccoonntteexxtt vvaall
+           Sets the SSL context id. It can be given any string value. If this
+           option is not present a default value will be used.
+
+       --vveerriiffyy iinntt, --VVeerriiffyy iinntt
+           The verify depth to use. This specifies the maximum length of the
+           client certificate chain and makes the server request a certificate
+           from the client. With the --vveerriiffyy option a certificate is requested
+           but the client does not have to send one, with the --VVeerriiffyy option
+           the client must supply a certificate or an error occurs.
+
+           If the cipher suite cannot request a client certificate (for
+           example an anonymous cipher suite or PSK) this option has no
+           effect.
+
+       --cceerrtt iinnffiillee
+           The certificate to use, most servers cipher suites require the use
+           of a certificate and some require a certificate with a certain
+           public key type: for example the DSS cipher suites require a
+           certificate containing a DSS (DSA) key. If not specified then the
+           filename "server.pem" will be used.
+
+       --cceerrtt__cchhaaiinn
+           A file containing trusted certificates to use when attempting to
+           build the client/server certificate chain related to the
+           certificate specified via the --cceerrtt option.
+
+       --bbuuiilldd__cchhaaiinn
+           Specify whether the application should build the certificate chain
+           to be provided to the client.
+
+       --nnaammeeoopptt vvaall
+           Option which determines how the subject or issuer names are
+           displayed. The vvaall argument can be a single option or multiple
+           options separated by commas.  Alternatively the --nnaammeeoopptt switch may
+           be used more than once to set multiple options. See the xx550099(1)
+           manual page for details.
+
+       --nnaacccceepptt ++iinntt
+           The server will exit after receiving the specified number of
+           connections, default unlimited.
+
+       --sseerrvveerriinnffoo vvaall
+           A file containing one or more blocks of PEM data.  Each PEM block
+           must encode a TLS ServerHello extension (2 bytes type, 2 bytes
+           length, followed by "length" bytes of extension data).  If the
+           client sends an empty TLS ClientHello extension matching the type,
+           the corresponding ServerHello extension will be returned.
+
+       --cceerrttffoorrmm PPEEMM||DDEERR
+           The certificate format to use: DER or PEM. PEM is the default.
+
+       --kkeeyy iinnffiillee
+           The private key to use. If not specified then the certificate file
+           will be used.
+
+       --kkeeyyffoorrmm ffoorrmmaatt
+           The private format to use: DER or PEM. PEM is the default.
+
+       --ppaassss vvaall
+           The private key password source. For more information about the
+           format of vvaall see "Pass Phrase Options" in ooppeennssssll(1).
+
+       --ddcceerrtt iinnffiillee, --ddkkeeyy iinnffiillee
+           Specify an additional certificate and private key, these behave in
+           the same manner as the --cceerrtt and --kkeeyy options except there is no
+           default if they are not specified (no additional certificate and
+           key is used). As noted above some cipher suites require a
+           certificate containing a key of a certain type. Some cipher suites
+           need a certificate carrying an RSA key and some a DSS (DSA) key. By
+           using RSA and DSS certificates and keys a server can support
+           clients which only support RSA or DSS cipher suites by using an
+           appropriate certificate.
+
+       --ddcceerrtt__cchhaaiinn
+           A file containing trusted certificates to use when attempting to
+           build the server certificate chain when a certificate specified via
+           the --ddcceerrtt option is in use.
+
+       --ddcceerrttffoorrmm PPEEMM||DDEERR, --ddkkeeyyffoorrmm PPEEMM||DDEERR, --ddppaassss vvaall
+           Additional certificate and private key format and passphrase
+           respectively.
+
+       --xxkkeeyy iinnffiillee, --xxcceerrtt iinnffiillee, --xxcchhaaiinn
+           Specify an extra certificate, private key and certificate chain.
+           These behave in the same manner as the --cceerrtt, --kkeeyy and --cceerrtt__cchhaaiinn
+           options.  When specified, the callback returning the first valid
+           chain will be in use by the server.
+
+       --xxcchhaaiinn__bbuuiilldd
+           Specify whether the application should build the certificate chain
+           to be provided to the client for the extra certificates provided
+           via --xxkkeeyy iinnffiillee, --xxcceerrtt iinnffiillee, --xxcchhaaiinn options.
+
+       --xxcceerrttffoorrmm PPEEMM||DDEERR, --xxkkeeyyffoorrmm PPEEMM||DDEERR
+           Extra certificate and private key format respectively.
+
+       --nnbbiioo__tteesstt
+           Tests non blocking I/O.
+
+       --ccrrllff
+           This option translated a line feed from the terminal into CR+LF.
+
+       --ddeebbuugg
+           Print extensive debugging information including a hex dump of all
+           traffic.
+
+       --mmssgg
+           Show all protocol messages with hex dump.
+
+       --mmssggffiillee oouuttffiillee
+           File to send output of --mmssgg or --ttrraaccee to, default standard output.
+
+       --ssttaattee
+           Prints the SSL session states.
+
+       --CCAAffiillee iinnffiillee
+           A file containing trusted certificates to use during client
+           authentication and to use when attempting to build the server
+           certificate chain. The list is also used in the list of acceptable
+           client CAs passed to the client when a certificate is requested.
+
+       --CCAAppaatthh ddiirr
+           The directory to use for client certificate verification. This
+           directory must be in "hash format", see vveerriiffyy(1) for more
+           information. These are also used when building the server
+           certificate chain.
+
+       --cchhaaiinnCCAAppaatthh ddiirr
+           The directory to use for building the chain provided to the client.
+           This directory must be in "hash format", see vveerriiffyy(1) for more
+           information.
+
+       --cchhaaiinnCCAAffiillee ffiillee
+           A file containing trusted certificates to use when attempting to
+           build the server certificate chain.
+
+       --nnoo--CCAAffiillee
+           Do not load the trusted CA certificates from the default file
+           location.
+
+       --nnoo--CCAAppaatthh
+           Do not load the trusted CA certificates from the default directory
+           location.
+
+       --nnoocceerrtt
+           If this option is set then no certificate is used. This restricts
+           the cipher suites available to the anonymous ones (currently just
+           anonymous DH).
+
+       --qquuiieett
+           Inhibit printing of session and certificate information.
+
+       --wwwwww
+           Sends a status message back to the client when it connects. This
+           includes information about the ciphers used and various session
+           parameters.  The output is in HTML format so this option will
+           normally be used with a web browser. Cannot be used in conjunction
+           with --eeaarrllyy__ddaattaa.
+
+       --WWWWWW
+           Emulates a simple web server. Pages will be resolved relative to
+           the current directory, for example if the URL
+           https://myhost/page.html is requested the file ./page.html will be
+           loaded. Cannot be used in conjunction with --eeaarrllyy__ddaattaa.
+
+       --ttllsseexxttddeebbuugg
+           Print a hex dump of any TLS extensions received from the server.
+
+       --HHTTTTPP
+           Emulates a simple web server. Pages will be resolved relative to
+           the current directory, for example if the URL
+           https://myhost/page.html is requested the file ./page.html will be
+           loaded. The files loaded are assumed to contain a complete and
+           correct HTTP response (lines that are part of the HTTP response
+           line and headers must end with CRLF). Cannot be used in conjunction
+           with --eeaarrllyy__ddaattaa.
+
+       --iidd__pprreeffiixx vvaall
+           Generate SSL/TLS session IDs prefixed by vvaall. This is mostly useful
+           for testing any SSL/TLS code (e.g. proxies) that wish to deal with
+           multiple servers, when each of which might be generating a unique
+           range of session IDs (e.g. with a certain prefix).
+
+       --rraanndd ffiillee......
+           A file or files containing random data used to seed the random
+           number generator.  Multiple files can be specified separated by an
+           OS-dependent character.  The separator is ;; for MS-Windows, ,, for
+           OpenVMS, and :: for all others.
+
+       [--wwrriitteerraanndd ffiillee]
+           Writes random data to the specified _f_i_l_e upon exit.  This can be
+           used with a subsequent --rraanndd flag.
+
+       --vveerriiffyy__rreettuurrnn__eerrrroorr
+           Verification errors normally just print a message but allow the
+           connection to continue, for debugging purposes.  If this option is
+           used, then verification errors close the connection.
+
+       --ssttaattuuss
+           Enables certificate status request support (aka OCSP stapling).
+
+       --ssttaattuuss__vveerrbboossee
+           Enables certificate status request support (aka OCSP stapling) and
+           gives a verbose printout of the OCSP response.
+
+       --ssttaattuuss__ttiimmeeoouutt iinntt
+           Sets the timeout for OCSP response to iinntt seconds.
+
+       --ssttaattuuss__uurrll vvaall
+           Sets a fallback responder URL to use if no responder URL is present
+           in the server certificate. Without this option an error is returned
+           if the server certificate does not contain a responder address.
+
+       --ssttaattuuss__ffiillee iinnffiillee
+           Overrides any OCSP responder URLs from the certificate and always
+           provides the OCSP Response stored in the file. The file must be in
+           DER format.
+
+       --ttrraaccee
+           Show verbose trace output of protocol messages. OpenSSL needs to be
+           compiled with eennaabbllee--ssssll--ttrraaccee for this option to work.
+
+       --bbrriieeff
+           Provide a brief summary of connection parameters instead of the
+           normal verbose output.
+
+       --rreevv
+           Simple test server which just reverses the text received from the
+           client and sends it back to the server. Also sets --bbrriieeff. Cannot be
+           used in conjunction with --eeaarrllyy__ddaattaa.
+
+       --aassyynncc
+           Switch on asynchronous mode. Cryptographic operations will be
+           performed asynchronously. This will only have an effect if an
+           asynchronous capable engine is also used via the --eennggiinnee option.
+           For test purposes the dummy async engine (dasync) can be used (if
+           available).
+
+       --mmaaxx__sseenndd__ffrraagg ++iinntt
+           The maximum size of data fragment to send.  See
+           SSSSLL__CCTTXX__sseett__mmaaxx__sseenndd__ffrraaggmmeenntt(3) for further information.
+
+       --sspplliitt__sseenndd__ffrraagg ++iinntt
+           The size used to split data for encrypt pipelines. If more data is
+           written in one go than this value then it will be split into
+           multiple pipelines, up to the maximum number of pipelines defined
+           by max_pipelines. This only has an effect if a suitable cipher
+           suite has been negotiated, an engine that supports pipelining has
+           been loaded, and max_pipelines is greater than 1. See
+           SSSSLL__CCTTXX__sseett__sspplliitt__sseenndd__ffrraaggmmeenntt(3) for further information.
+
+       --mmaaxx__ppiippeelliinneess ++iinntt
+           The maximum number of encrypt/decrypt pipelines to be used. This
+           will only have an effect if an engine has been loaded that supports
+           pipelining (e.g. the dasync engine) and a suitable cipher suite has
+           been negotiated. The default value is 1.  See
+           SSSSLL__CCTTXX__sseett__mmaaxx__ppiippeelliinneess(3) for further information.
+
+       --rreeaadd__bbuuff ++iinntt
+           The default read buffer size to be used for connections. This will
+           only have an effect if the buffer size is larger than the size that
+           would otherwise be used and pipelining is in use (see
+           SSSSLL__CCTTXX__sseett__ddeeffaauulltt__rreeaadd__bbuuffffeerr__lleenn(3) for further information).
+
+       --ssssll22, --ssssll33, --ttllss11, --ttllss11__11, --ttllss11__22, --ttllss11__33, --nnoo__ssssll22, --nnoo__ssssll33,
+       --nnoo__ttllss11, --nnoo__ttllss11__11, --nnoo__ttllss11__22, --nnoo__ttllss11__33
+           These options require or disable the use of the specified SSL or
+           TLS protocols.  By default ss__sseerrvveerr will negotiate the highest
+           mutually supported protocol version.  When a specific TLS version
+           is required, only that version will be accepted from the client.
+           Note that not all protocols and flags may be available, depending
+           on how OpenSSL was built.
+
+       --bbuuggss
+           There are several known bugs in SSL and TLS implementations. Adding
+           this option enables various workarounds.
+
+       --nnoo__ccoommpp
+           Disable negotiation of TLS compression.  TLS compression is not
+           recommended and is off by default as of OpenSSL 1.1.0.
+
+       --ccoommpp
+           Enable negotiation of TLS compression.  This option was introduced
+           in OpenSSL 1.1.0.  TLS compression is not recommended and is off by
+           default as of OpenSSL 1.1.0.
+
+       --nnoo__ttiicckkeett
+           Disable RFC4507bis session ticket support. This option has no
+           effect if TLSv1.3 is negotiated. See --nnuumm__ttiicckkeettss.
+
+       --nnuumm__ttiicckkeettss
+           Control the number of tickets that will be sent to the client after
+           a full handshake in TLSv1.3. The default number of tickets is 2.
+           This option does not affect the number of tickets sent after a
+           resumption handshake.
+
+       --sseerrvveerrpprreeff
+           Use the server's cipher preferences, rather than the client's
+           preferences.
+
+       --pprriioorriittiizzee__cchhaacchhaa
+           Prioritize ChaCha ciphers when preferred by clients. Requires
+           --sseerrvveerrpprreeff.
+
+       --nnoo__rreessuummppttiioonn__oonn__rreenneegg
+           Set the SSSSLL__OOPP__NNOO__SSEESSSSIIOONN__RREESSUUMMPPTTIIOONN__OONN__RREENNEEGGOOTTIIAATTIIOONN option.
+
+       --cclliieenntt__ssiiggaallggss vvaall
+           Signature algorithms to support for client certificate
+           authentication (colon-separated list).
+
+       --nnaammeedd__ccuurrvvee vvaall
+           Specifies the elliptic curve to use. NOTE: this is single curve,
+           not a list.  For a list of all possible curves, use:
+
+               $ openssl ecparam -list_curves
+
+       --cciipphheerr vvaall
+           This allows the list of TLSv1.2 and below ciphersuites used by the
+           server to be modified. This list is combined with any TLSv1.3
+           ciphersuites that have been configured. When the client sends a
+           list of supported ciphers the first client cipher also included in
+           the server list is used. Because the client specifies the
+           preference order, the order of the server cipherlist is irrelevant.
+           See the cciipphheerrss command for more information.
+
+       --cciipphheerrssuuiitteess vvaall
+           This allows the list of TLSv1.3 ciphersuites used by the server to
+           be modified.  This list is combined with any TLSv1.2 and below
+           ciphersuites that have been configured. When the client sends a
+           list of supported ciphers the first client cipher also included in
+           the server list is used. Because the client specifies the
+           preference order, the order of the server cipherlist is irrelevant.
+           See the cciipphheerrss command for more information. The format for this
+           list is a simple colon (":") separated list of TLSv1.3 ciphersuite
+           names.
+
+       --ddhhppaarraamm iinnffiillee
+           The DH parameter file to use. The ephemeral DH cipher suites
+           generate keys using a set of DH parameters. If not specified then
+           an attempt is made to load the parameters from the server
+           certificate file.  If this fails then a static set of parameters
+           hard coded into the ss__sseerrvveerr program will be used.
+
+       --aattttiimmee, --cchheecckk__ssss__ssiigg, --ccrrll__cchheecckk, --ccrrll__cchheecckk__aallll, --eexxpplliicciitt__ppoolliiccyy,
+       --eexxtteennddeedd__ccrrll, --iiggnnoorree__ccrriittiiccaall, --iinnhhiibbiitt__aannyy, --iinnhhiibbiitt__mmaapp,
+       --nnoo__aalltt__cchhaaiinnss, --nnoo__cchheecckk__ttiimmee, --ppaarrttiiaall__cchhaaiinn, --ppoolliiccyy, --ppoolliiccyy__cchheecckk,
+       --ppoolliiccyy__pprriinntt, --ppuurrppoossee, --ssuuiitteeBB__112288, --ssuuiitteeBB__112288__oonnllyy, --ssuuiitteeBB__119922,
+       --ttrruusstteedd__ffiirrsstt, --uussee__ddeellttaass, --aauutthh__lleevveell, --vveerriiffyy__ddeepptthh, --vveerriiffyy__eemmaaiill,
+       --vveerriiffyy__hhoossttnnaammee, --vveerriiffyy__iipp, --vveerriiffyy__nnaammee, --xx550099__ssttrriicctt
+           Set different peer certificate verification options.  See the
+           vveerriiffyy(1) manual page for details.
+
+       --ccrrll__cchheecckk, --ccrrll__cchheecckk__aallll
+           Check the peer certificate has not been revoked by its CA.  The
+           CRL(s) are appended to the certificate file. With the
+           --ccrrll__cchheecckk__aallll option all CRLs of all CAs in the chain are checked.
+
+       --nnbbiioo
+           Turns on non blocking I/O.
+
+       --ppsskk__iiddeennttiittyy vvaall
+           Expect the client to send PSK identity vvaall when using a PSK cipher
+           suite, and warn if they do not.  By default, the expected PSK
+           identity is the string "Client_identity".
+
+       --ppsskk__hhiinntt vvaall
+           Use the PSK identity hint vvaall when using a PSK cipher suite.
+
+       --ppsskk vvaall
+           Use the PSK key vvaall when using a PSK cipher suite. The key is given
+           as a hexadecimal number without leading 0x, for example -psk
+           1a2b3c4d.  This option must be provided in order to use a PSK
+           cipher.
+
+       --ppsskk__sseessssiioonn ffiillee
+           Use the pem encoded SSL_SESSION data stored in ffiillee as the basis of
+           a PSK.  Note that this will only work if TLSv1.3 is negotiated.
+
+       --lliisstteenn
+           This option can only be used in conjunction with one of the DTLS
+           options above.  With this option ss__sseerrvveerr will listen on a UDP port
+           for incoming connections.  Any ClientHellos that arrive will be
+           checked to see if they have a cookie in them or not.  Any without a
+           cookie will be responded to with a HelloVerifyRequest.  If a
+           ClientHello with a cookie is received then ss__sseerrvveerr will connect to
+           that peer and complete the handshake.
+
+       --ddttllss, --ddttllss11, --ddttllss11__22
+           These options make ss__sseerrvveerr use DTLS protocols instead of TLS.
+           With --ddttllss, ss__sseerrvveerr will negotiate any supported DTLS protocol
+           version, whilst --ddttllss11 and --ddttllss11__22 will only support DTLSv1.0 and
+           DTLSv1.2 respectively.
+
+       --ssccttpp
+           Use SCTP for the transport protocol instead of UDP in DTLS. Must be
+           used in conjunction with --ddttllss, --ddttllss11 or --ddttllss11__22. This option is
+           only available where OpenSSL has support for SCTP enabled.
+
+       --ssccttpp__llaabbeell__bbuugg
+           Use the incorrect behaviour of older OpenSSL implementations when
+           computing endpoint-pair shared secrets for DTLS/SCTP. This allows
+           communication with older broken implementations but breaks
+           interoperability with correct implementations. Must be used in
+           conjunction with --ssccttpp. This option is only available where OpenSSL
+           has support for SCTP enabled.
+
+       --nnoo__ddhhee
+           If this option is set then no DH parameters will be loaded
+           effectively disabling the ephemeral DH cipher suites.
+
+       --aallppnn vvaall, --nneexxttpprroottoonneegg vvaall
+           These flags enable the Application-Layer Protocol Negotiation or
+           Next Protocol Negotiation (NPN) extension, respectively. ALPN is
+           the IETF standard and replaces NPN.  The vvaall list is a comma-
+           separated list of supported protocol names.  The list should
+           contain the most desirable protocols first.  Protocol names are
+           printable ASCII strings, for example "http/1.1" or "spdy/3".  The
+           flag --nneexxttpprroottoonneegg cannot be specified if --ttllss11__33 is used.
+
+       --eennggiinnee vvaall
+           Specifying an engine (by its unique id string in vvaall) will cause
+           ss__sseerrvveerr to attempt to obtain a functional reference to the
+           specified engine, thus initialising it if needed. The engine will
+           then be set as the default for all available algorithms.
+
+       --kkeeyyllooggffiillee oouuttffiillee
+           Appends TLS secrets to the specified keylog file such that external
+           programs (like Wireshark) can decrypt TLS connections.
+
+       --mmaaxx__eeaarrllyy__ddaattaa iinntt
+           Change the default maximum early data bytes that are specified for
+           new sessions and any incoming early data (when used in conjunction
+           with the --eeaarrllyy__ddaattaa flag). The default value is approximately 16k.
+           The argument must be an integer greater than or equal to 0.
+
+       --eeaarrllyy__ddaattaa
+           Accept early data where possible. Cannot be used in conjunction
+           with --wwwwww, --WWWWWW, --HHTTTTPP or --rreevv.
+
+       --aannttii__rreeppllaayy, --nnoo__aannttii__rreeppllaayy
+           Switches replay protection on or off, respectively. Replay
+           protection is on by default unless overridden by a configuration
+           file. When it is on, OpenSSL will automatically detect if a session
+           ticket has been used more than once, TLSv1.3 has been negotiated,
+           and early data is enabled on the server. A full handshake is forced
+           if a session ticket is used a second or subsequent time. Any early
+           data that was sent will be rejected.
+
+CCOONNNNEECCTTEEDD CCOOMMMMAANNDDSS
+       If a connection request is established with an SSL client and neither
+       the --wwwwww nor the --WWWWWW option has been used then normally any data
+       received from the client is displayed and any key presses will be sent
+       to the client.
+
+       Certain commands are also recognized which perform special operations.
+       These commands are a letter which must appear at the start of a line.
+       They are listed below.
+
+       qq   End the current SSL connection but still accept new connections.
+
+       QQ   End the current SSL connection and exit.
+
+       rr   Renegotiate the SSL session (TLSv1.2 and below only).
+
+       RR   Renegotiate the SSL session and request a client certificate
+           (TLSv1.2 and below only).
+
+       PP   Send some plain text down the underlying TCP connection: this
+           should cause the client to disconnect due to a protocol violation.
+
+       SS   Print out some session cache status information.
+
+       BB   Send a heartbeat message to the client (DTLS only)
+
+       kk   Send a key update message to the client (TLSv1.3 only)
+
+       KK   Send a key update message to the client and request one back
+           (TLSv1.3 only)
+
+       cc   Send a certificate request to the client (TLSv1.3 only)
+
+NNOOTTEESS
+       ss__sseerrvveerr can be used to debug SSL clients. To accept connections from a
+       web browser the command:
+
+        openssl s_server -accept 443 -www
+
+       can be used for example.
+
+       Although specifying an empty list of CAs when requesting a client
+       certificate is strictly speaking a protocol violation, some SSL clients
+       interpret this to mean any CA is acceptable. This is useful for
+       debugging purposes.
+
+       The session parameters can printed out using the sseessss__iidd program.
+
+BBUUGGSS
+       Because this program has a lot of options and also because some of the
+       techniques used are rather old, the C source of ss__sseerrvveerr is rather hard
+       to read and not a model of how things should be done.  A typical SSL
+       server program would be much simpler.
+
+       The output of common ciphers is wrong: it just gives the list of
+       ciphers that OpenSSL recognizes and the client supports.
+
+       There should be a way for the ss__sseerrvveerr program to print out details of
+       any unknown cipher suites a client says it supports.
+
+SSEEEE AALLSSOO
+       SSSSLL__CCOONNFF__ccmmdd(3), sseessss__iidd(1), ss__cclliieenntt(1), cciipphheerrss(1)
+       SSSSLL__CCTTXX__sseett__mmaaxx__sseenndd__ffrraaggmmeenntt(3), SSSSLL__CCTTXX__sseett__sspplliitt__sseenndd__ffrraaggmmeenntt(3),
+       SSSSLL__CCTTXX__sseett__mmaaxx__ppiippeelliinneess(3)
+
+HHIISSTTOORRYY
+       The -no_alt_chains option was added in OpenSSL 1.1.0.
+
+       The -allow-no-dhe-kex and -prioritize_chacha options were added in
+       OpenSSL 1.1.1.
+
+CCOOPPYYRRIIGGHHTT
+       Copyright 2000-2021 The OpenSSL Project Authors. All Rights Reserved.
+
+       Licensed under the OpenSSL license (the "License").  You may not use
+       this file except in compliance with the License.  You can obtain a copy
+       in the file LICENSE in the source distribution or at
+       <https://www.openssl.org/source/license.html>.
+
+
+
+1.1.1l                            2021-08-24                       S_SERVER(1)

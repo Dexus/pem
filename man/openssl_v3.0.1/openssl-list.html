@@ -1,0 +1,339 @@
+<!-- Creator     : groff version 1.22.4 -->
+<!-- CreationDate: Mon Jan 31 16:15:32 2022 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>OPENSSL-LIST</title>
+
+</head>
+<body>
+
+<h1 align="center">OPENSSL-LIST</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#OPTIONS">OPTIONS</a><br>
+<a href="#HISTORY">HISTORY</a><br>
+<a href="#COPYRIGHT">COPYRIGHT</a><br>
+
+<hr>
+
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">openssl-list -
+list algorithms and features</p>
+
+<h2>SYNOPSIS
+<a name="SYNOPSIS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>openssl
+list</b> [<b>-help</b>] [<b>-verbose</b>] [<b>-select</b>
+<i>name</i>] [<b>-1</b>] [<b>-commands</b>]
+[<b>-standard-commands</b>] [<b>-digest-algorithms</b>]
+[<b>-digest-commands</b>] [<b>-kdf-algorithms</b>]
+[<b>-mac-algorithms</b>] [<b>-random-instances</b>]
+[<b>-random-generators</b>] [<b>-cipher-algorithms</b>]
+[<b>-cipher-commands</b>] [<b>-encoders</b>]
+[<b>-decoders</b>] [<b>-key-managers</b>]
+[<b>-key-exchange-algorithms</b>] [<b>-kem-algorithms</b>]
+[<b>-signature-algorithms</b>]
+[<b>-asymcipher-algorithms</b>]
+[<b>-public-key-algorithms</b>] [<b>-public-key-methods</b>]
+[<b>-store-loaders</b>] [<b>-providers</b>]
+[<b>-engines</b>] [<b>-disabled</b>] [<b>-objects</b>]
+[<b>-options</b> <i>command</i>] [<b>-provider</b>
+<i>name</i>] [<b>-provider-path</b> <i>path</i>]
+[<b>-propquery</b> <i>propq</i>]</p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">This command is
+used to generate list of algorithms or disabled
+features.</p>
+
+<h2>OPTIONS
+<a name="OPTIONS"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>-help</b></p>
+
+<p style="margin-left:17%;">Display a usage message.</p>
+
+<p style="margin-left:11%;"><b>-verbose</b></p>
+
+<p style="margin-left:17%;">Displays extra information. The
+options below where verbosity applies say a bit more about
+what that means.</p>
+
+<p style="margin-left:11%;"><b>-select</b> <i>name</i></p>
+
+<p style="margin-left:17%;">Only list algorithms that match
+this name.</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+<p><b>-1</b></p></td>
+<td width="3%"></td>
+<td width="83%">
+
+
+<p>List the commands, digest-commands, or cipher-commands
+in a single column. If used, this option must be given
+first.</p> </td></tr>
+</table>
+
+<p style="margin-left:11%;"><b>-commands</b></p>
+
+<p style="margin-left:17%;">Display a list of standard
+commands.</p>
+
+<p style="margin-left:11%;"><b>-standard-commands</b></p>
+
+<p style="margin-left:17%;">List of standard commands.</p>
+
+<p style="margin-left:11%;"><b>-digest-commands</b></p>
+
+<p style="margin-left:17%;">This option is deprecated. Use
+<b>digest-algorithms</b> instead.</p>
+
+<p style="margin-left:17%; margin-top: 1em">Display a list
+of message digest commands, which are typically used as
+input to the <b>openssl-dgst</b>(1) or
+<b>openssl-speed</b>(1) commands.</p>
+
+<p style="margin-left:11%;"><b>-cipher-commands</b></p>
+
+<p style="margin-left:17%;">This option is deprecated. Use
+<b>cipher-algorithms</b> instead.</p>
+
+<p style="margin-left:17%; margin-top: 1em">Display a list
+of cipher commands, which are typically used as input to the
+<b>openssl-enc</b>(1) or <b>openssl-speed</b>(1)
+commands.</p>
+
+<p style="margin-left:11%;"><b>-digest-algorithms</b>,
+<b>-kdf-algorithms</b>, <b>-mac-algorithms</b>, <b><br>
+-cipher-algorithms</b></p>
+
+<p style="margin-left:17%;">Display a list of cipher,
+digest, kdf and mac algorithms. See &quot;Display of
+algorithm names&quot; for a description of how names are
+displayed.</p>
+
+<p style="margin-left:17%; margin-top: 1em">In verbose
+mode, the algorithms provided by a provider will get
+additional information on what parameters each
+implementation supports.</p>
+
+<p style="margin-left:11%;"><b>-random-instances</b></p>
+
+<p style="margin-left:17%;">List the primary, public and
+private random number generator details.</p>
+
+<p style="margin-left:11%;"><b>-random-generators</b></p>
+
+<p style="margin-left:17%;">Display a list of random number
+generators. See &quot;Display of algorithm names&quot; for a
+description of how names are displayed.</p>
+
+<p style="margin-left:11%;"><b>-encoders</b></p>
+
+<p style="margin-left:17%;">Display a list of encoders. See
+&quot;Display of algorithm names&quot; for a description of
+how names are displayed.</p>
+
+<p style="margin-left:17%; margin-top: 1em">In verbose
+mode, the algorithms provided by a provider will get
+additional information on what parameters each
+implementation supports.</p>
+
+<p style="margin-left:11%;"><b>-decoders</b></p>
+
+<p style="margin-left:17%;">Display a list of decoders. See
+&quot;Display of algorithm names&quot; for a description of
+how names are displayed.</p>
+
+<p style="margin-left:17%; margin-top: 1em">In verbose
+mode, the algorithms provided by a provider will get
+additional information on what parameters each
+implementation supports.</p>
+
+
+<p style="margin-left:11%;"><b>-public-key-algorithms</b></p>
+
+<p style="margin-left:17%;">Display a list of public key
+algorithms, with each algorithm as a block of multiple
+lines, all but the first are indented. The options
+<b>key-exchange-algorithms</b>, <b>kem-algorithms</b>,
+<b>signature-algorithms</b>, and
+<b>asymcipher-algorithms</b> will display similar info.</p>
+
+<p style="margin-left:11%;"><b>-public-key-methods</b></p>
+
+<p style="margin-left:17%;">Display a list of public key
+methods.</p>
+
+<p style="margin-left:11%;"><b>-key-managers</b></p>
+
+<p style="margin-left:17%;">Display a list of key
+managers.</p>
+
+
+<p style="margin-left:11%;"><b>-key-exchange-algorithms</b></p>
+
+<p style="margin-left:17%;">Display a list of key exchange
+algorithms.</p>
+
+<p style="margin-left:11%;"><b>-kem-algorithms</b></p>
+
+<p style="margin-left:17%;">Display a list of key
+encapsulation algorithms.</p>
+
+
+<p style="margin-left:11%;"><b>-signature-algorithms</b></p>
+
+<p style="margin-left:17%;">Display a list of signature
+algorithms.</p>
+
+
+<p style="margin-left:11%;"><b>-asymcipher-algorithms</b></p>
+
+<p style="margin-left:17%;">Display a list of asymmetric
+cipher algorithms.</p>
+
+<p style="margin-left:11%;"><b>-store-loaders</b></p>
+
+<p style="margin-left:17%;">Display a list of store
+loaders.</p>
+
+<p style="margin-left:11%;"><b>-providers</b></p>
+
+<p style="margin-left:17%;">Display a list of all loaded
+providers with their names, version and status.</p>
+
+<p style="margin-left:17%; margin-top: 1em">In verbose
+mode, the full version and all provider parameters will
+additionally be displayed.</p>
+
+<p style="margin-left:11%;"><b>-engines</b></p>
+
+<p style="margin-left:17%;">This option is deprecated.</p>
+
+<p style="margin-left:17%; margin-top: 1em">Display a list
+of loaded engines.</p>
+
+<p style="margin-left:11%;"><b>-disabled</b></p>
+
+<p style="margin-left:17%;">Display a list of disabled
+features, those that were compiled out of the
+installation.</p>
+
+<p style="margin-left:11%;"><b>-objects</b></p>
+
+<p style="margin-left:17%;">Display a list of built in
+objects, i.e. OIDs with names. They&rsquo;re listed in the
+format described in &quot; <small>ASN1</small> Object
+Configuration Module&quot; in <b>config</b>(5).</p>
+
+<p style="margin-left:11%;"><b>-options</b>
+<i>command</i></p>
+
+<p style="margin-left:17%;">Output a two-column list of the
+options accepted by the specified <i>command</i>. The first
+is the option name, and the second is a one-character
+indication of what type of parameter it takes, if any. This
+is an internal option, used for checking that the
+documentation is complete.</p>
+
+<p style="margin-left:11%;"><b>-provider</b> <i>name</i>
+<b><br>
+-provider-path</b> <i>path</i> <b><br>
+-propquery</b> <i>propq</i></p>
+
+<p style="margin-left:17%;">See &quot;Provider
+Options&quot; in <b>openssl</b>(1), <b>provider</b>(7), and
+<b>property</b>(7).</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>Display of
+algorithm names</b> <br>
+Algorithm names may be displayed in one of two manners: <br>
+Legacy implementations</p>
+
+<p style="margin-left:17%;">Legacy implementations will
+simply display the main name of the algorithm on a line of
+its own, or in the form &quot;&lt;foo &quot; bar&gt;&gt; to
+show that &quot;foo&quot; is an alias for the main name,
+&quot;bar&quot;</p>
+
+<p style="margin-left:11%;">Provided implementations</p>
+
+<p style="margin-left:17%;">Implementations from a provider
+are displayed like this if the implementation is labeled
+with a single name:</p>
+
+<p style="margin-left:17%; margin-top: 1em">foo @ bar</p>
+
+<p style="margin-left:17%; margin-top: 1em">or like this if
+it&rsquo;s labeled with multiple names:</p>
+
+<p style="margin-left:17%; margin-top: 1em">{ foo1, foo2 }
+@bar</p>
+
+<p style="margin-left:17%; margin-top: 1em">In both cases,
+&quot;bar&quot; is the name of the provider.</p>
+
+<h2>HISTORY
+<a name="HISTORY"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The
+<b>-engines</b>, <b>-digest-commands</b>, and
+<b>-cipher-commands</b> options were deprecated in OpenSSL
+3.0.</p>
+
+<h2>COPYRIGHT
+<a name="COPYRIGHT"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Copyright
+2016-2021 The OpenSSL Project Authors. All Rights
+Reserved.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Licensed under
+the Apache License 2.0 (the &quot;License&quot;). You may
+not use this file except in compliance with the License. You
+can obtain a copy in the file <small>LICENSE</small> in the
+source distribution or at
+&lt;https://www.openssl.org/source/license.html&gt;.</p>
+<hr>
+</body>
+</html>

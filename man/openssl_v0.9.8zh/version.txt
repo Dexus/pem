@@ -1,0 +1,38 @@
+VERSION(1)                          OpenSSL                         VERSION(1)
+
+
+
+NNAAMMEE
+       version - print OpenSSL version information
+
+SSYYNNOOPPSSIISS
+       ooppeennssssll vveerrssiioonn [--aa] [--vv] [--bb] [--oo] [--ff] [--pp]
+
+DDEESSCCRRIIPPTTIIOONN
+       This command is used to print out version information about OpenSSL.
+
+OOPPTTIIOONNSS
+       --aa  all information, this is the same as setting all the other flags.
+
+       --vv  the current OpenSSL version.
+
+       --bb  the date the current version of OpenSSL was built.
+
+       --oo  option information: various options set when the library was built.
+
+       --cc  compilation flags.
+
+       --pp  platform setting.
+
+       --dd  OPENSSLDIR setting.
+
+NNOOTTEESS
+       The output of ooppeennssssll vveerrssiioonn --aa would typically be used when sending
+       in a bug report.
+
+HHIISSTTOORRYY
+       The --dd option was added in OpenSSL 0.9.7.
+
+
+
+0.9.8zh                           2015-12-03                        VERSION(1)

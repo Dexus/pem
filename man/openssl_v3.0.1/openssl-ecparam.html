@@ -1,0 +1,305 @@
+<!-- Creator     : groff version 1.22.4 -->
+<!-- CreationDate: Mon Jan 31 16:15:32 2022 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>OPENSSL-ECPARAM</title>
+
+</head>
+<body>
+
+<h1 align="center">OPENSSL-ECPARAM</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#OPTIONS">OPTIONS</a><br>
+<a href="#EXAMPLES">EXAMPLES</a><br>
+<a href="#SEE ALSO">SEE ALSO</a><br>
+<a href="#HISTORY">HISTORY</a><br>
+<a href="#COPYRIGHT">COPYRIGHT</a><br>
+
+<hr>
+
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em">openssl-ecparam
+- EC parameter manipulation and generation</p>
+
+<h2>SYNOPSIS
+<a name="SYNOPSIS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>openssl
+ecparam</b> [<b>-help</b>] [<b>-inform
+<small>DER</small></b> | <b><small>PEM</small></b> ]
+[<b>-outform <small>DER</small></b> |
+<b><small>PEM</small></b> ] [<b>-in</b> <i>filename</i>]
+[<b>-out</b> <i>filename</i>] [<b>-noout</b>] [<b>-text</b>]
+[<b>-check</b>] [<b>-check_named</b>] [<b>-name</b>
+<i>arg</i>] [<b>-list_curves</b>] [<b>-conv_form</b>
+<i>arg</i>] [<b>-param_enc</b> <i>arg</i>] [<b>-no_seed</b>]
+[<b>-genkey</b>] [<b>-engine</b> <i>id</i>] [<b>-rand</b>
+<i>files</i>] [<b>-writerand</b> <i>file</i>]
+[<b>-provider</b> <i>name</i>] [<b>-provider-path</b>
+<i>path</i>] [<b>-propquery</b> <i>propq</i>]</p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">This command is
+used to manipulate or generate <small>EC</small> parameter
+files.</p>
+
+<p style="margin-left:11%; margin-top: 1em">OpenSSL is
+currently not able to generate new groups and therefore this
+command can only create <small>EC</small> parameters from
+known (named) curves.</p>
+
+<h2>OPTIONS
+<a name="OPTIONS"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>-help</b></p>
+
+<p style="margin-left:17%;">Print out a usage message.</p>
+
+<p style="margin-left:11%;"><b>-inform
+<small>DER</small></b> | <b><small>PEM</small></b></p>
+
+<p style="margin-left:17%;">The <small>EC</small>
+parameters input format; unspecified by default. See
+<b>openssl-format-options</b>(1) for details.</p>
+
+<p style="margin-left:11%;"><b>-outform
+<small>DER</small></b> | <b><small>PEM</small></b></p>
+
+<p style="margin-left:17%;">The <small>EC</small>
+parameters output format; the default is
+<b><small>PEM</small></b> . See
+<b>openssl-format-options</b>(1) for details.</p>
+
+<p style="margin-left:17%; margin-top: 1em">Parameters are
+encoded as <b>EcpkParameters</b> as specified in <small>IETF
+RFC 3279.</small></p>
+
+<p style="margin-left:11%;"><b>-in</b> <i>filename</i></p>
+
+<p style="margin-left:17%;">This specifies the input
+filename to read parameters from or standard input if this
+option is not specified.</p>
+
+<p style="margin-left:11%;"><b>-out</b> <i>filename</i></p>
+
+<p style="margin-left:17%;">This specifies the output
+filename parameters to. Standard output is used if this
+option is not present. The output filename should <b>not</b>
+be the same as the input filename.</p>
+
+<p style="margin-left:11%;"><b>-noout</b></p>
+
+<p style="margin-left:17%;">This option inhibits the output
+of the encoded version of the parameters.</p>
+
+<p style="margin-left:11%;"><b>-text</b></p>
+
+<p style="margin-left:17%;">This option prints out the
+<small>EC</small> parameters in human readable form.</p>
+
+<p style="margin-left:11%;"><b>-check</b></p>
+
+<p style="margin-left:17%;">Validate the elliptic curve
+parameters.</p>
+
+<p style="margin-left:11%;"><b>-check_named</b></p>
+
+<p style="margin-left:17%;">Validate the elliptic name
+curve parameters by checking if the curve parameters match
+any built-in curves.</p>
+
+<p style="margin-left:11%;"><b>-name</b> <i>arg</i></p>
+
+<p style="margin-left:17%;">Use the <small>EC</small>
+parameters with the specified &rsquo;short&rsquo; name. Use
+<b>-list_curves</b> to get a list of all currently
+implemented <small>EC</small> parameters.</p>
+
+<p style="margin-left:11%;"><b>-list_curves</b></p>
+
+<p style="margin-left:17%;">Print out a list of all
+currently implemented <small>EC</small> parameters names and
+exit.</p>
+
+<p style="margin-left:11%;"><b>-conv_form</b>
+<i>arg</i></p>
+
+<p style="margin-left:17%;">This specifies how the points
+on the elliptic curve are converted into octet strings.
+Possible values are: <b>compressed</b>, <b>uncompressed</b>
+(the default value) and <b>hybrid</b>. For more information
+regarding the point conversion forms please read the X9.62
+standard. <b>Note</b> Due to patent issues the
+<b>compressed</b> option is disabled by default for binary
+curves and can be enabled by defining the preprocessor macro
+<b><small>OPENSSL_EC_BIN_PT_COMP</small></b> at compile
+time.</p>
+
+<p style="margin-left:11%;"><b>-param_enc</b>
+<i>arg</i></p>
+
+<p style="margin-left:17%;">This specifies how the elliptic
+curve parameters are encoded. Possible value are:
+<b>named_curve</b>, i.e. the ec parameters are specified by
+an <small>OID,</small> or <b>explicit</b> where the ec
+parameters are explicitly given (see <small>RFC 3279</small>
+for the definition of the <small>EC</small> parameters
+structures). The default value is <b>named_curve</b>.
+<b>Note</b> the <b>implicitlyCA</b> alternative, as
+specified in <small>RFC 3279,</small> is currently not
+implemented in OpenSSL.</p>
+
+<p style="margin-left:11%;"><b>-no_seed</b></p>
+
+<p style="margin-left:17%;">This option inhibits that the
+&rsquo;seed&rsquo; for the parameter generation is included
+in the ECParameters structure (see <small>RFC 3279</small>
+).</p>
+
+<p style="margin-left:11%;"><b>-genkey</b></p>
+
+<p style="margin-left:17%;">This option will generate an
+<small>EC</small> private key using the specified
+parameters.</p>
+
+<p style="margin-left:11%;"><b>-engine</b> <i>id</i></p>
+
+<p style="margin-left:17%;">See &quot;Engine Options&quot;
+in <b>openssl</b>(1). This option is deprecated.</p>
+
+<p style="margin-left:11%;"><b>-rand</b> <i>files</i>,
+<b>-writerand</b> <i>file</i></p>
+
+<p style="margin-left:17%;">See &quot;Random State
+Options&quot; in <b>openssl</b>(1) for details.</p>
+
+<p style="margin-left:11%;"><b>-provider</b> <i>name</i>
+<b><br>
+-provider-path</b> <i>path</i> <b><br>
+-propquery</b> <i>propq</i></p>
+
+<p style="margin-left:17%;">See &quot;Provider
+Options&quot; in <b>openssl</b>(1), <b>provider</b>(7), and
+<b>property</b>(7).</p>
+
+<p style="margin-left:11%; margin-top: 1em">The
+<b>openssl-genpkey</b>(1) and <b>openssl-pkeyparam</b>(1)
+commands are capable of performing all the operations this
+command can, as well as supporting other public key
+types.</p>
+
+<h2>EXAMPLES
+<a name="EXAMPLES"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The
+documentation for the <b>openssl-genpkey</b>(1) and
+<b>openssl-pkeyparam</b>(1) commands contains examples
+equivalent to the ones listed here.</p>
+
+<p style="margin-left:11%; margin-top: 1em">To create
+<small>EC</small> parameters with the group
+&rsquo;prime192v1&rsquo;:</p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl ecparam
+-out ec_param.pem -name prime192v1</p>
+
+<p style="margin-left:11%; margin-top: 1em">To create
+<small>EC</small> parameters with explicit parameters:</p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl ecparam
+-out ec_param.pem -name prime192v1 -param_enc explicit</p>
+
+<p style="margin-left:11%; margin-top: 1em">To validate
+given <small>EC</small> parameters:</p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl ecparam
+-in ec_param.pem -check</p>
+
+<p style="margin-left:11%; margin-top: 1em">To create
+<small>EC</small> parameters and a private key:</p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl ecparam
+-out ec_key.pem -name prime192v1 -genkey</p>
+
+<p style="margin-left:11%; margin-top: 1em">To change the
+point encoding to &rsquo;compressed&rsquo;:</p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl ecparam
+-in ec_in.pem -out ec_out.pem -conv_form compressed</p>
+
+<p style="margin-left:11%; margin-top: 1em">To print out
+the <small>EC</small> parameters to standard output:</p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl ecparam
+-in ec_param.pem -noout -text</p>
+
+<h2>SEE ALSO
+<a name="SEE ALSO"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>openssl</b>(1),
+<b>openssl-pkeyparam</b>(1), <b>openssl-genpkey</b>(1),
+<b>openssl-ec</b>(1), <b>openssl-dsaparam</b>(1)</p>
+
+<h2>HISTORY
+<a name="HISTORY"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The
+<b>-engine</b> option was deprecated in OpenSSL 3.0.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The <b>-C</b>
+option was removed in OpenSSL 3.0.</p>
+
+<h2>COPYRIGHT
+<a name="COPYRIGHT"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Copyright
+2003-2021 The OpenSSL Project Authors. All Rights
+Reserved.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Licensed under
+the Apache License 2.0 (the &quot;License&quot;). You may
+not use this file except in compliance with the License. You
+can obtain a copy in the file <small>LICENSE</small> in the
+source distribution or at
+&lt;https://www.openssl.org/source/license.html&gt;.</p>
+<hr>
+</body>
+</html>

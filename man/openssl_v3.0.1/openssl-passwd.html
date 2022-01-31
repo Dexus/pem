@@ -1,0 +1,225 @@
+<!-- Creator     : groff version 1.22.4 -->
+<!-- CreationDate: Mon Jan 31 16:15:27 2022 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>OPENSSL-PASSWD</title>
+
+</head>
+<body>
+
+<h1 align="center">OPENSSL-PASSWD</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#OPTIONS">OPTIONS</a><br>
+<a href="#EXAMPLES">EXAMPLES</a><br>
+<a href="#HISTORY">HISTORY</a><br>
+<a href="#COPYRIGHT">COPYRIGHT</a><br>
+
+<hr>
+
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">openssl-passwd
+- compute password hashes</p>
+
+<h2>SYNOPSIS
+<a name="SYNOPSIS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>openssl
+passwd</b> [<b>-help</b>] [<b>-1</b>] [<b>-apr1</b>]
+[<b>-aixmd5</b>] [<b>-5</b>] [<b>-6</b>] [<b>-salt</b>
+<i>string</i>] [<b>-in</b> <i>file</i>] [<b>-stdin</b>]
+[<b>-noverify</b>] [<b>-quiet</b>] [<b>-table</b>]
+[<b>-reverse</b>] [<b>-rand</b> <i>files</i>]
+[<b>-writerand</b> <i>file</i>] [<b>-provider</b>
+<i>name</i>] [<b>-provider-path</b> <i>path</i>]
+[<b>-propquery</b> <i>propq</i>] [<i>password</i>]</p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">This command
+computes the hash of a password typed at run-time or the
+hash of each password in a list. The password list is taken
+from the named file for option <b>-in</b>, from stdin for
+option <b>-stdin</b>, or from the command line, or from the
+terminal otherwise.</p>
+
+<h2>OPTIONS
+<a name="OPTIONS"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>-help</b></p>
+
+<p style="margin-left:17%;">Print out a usage message.</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+<p><b>-1</b></p></td>
+<td width="3%"></td>
+<td width="81%">
+
+
+<p>Use the <small>MD5</small> based <small>BSD</small>
+password algorithm <b>1</b> (default).</p></td>
+<td width="2%">
+</td></tr>
+</table>
+
+<p style="margin-left:11%;"><b>-apr1</b></p>
+
+<p style="margin-left:17%;">Use the <b>apr1</b> algorithm
+(Apache variant of the <small>BSD</small> algorithm).</p>
+
+<p style="margin-left:11%;"><b>-aixmd5</b></p>
+
+<p style="margin-left:17%;">Use the <b><small>AIX
+MD5</small></b> algorithm ( <small>AIX</small> variant of
+the <small>BSD</small> algorithm).</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+<p><b>-5</b></p></td>
+<td width="3%"></td>
+<td width="83%">
+</td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+<p><b>-6</b></p></td>
+<td width="3%"></td>
+<td width="83%">
+
+
+<p>Use the <b><small>SHA256</small></b> /
+<b><small>SHA512</small></b> based algorithms defined by
+Ulrich Drepper. See
+&lt;https://www.akkadia.org/drepper/SHA-crypt.txt&gt;.</p> </td></tr>
+</table>
+
+<p style="margin-left:11%;"><b>-salt</b> <i>string</i></p>
+
+<p style="margin-left:17%;">Use the specified salt. When
+reading a password from the terminal, this implies
+<b>-noverify</b>.</p>
+
+<p style="margin-left:11%;"><b>-in</b> <i>file</i></p>
+
+<p style="margin-left:17%;">Read passwords from
+<i>file</i>.</p>
+
+<p style="margin-left:11%;"><b>-stdin</b></p>
+
+<p style="margin-left:17%;">Read passwords from
+<b>stdin</b>.</p>
+
+<p style="margin-left:11%;"><b>-noverify</b></p>
+
+<p style="margin-left:17%;">Don&rsquo;t verify when reading
+a password from the terminal.</p>
+
+<p style="margin-left:11%;"><b>-quiet</b></p>
+
+<p style="margin-left:17%;">Don&rsquo;t output warnings
+when passwords given at the command line are truncated.</p>
+
+<p style="margin-left:11%;"><b>-table</b></p>
+
+<p style="margin-left:17%;">In the output list, prepend the
+cleartext password and a <small>TAB</small> character to
+each password hash.</p>
+
+<p style="margin-left:11%;"><b>-reverse</b></p>
+
+<p style="margin-left:17%;">When the <b>-table</b> option
+is used, reverse the order of cleartext and hash.</p>
+
+<p style="margin-left:11%;"><b>-rand</b> <i>files</i>,
+<b>-writerand</b> <i>file</i></p>
+
+<p style="margin-left:17%;">See &quot;Random State
+Options&quot; in <b>openssl</b>(1) for details.</p>
+
+<p style="margin-left:11%;"><b>-provider</b> <i>name</i>
+<b><br>
+-provider-path</b> <i>path</i> <b><br>
+-propquery</b> <i>propq</i></p>
+
+<p style="margin-left:17%;">See &quot;Provider
+Options&quot; in <b>openssl</b>(1), <b>provider</b>(7), and
+<b>property</b>(7).</p>
+
+<h2>EXAMPLES
+<a name="EXAMPLES"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">% openssl
+passwd -1 -salt xxxxxxxx password <br>
+$1$xxxxxxxx$UYCIxa628.9qXjpQCjM4a. <br>
+% openssl passwd -apr1 -salt xxxxxxxx password <br>
+$apr1$xxxxxxxx$dxHfLAsjHkDRmG83UXe8K0 <br>
+% openssl passwd -aixmd5 -salt xxxxxxxx password <br>
+xxxxxxxx$8Oaipk/GPKhC64w/YVeFD/</p>
+
+<h2>HISTORY
+<a name="HISTORY"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The
+<b>-crypt</b> option was removed in OpenSSL 3.0.</p>
+
+<h2>COPYRIGHT
+<a name="COPYRIGHT"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Copyright
+2000-2021 The OpenSSL Project Authors. All Rights
+Reserved.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Licensed under
+the Apache License 2.0 (the &quot;License&quot;). You may
+not use this file except in compliance with the License. You
+can obtain a copy in the file <small>LICENSE</small> in the
+source distribution or at
+&lt;https://www.openssl.org/source/license.html&gt;.</p>
+<hr>
+</body>
+</html>

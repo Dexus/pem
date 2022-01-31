@@ -1,0 +1,207 @@
+<!-- Creator     : groff version 1.22.4 -->
+<!-- CreationDate: Mon Jan 31 16:15:09 2022 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>ENGINE</title>
+
+</head>
+<body>
+
+<h1 align="center">ENGINE</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#OPTIONS">OPTIONS</a><br>
+<a href="#EXAMPLES">EXAMPLES</a><br>
+<a href="#ENVIRONMENT">ENVIRONMENT</a><br>
+<a href="#SEE ALSO">SEE ALSO</a><br>
+<a href="#COPYRIGHT">COPYRIGHT</a><br>
+
+<hr>
+
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em">openssl-engine,
+engine - load and query engines</p>
+
+<h2>SYNOPSIS
+<a name="SYNOPSIS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>openssl
+engine</b> [ <i>engine...</i> ] [<b>-v</b>] [<b>-vv</b>]
+[<b>-vvv</b>] [<b>-vvv</b>] [<b>-vvv</b>] [<b>-c</b>]
+[<b>-t</b>] [<b>-tt</b>] [<b>-pre</b> <i>command</i>]
+[<b>-post</b> <i>command</i>] [ <i>engine...</i> ]</p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The
+<b>engine</b> command is used to query the status and
+capabilities of the specified <b>engine</b>&rsquo;s. Engines
+may be specified before and after all other command-line
+flags. Only those specified are queried.</p>
+
+<h2>OPTIONS
+<a name="OPTIONS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>-v -vv -vvv
+-vvvv</b></p>
+
+<p style="margin-left:17%;">Provides information about each
+specified engine. The first flag lists all the possible
+run-time control commands; the second adds a description of
+each command; the third adds the input flags, and the final
+option adds the internal input flags.</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="4%">
+
+
+<p><b>-c</b></p></td>
+<td width="2%"></td>
+<td width="83%">
+
+
+<p>Lists the capabilities of each engine.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="4%">
+
+
+<p><b>-t</b></p></td>
+<td width="2%"></td>
+<td width="83%">
+
+
+<p>Tests if each specified engine is available, and
+displays the answer.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="4%">
+
+
+<p><b>-tt</b></p></td>
+<td width="2%"></td>
+<td width="83%">
+
+
+<p>Displays an error trace for any unavailable engine.</p></td></tr>
+</table>
+
+<p style="margin-left:11%;"><b>-pre</b> <i>command</i>
+<b><br>
+-post</b> <i>command</i></p>
+
+<p style="margin-left:17%;">Command-line configuration of
+engines. The <b>-pre</b> command is given to the engine
+before it is loaded and the <b>-post</b> command is given
+after the engine is loaded. The <i>command</i> is of the
+form <i>cmd:val</i> where <i>cmd</i> is the command, and
+<i>val</i> is the value for the command. See the example
+below.</p>
+
+<h2>EXAMPLES
+<a name="EXAMPLES"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">To list all the
+commands available to a dynamic engine:</p>
+
+<p style="margin-left:11%; margin-top: 1em">$ openssl
+engine -t -tt -vvvv dynamic <br>
+(dynamic) Dynamic engine loading support <br>
+[ unavailable ] <br>
+SO_PATH: Specifies the path to the new ENGINE shared library
+<br>
+(input flags): STRING <br>
+NO_VCHECK: Specifies to continue even if version checking
+fails (boolean) <br>
+(input flags): NUMERIC <br>
+ID: Specifies an ENGINE id name for loading <br>
+(input flags): STRING <br>
+LIST_ADD: Whether to add a loaded ENGINE to the internal
+list (0=no,1=yes,2=mandatory) <br>
+(input flags): NUMERIC <br>
+DIR_LOAD: Specifies whether to load from 'DIR_ADD'
+directories (0=no,1=yes,2=mandatory) <br>
+(input flags): NUMERIC <br>
+DIR_ADD: Adds a directory from which ENGINEs can be loaded
+<br>
+(input flags): STRING <br>
+LOAD: Load up the ENGINE specified by other settings <br>
+(input flags): NO_INPUT</p>
+
+<p style="margin-left:11%; margin-top: 1em">To list the
+capabilities of the <i>rsax</i> engine:</p>
+
+<p style="margin-left:11%; margin-top: 1em">$ openssl
+engine -c <br>
+(rsax) RSAX engine support <br>
+[RSA] <br>
+(dynamic) Dynamic engine loading support</p>
+
+<h2>ENVIRONMENT
+<a name="ENVIRONMENT"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b><small>OPENSSL_ENGINES</small></b></p>
+
+<p style="margin-left:17%;">The path to the engines
+directory.</p>
+
+<h2>SEE ALSO
+<a name="SEE ALSO"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>config</b>(5)</p>
+
+<h2>COPYRIGHT
+<a name="COPYRIGHT"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Copyright
+2016-2019 The OpenSSL Project Authors. All Rights
+Reserved.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Licensed under
+the OpenSSL license (the &quot;License&quot;). You may not
+use this file except in compliance with the License. You can
+obtain a copy in the file <small>LICENSE</small> in the
+source distribution or at
+&lt;https://www.openssl.org/source/license.html&gt;.</p>
+<hr>
+</body>
+</html>

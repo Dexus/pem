@@ -1,0 +1,108 @@
+OPENSSL-STOREUTL(1ossl)             OpenSSL            OPENSSL-STOREUTL(1ossl)
+
+
+
+NNAAMMEE
+       openssl-storeutl - STORE command
+
+SSYYNNOOPPSSIISS
+       ooppeennssssll ssttoorreeuuttll [--hheellpp] [--oouutt _f_i_l_e] [--nnoooouutt] [--ppaassssiinn _a_r_g] [--tteexxtt _a_r_g]
+       [--rr] [--cceerrttss] [--kkeeyyss] [--ccrrllss] [--ssuubbjjeecctt _a_r_g] [--iissssuueerr _a_r_g] [--sseerriiaall
+       _a_r_g] [--aalliiaass _a_r_g] [--ffiinnggeerrpprriinntt _a_r_g] [--_dd_ii_gg_ee_ss_tt] [--eennggiinnee _i_d] [--pprroovviiddeerr
+       _n_a_m_e] [--pprroovviiddeerr--ppaatthh _p_a_t_h] [--pprrooppqquueerryy _p_r_o_p_q] _u_r_i ...
+
+DDEESSCCRRIIPPTTIIOONN
+       This command can be used to display the contents (after decryption as
+       the case may be) fetched from the given URIs.
+
+OOPPTTIIOONNSS
+       --hheellpp
+           Print out a usage message.
+
+       --oouutt _f_i_l_e_n_a_m_e
+           specifies the output filename to write to or standard output by
+           default.
+
+       --nnoooouutt
+           this option prevents output of the PEM data.
+
+       --ppaassssiinn _a_r_g
+           the key password source. For more information about the format of
+           _a_r_g see ooppeennssssll--ppaasssspphhrraassee--ooppttiioonnss(1).
+
+       --tteexxtt
+           Prints out the objects in text form, similarly to the --tteexxtt output
+           from ooppeennssssll--xx550099(1), ooppeennssssll--ppkkeeyy(1), etc.
+
+       --rr  Fetch objects recursively when possible.
+
+       --cceerrttss
+       --kkeeyyss
+       --ccrrllss
+           Only select the certificates, keys or CRLs from the given URI.
+           However, if this URI would return a set of names (URIs), those are
+           always returned.
+
+       --ssuubbjjeecctt _a_r_g
+           Search for an object having the subject name _a_r_g.
+
+           The arg must be formatted as
+           "/type0=value0/type1=value1/type2=...".  Special characters may be
+           escaped by "\" (backslash), whitespace is retained.  Empty values
+           are permitted but are ignored for the search.  That is, a search
+           with an empty value will have the same effect as not specifying the
+           type at all.  Giving a single "/" will lead to an empty sequence of
+           RDNs (a NULL-DN).  Multi-valued RDNs can be formed by placing a "+"
+           character instead of a "/" between the AttributeValueAssertions
+           (AVAs) that specify the members of the set.
+
+           Example:
+
+           "/DC=org/DC=OpenSSL/DC=users/UID=123456+CN=John Doe"
+
+       --iissssuueerr _a_r_g
+       --sseerriiaall _a_r_g
+           Search for an object having the given issuer name and serial
+           number.  These two options _m_u_s_t be used together.  The issuer arg
+           must be formatted as "/type0=value0/type1=value1/type2=...",
+           characters may be escaped by \ (backslash), no spaces are skipped.
+           The serial arg may be specified as a decimal value or a hex value
+           if preceded by "0x".
+
+       --aalliiaass _a_r_g
+           Search for an object having the given alias.
+
+       --ffiinnggeerrpprriinntt _a_r_g
+           Search for an object having the given fingerprint.
+
+       --_dd_ii_gg_ee_ss_tt
+           The digest that was used to compute the fingerprint given with
+           --ffiinnggeerrpprriinntt.
+
+       --eennggiinnee _i_d
+           See "Engine Options" in ooppeennssssll(1).  This option is deprecated.
+
+       --pprroovviiddeerr _n_a_m_e
+       --pprroovviiddeerr--ppaatthh _p_a_t_h
+       --pprrooppqquueerryy _p_r_o_p_q
+           See "Provider Options" in ooppeennssssll(1), pprroovviiddeerr(7), and pprrooppeerrttyy(7).
+
+SSEEEE AALLSSOO
+       ooppeennssssll(1)
+
+HHIISSTTOORRYY
+       This command was added in OpenSSL 1.1.1.
+
+       The --eennggiinnee option was deprecated in OpenSSL 3.0.
+
+CCOOPPYYRRIIGGHHTT
+       Copyright 2016-2020 The OpenSSL Project Authors. All Rights Reserved.
+
+       Licensed under the Apache License 2.0 (the "License").  You may not use
+       this file except in compliance with the License.  You can obtain a copy
+       in the file LICENSE in the source distribution or at
+       <https://www.openssl.org/source/license.html>.
+
+
+
+3.0.1                             2022-01-31           OPENSSL-STOREUTL(1ossl)

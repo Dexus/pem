@@ -1,0 +1,151 @@
+<!-- Creator     : groff version 1.22.4 -->
+<!-- CreationDate: Mon Jan 31 16:14:49 2022 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>PASSWD</title>
+
+</head>
+<body>
+
+<h1 align="center">PASSWD</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#OPTIONS">OPTIONS</a><br>
+<a href="#EXAMPLES">EXAMPLES</a><br>
+
+<hr>
+
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em">openssl-passwd,
+passwd - compute password hashes</p>
+
+<h2>SYNOPSIS
+<a name="SYNOPSIS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>openssl
+passwd</b> [<b>-crypt</b>] [<b>-1</b>] [<b>-apr1</b>]
+[<b>-salt</b> <i>string</i>] [<b>-in</b> <i>file</i>]
+[<b>-stdin</b>] [<b>-noverify</b>] [<b>-quiet</b>]
+[<b>-table</b>] {<i>password</i>}</p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The
+<b>passwd</b> command computes the hash of a password typed
+at run-time or the hash of each password in a list. The
+password list is taken from the named file for option <b>-in
+file</b>, from stdin for option <b>-stdin</b>, or from the
+command line, or from the terminal otherwise. The Unix
+standard algorithm <b>crypt</b> and the MD5-based
+<small>BSD</small> password algorithm <b>1</b> and its
+Apache variant <b>apr1</b> are available.</p>
+
+<h2>OPTIONS
+<a name="OPTIONS"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>-crypt</b></p>
+
+<p style="margin-left:17%;">Use the <b>crypt</b> algorithm
+(default).</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+<p><b>-1</b></p></td>
+<td width="3%"></td>
+<td width="66%">
+
+
+<p>Use the <small>MD5</small> based <small>BSD</small>
+password algorithm <b>1</b>.</p></td>
+<td width="17%">
+</td></tr>
+</table>
+
+<p style="margin-left:11%;"><b>-apr1</b></p>
+
+<p style="margin-left:17%;">Use the <b>apr1</b> algorithm
+(Apache variant of the <small>BSD</small> algorithm).</p>
+
+<p style="margin-left:11%;"><b>-salt</b> <i>string</i></p>
+
+<p style="margin-left:17%;">Use the specified salt. When
+reading a password from the terminal, this implies
+<b>-noverify</b>.</p>
+
+<p style="margin-left:11%;"><b>-in</b> <i>file</i></p>
+
+<p style="margin-left:17%;">Read passwords from
+<i>file</i>.</p>
+
+<p style="margin-left:11%;"><b>-stdin</b></p>
+
+<p style="margin-left:17%;">Read passwords from
+<b>stdin</b>.</p>
+
+<p style="margin-left:11%;"><b>-noverify</b></p>
+
+<p style="margin-left:17%;">Don&rsquo;t verify when reading
+a password from the terminal.</p>
+
+<p style="margin-left:11%;"><b>-quiet</b></p>
+
+<p style="margin-left:17%;">Don&rsquo;t output warnings
+when passwords given at the command line are truncated.</p>
+
+<p style="margin-left:11%;"><b>-table</b></p>
+
+<p style="margin-left:17%;">In the output list, prepend the
+cleartext password and a <small>TAB</small> character to
+each password hash.</p>
+
+<h2>EXAMPLES
+<a name="EXAMPLES"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>openssl
+passwd -crypt -salt xx password</b> prints
+<b>xxj31ZMTZzkVA</b>.</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>openssl
+passwd -1 -salt xxxxxxxx password</b> prints
+<b>$1$xxxxxxxx$UYCIxa628.9qXjpQCjM4a.</b>.</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>openssl
+passwd -apr1 -salt xxxxxxxx password</b> prints
+<b>$apr1$xxxxxxxx$dxHfLAsjHkDRmG83UXe8K0</b>.</p>
+<hr>
+</body>
+</html>

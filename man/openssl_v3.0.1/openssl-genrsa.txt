@@ -1,0 +1,104 @@
+OPENSSL-GENRSA(1ossl)               OpenSSL              OPENSSL-GENRSA(1ossl)
+
+
+
+NNAAMMEE
+       openssl-genrsa - generate an RSA private key
+
+SSYYNNOOPPSSIISS
+       ooppeennssssll ggeennrrssaa [--hheellpp] [--oouutt _f_i_l_e_n_a_m_e] [--ppaassssoouutt _a_r_g] [--aaeess112288]
+       [--aaeess119922] [--aaeess225566] [--aarriiaa112288] [--aarriiaa119922] [--aarriiaa225566] [--ccaammeelllliiaa112288]
+       [--ccaammeelllliiaa119922] [--ccaammeelllliiaa225566] [--ddeess] [--ddeess33] [--iiddeeaa] [--FF44] [--ff44] [--33]
+       [--pprriimmeess _n_u_m] [--vveerrbboossee] [--ttrraaddiittiioonnaall] [--rraanndd _f_i_l_e_s] [--wwrriitteerraanndd _f_i_l_e]
+       [--eennggiinnee _i_d] [--pprroovviiddeerr _n_a_m_e] [--pprroovviiddeerr--ppaatthh _p_a_t_h] [--pprrooppqquueerryy _p_r_o_p_q]
+       [nnuummbbiittss]
+
+DDEESSCCRRIIPPTTIIOONN
+       This command has been deprecated.  The ooppeennssssll--ggeennppkkeeyy(1) command
+       should be used instead.
+
+       This command generates an RSA private key.
+
+OOPPTTIIOONNSS
+       --hheellpp
+           Print out a usage message.
+
+       --oouutt _f_i_l_e_n_a_m_e
+           Output the key to the specified file. If this argument is not
+           specified then standard output is used.
+
+       --ppaassssoouutt _a_r_g
+           The output file password source. For more information about the
+           format see ooppeennssssll--ppaasssspphhrraassee--ooppttiioonnss(1).
+
+       --aaeess112288, --aaeess119922, --aaeess225566, --aarriiaa112288, --aarriiaa119922, --aarriiaa225566, --ccaammeelllliiaa112288,
+       --ccaammeelllliiaa119922, --ccaammeelllliiaa225566, --ddeess, --ddeess33, --iiddeeaa
+           These options encrypt the private key with specified cipher before
+           outputting it. If none of these options is specified no encryption
+           is used. If encryption is used a pass phrase is prompted for if it
+           is not supplied via the --ppaassssoouutt argument.
+
+       --FF44, --ff44, --33
+           The public exponent to use, either 65537 or 3. The default is
+           65537.  The --33 option has been deprecated.
+
+       --pprriimmeess _n_u_m
+           Specify the number of primes to use while generating the RSA key.
+           The _n_u_m parameter must be a positive integer that is greater than 1
+           and less than 16.  If _n_u_m is greater than 2, then the generated key
+           is called a 'multi-prime' RSA key, which is defined in RFC 8017.
+
+       --vveerrbboossee
+           Print extra details about the operations being performed.
+
+       --ttrraaddiittiioonnaall
+           Write the key using the traditional PKCS#1 format instead of the
+           PKCS#8 format.
+
+       --rraanndd _f_i_l_e_s, --wwrriitteerraanndd _f_i_l_e
+           See "Random State Options" in ooppeennssssll(1) for details.
+
+       --eennggiinnee _i_d
+           See "Engine Options" in ooppeennssssll(1).  This option is deprecated.
+
+       --pprroovviiddeerr _n_a_m_e
+       --pprroovviiddeerr--ppaatthh _p_a_t_h
+       --pprrooppqquueerryy _p_r_o_p_q
+           See "Provider Options" in ooppeennssssll(1), pprroovviiddeerr(7), and pprrooppeerrttyy(7).
+
+       nnuummbbiittss
+           The size of the private key to generate in bits. This must be the
+           last option specified. The default is 2048 and values less than 512
+           are not allowed.
+
+NNOOTTEESS
+       RSA private key generation essentially involves the generation of two
+       or more prime numbers. When generating a private key various symbols
+       will be output to indicate the progress of the generation. A ..
+       represents each number which has passed an initial sieve test, ++ means
+       a number has passed a single round of the Miller-Rabin primality test,
+       ** means the current prime starts a regenerating progress due to some
+       failed tests. A newline means that the number has passed all the prime
+       tests (the actual number depends on the key size).
+
+       Because key generation is a random process the time taken to generate a
+       key may vary somewhat. But in general, more primes lead to less
+       generation time of a key.
+
+SSEEEE AALLSSOO
+       ooppeennssssll(1), ooppeennssssll--ggeennppkkeeyy(1), ooppeennssssll--ggeennddssaa(1)
+
+HHIISSTTOORRYY
+       This command was deprecated in OpenSSL 3.0.
+
+CCOOPPYYRRIIGGHHTT
+       Copyright 2000-2021 The OpenSSL Project Authors. All Rights Reserved.
+
+       Licensed under the Apache License 2.0 (the "License").  You may not use
+       this file except in compliance with the License.  You can obtain a copy
+       in the file LICENSE in the source distribution or at
+       <https://www.openssl.org/source/license.html>.
+
+
+
+3.0.1                             2022-01-31             OPENSSL-GENRSA(1ossl)

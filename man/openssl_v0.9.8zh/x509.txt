@@ -1,0 +1,692 @@
+X509(1)                             OpenSSL                            X509(1)
+
+
+
+NNAAMMEE
+       x509 - Certificate display and signing utility
+
+SSYYNNOOPPSSIISS
+       ooppeennssssll xx550099 [--iinnffoorrmm DDEERR||PPEEMM||NNEETT] [--oouuttffoorrmm DDEERR||PPEEMM||NNEETT] [--kkeeyyffoorrmm
+       DDEERR||PPEEMM] [--CCAAffoorrmm DDEERR||PPEEMM] [--CCAAkkeeyyffoorrmm DDEERR||PPEEMM] [--iinn ffiilleennaammee] [--oouutt
+       ffiilleennaammee] [--sseerriiaall] [--hhaasshh] [--ssuubbjjeecctt__hhaasshh] [--iissssuueerr__hhaasshh] [--ooccssppiidd]
+       [--ssuubbjjeecctt] [--iissssuueerr] [--nnaammeeoopptt ooppttiioonn] [--eemmaaiill] [--ssttaarrttddaattee] [--eennddddaattee]
+       [--ppuurrppoossee] [--ddaatteess] [--cchheecckkeenndd nnuumm] [--mmoodduulluuss] [--ffiinnggeerrpprriinntt] [--aalliiaass]
+       [--nnoooouutt] [--ttrruussttoouutt] [--ccllrrttrruusstt] [--ccllrrrreejjeecctt] [--aaddddttrruusstt aarrgg]
+       [--aaddddrreejjeecctt aarrgg] [--sseettaalliiaass aarrgg] [--ddaayyss aarrgg] [--sseett__sseerriiaall nn] [--ssiiggnnkkeeyy
+       ffiilleennaammee] [--ppaassssiinn aarrgg] [--xx550099ttoorreeqq] [--rreeqq] [--CCAA ffiilleennaammee] [--CCAAkkeeyy
+       ffiilleennaammee] [--CCAAccrreeaatteesseerriiaall] [--CCAAsseerriiaall ffiilleennaammee] [--tteexxtt] [--cceerrttoopptt
+       ooppttiioonn] [--CC] [--mmdd22||--mmdd55||--sshhaa11||--mmddcc22] [--ccllrreexxtt] [--eexxttffiillee ffiilleennaammee]
+       [--eexxtteennssiioonnss sseeccttiioonn] [--eennggiinnee iidd]
+
+DDEESSCCRRIIPPTTIIOONN
+       The xx550099 command is a multi purpose certificate utility. It can be used
+       to display certificate information, convert certificates to various
+       forms, sign certificate requests like a "mini CA" or edit certificate
+       trust settings.
+
+       Since there are a large number of options they will split up into
+       various sections.
+
+OOPPTTIIOONNSS
+   IINNPPUUTT,, OOUUTTPPUUTT AANNDD GGEENNEERRAALL PPUURRPPOOSSEE OOPPTTIIOONNSS
+       --iinnffoorrmm DDEERR||PPEEMM||NNEETT
+           This specifies the input format normally the command will expect an
+           X509 certificate but this can change if other options such as --rreeqq
+           are present. The DER format is the DER encoding of the certificate
+           and PEM is the base64 encoding of the DER encoding with header and
+           footer lines added. The NET option is an obscure Netscape server
+           format that is now obsolete.
+
+       --oouuttffoorrmm DDEERR||PPEEMM||NNEETT
+           This specifies the output format, the options have the same meaning
+           as the --iinnffoorrmm option.
+
+       --iinn ffiilleennaammee
+           This specifies the input filename to read a certificate from or
+           standard input if this option is not specified.
+
+       --oouutt ffiilleennaammee
+           This specifies the output filename to write to or standard output
+           by default.
+
+       --mmdd22||--mmdd55||--sshhaa11||--mmddcc22
+           the digest to use. This affects any signing or display option that
+           uses a message digest, such as the --ffiinnggeerrpprriinntt, --ssiiggnnkkeeyy and --CCAA
+           options. If not specified then SHA1 is used. If the key being used
+           to sign with is a DSA key then this option has no effect: SHA1 is
+           always used with DSA keys.
+
+       --eennggiinnee iidd
+           specifying an engine (by it's unique iidd string) will cause rreeqq to
+           attempt to obtain a functional reference to the specified engine,
+           thus initialising it if needed. The engine will then be set as the
+           default for all available algorithms.
+
+   DDIISSPPLLAAYY OOPPTTIIOONNSS
+       Note: the --aalliiaass and --ppuurrppoossee options are also display options but are
+       described in the TTRRUUSSTT SSEETTTTIINNGGSS section.
+
+       --tteexxtt
+           prints out the certificate in text form. Full details are output
+           including the public key, signature algorithms, issuer and subject
+           names, serial number any extensions present and any trust settings.
+
+       --cceerrttoopptt ooppttiioonn
+           customise the output format used with --tteexxtt. The ooppttiioonn argument
+           can be a single option or multiple options separated by commas. The
+           --cceerrttoopptt switch may be also be used more than once to set multiple
+           options. See the TTEEXXTT OOPPTTIIOONNSS section for more information.
+
+       --nnoooouutt
+           this option prevents output of the encoded version of the request.
+
+       --mmoodduulluuss
+           this option prints out the value of the modulus of the public key
+           contained in the certificate.
+
+       --sseerriiaall
+           outputs the certificate serial number.
+
+       --ssuubbjjeecctt__hhaasshh
+           outputs the "hash" of the certificate subject name. This is used in
+           OpenSSL to form an index to allow certificates in a directory to be
+           looked up by subject name.
+
+       --iissssuueerr__hhaasshh
+           outputs the "hash" of the certificate issuer name.
+
+       --ooccssppiidd
+           outputs the OCSP hash values for the subject name and public key.
+
+       --hhaasshh
+           synonym for "-subject_hash" for backward compatibility reasons.
+
+       --ssuubbjjeecctt
+           outputs the subject name.
+
+       --iissssuueerr
+           outputs the issuer name.
+
+       --nnaammeeoopptt ooppttiioonn
+           option which determines how the subject or issuer names are
+           displayed. The ooppttiioonn argument can be a single option or multiple
+           options separated by commas.  Alternatively the --nnaammeeoopptt switch may
+           be used more than once to set multiple options. See the NNAAMMEE
+           OOPPTTIIOONNSS section for more information.
+
+       --eemmaaiill
+           outputs the email address(es) if any.
+
+       --ssttaarrttddaattee
+           prints out the start date of the certificate, that is the notBefore
+           date.
+
+       --eennddddaattee
+           prints out the expiry date of the certificate, that is the notAfter
+           date.
+
+       --ddaatteess
+           prints out the start and expiry dates of a certificate.
+
+       --cchheecckkeenndd aarrgg
+           checks if the certificate expires within the next aarrgg seconds and
+           exits non-zero if yes it will expire or zero if not.
+
+       --ffiinnggeerrpprriinntt
+           prints out the digest of the DER encoded version of the whole
+           certificate (see digest options).
+
+       --CC  this outputs the certificate in the form of a C source file.
+
+   TTRRUUSSTT SSEETTTTIINNGGSS
+       Please note these options are currently experimental and may well
+       change.
+
+       A ttrruusstteedd cceerrttiiffiiccaattee is an ordinary certificate which has several
+       additional pieces of information attached to it such as the permitted
+       and prohibited uses of the certificate and an "alias".
+
+       Normally when a certificate is being verified at least one certificate
+       must be "trusted". By default a trusted certificate must be stored
+       locally and must be a root CA: any certificate chain ending in this CA
+       is then usable for any purpose.
+
+       Trust settings currently are only used with a root CA. They allow a
+       finer control over the purposes the root CA can be used for. For
+       example a CA may be trusted for SSL client but not SSL server use.
+
+       See the description of the vveerriiffyy utility for more information on the
+       meaning of trust settings.
+
+       Future versions of OpenSSL will recognize trust settings on any
+       certificate: not just root CAs.
+
+       --ttrruussttoouutt
+           this causes xx550099 to output a ttrruusstteedd certificate. An ordinary or
+           trusted certificate can be input but by default an ordinary
+           certificate is output and any trust settings are discarded. With
+           the --ttrruussttoouutt option a trusted certificate is output. A trusted
+           certificate is automatically output if any trust settings are
+           modified.
+
+       --sseettaalliiaass aarrgg
+           sets the alias of the certificate. This will allow the certificate
+           to be referred to using a nickname for example "Steve's
+           Certificate".
+
+       --aalliiaass
+           outputs the certificate alias, if any.
+
+       --ccllrrttrruusstt
+           clears all the permitted or trusted uses of the certificate.
+
+       --ccllrrrreejjeecctt
+           clears all the prohibited or rejected uses of the certificate.
+
+       --aaddddttrruusstt aarrgg
+           adds a trusted certificate use. Any object name can be used here
+           but currently only cclliieennttAAuutthh (SSL client use), sseerrvveerrAAuutthh (SSL
+           server use) and eemmaaiillPPrrootteeccttiioonn (S/MIME email) are used.  Other
+           OpenSSL applications may define additional uses.
+
+       --aaddddrreejjeecctt aarrgg
+           adds a prohibited use. It accepts the same values as the --aaddddttrruusstt
+           option.
+
+       --ppuurrppoossee
+           this option performs tests on the certificate extensions and
+           outputs the results. For a more complete description see the
+           CCEERRTTIIFFIICCAATTEE EEXXTTEENNSSIIOONNSS section.
+
+   SSIIGGNNIINNGG OOPPTTIIOONNSS
+       The xx550099 utility can be used to sign certificates and requests: it can
+       thus behave like a "mini CA".
+
+       --ssiiggnnkkeeyy ffiilleennaammee
+           this option causes the input file to be self signed using the
+           supplied private key.
+
+           If the input file is a certificate it sets the issuer name to the
+           subject name (i.e.  makes it self signed) changes the public key to
+           the supplied value and changes the start and end dates. The start
+           date is set to the current time and the end date is set to a value
+           determined by the --ddaayyss option. Any certificate extensions are
+           retained unless the --ccllrreexxtt option is supplied.
+
+           If the input is a certificate request then a self signed
+           certificate is created using the supplied private key using the
+           subject name in the request.
+
+       --ppaassssiinn aarrgg
+           the key password source. For more information about the format of
+           aarrgg see the PPAASSSS PPHHRRAASSEE AARRGGUUMMEENNTTSS section in ooppeennssssll(1).
+
+       --ccllrreexxtt
+           delete any extensions from a certificate. This option is used when
+           a certificate is being created from another certificate (for
+           example with the --ssiiggnnkkeeyy or the --CCAA options). Normally all
+           extensions are retained.
+
+       --kkeeyyffoorrmm PPEEMM||DDEERR
+           specifies the format (DER or PEM) of the private key file used in
+           the --ssiiggnnkkeeyy option.
+
+       --ddaayyss aarrgg
+           specifies the number of days to make a certificate valid for. The
+           default is 30 days.
+
+       --xx550099ttoorreeqq
+           converts a certificate into a certificate request. The --ssiiggnnkkeeyy
+           option is used to pass the required private key.
+
+       --rreeqq
+           by default a certificate is expected on input. With this option a
+           certificate request is expected instead.
+
+       --sseett__sseerriiaall nn
+           specifies the serial number to use. This option can be used with
+           either the --ssiiggnnkkeeyy or --CCAA options. If used in conjunction with the
+           --CCAA option the serial number file (as specified by the --CCAAsseerriiaall or
+           --CCAAccrreeaatteesseerriiaall options) is not used.
+
+           The serial number can be decimal or hex (if preceded by 00xx).
+           Negative serial numbers can also be specified but their use is not
+           recommended.
+
+       --CCAA ffiilleennaammee
+           specifies the CA certificate to be used for signing. When this
+           option is present xx550099 behaves like a "mini CA". The input file is
+           signed by this CA using this option: that is its issuer name is set
+           to the subject name of the CA and it is digitally signed using the
+           CAs private key.
+
+           This option is normally combined with the --rreeqq option. Without the
+           --rreeqq option the input is a certificate which must be self signed.
+
+       --CCAAkkeeyy ffiilleennaammee
+           sets the CA private key to sign a certificate with. If this option
+           is not specified then it is assumed that the CA private key is
+           present in the CA certificate file.
+
+       --CCAAsseerriiaall ffiilleennaammee
+           sets the CA serial number file to use.
+
+           When the --CCAA option is used to sign a certificate it uses a serial
+           number specified in a file. This file consist of one line
+           containing an even number of hex digits with the serial number to
+           use. After each use the serial number is incremented and written
+           out to the file again.
+
+           The default filename consists of the CA certificate file base name
+           with ".srl" appended. For example if the CA certificate file is
+           called "mycacert.pem" it expects to find a serial number file
+           called "mycacert.srl".
+
+       --CCAAccrreeaatteesseerriiaall
+           with this option the CA serial number file is created if it does
+           not exist: it will contain the serial number "02" and the
+           certificate being signed will have the 1 as its serial number.
+           Normally if the --CCAA option is specified and the serial number file
+           does not exist it is an error.
+
+       --eexxttffiillee ffiilleennaammee
+           file containing certificate extensions to use. If not specified
+           then no extensions are added to the certificate.
+
+       --eexxtteennssiioonnss sseeccttiioonn
+           the section to add certificate extensions from. If this option is
+           not specified then the extensions should either be contained in the
+           unnamed (default) section or the default section should contain a
+           variable called "extensions" which contains the section to use.
+
+   NNAAMMEE OOPPTTIIOONNSS
+       The nnaammeeoopptt command line switch determines how the subject and issuer
+       names are displayed. If no nnaammeeoopptt switch is present the default
+       "oneline" format is used which is compatible with previous versions of
+       OpenSSL.  Each option is described in detail below, all options can be
+       preceded by a -- to turn the option off. Only the first four will
+       normally be used.
+
+       ccoommppaatt
+           use the old format. This is equivalent to specifying no name
+           options at all.
+
+       RRFFCC22225533
+           displays names compatible with RFC2253 equivalent to eesscc__22225533,
+           eesscc__ccttrrll, eesscc__mmssbb, uuttff88, dduummpp__nnoossttrr, dduummpp__uunnkknnoowwnn, dduummpp__ddeerr,
+           sseepp__ccoommmmaa__pplluuss, ddnn__rreevv and ssnnaammee.
+
+       oonneelliinnee
+           a oneline format which is more readable than RFC2253. It is
+           equivalent to specifying the  eesscc__22225533, eesscc__ccttrrll, eesscc__mmssbb, uuttff88,
+           dduummpp__nnoossttrr, dduummpp__ddeerr, uussee__qquuoottee, sseepp__ccoommmmaa__pplluuss__ssppaaccee, ssppaaccee__eeqq and
+           ssnnaammee options.
+
+       mmuullttiilliinnee
+           a multiline format. It is equivalent eesscc__ccttrrll, eesscc__mmssbb,
+           sseepp__mmuullttiilliinnee, ssppaaccee__eeqq, llnnaammee and aalliiggnn.
+
+       eesscc__22225533
+           escape the "special" characters required by RFC2253 in a field That
+           is ,,++""<<>>;;. Additionally ## is escaped at the beginning of a string
+           and a space character at the beginning or end of a string.
+
+       eesscc__ccttrrll
+           escape control characters. That is those with ASCII values less
+           than 0x20 (space) and the delete (0x7f) character. They are escaped
+           using the RFC2253 \XX notation (where XX are two hex digits
+           representing the character value).
+
+       eesscc__mmssbb
+           escape characters with the MSB set, that is with ASCII values
+           larger than 127.
+
+       uussee__qquuoottee
+           escapes some characters by surrounding the whole string with ""
+           characters, without the option all escaping is done with the \\
+           character.
+
+       uuttff88
+           convert all strings to UTF8 format first. This is required by
+           RFC2253. If you are lucky enough to have a UTF8 compatible terminal
+           then the use of this option (and nnoott setting eesscc__mmssbb) may result in
+           the correct display of multibyte (international) characters. Is
+           this option is not present then multibyte characters larger than
+           0xff will be represented using the format \UXXXX for 16 bits and
+           \WXXXXXXXX for 32 bits.  Also if this option is off any UTF8Strings
+           will be converted to their character form first.
+
+       iiggnnoorree__ttyyppee
+           this option does not attempt to interpret multibyte characters in
+           any way. That is their content octets are merely dumped as though
+           one octet represents each character. This is useful for diagnostic
+           purposes but will result in rather odd looking output.
+
+       sshhooww__ttyyppee
+           show the type of the ASN1 character string. The type precedes the
+           field contents. For example "BMPSTRING: Hello World".
+
+       dduummpp__ddeerr
+           when this option is set any fields that need to be hexdumped will
+           be dumped using the DER encoding of the field. Otherwise just the
+           content octets will be displayed. Both options use the RFC2253
+           ##XXXXXXXX...... format.
+
+       dduummpp__nnoossttrr
+           dump non character string types (for example OCTET STRING) if this
+           option is not set then non character string types will be displayed
+           as though each content octet represents a single character.
+
+       dduummpp__aallll
+           dump all fields. This option when used with dduummpp__ddeerr allows the DER
+           encoding of the structure to be unambiguously determined.
+
+       dduummpp__uunnkknnoowwnn
+           dump any field whose OID is not recognised by OpenSSL.
+
+       sseepp__ccoommmmaa__pplluuss, sseepp__ccoommmmaa__pplluuss__ssppaaccee, sseepp__sseemmii__pplluuss__ssppaaccee,
+       sseepp__mmuullttiilliinnee
+           these options determine the field separators. The first character
+           is between RDNs and the second between multiple AVAs (multiple AVAs
+           are very rare and their use is discouraged). The options ending in
+           "space" additionally place a space after the separator to make it
+           more readable. The sseepp__mmuullttiilliinnee uses a linefeed character for the
+           RDN separator and a spaced ++ for the AVA separator. It also indents
+           the fields by four characters.
+
+       ddnn__rreevv
+           reverse the fields of the DN. This is required by RFC2253. As a
+           side effect this also reverses the order of multiple AVAs but this
+           is permissible.
+
+       nnooffnnaammee, ssnnaammee, llnnaammee, ooiidd
+           these options alter how the field name is displayed. nnooffnnaammee does
+           not display the field at all. ssnnaammee uses the "short name" form (CN
+           for commonName for example). llnnaammee uses the long form.  ooiidd
+           represents the OID in numerical form and is useful for diagnostic
+           purpose.
+
+       aalliiggnn
+           align field values for a more readable output. Only usable with
+           sseepp__mmuullttiilliinnee.
+
+       ssppaaccee__eeqq
+           places spaces round the == character which follows the field name.
+
+   TTEEXXTT OOPPTTIIOONNSS
+       As well as customising the name output format, it is also possible to
+       customise the actual fields printed using the cceerrttoopptt options when the
+       tteexxtt option is present. The default behaviour is to print all fields.
+
+       ccoommppaattiibbllee
+           use the old format. This is equivalent to specifying no output
+           options at all.
+
+       nnoo__hheeaaddeerr
+           don't print header information: that is the lines saying
+           "Certificate" and "Data".
+
+       nnoo__vveerrssiioonn
+           don't print out the version number.
+
+       nnoo__sseerriiaall
+           don't print out the serial number.
+
+       nnoo__ssiiggnnaammee
+           don't print out the signature algorithm used.
+
+       nnoo__vvaalliiddiittyy
+           don't print the validity, that is the nnoottBBeeffoorree and nnoottAAfftteerr
+           fields.
+
+       nnoo__ssuubbjjeecctt
+           don't print out the subject name.
+
+       nnoo__iissssuueerr
+           don't print out the issuer name.
+
+       nnoo__ppuubbkkeeyy
+           don't print out the public key.
+
+       nnoo__ssiiggdduummpp
+           don't give a hexadecimal dump of the certificate signature.
+
+       nnoo__aauuxx
+           don't print out certificate trust information.
+
+       nnoo__eexxtteennssiioonnss
+           don't print out any X509V3 extensions.
+
+       eexxtt__ddeeffaauulltt
+           retain default extension behaviour: attempt to print out
+           unsupported certificate extensions.
+
+       eexxtt__eerrrroorr
+           print an error message for unsupported certificate extensions.
+
+       eexxtt__ppaarrssee
+           ASN1 parse unsupported extensions.
+
+       eexxtt__dduummpp
+           hex dump unsupported extensions.
+
+       ccaa__ddeeffaauulltt
+           the value used by the ccaa utility, equivalent to nnoo__iissssuueerr,
+           nnoo__ppuubbkkeeyy, nnoo__hheeaaddeerr, nnoo__vveerrssiioonn, nnoo__ssiiggdduummpp and nnoo__ssiiggnnaammee.
+
+EEXXAAMMPPLLEESS
+       Note: in these examples the '\' means the example should be all on one
+       line.
+
+       Display the contents of a certificate:
+
+        openssl x509 -in cert.pem -noout -text
+
+       Display the certificate serial number:
+
+        openssl x509 -in cert.pem -noout -serial
+
+       Display the certificate subject name:
+
+        openssl x509 -in cert.pem -noout -subject
+
+       Display the certificate subject name in RFC2253 form:
+
+        openssl x509 -in cert.pem -noout -subject -nameopt RFC2253
+
+       Display the certificate subject name in oneline form on a terminal
+       supporting UTF8:
+
+        openssl x509 -in cert.pem -noout -subject -nameopt oneline,-esc_msb
+
+       Display the certificate MD5 fingerprint:
+
+        openssl x509 -in cert.pem -noout -fingerprint
+
+       Display the certificate SHA1 fingerprint:
+
+        openssl x509 -sha1 -in cert.pem -noout -fingerprint
+
+       Convert a certificate from PEM to DER format:
+
+        openssl x509 -in cert.pem -inform PEM -out cert.der -outform DER
+
+       Convert a certificate to a certificate request:
+
+        openssl x509 -x509toreq -in cert.pem -out req.pem -signkey key.pem
+
+       Convert a certificate request into a self signed certificate using
+       extensions for a CA:
+
+        openssl x509 -req -in careq.pem -extfile openssl.cnf -extensions v3_ca \
+               -signkey key.pem -out cacert.pem
+
+       Sign a certificate request using the CA certificate above and add user
+       certificate extensions:
+
+        openssl x509 -req -in req.pem -extfile openssl.cnf -extensions v3_usr \
+               -CA cacert.pem -CAkey key.pem -CAcreateserial
+
+       Set a certificate to be trusted for SSL client use and change set its
+       alias to "Steve's Class 1 CA"
+
+        openssl x509 -in cert.pem -addtrust clientAuth \
+               -setalias "Steve's Class 1 CA" -out trust.pem
+
+NNOOTTEESS
+       The PEM format uses the header and footer lines:
+
+        -----BEGIN CERTIFICATE-----
+        -----END CERTIFICATE-----
+
+       it will also handle files containing:
+
+        -----BEGIN X509 CERTIFICATE-----
+        -----END X509 CERTIFICATE-----
+
+       Trusted certificates have the lines
+
+        -----BEGIN TRUSTED CERTIFICATE-----
+        -----END TRUSTED CERTIFICATE-----
+
+       The conversion to UTF8 format used with the name options assumes that
+       T61Strings use the ISO8859-1 character set. This is wrong but Netscape
+       and MSIE do this as do many certificates. So although this is incorrect
+       it is more likely to display the majority of certificates correctly.
+
+       The --ffiinnggeerrpprriinntt option takes the digest of the DER encoded
+       certificate.  This is commonly called a "fingerprint". Because of the
+       nature of message digests the fingerprint of a certificate is unique to
+       that certificate and two certificates with the same fingerprint can be
+       considered to be the same.
+
+       The Netscape fingerprint uses MD5 whereas MSIE uses SHA1.
+
+       The --eemmaaiill option searches the subject name and the subject alternative
+       name extension. Only unique email addresses will be printed out: it
+       will not print the same address more than once.
+
+CCEERRTTIIFFIICCAATTEE EEXXTTEENNSSIIOONNSS
+       The --ppuurrppoossee option checks the certificate extensions and determines
+       what the certificate can be used for. The actual checks done are rather
+       complex and include various hacks and workarounds to handle broken
+       certificates and software.
+
+       The same code is used when verifying untrusted certificates in chains
+       so this section is useful if a chain is rejected by the verify code.
+
+       The basicConstraints extension CA flag is used to determine whether the
+       certificate can be used as a CA. If the CA flag is true then it is a
+       CA, if the CA flag is false then it is not a CA. AAllll CAs should have
+       the CA flag set to true.
+
+       If the basicConstraints extension is absent then the certificate is
+       considered to be a "possible CA" other extensions are checked according
+       to the intended use of the certificate. A warning is given in this case
+       because the certificate should really not be regarded as a CA: however
+       it is allowed to be a CA to work around some broken software.
+
+       If the certificate is a V1 certificate (and thus has no extensions) and
+       it is self signed it is also assumed to be a CA but a warning is again
+       given: this is to work around the problem of Verisign roots which are
+       V1 self signed certificates.
+
+       If the keyUsage extension is present then additional restraints are
+       made on the uses of the certificate. A CA certificate mmuusstt have the
+       keyCertSign bit set if the keyUsage extension is present.
+
+       The extended key usage extension places additional restrictions on the
+       certificate uses. If this extension is present (whether critical or
+       not) the key can only be used for the purposes specified.
+
+       A complete description of each test is given below. The comments about
+       basicConstraints and keyUsage and V1 certificates above apply to aallll CA
+       certificates.
+
+       SSSSLL CClliieenntt
+           The extended key usage extension must be absent or include the "web
+           client authentication" OID.  keyUsage must be absent or it must
+           have the digitalSignature bit set. Netscape certificate type must
+           be absent or it must have the SSL client bit set.
+
+       SSSSLL CClliieenntt CCAA
+           The extended key usage extension must be absent or include the "web
+           client authentication" OID. Netscape certificate type must be
+           absent or it must have the SSL CA bit set: this is used as a work
+           around if the basicConstraints extension is absent.
+
+       SSSSLL SSeerrvveerr
+           The extended key usage extension must be absent or include the "web
+           server authentication" and/or one of the SGC OIDs.  keyUsage must
+           be absent or it must have the digitalSignature, the keyEncipherment
+           set or both bits set.  Netscape certificate type must be absent or
+           have the SSL server bit set.
+
+       SSSSLL SSeerrvveerr CCAA
+           The extended key usage extension must be absent or include the "web
+           server authentication" and/or one of the SGC OIDs.  Netscape
+           certificate type must be absent or the SSL CA bit must be set: this
+           is used as a work around if the basicConstraints extension is
+           absent.
+
+       NNeettssccaappee SSSSLL SSeerrvveerr
+           For Netscape SSL clients to connect to an SSL server it must have
+           the keyEncipherment bit set if the keyUsage extension is present.
+           This isn't always valid because some cipher suites use the key for
+           digital signing.  Otherwise it is the same as a normal SSL server.
+
+       CCoommmmoonn SS//MMIIMMEE CClliieenntt TTeessttss
+           The extended key usage extension must be absent or include the
+           "email protection" OID. Netscape certificate type must be absent or
+           should have the S/MIME bit set. If the S/MIME bit is not set in
+           netscape certificate type then the SSL client bit is tolerated as
+           an alternative but a warning is shown: this is because some
+           Verisign certificates don't set the S/MIME bit.
+
+       SS//MMIIMMEE SSiiggnniinngg
+           In addition to the common S/MIME client tests the digitalSignature
+           bit must be set if the keyUsage extension is present.
+
+       SS//MMIIMMEE EEnnccrryyppttiioonn
+           In addition to the common S/MIME tests the keyEncipherment bit must
+           be set if the keyUsage extension is present.
+
+       SS//MMIIMMEE CCAA
+           The extended key usage extension must be absent or include the
+           "email protection" OID. Netscape certificate type must be absent or
+           must have the S/MIME CA bit set: this is used as a work around if
+           the basicConstraints extension is absent.
+
+       CCRRLL SSiiggnniinngg
+           The keyUsage extension must be absent or it must have the CRL
+           signing bit set.
+
+       CCRRLL SSiiggnniinngg CCAA
+           The normal CA tests apply. Except in this case the basicConstraints
+           extension must be present.
+
+BBUUGGSS
+       Extensions in certificates are not transferred to certificate requests
+       and vice versa.
+
+       It is possible to produce invalid certificates or requests by
+       specifying the wrong private key or using inconsistent options in some
+       cases: these should be checked.
+
+       There should be options to explicitly set such things as start and end
+       dates rather than an offset from the current time.
+
+       The code to implement the verify behaviour described in the TTRRUUSSTT
+       SSEETTTTIINNGGSS is currently being developed. It thus describes the intended
+       behaviour rather than the current behaviour. It is hoped that it will
+       represent reality in OpenSSL 0.9.5 and later.
+
+SSEEEE AALLSSOO
+       rreeqq(1), ccaa(1), ggeennrrssaa(1), ggeennddssaa(1), vveerriiffyy(1)
+
+HHIISSTTOORRYY
+       Before OpenSSL 0.9.8, the default digest for RSA keys was MD5.
+
+
+
+0.9.8zh                           2015-12-03                           X509(1)

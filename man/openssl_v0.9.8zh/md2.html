@@ -1,0 +1,187 @@
+<!-- Creator     : groff version 1.22.4 -->
+<!-- CreationDate: Mon Jan 31 16:14:31 2022 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>DGST</title>
+
+</head>
+<body>
+
+<h1 align="center">DGST</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#OPTIONS">OPTIONS</a><br>
+<a href="#NOTES">NOTES</a><br>
+
+<hr>
+
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">dgst, md5, md4,
+md2, sha1, sha, mdc2, ripemd160 - message digests</p>
+
+<h2>SYNOPSIS
+<a name="SYNOPSIS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>openssl
+dgst</b>
+[<b>-md5|-md4|-md2|-sha1|-sha|-mdc2|-ripemd160|-dss1</b>]
+[<b>-c</b>] [<b>-d</b>] [<b>-hex</b>] [<b>-binary</b>]
+[<b>-out filename</b>] [<b>-sign filename</b>] [<b>-passin
+arg</b>] [<b>-verify filename</b>] [<b>-prverify
+filename</b>] [<b>-signature filename</b>] [<b>-hmac
+key</b>] [<b>file...</b>]</p>
+
+
+<p style="margin-left:11%; margin-top: 1em">[<b>md5|md4|md2|sha1|sha|mdc2|ripemd160</b>]
+[<b>-c</b>] [<b>-d</b>] [<b>file...</b>]</p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The digest
+functions output the message digest of a supplied file or
+files in hexadecimal form. They can also be used for digital
+signing and verification.</p>
+
+<h2>OPTIONS
+<a name="OPTIONS"></a>
+</h2>
+
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+<p style="margin-top: 1em"><b>-c</b></p></td>
+<td width="3%"></td>
+<td width="83%">
+
+
+<p style="margin-top: 1em">print out the digest in two
+digit groups separated by colons, only relevant if
+<b>hex</b> format output is used.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+<p><b>-d</b></p></td>
+<td width="3%"></td>
+<td width="83%">
+
+
+<p>print out <small>BIO</small> debugging information.</p></td></tr>
+</table>
+
+<p style="margin-left:11%;"><b>-hex</b></p>
+
+<p style="margin-left:17%;">digest is to be output as a hex
+dump. This is the default case for a &quot;normal&quot;
+digest as opposed to a digital signature.</p>
+
+<p style="margin-left:11%;"><b>-binary</b></p>
+
+<p style="margin-left:17%;">output the digest or signature
+in binary form.</p>
+
+<p style="margin-left:11%;"><b>-out filename</b></p>
+
+<p style="margin-left:17%;">filename to output to, or
+standard output by default.</p>
+
+<p style="margin-left:11%;"><b>-sign filename</b></p>
+
+<p style="margin-left:17%;">digitally sign the digest using
+the private key in &quot;filename&quot;.</p>
+
+<p style="margin-left:11%;"><b>-passin arg</b></p>
+
+<p style="margin-left:17%;">the private key password
+source. For more information about the format of <b>arg</b>
+see the <b><small>PASS PHRASE ARGUMENTS</small></b> section
+in <b>openssl</b>(1).</p>
+
+<p style="margin-left:11%;"><b>-verify filename</b></p>
+
+<p style="margin-left:17%;">verify the signature using the
+the public key in &quot;filename&quot;. The output is either
+&quot;Verification <small>OK&quot;</small> or
+&quot;Verification Failure&quot;.</p>
+
+<p style="margin-left:11%;"><b>-prverify filename</b></p>
+
+<p style="margin-left:17%;">verify the signature using the
+the private key in &quot;filename&quot;.</p>
+
+<p style="margin-left:11%;"><b>-signature filename</b></p>
+
+<p style="margin-left:17%;">the actual signature to
+verify.</p>
+
+<p style="margin-left:11%;"><b>-hmac key</b></p>
+
+<p style="margin-left:17%;">create a hashed
+<small>MAC</small> using &quot;key&quot;.</p>
+
+<p style="margin-left:11%;"><b>-rand file(s)</b></p>
+
+<p style="margin-left:17%;">a file or files containing
+random data used to seed the random number generator, or an
+<small>EGD</small> socket (see <b>RAND_egd</b>(3)). Multiple
+files can be specified separated by a OS-dependent
+character. The separator is <b>;</b> for MS-Windows,
+<b>,</b> for OpenVMS, and <b>:</b> for all others.</p>
+
+<p style="margin-left:11%;"><b>file...</b></p>
+
+<p style="margin-left:17%;">file or files to digest. If no
+files are specified then standard input is used.</p>
+
+<h2>NOTES
+<a name="NOTES"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The digest of
+choice for all new applications is <small>SHA1.</small>
+Other digests are however still widely used.</p>
+
+<p style="margin-left:11%; margin-top: 1em">If you wish to
+sign or verify data using the <small>DSA</small> algorithm
+then the dss1 digest must be used.</p>
+
+<p style="margin-left:11%; margin-top: 1em">A source of
+random numbers is required for certain signing algorithms,
+in particular <small>DSA.</small></p>
+
+<p style="margin-left:11%; margin-top: 1em">The signing and
+verify options should only be used if a single file is being
+signed or verified.</p>
+<hr>
+</body>
+</html>

@@ -1,0 +1,92 @@
+OPENSSL-PASSWD(1ossl)               OpenSSL              OPENSSL-PASSWD(1ossl)
+
+
+
+NNAAMMEE
+       openssl-passwd - compute password hashes
+
+SSYYNNOOPPSSIISS
+       ooppeennssssll ppaasssswwdd [--hheellpp] [--11] [--aapprr11] [--aaiixxmmdd55] [--55] [--66] [--ssaalltt _s_t_r_i_n_g]
+       [--iinn _f_i_l_e] [--ssttddiinn] [--nnoovveerriiffyy] [--qquuiieett] [--ttaabbllee] [--rreevveerrssee] [--rraanndd
+       _f_i_l_e_s] [--wwrriitteerraanndd _f_i_l_e] [--pprroovviiddeerr _n_a_m_e] [--pprroovviiddeerr--ppaatthh _p_a_t_h]
+       [--pprrooppqquueerryy _p_r_o_p_q] [_p_a_s_s_w_o_r_d]
+
+DDEESSCCRRIIPPTTIIOONN
+       This command computes the hash of a password typed at run-time or the
+       hash of each password in a list.  The password list is taken from the
+       named file for option --iinn, from stdin for option --ssttddiinn, or from the
+       command line, or from the terminal otherwise.
+
+OOPPTTIIOONNSS
+       --hheellpp
+           Print out a usage message.
+
+       --11  Use the MD5 based BSD password algorithm 11 (default).
+
+       --aapprr11
+           Use the aapprr11 algorithm (Apache variant of the BSD algorithm).
+
+       --aaiixxmmdd55
+           Use the AAIIXX MMDD55 algorithm (AIX variant of the BSD algorithm).
+
+       --55
+       --66  Use the SSHHAA225566 / SSHHAA551122 based algorithms defined by Ulrich Drepper.
+           See <https://www.akkadia.org/drepper/SHA-crypt.txt>.
+
+       --ssaalltt _s_t_r_i_n_g
+           Use the specified salt.  When reading a password from the terminal,
+           this implies --nnoovveerriiffyy.
+
+       --iinn _f_i_l_e
+           Read passwords from _f_i_l_e.
+
+       --ssttddiinn
+           Read passwords from ssttddiinn.
+
+       --nnoovveerriiffyy
+           Don't verify when reading a password from the terminal.
+
+       --qquuiieett
+           Don't output warnings when passwords given at the command line are
+           truncated.
+
+       --ttaabbllee
+           In the output list, prepend the cleartext password and a TAB
+           character to each password hash.
+
+       --rreevveerrssee
+           When the --ttaabbllee option is used, reverse the order of cleartext and
+           hash.
+
+       --rraanndd _f_i_l_e_s, --wwrriitteerraanndd _f_i_l_e
+           See "Random State Options" in ooppeennssssll(1) for details.
+
+       --pprroovviiddeerr _n_a_m_e
+       --pprroovviiddeerr--ppaatthh _p_a_t_h
+       --pprrooppqquueerryy _p_r_o_p_q
+           See "Provider Options" in ooppeennssssll(1), pprroovviiddeerr(7), and pprrooppeerrttyy(7).
+
+EEXXAAMMPPLLEESS
+         % openssl passwd -1 -salt xxxxxxxx password
+         $1$xxxxxxxx$UYCIxa628.9qXjpQCjM4a.
+
+         % openssl passwd -apr1 -salt xxxxxxxx password
+         $apr1$xxxxxxxx$dxHfLAsjHkDRmG83UXe8K0
+
+         % openssl passwd -aixmd5 -salt xxxxxxxx password
+         xxxxxxxx$8Oaipk/GPKhC64w/YVeFD/
+
+HHIISSTTOORRYY
+       The --ccrryypptt option was removed in OpenSSL 3.0.
+
+CCOOPPYYRRIIGGHHTT
+       Copyright 2000-2021 The OpenSSL Project Authors. All Rights Reserved.
+
+       Licensed under the Apache License 2.0 (the "License").  You may not use
+       this file except in compliance with the License.  You can obtain a copy
+       in the file LICENSE in the source distribution or at
+       <https://www.openssl.org/source/license.html>.
+
+
+
+3.0.1                             2022-01-31             OPENSSL-PASSWD(1ossl)

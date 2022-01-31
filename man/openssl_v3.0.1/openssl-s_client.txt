@@ -1,0 +1,784 @@
+OPENSSL-S_CLIENT(1ossl)             OpenSSL            OPENSSL-S_CLIENT(1ossl)
+
+
+
+NNAAMMEE
+       openssl-s_client - SSL/TLS client program
+
+SSYYNNOOPPSSIISS
+       ooppeennssssll ss__cclliieenntt [--hheellpp] [--ssssll__ccoonnffiigg _s_e_c_t_i_o_n] [--ccoonnnneecctt _h_o_s_t_:_p_o_r_t]
+       [--hhoosstt _h_o_s_t_n_a_m_e] [--ppoorrtt _p_o_r_t] [--bbiinndd _h_o_s_t_:_p_o_r_t] [--pprrooxxyy _h_o_s_t_:_p_o_r_t]
+       [--pprrooxxyy__uusseerr _u_s_e_r_i_d] [--pprrooxxyy__ppaassss _a_r_g] [--uunniixx _p_a_t_h] [--44] [--66]
+       [--sseerrvveerrnnaammee _n_a_m_e] [--nnoosseerrvveerrnnaammee] [--vveerriiffyy _d_e_p_t_h]
+       [--vveerriiffyy__rreettuurrnn__eerrrroorr] [--vveerriiffyy__qquuiieett] [--vveerriiffyyCCAAffiillee _f_i_l_e_n_a_m_e]
+       [--vveerriiffyyCCAAppaatthh _d_i_r] [--vveerriiffyyCCAAssttoorree _u_r_i] [--cceerrtt _f_i_l_e_n_a_m_e] [--cceerrttffoorrmm
+       DDEERR|PPEEMM|PP1122] [--cceerrtt__cchhaaiinn _f_i_l_e_n_a_m_e] [--bbuuiilldd__cchhaaiinn] [--CCRRLL _f_i_l_e_n_a_m_e]
+       [--CCRRLLffoorrmm DDEERR|PPEEMM] [--ccrrll__ddoowwnnllooaadd] [--kkeeyy _f_i_l_e_n_a_m_e|_u_r_i] [--kkeeyyffoorrmm
+       DDEERR|PPEEMM|PP1122|EENNGGIINNEE] [--ppaassss _a_r_g] [--cchhaaiinnCCAAffiillee _f_i_l_e_n_a_m_e] [--cchhaaiinnCCAAppaatthh
+       _d_i_r_e_c_t_o_r_y] [--cchhaaiinnCCAAssttoorree _u_r_i] [--rreeqquueessttCCAAffiillee _f_i_l_e_n_a_m_e]
+       [--ddaannee__ttllssaa__ddoommaaiinn _d_o_m_a_i_n] [--ddaannee__ttllssaa__rrrrddaattaa _r_r_d_a_t_a]
+       [--ddaannee__eeee__nnoo__nnaammeecchheecckkss] [--rreeccoonnnneecctt] [--sshhoowwcceerrttss] [--pprreexxiitt] [--ddeebbuugg]
+       [--ttrraaccee] [--nnooccoommmmaannddss] [--sseeccuurriittyy__ddeebbuugg] [--sseeccuurriittyy__ddeebbuugg__vveerrbboossee]
+       [--mmssgg] [--ttiimmeeoouutt] [--mmttuu _s_i_z_e] [--nnoo__eettmm] [--kkeeyymmaatteexxppoorrtt _l_a_b_e_l]
+       [--kkeeyymmaatteexxppoorrttlleenn _l_e_n] [--mmssggffiillee _f_i_l_e_n_a_m_e] [--nnbbiioo__tteesstt] [--ssttaattee]
+       [--nnbbiioo] [--ccrrllff] [--iiggnn__eeooff] [--nnoo__iiggnn__eeooff] [--ppsskk__iiddeennttiittyy _i_d_e_n_t_i_t_y] [--ppsskk
+       _k_e_y] [--ppsskk__sseessssiioonn _f_i_l_e] [--qquuiieett] [--ssccttpp] [--ssccttpp__llaabbeell__bbuugg]
+       [--ffaallllbbaacckk__ssccssvv] [--aassyynncc] [--mmaaxxffrraagglleenn _l_e_n] [--mmaaxx__sseenndd__ffrraagg]
+       [--sspplliitt__sseenndd__ffrraagg] [--mmaaxx__ppiippeelliinneess] [--rreeaadd__bbuuff]
+       [--iiggnnoorree__uunneexxppeecctteedd__eeooff] [--bbuuggss] [--ccoommpp] [--nnoo__ccoommpp] [--bbrriieeff]
+       [--lleeggaaccyy__sseerrvveerr__ccoonnnneecctt] [--aallllooww__nnoo__ddhhee__kkeexx] [--ssiiggaallggss _s_i_g_a_l_g_l_i_s_t]
+       [--ccuurrvveess _c_u_r_v_e_l_i_s_t] [--cciipphheerr _c_i_p_h_e_r_l_i_s_t] [--cciipphheerrssuuiitteess _v_a_l]
+       [--sseerrvveerrpprreeff] [--ssttaarrttttllss _p_r_o_t_o_c_o_l] [--nnaammee _h_o_s_t_n_a_m_e] [--xxmmpppphhoosstt
+       _h_o_s_t_n_a_m_e] [--nnaammee _h_o_s_t_n_a_m_e] [--ttllsseexxttddeebbuugg] [--nnoo__ttiicckkeett] [--sseessss__oouutt
+       _f_i_l_e_n_a_m_e] [--sseerrvveerriinnffoo _t_y_p_e_s] [--sseessss__iinn _f_i_l_e_n_a_m_e] [--sseerrvveerriinnffoo _t_y_p_e_s]
+       [--ssttaattuuss] [--aallppnn _p_r_o_t_o_c_o_l_s] [--nneexxttpprroottoonneegg _p_r_o_t_o_c_o_l_s] [--cctt] [--nnoocctt]
+       [--ccttllooggffiillee] [--kkeeyyllooggffiillee _f_i_l_e] [--eeaarrllyy__ddaattaa _f_i_l_e] [--eennaabbllee__pphhaa]
+       [--uussee__ssrrttpp _v_a_l_u_e] [--ssrrppuusseerr _v_a_l_u_e] [--ssrrppppaassss _v_a_l_u_e] [--ssrrpp__llaatteeuusseerr]
+       [--ssrrpp__mmoorreeggrroouuppss] [--ssrrpp__ssttrreennggtthh _n_u_m_b_e_r] [--nnaammeeoopptt _o_p_t_i_o_n] [--nnoo__ssssll33]
+       [--nnoo__ttllss11] [--nnoo__ttllss11__11] [--nnoo__ttllss11__22] [--nnoo__ttllss11__33] [--ssssll33] [--ttllss11]
+       [--ttllss11__11] [--ttllss11__22] [--ttllss11__33] [--ddttllss] [--ddttllss11] [--ddttllss11__22] [--xxkkeeyy
+       _i_n_f_i_l_e] [--xxcceerrtt _f_i_l_e] [--xxcchhaaiinn _f_i_l_e] [--xxcchhaaiinn__bbuuiilldd _f_i_l_e] [--xxcceerrttffoorrmm
+       DDEERR|PPEEMM]> [--xxkkeeyyffoorrmm DDEERR|PPEEMM]> [--CCAAffiillee _f_i_l_e] [--nnoo--CCAAffiillee] [--CCAAppaatthh
+       _d_i_r] [--nnoo--CCAAppaatthh] [--CCAAssttoorree _u_r_i] [--nnoo--CCAAssttoorree] [--bbuuggss] [--nnoo__ccoommpp]
+       [--ccoommpp] [--nnoo__ttiicckkeett] [--sseerrvveerrpprreeff] [--cclliieenntt__rreenneeggoottiiaattiioonn]
+       [--lleeggaaccyy__rreenneeggoottiiaattiioonn] [--nnoo__rreenneeggoottiiaattiioonn] [--nnoo__rreessuummppttiioonn__oonn__rreenneegg]
+       [--lleeggaaccyy__sseerrvveerr__ccoonnnneecctt] [--nnoo__lleeggaaccyy__sseerrvveerr__ccoonnnneecctt] [--nnoo__eettmm]
+       [--aallllooww__nnoo__ddhhee__kkeexx] [--pprriioorriittiizzee__cchhaacchhaa] [--ssttrriicctt] [--ssiiggaallggss _a_l_g_s]
+       [--cclliieenntt__ssiiggaallggss _a_l_g_s] [--ggrroouuppss _g_r_o_u_p_s] [--ccuurrvveess _c_u_r_v_e_s] [--nnaammeedd__ccuurrvvee
+       _c_u_r_v_e] [--cciipphheerr _c_i_p_h_e_r_s] [--cciipphheerrssuuiitteess _1_._3_c_i_p_h_e_r_s] [--mmiinn__pprroottooccooll
+       _m_i_n_p_r_o_t] [--mmaaxx__pprroottooccooll _m_a_x_p_r_o_t] [--rreeccoorrdd__ppaaddddiinngg _p_a_d_d_i_n_g]
+       [--ddeebbuugg__bbrrookkeenn__pprroottooccooll] [--nnoo__mmiiddddlleebbooxx] [--rraanndd _f_i_l_e_s] [--wwrriitteerraanndd
+       _f_i_l_e] [--pprroovviiddeerr _n_a_m_e] [--pprroovviiddeerr--ppaatthh _p_a_t_h] [--pprrooppqquueerryy _p_r_o_p_q]
+       [--eennggiinnee _i_d] [--ssssll__cclliieenntt__eennggiinnee _i_d] [--aallllooww__pprrooxxyy__cceerrttss] [--aattttiimmee
+       _t_i_m_e_s_t_a_m_p] [--nnoo__cchheecckk__ttiimmee] [--cchheecckk__ssss__ssiigg] [--ccrrll__cchheecckk]
+       [--ccrrll__cchheecckk__aallll] [--eexxpplliicciitt__ppoolliiccyy] [--eexxtteennddeedd__ccrrll] [--iiggnnoorree__ccrriittiiccaall]
+       [--iinnhhiibbiitt__aannyy] [--iinnhhiibbiitt__mmaapp] [--ppaarrttiiaall__cchhaaiinn] [--ppoolliiccyy _a_r_g]
+       [--ppoolliiccyy__cchheecckk] [--ppoolliiccyy__pprriinntt] [--ppuurrppoossee _p_u_r_p_o_s_e] [--ssuuiitteeBB__112288]
+       [--ssuuiitteeBB__112288__oonnllyy] [--ssuuiitteeBB__119922] [--ttrruusstteedd__ffiirrsstt] [--nnoo__aalltt__cchhaaiinnss]
+       [--uussee__ddeellttaass] [--aauutthh__lleevveell _n_u_m] [--vveerriiffyy__ddeepptthh _n_u_m] [--vveerriiffyy__eemmaaiill
+       _e_m_a_i_l] [--vveerriiffyy__hhoossttnnaammee _h_o_s_t_n_a_m_e] [--vveerriiffyy__iipp _i_p] [--vveerriiffyy__nnaammee _n_a_m_e]
+       [--xx550099__ssttrriicctt] [--iissssuueerr__cchheecckkss] [_h_o_s_t:_p_o_r_t]
+
+DDEESSCCRRIIPPTTIIOONN
+       This command implements a generic SSL/TLS client which connects to a
+       remote host using SSL/TLS. It is a _v_e_r_y useful diagnostic tool for SSL
+       servers.
+
+OOPPTTIIOONNSS
+       In addition to the options below, this command also supports the common
+       and client only options documented in the "Supported Command Line
+       Commands" section of the SSSSLL__CCOONNFF__ccmmdd(3) manual page.
+
+       --hheellpp
+           Print out a usage message.
+
+       --ssssll__ccoonnffiigg _s_e_c_t_i_o_n
+           Use the specified section of the configuration file to configure
+           the SSSSLL__CCTTXX object.
+
+       --ccoonnnneecctt _h_o_s_t:_p_o_r_t
+           This specifies the host and optional port to connect to. It is
+           possible to select the host and port using the optional target
+           positional argument instead.  If neither this nor the target
+           positional argument are specified then an attempt is made to
+           connect to the local host on port 4433.
+
+       --hhoosstt _h_o_s_t_n_a_m_e
+           Host to connect to; use --ccoonnnneecctt instead.
+
+       --ppoorrtt _p_o_r_t
+           Connect to the specified port; use --ccoonnnneecctt instead.
+
+       --bbiinndd _h_o_s_t_:_p_o_r_t
+           This specifies the host address and or port to bind as the source
+           for the connection.  For Unix-domain sockets the port is ignored
+           and the host is used as the source socket address.
+
+       --pprrooxxyy _h_o_s_t_:_p_o_r_t
+           When used with the --ccoonnnneecctt flag, the program uses the host and
+           port specified with this flag and issues an HTTP CONNECT command to
+           connect to the desired server.
+
+       --pprrooxxyy__uusseerr _u_s_e_r_i_d
+           When used with the --pprrooxxyy flag, the program will attempt to
+           authenticate with the specified proxy using basic (base64)
+           authentication.  NB: Basic authentication is insecure; the
+           credentials are sent to the proxy in easily reversible base64
+           encoding before any TLS/SSL session is established.  Therefore,
+           these credentials are easily recovered by anyone able to
+           sniff/trace the network. Use with caution.
+
+       --pprrooxxyy__ppaassss _a_r_g
+           The proxy password source, used with the --pprrooxxyy__uusseerr flag.  For
+           more information about the format of aarrgg see
+           ooppeennssssll--ppaasssspphhrraassee--ooppttiioonnss(1).
+
+       --uunniixx _p_a_t_h
+           Connect over the specified Unix-domain socket.
+
+       --44  Use IPv4 only.
+
+       --66  Use IPv6 only.
+
+       --sseerrvveerrnnaammee _n_a_m_e
+           Set the TLS SNI (Server Name Indication) extension in the
+           ClientHello message to the given value.  If --sseerrvveerrnnaammee is not
+           provided, the TLS SNI extension will be populated with the name
+           given to --ccoonnnneecctt if it follows a DNS name format. If --ccoonnnneecctt is
+           not provided either, the SNI is set to "localhost".  This is the
+           default since OpenSSL 1.1.1.
+
+           Even though SNI should normally be a DNS name and not an IP
+           address, if --sseerrvveerrnnaammee is provided then that name will be sent,
+           regardless of whether it is a DNS name or not.
+
+           This option cannot be used in conjunction with --nnoosseerrvveerrnnaammee.
+
+       --nnoosseerrvveerrnnaammee
+           Suppresses sending of the SNI (Server Name Indication) extension in
+           the ClientHello message. Cannot be used in conjunction with the
+           --sseerrvveerrnnaammee or --ddaannee__ttllssaa__ddoommaaiinn options.
+
+       --cceerrtt _f_i_l_e_n_a_m_e
+           The client certificate to use, if one is requested by the server.
+           The default is not to use a certificate.
+
+           The chain for the client certificate may be specified using
+           --cceerrtt__cchhaaiinn.
+
+       --cceerrttffoorrmm DDEERR|PPEEMM|PP1122
+           The client certificate file format to use; unspecified by default.
+           See ooppeennssssll--ffoorrmmaatt--ooppttiioonnss(1) for details.
+
+       --cceerrtt__cchhaaiinn
+           A file or URI of untrusted certificates to use when attempting to
+           build the certificate chain related to the certificate specified
+           via the --cceerrtt option.  The input can be in PEM, DER, or PKCS#12
+           format.
+
+       --bbuuiilldd__cchhaaiinn
+           Specify whether the application should build the client certificate
+           chain to be provided to the server.
+
+       --CCRRLL _f_i_l_e_n_a_m_e
+           CRL file to use to check the server's certificate.
+
+       --CCRRLLffoorrmm DDEERR|PPEEMM
+           The CRL file format; unspecified by default.  See
+           ooppeennssssll--ffoorrmmaatt--ooppttiioonnss(1) for details.
+
+       --ccrrll__ddoowwnnllooaadd
+           Download CRL from distribution points in the certificate.
+
+       --kkeeyy _f_i_l_e_n_a_m_e|_u_r_i
+           The client private key to use.  If not specified then the
+           certificate file will be used to read also the key.
+
+       --kkeeyyffoorrmm DDEERR|PPEEMM|PP1122|EENNGGIINNEE
+           The key format; unspecified by default.  See
+           ooppeennssssll--ffoorrmmaatt--ooppttiioonnss(1) for details.
+
+       --ppaassss _a_r_g
+           the private key and certifiate file password source.  For more
+           information about the format of _a_r_g see
+           ooppeennssssll--ppaasssspphhrraassee--ooppttiioonnss(1).
+
+       --vveerriiffyy _d_e_p_t_h
+           The verify depth to use. This specifies the maximum length of the
+           server certificate chain and turns on server certificate
+           verification.  Currently the verify operation continues after
+           errors so all the problems with a certificate chain can be seen. As
+           a side effect the connection will never fail due to a server
+           certificate verify failure.
+
+       --vveerriiffyy__rreettuurrnn__eerrrroorr
+           Return verification errors instead of continuing. This will
+           typically abort the handshake with a fatal error.
+
+       --vveerriiffyy__qquuiieett
+           Limit verify output to only errors.
+
+       --vveerriiffyyCCAAffiillee _f_i_l_e_n_a_m_e
+           A file in PEM format containing trusted certificates to use for
+           verifying the server's certificate.
+
+       --vveerriiffyyCCAAppaatthh _d_i_r
+           A directory containing trusted certificates to use for verifying
+           the server's certificate.  This directory must be in "hash format",
+           see ooppeennssssll--vveerriiffyy(1) for more information.
+
+       --vveerriiffyyCCAAssttoorree _u_r_i
+           The URI of a store containing trusted certificates to use for
+           verifying the server's certificate.
+
+       --cchhaaiinnCCAAffiillee _f_i_l_e
+           A file in PEM format containing trusted certificates to use when
+           attempting to build the client certificate chain.
+
+       --cchhaaiinnCCAAppaatthh _d_i_r_e_c_t_o_r_y
+           A directory containing trusted certificates to use for building the
+           client certificate chain provided to the server.  This directory
+           must be in "hash format", see ooppeennssssll--vveerriiffyy(1) for more
+           information.
+
+       --cchhaaiinnCCAAssttoorree _u_r_i
+           The URI of a store containing trusted certificates to use when
+           attempting to build the client certificate chain.  The URI may
+           indicate a single certificate, as well as a collection of them.
+           With URIs in the "file:" scheme, this acts as --cchhaaiinnCCAAffiillee or
+           --cchhaaiinnCCAAppaatthh, depending on if the URI indicates a directory or a
+           single file.  See oossssll__ssttoorree--ffiillee(7) for more information on the
+           "file:" scheme.
+
+       --rreeqquueessttCCAAffiillee _f_i_l_e
+           A file containing a list of certificates whose subject names will
+           be sent to the server in the cceerrttiiffiiccaattee__aauutthhoorriittiieess extension.
+           Only supported for TLS 1.3
+
+       --ddaannee__ttllssaa__ddoommaaiinn _d_o_m_a_i_n
+           Enable RFC6698/RFC7671 DANE TLSA authentication and specify the
+           TLSA base domain which becomes the default SNI hint and the primary
+           reference identifier for hostname checks.  This must be used in
+           combination with at least one instance of the --ddaannee__ttllssaa__rrrrddaattaa
+           option below.
+
+           When DANE authentication succeeds, the diagnostic output will
+           include the lowest (closest to 0) depth at which a TLSA record
+           authenticated a chain certificate.  When that TLSA record is a "2 1
+           0" trust anchor public key that signed (rather than matched) the
+           top-most certificate of the chain, the result is reported as "TA
+           public key verified".  Otherwise, either the TLSA record "matched
+           TA certificate" at a positive depth or else "matched EE
+           certificate" at depth 0.
+
+       --ddaannee__ttllssaa__rrrrddaattaa _r_r_d_a_t_a
+           Use one or more times to specify the RRDATA fields of the DANE TLSA
+           RRset associated with the target service.  The _r_r_d_a_t_a value is
+           specified in "presentation form", that is four whitespace separated
+           fields that specify the usage, selector, matching type and
+           associated data, with the last of these encoded in hexadecimal.
+           Optional whitespace is ignored in the associated data field.  For
+           example:
+
+             $ openssl s_client -brief -starttls smtp \
+               -connect smtp.example.com:25 \
+               -dane_tlsa_domain smtp.example.com \
+               -dane_tlsa_rrdata "2 1 1
+                 B111DD8A1C2091A89BD4FD60C57F0716CCE50FEEFF8137CDBEE0326E 02CF362B" \
+               -dane_tlsa_rrdata "2 1 1
+                 60B87575447DCBA2A36B7D11AC09FB24A9DB406FEE12D2CC90180517 616E8A18"
+             ...
+             Verification: OK
+             Verified peername: smtp.example.com
+             DANE TLSA 2 1 1 ...ee12d2cc90180517616e8a18 matched TA certificate at depth 1
+             ...
+
+       --ddaannee__eeee__nnoo__nnaammeecchheecckkss
+           This disables server name checks when authenticating via DDAANNEE--EEEE(3)
+           TLSA records.  For some applications, primarily web browsers, it is
+           not safe to disable name checks due to "unknown key share" attacks,
+           in which a malicious server can convince a client that a connection
+           to a victim server is instead a secure connection to the malicious
+           server.  The malicious server may then be able to violate cross-
+           origin scripting restrictions.  Thus, despite the text of RFC7671,
+           name checks are by default enabled for DDAANNEE--EEEE(3) TLSA records, and
+           can be disabled in applications where it is safe to do so.  In
+           particular, SMTP and XMPP clients should set this option as SRV and
+           MX records already make it possible for a remote domain to redirect
+           client connections to any server of its choice, and in any case
+           SMTP and XMPP clients do not execute scripts downloaded from remote
+           servers.
+
+       --rreeccoonnnneecctt
+           Reconnects to the same server 5 times using the same session ID,
+           this can be used as a test that session caching is working.
+
+       --sshhoowwcceerrttss
+           Displays the server certificate list as sent by the server: it only
+           consists of certificates the server has sent (in the order the
+           server has sent them). It is nnoott a verified chain.
+
+       --pprreexxiitt
+           Print session information when the program exits. This will always
+           attempt to print out information even if the connection fails.
+           Normally information will only be printed out once if the
+           connection succeeds. This option is useful because the cipher in
+           use may be renegotiated or the connection may fail because a client
+           certificate is required or is requested only after an attempt is
+           made to access a certain URL. Note: the output produced by this
+           option is not always accurate because a connection might never have
+           been established.
+
+       --ssttaattee
+           Prints out the SSL session states.
+
+       --ddeebbuugg
+           Print extensive debugging information including a hex dump of all
+           traffic.
+
+       --nnooccoommmmaannddss
+           Do not use interactive command letters.
+
+       --sseeccuurriittyy__ddeebbuugg
+           Enable security debug messages.
+
+       --sseeccuurriittyy__ddeebbuugg__vveerrbboossee
+           Output more security debug output.
+
+       --mmssgg
+           Show protocol messages.
+
+       --ttiimmeeoouutt
+           Enable send/receive timeout on DTLS connections.
+
+       --mmttuu _s_i_z_e
+           Set MTU of the link layer to the specified size.
+
+       --nnoo__eettmm
+           Disable Encrypt-then-MAC negotiation.
+
+       --kkeeyymmaatteexxppoorrtt _l_a_b_e_l
+           Export keying material using the specified label.
+
+       --kkeeyymmaatteexxppoorrttlleenn _l_e_n
+           Export the specified number of bytes of keying material; default is
+           20.
+
+           Show all protocol messages with hex dump.
+
+       --ttrraaccee
+           Show verbose trace output of protocol messages.
+
+       --mmssggffiillee _f_i_l_e_n_a_m_e
+           File to send output of --mmssgg or --ttrraaccee to, default standard output.
+
+       --nnbbiioo__tteesstt
+           Tests nonblocking I/O
+
+       --nnbbiioo
+           Turns on nonblocking I/O
+
+       --ccrrllff
+           This option translated a line feed from the terminal into CR+LF as
+           required by some servers.
+
+       --iiggnn__eeooff
+           Inhibit shutting down the connection when end of file is reached in
+           the input.
+
+       --qquuiieett
+           Inhibit printing of session and certificate information.  This
+           implicitly turns on --iiggnn__eeooff as well.
+
+       --nnoo__iiggnn__eeooff
+           Shut down the connection when end of file is reached in the input.
+           Can be used to override the implicit --iiggnn__eeooff after --qquuiieett.
+
+       --ppsskk__iiddeennttiittyy _i_d_e_n_t_i_t_y
+           Use the PSK identity _i_d_e_n_t_i_t_y when using a PSK cipher suite.  The
+           default value is "Client_identity" (without the quotes).
+
+       --ppsskk _k_e_y
+           Use the PSK key _k_e_y when using a PSK cipher suite. The key is given
+           as a hexadecimal number without leading 0x, for example -psk
+           1a2b3c4d.  This option must be provided in order to use a PSK
+           cipher.
+
+       --ppsskk__sseessssiioonn _f_i_l_e
+           Use the pem encoded SSL_SESSION data stored in _f_i_l_e as the basis of
+           a PSK.  Note that this will only work if TLSv1.3 is negotiated.
+
+       --ssccttpp
+           Use SCTP for the transport protocol instead of UDP in DTLS. Must be
+           used in conjunction with --ddttllss, --ddttllss11 or --ddttllss11__22. This option is
+           only available where OpenSSL has support for SCTP enabled.
+
+       --ssccttpp__llaabbeell__bbuugg
+           Use the incorrect behaviour of older OpenSSL implementations when
+           computing endpoint-pair shared secrets for DTLS/SCTP. This allows
+           communication with older broken implementations but breaks
+           interoperability with correct implementations. Must be used in
+           conjunction with --ssccttpp. This option is only available where OpenSSL
+           has support for SCTP enabled.
+
+       --ffaallllbbaacckk__ssccssvv
+           Send TLS_FALLBACK_SCSV in the ClientHello.
+
+       --aassyynncc
+           Switch on asynchronous mode. Cryptographic operations will be
+           performed asynchronously. This will only have an effect if an
+           asynchronous capable engine is also used via the --eennggiinnee option.
+           For test purposes the dummy async engine (dasync) can be used (if
+           available).
+
+       --mmaaxxffrraagglleenn _l_e_n
+           Enable Maximum Fragment Length Negotiation; allowed values are 512,
+           1024, 2048, and 4096.
+
+       --mmaaxx__sseenndd__ffrraagg _i_n_t
+           The maximum size of data fragment to send.  See
+           SSSSLL__CCTTXX__sseett__mmaaxx__sseenndd__ffrraaggmmeenntt(3) for further information.
+
+       --sspplliitt__sseenndd__ffrraagg _i_n_t
+           The size used to split data for encrypt pipelines. If more data is
+           written in one go than this value then it will be split into
+           multiple pipelines, up to the maximum number of pipelines defined
+           by max_pipelines. This only has an effect if a suitable cipher
+           suite has been negotiated, an engine that supports pipelining has
+           been loaded, and max_pipelines is greater than 1. See
+           SSSSLL__CCTTXX__sseett__sspplliitt__sseenndd__ffrraaggmmeenntt(3) for further information.
+
+       --mmaaxx__ppiippeelliinneess _i_n_t
+           The maximum number of encrypt/decrypt pipelines to be used. This
+           will only have an effect if an engine has been loaded that supports
+           pipelining (e.g. the dasync engine) and a suitable cipher suite has
+           been negotiated. The default value is 1.  See
+           SSSSLL__CCTTXX__sseett__mmaaxx__ppiippeelliinneess(3) for further information.
+
+       --rreeaadd__bbuuff _i_n_t
+           The default read buffer size to be used for connections. This will
+           only have an effect if the buffer size is larger than the size that
+           would otherwise be used and pipelining is in use (see
+           SSSSLL__CCTTXX__sseett__ddeeffaauulltt__rreeaadd__bbuuffffeerr__lleenn(3) for further information).
+
+       --iiggnnoorree__uunneexxppeecctteedd__eeooff
+           Some TLS implementations do not send the mandatory close_notify
+           alert on shutdown. If the application tries to wait for the
+           close_notify alert but the peer closes the connection without
+           sending it, an error is generated. When this option is enabled the
+           peer does not need to send the close_notify alert and a closed
+           connection will be treated as if the close_notify alert was
+           received.  For more information on shutting down a connection, see
+           SSSSLL__sshhuuttddoowwnn(3).
+
+       --bbuuggss
+           There are several known bugs in SSL and TLS implementations. Adding
+           this option enables various workarounds.
+
+       --ccoommpp
+           Enables support for SSL/TLS compression.  This option was
+           introduced in OpenSSL 1.1.0.  TLS compression is not recommended
+           and is off by default as of OpenSSL 1.1.0.
+
+       --nnoo__ccoommpp
+           Disables support for SSL/TLS compression.  TLS compression is not
+           recommended and is off by default as of OpenSSL 1.1.0.
+
+       --bbrriieeff
+           Only provide a brief summary of connection parameters instead of
+           the normal verbose output.
+
+       --ssiiggaallggss _s_i_g_a_l_g_l_i_s_t
+           Specifies the list of signature algorithms that are sent by the
+           client.  The server selects one entry in the list based on its
+           preferences.  For example strings, see SSSSLL__CCTTXX__sseett11__ssiiggaallggss(3)
+
+       --ccuurrvveess _c_u_r_v_e_l_i_s_t
+           Specifies the list of supported curves to be sent by the client.
+           The curve is ultimately selected by the server. For a list of all
+           curves, use:
+
+               $ openssl ecparam -list_curves
+
+       --cciipphheerr _c_i_p_h_e_r_l_i_s_t
+           This allows the TLSv1.2 and below cipher list sent by the client to
+           be modified.  This list will be combined with any TLSv1.3
+           ciphersuites that have been configured. Although the server
+           determines which ciphersuite is used it should take the first
+           supported cipher in the list sent by the client. See
+           ooppeennssssll--cciipphheerrss(1) for more information.
+
+       --cciipphheerrssuuiitteess _v_a_l
+           This allows the TLSv1.3 ciphersuites sent by the client to be
+           modified. This list will be combined with any TLSv1.2 and below
+           ciphersuites that have been configured. Although the server
+           determines which cipher suite is used it should take the first
+           supported cipher in the list sent by the client. See
+           ooppeennssssll--cciipphheerrss(1) for more information. The format for this list
+           is a simple colon (":") separated list of TLSv1.3 ciphersuite
+           names.
+
+       --ssttaarrttttllss _p_r_o_t_o_c_o_l
+           Send the protocol-specific message(s) to switch to TLS for
+           communication.  _p_r_o_t_o_c_o_l is a keyword for the intended protocol.
+           Currently, the only supported keywords are "smtp", "pop3", "imap",
+           "ftp", "xmpp", "xmpp-server", "irc", "postgres", "mysql", "lmtp",
+           "nntp", "sieve" and "ldap".
+
+       --xxmmpppphhoosstt _h_o_s_t_n_a_m_e
+           This option, when used with "-starttls xmpp" or "-starttls xmpp-
+           server", specifies the host for the "to" attribute of the stream
+           element.  If this option is not specified, then the host specified
+           with "-connect" will be used.
+
+           This option is an alias of the --nnaammee option for "xmpp" and "xmpp-
+           server".
+
+       --nnaammee _h_o_s_t_n_a_m_e
+           This option is used to specify hostname information for various
+           protocols used with --ssttaarrttttllss option. Currently only "xmpp", "xmpp-
+           server", "smtp" and "lmtp" can utilize this --nnaammee option.
+
+           If this option is used with "-starttls xmpp" or "-starttls xmpp-
+           server", if specifies the host for the "to" attribute of the stream
+           element. If this option is not specified, then the host specified
+           with "-connect" will be used.
+
+           If this option is used with "-starttls lmtp" or "-starttls smtp",
+           it specifies the name to use in the "LMTP LHLO" or "SMTP EHLO"
+           message, respectively. If this option is not specified, then
+           "mail.example.com" will be used.
+
+       --ttllsseexxttddeebbuugg
+           Print out a hex dump of any TLS extensions received from the
+           server.
+
+       --nnoo__ttiicckkeett
+           Disable RFC4507bis session ticket support.
+
+       --sseessss__oouutt _f_i_l_e_n_a_m_e
+           Output SSL session to _f_i_l_e_n_a_m_e.
+
+       --sseessss__iinn _f_i_l_e_n_a_m_e
+           Load SSL session from _f_i_l_e_n_a_m_e. The client will attempt to resume a
+           connection from this session.
+
+       --sseerrvveerriinnffoo _t_y_p_e_s
+           A list of comma-separated TLS Extension Types (numbers between 0
+           and 65535).  Each type will be sent as an empty ClientHello TLS
+           Extension.  The server's response (if any) will be encoded and
+           displayed as a PEM file.
+
+       --ssttaattuuss
+           Sends a certificate status request to the server (OCSP stapling).
+           The server response (if any) is printed out.
+
+       --aallppnn _p_r_o_t_o_c_o_l_s, --nneexxttpprroottoonneegg _p_r_o_t_o_c_o_l_s
+           These flags enable the Enable the Application-Layer Protocol
+           Negotiation or Next Protocol Negotiation (NPN) extension,
+           respectively. ALPN is the IETF standard and replaces NPN.  The
+           _p_r_o_t_o_c_o_l_s list is a comma-separated list of protocol names that the
+           client should advertise support for. The list should contain the
+           most desirable protocols first.  Protocol names are printable ASCII
+           strings, for example "http/1.1" or "spdy/3".  An empty list of
+           protocols is treated specially and will cause the client to
+           advertise support for the TLS extension but disconnect just after
+           receiving ServerHello with a list of server supported protocols.
+           The flag --nneexxttpprroottoonneegg cannot be specified if --ttllss11__33 is used.
+
+       --cctt, --nnoocctt
+           Use one of these two options to control whether Certificate
+           Transparency (CT) is enabled (--cctt) or disabled (--nnoocctt).  If CT is
+           enabled, signed certificate timestamps (SCTs) will be requested
+           from the server and reported at handshake completion.
+
+           Enabling CT also enables OCSP stapling, as this is one possible
+           delivery method for SCTs.
+
+       --ccttllooggffiillee
+           A file containing a list of known Certificate Transparency logs.
+           See SSSSLL__CCTTXX__sseett__ccttlloogg__lliisstt__ffiillee(3) for the expected file format.
+
+       --kkeeyyllooggffiillee _f_i_l_e
+           Appends TLS secrets to the specified keylog file such that external
+           programs (like Wireshark) can decrypt TLS connections.
+
+       --eeaarrllyy__ddaattaa _f_i_l_e
+           Reads the contents of the specified file and attempts to send it as
+           early data to the server. This will only work with resumed sessions
+           that support early data and when the server accepts the early data.
+
+       --eennaabbllee__pphhaa
+           For TLSv1.3 only, send the Post-Handshake Authentication extension.
+           This will happen whether or not a certificate has been provided via
+           --cceerrtt.
+
+       --uussee__ssrrttpp _v_a_l_u_e
+           Offer SRTP key management, where vvaalluuee is a colon-separated profile
+           list.
+
+       --ssrrppuusseerr _v_a_l_u_e
+           Set the SRP username to the specified value. This option is
+           deprecated.
+
+       --ssrrppppaassss _v_a_l_u_e
+           Set the SRP password to the specified value. This option is
+           deprecated.
+
+       --ssrrpp__llaatteeuusseerr
+           SRP username for the second ClientHello message. This option is
+           deprecated.
+
+       --ssrrpp__mmoorreeggrroouuppss  This option is deprecated.
+           Tolerate other than the known gg and NN values.
+
+       --ssrrpp__ssttrreennggtthh _n_u_m_b_e_r
+           Set the minimal acceptable length, in bits, for NN.  This option is
+           deprecated.
+
+       --nnoo__ssssll33, --nnoo__ttllss11, --nnoo__ttllss11__11, --nnoo__ttllss11__22, --nnoo__ttllss11__33, --ssssll33, --ttllss11,
+       --ttllss11__11, --ttllss11__22, --ttllss11__33
+           See "TLS Version Options" in ooppeennssssll(1).
+
+       --ddttllss, --ddttllss11, --ddttllss11__22
+           These specify the use of DTLS instead of TLS.  See "TLS Version
+           Options" in ooppeennssssll(1).
+
+       --nnaammeeoopptt _o_p_t_i_o_n
+           This specifies how the subject or issuer names are displayed.  See
+           ooppeennssssll--nnaammeeddiissppllaayy--ooppttiioonnss(1) for details.
+
+       --xxkkeeyy _i_n_f_i_l_e, --xxcceerrtt _f_i_l_e, --xxcchhaaiinn _f_i_l_e, --xxcchhaaiinn__bbuuiilldd _f_i_l_e, --xxcceerrttffoorrmm
+       DDEERR|PPEEMM, --xxkkeeyyffoorrmm DDEERR|PPEEMM
+           Set extended certificate verification options.  See "Extended
+           Verification Options" in ooppeennssssll--vveerriiffiiccaattiioonn--ooppttiioonnss(1) for
+           details.
+
+       --CCAAffiillee _f_i_l_e, --nnoo--CCAAffiillee, --CCAAppaatthh _d_i_r, --nnoo--CCAAppaatthh, --CCAAssttoorree _u_r_i,
+       --nnoo--CCAAssttoorree
+           See "Trusted Certificate Options" in
+           ooppeennssssll--vveerriiffiiccaattiioonn--ooppttiioonnss(1) for details.
+
+       --bbuuggss, --ccoommpp, --nnoo__ccoommpp, --nnoo__ttiicckkeett, --sseerrvveerrpprreeff, --cclliieenntt__rreenneeggoottiiaattiioonn,
+       --lleeggaaccyy__rreenneeggoottiiaattiioonn, --nnoo__rreenneeggoottiiaattiioonn, --nnoo__rreessuummppttiioonn__oonn__rreenneegg,
+       --lleeggaaccyy__sseerrvveerr__ccoonnnneecctt, --nnoo__lleeggaaccyy__sseerrvveerr__ccoonnnneecctt, --nnoo__eettmm
+       --aallllooww__nnoo__ddhhee__kkeexx, --pprriioorriittiizzee__cchhaacchhaa, --ssttrriicctt, --ssiiggaallggss _a_l_g_s,
+       --cclliieenntt__ssiiggaallggss _a_l_g_s, --ggrroouuppss _g_r_o_u_p_s, --ccuurrvveess _c_u_r_v_e_s, --nnaammeedd__ccuurrvvee
+       _c_u_r_v_e, --cciipphheerr _c_i_p_h_e_r_s, --cciipphheerrssuuiitteess _1_._3_c_i_p_h_e_r_s, --mmiinn__pprroottooccooll
+       _m_i_n_p_r_o_t, --mmaaxx__pprroottooccooll _m_a_x_p_r_o_t, --rreeccoorrdd__ppaaddddiinngg _p_a_d_d_i_n_g,
+       --ddeebbuugg__bbrrookkeenn__pprroottooccooll, --nnoo__mmiiddddlleebbooxx
+           See "SUPPORTED COMMAND LINE COMMANDS" in SSSSLL__CCOONNFF__ccmmdd(3) for
+           details.
+
+       --rraanndd _f_i_l_e_s, --wwrriitteerraanndd _f_i_l_e
+           See "Random State Options" in ooppeennssssll(1) for details.
+
+       --pprroovviiddeerr _n_a_m_e
+       --pprroovviiddeerr--ppaatthh _p_a_t_h
+       --pprrooppqquueerryy _p_r_o_p_q
+           See "Provider Options" in ooppeennssssll(1), pprroovviiddeerr(7), and pprrooppeerrttyy(7).
+
+       --eennggiinnee _i_d
+           See "Engine Options" in ooppeennssssll(1).  This option is deprecated.
+
+       --ssssll__cclliieenntt__eennggiinnee _i_d
+           Specify engine to be used for client certificate operations.
+
+       --aallllooww__pprrooxxyy__cceerrttss, --aattttiimmee, --nnoo__cchheecckk__ttiimmee, --cchheecckk__ssss__ssiigg, --ccrrll__cchheecckk,
+       --ccrrll__cchheecckk__aallll, --eexxpplliicciitt__ppoolliiccyy, --eexxtteennddeedd__ccrrll, --iiggnnoorree__ccrriittiiccaall,
+       --iinnhhiibbiitt__aannyy, --iinnhhiibbiitt__mmaapp, --nnoo__aalltt__cchhaaiinnss, --ppaarrttiiaall__cchhaaiinn, --ppoolliiccyy,
+       --ppoolliiccyy__cchheecckk, --ppoolliiccyy__pprriinntt, --ppuurrppoossee, --ssuuiitteeBB__112288, --ssuuiitteeBB__112288__oonnllyy,
+       --ssuuiitteeBB__119922, --ttrruusstteedd__ffiirrsstt, --uussee__ddeellttaass, --aauutthh__lleevveell, --vveerriiffyy__ddeepptthh,
+       --vveerriiffyy__eemmaaiill, --vveerriiffyy__hhoossttnnaammee, --vveerriiffyy__iipp, --vveerriiffyy__nnaammee, --xx550099__ssttrriicctt
+       --iissssuueerr__cchheecckkss
+           Set various options of certificate chain verification.  See
+           "Verification Options" in ooppeennssssll--vveerriiffiiccaattiioonn--ooppttiioonnss(1) for
+           details.
+
+           Verification errors are displayed, for debugging, but the command
+           will proceed unless the --vveerriiffyy__rreettuurrnn__eerrrroorr option is used.
+
+       _h_o_s_t:_p_o_r_t
+           Rather than providing --ccoonnnneecctt, the target hostname and optional
+           port may be provided as a single positional argument after all
+           options. If neither this nor --ccoonnnneecctt are provided, falls back to
+           attempting to connect to _l_o_c_a_l_h_o_s_t on port _4_4_3_3.
+
+CCOONNNNEECCTTEEDD CCOOMMMMAANNDDSS
+       If a connection is established with an SSL server then any data
+       received from the server is displayed and any key presses will be sent
+       to the server. If end of file is reached then the connection will be
+       closed down. When used interactively (which means neither --qquuiieett nor
+       --iiggnn__eeooff have been given), then certain commands are also recognized
+       which perform special operations. These commands are a letter which
+       must appear at the start of a line. They are listed below.
+
+       QQ   End the current SSL connection and exit.
+
+       RR   Renegotiate the SSL session (TLSv1.2 and below only).
+
+       kk   Send a key update message to the server (TLSv1.3 only)
+
+       KK   Send a key update message to the server and request one back
+           (TLSv1.3 only)
+
+NNOOTTEESS
+       This command can be used to debug SSL servers. To connect to an SSL
+       HTTP server the command:
+
+        openssl s_client -connect servername:443
+
+       would typically be used (https uses port 443). If the connection
+       succeeds then an HTTP command can be given such as "GET /" to retrieve
+       a web page.
+
+       If the handshake fails then there are several possible causes, if it is
+       nothing obvious like no client certificate then the --bbuuggss, --ssssll33,
+       --ttllss11, --nnoo__ssssll33, --nnoo__ttllss11 options can be tried in case it is a buggy
+       server. In particular you should play with these options bbeeffoorree
+       submitting a bug report to an OpenSSL mailing list.
+
+       A frequent problem when attempting to get client certificates working
+       is that a web client complains it has no certificates or gives an empty
+       list to choose from. This is normally because the server is not sending
+       the clients certificate authority in its "acceptable CA list" when it
+       requests a certificate. By using this command, the CA list can be
+       viewed and checked. However, some servers only request client
+       authentication after a specific URL is requested. To obtain the list in
+       this case it is necessary to use the --pprreexxiitt option and send an HTTP
+       request for an appropriate page.
+
+       If a certificate is specified on the command line using the --cceerrtt
+       option it will not be used unless the server specifically requests a
+       client certificate. Therefore, merely including a client certificate on
+       the command line is no guarantee that the certificate works.
+
+       If there are problems verifying a server certificate then the
+       --sshhoowwcceerrttss option can be used to show all the certificates sent by the
+       server.
+
+       This command is a test tool and is designed to continue the handshake
+       after any certificate verification errors. As a result it will accept
+       any certificate chain (trusted or not) sent by the peer. Non-test
+       applications should nnoott do this as it makes them vulnerable to a MITM
+       attack. This behaviour can be changed by with the --vveerriiffyy__rreettuurrnn__eerrrroorr
+       option: any verify errors are then returned aborting the handshake.
+
+       The --bbiinndd option may be useful if the server or a firewall requires
+       connections to come from some particular address and or port.
+
+BBUUGGSS
+       Because this program has a lot of options and also because some of the
+       techniques used are rather old, the C source for this command is rather
+       hard to read and not a model of how things should be done.  A typical
+       SSL client program would be much simpler.
+
+       The --pprreexxiitt option is a bit of a hack. We should really report
+       information whenever a session is renegotiated.
+
+SSEEEE AALLSSOO
+       ooppeennssssll(1), ooppeennssssll--sseessss__iidd(1), ooppeennssssll--ss__sseerrvveerr(1),
+       ooppeennssssll--cciipphheerrss(1), SSSSLL__CCOONNFF__ccmmdd(3), SSSSLL__CCTTXX__sseett__mmaaxx__sseenndd__ffrraaggmmeenntt(3),
+       SSSSLL__CCTTXX__sseett__sspplliitt__sseenndd__ffrraaggmmeenntt(3), SSSSLL__CCTTXX__sseett__mmaaxx__ppiippeelliinneess(3),
+       oossssll__ssttoorree--ffiillee(7)
+
+HHIISSTTOORRYY
+       The --nnoo__aalltt__cchhaaiinnss option was added in OpenSSL 1.1.0.  The --nnaammee option
+       was added in OpenSSL 1.1.1.
+
+       The --cceerrttffoorrmm option has become obsolete in OpenSSL 3.0.0 and has no
+       effect.
+
+       The --eennggiinnee option was deprecated in OpenSSL 3.0.
+
+CCOOPPYYRRIIGGHHTT
+       Copyright 2000-2021 The OpenSSL Project Authors. All Rights Reserved.
+
+       Licensed under the Apache License 2.0 (the "License").  You may not use
+       this file except in compliance with the License.  You can obtain a copy
+       in the file LICENSE in the source distribution or at
+       <https://www.openssl.org/source/license.html>.
+
+
+
+3.0.1                             2022-01-31           OPENSSL-S_CLIENT(1ossl)

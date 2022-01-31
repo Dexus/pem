@@ -1,0 +1,53 @@
+SPEED(1)                            OpenSSL                           SPEED(1)
+
+
+
+NNAAMMEE
+       openssl-speed, speed - test library performance
+
+SSYYNNOOPPSSIISS
+       ooppeennssssll ssppeeeedd [--hheellpp] [--eennggiinnee iidd] [--eellaappsseedd] [--eevvpp aallggoo] [--ddeeccrryypptt]
+       [aallggoorriitthhmm......]
+
+DDEESSCCRRIIPPTTIIOONN
+       This command is used to test the performance of cryptographic
+       algorithms.  To see the list of supported algorithms, use the _l_i_s_t
+       _-_-_d_i_g_e_s_t_-_c_o_m_m_a_n_d_s or _l_i_s_t _-_-_c_i_p_h_e_r_-_c_o_m_m_a_n_d_s command.
+
+OOPPTTIIOONNSS
+       --hheellpp
+           Print out a usage message.
+
+       --eennggiinnee iidd
+           specifying an engine (by its unique iidd string) will cause ssppeeeedd to
+           attempt to obtain a functional reference to the specified engine,
+           thus initialising it if needed. The engine will then be set as the
+           default for all available algorithms.
+
+       --eellaappsseedd
+           Measure time in real time instead of CPU time. It can be useful
+           when testing speed of hardware engines.
+
+       --eevvpp aallggoo
+           Use the specified cipher or message digest algorithm via the EVP
+           interface.
+
+       --ddeeccrryypptt
+           Time the decryption instead of encryption. Affects only the EVP
+           testing.
+
+       [[zzeerroo oorr mmoorree tteesstt aallggoorriitthhmmss]]
+           If any options are given, ssppeeeedd tests those algorithms, otherwise
+           all of the above are tested.
+
+CCOOPPYYRRIIGGHHTT
+       Copyright 2000-2016 The OpenSSL Project Authors. All Rights Reserved.
+
+       Licensed under the OpenSSL license (the "License").  You may not use
+       this file except in compliance with the License.  You can obtain a copy
+       in the file LICENSE in the source distribution or at
+       <https://www.openssl.org/source/license.html>.
+
+
+
+1.1.0l                            2019-09-10                          SPEED(1)

@@ -1,0 +1,94 @@
+OPENSSL-DSAPARAM(1ossl)             OpenSSL            OPENSSL-DSAPARAM(1ossl)
+
+
+
+NNAAMMEE
+       openssl-dsaparam - DSA parameter manipulation and generation
+
+SSYYNNOOPPSSIISS
+       ooppeennssssll ddssaappaarraamm [--hheellpp] [--iinnffoorrmm DDEERR|PPEEMM] [--oouuttffoorrmm DDEERR|PPEEMM] [--iinn
+       _f_i_l_e_n_a_m_e] [--oouutt _f_i_l_e_n_a_m_e] [--nnoooouutt] [--tteexxtt] [--ggeennkkeeyy] [--vveerrbboossee] [--rraanndd
+       _f_i_l_e_s] [--wwrriitteerraanndd _f_i_l_e] [--eennggiinnee _i_d] [--pprroovviiddeerr _n_a_m_e] [--pprroovviiddeerr--ppaatthh
+       _p_a_t_h] [--pprrooppqquueerryy _p_r_o_p_q] [_n_u_m_b_i_t_s]
+
+DDEESSCCRRIIPPTTIIOONN
+       This command is used to manipulate or generate DSA parameter files.
+
+       DSA parameter generation can be a slow process and as a result the same
+       set of DSA parameters is often used to generate several distinct keys.
+
+OOPPTTIIOONNSS
+       --hheellpp
+           Print out a usage message.
+
+       --iinnffoorrmm DDEERR|PPEEMM
+           The DSA parameters input format; unspecified by default.  See
+           ooppeennssssll--ffoorrmmaatt--ooppttiioonnss(1) for details.
+
+       --oouuttffoorrmm DDEERR|PPEEMM
+           The DSA parameters output format; the default is PPEEMM.  See
+           ooppeennssssll--ffoorrmmaatt--ooppttiioonnss(1) for details.
+
+           Parameters are a sequence of AASSNN..11 IINNTTEEGGEERRs: pp, qq, and gg.  This is
+           compatible with RFC 2459 DDSSSS--PPaarrmmss structure.
+
+       --iinn _f_i_l_e_n_a_m_e
+           This specifies the input filename to read parameters from or
+           standard input if this option is not specified. If the _n_u_m_b_i_t_s
+           parameter is included then this option will be ignored.
+
+       --oouutt _f_i_l_e_n_a_m_e
+           This specifies the output filename parameters to. Standard output
+           is used if this option is not present. The output filename should
+           nnoott be the same as the input filename.
+
+       --nnoooouutt
+           This option inhibits the output of the encoded version of the
+           parameters.
+
+       --tteexxtt
+           This option prints out the DSA parameters in human readable form.
+
+       --ggeennkkeeyy
+           This option will generate a DSA either using the specified or
+           generated parameters.
+
+       --vveerrbboossee
+           Print extra details about the operations being performed.
+
+       --rraanndd _f_i_l_e_s, --wwrriitteerraanndd _f_i_l_e
+           See "Random State Options" in ooppeennssssll(1) for details.
+
+       --eennggiinnee _i_d
+           See "Engine Options" in ooppeennssssll(1).  This option is deprecated.
+
+       _n_u_m_b_i_t_s
+           This option specifies that a parameter set should be generated of
+           size _n_u_m_b_i_t_s. It must be the last option. If this option is
+           included then the input file (if any) is ignored.
+
+       --pprroovviiddeerr _n_a_m_e
+       --pprroovviiddeerr--ppaatthh _p_a_t_h
+       --pprrooppqquueerryy _p_r_o_p_q
+           See "Provider Options" in ooppeennssssll(1), pprroovviiddeerr(7), and pprrooppeerrttyy(7).
+
+SSEEEE AALLSSOO
+       ooppeennssssll(1), ooppeennssssll--ppkkeeyyppaarraamm(1), ooppeennssssll--ggeennddssaa(1), ooppeennssssll--ddssaa(1),
+       ooppeennssssll--ggeennrrssaa(1), ooppeennssssll--rrssaa(1)
+
+HHIISSTTOORRYY
+       The --eennggiinnee option was deprecated in OpenSSL 3.0.
+
+       The --CC option was removed in OpenSSL 3.0.
+
+CCOOPPYYRRIIGGHHTT
+       Copyright 2000-2021 The OpenSSL Project Authors. All Rights Reserved.
+
+       Licensed under the Apache License 2.0 (the "License").  You may not use
+       this file except in compliance with the License.  You can obtain a copy
+       in the file LICENSE in the source distribution or at
+       <https://www.openssl.org/source/license.html>.
+
+
+
+3.0.1                             2022-01-31           OPENSSL-DSAPARAM(1ossl)

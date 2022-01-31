@@ -1,0 +1,44 @@
+OPENSSL-ERRSTR(1ossl)               OpenSSL              OPENSSL-ERRSTR(1ossl)
+
+
+
+NNAAMMEE
+       openssl-errstr - lookup error codes
+
+SSYYNNOOPPSSIISS
+       ooppeennssssll eerrrrssttrr [--hheellpp] _e_r_r_o_r___c_o_d_e_._._.
+
+DDEESSCCRRIIPPTTIIOONN
+       Sometimes an application will not load error message texts and only
+       numerical forms will be available. This command can be used to display
+       the meaning of the hex code. The hex code is the hex digits after the
+       second colon.
+
+OOPPTTIIOONNSS
+       --hheellpp
+           Display a usage message.
+
+EEXXAAMMPPLLEESS
+       The error code:
+
+        27594:error:2006D080:lib(32)::reason(128)::107:
+
+       can be displayed with:
+
+        openssl errstr 2006D080
+
+       to produce the error message:
+
+        error:2006D080:BIO routines::no such file
+
+CCOOPPYYRRIIGGHHTT
+       Copyright 2004-2020 The OpenSSL Project Authors. All Rights Reserved.
+
+       Licensed under the Apache License 2.0 (the "License").  You may not use
+       this file except in compliance with the License.  You can obtain a copy
+       in the file LICENSE in the source distribution or at
+       <https://www.openssl.org/source/license.html>.
+
+
+
+3.0.1                             2022-01-31             OPENSSL-ERRSTR(1ossl)

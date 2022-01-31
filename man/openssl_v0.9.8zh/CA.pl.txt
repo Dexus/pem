@@ -1,0 +1,154 @@
+CA.PL(1)                            OpenSSL                           CA.PL(1)
+
+
+
+NNAAMMEE
+       CA.pl - friendlier interface for OpenSSL certificate programs
+
+SSYYNNOOPPSSIISS
+       CCAA..ppll [--??]  [--hh] [--hheellpp] [--nneewwcceerrtt] [--nneewwrreeqq] [--nneewwrreeqq--nnooddeess] [--nneewwccaa]
+       [--xxssiiggnn] [--ssiiggnn] [--ssiiggnnrreeqq] [--ssiiggnncceerrtt] [--vveerriiffyy] [ffiilleess]
+
+DDEESSCCRRIIPPTTIIOONN
+       The CCAA..ppll script is a perl script that supplies the relevant command
+       line arguments to the ooppeennssssll command for some common certificate
+       operations.  It is intended to simplify the process of certificate
+       creation and management by the use of some simple options.
+
+CCOOMMMMAANNDD OOPPTTIIOONNSS
+       ??, --hh, --hheellpp
+           prints a usage message.
+
+       --nneewwcceerrtt
+           creates a new self signed certificate. The private key is written
+           to the file "newkey.pem" and the request written to the file
+           "newreq.pem".
+
+       --nneewwrreeqq
+           creates a new certificate request. The private key is written to
+           the file "newkey.pem" and the request written to the file
+           "newreq.pem".
+
+       --nneewwrreeqq--nnooddeess
+           is like --nneewwrreeqq except that the private key will not be encrypted.
+
+       --nneewwccaa
+           creates a new CA hierarchy for use with the ccaa program (or the
+           --ssiiggnncceerrtt and --xxssiiggnn options). The user is prompted to enter the
+           filename of the CA certificates (which should also contain the
+           private key) or by hitting ENTER details of the CA will be prompted
+           for. The relevant files and directories are created in a directory
+           called "demoCA" in the current directory.
+
+       --ppkkccss1122
+           create a PKCS#12 file containing the user certificate, private key
+           and CA certificate. It expects the user certificate and private key
+           to be in the file "newcert.pem" and the CA certificate to be in the
+           file demoCA/cacert.pem, it creates a file "newcert.p12". This
+           command can thus be called after the --ssiiggnn option. The PKCS#12 file
+           can be imported directly into a browser.  If there is an additional
+           argument on the command line it will be used as the "friendly name"
+           for the certificate (which is typically displayed in the browser
+           list box), otherwise the name "My Certificate" is used.
+
+       --ssiiggnn, --ssiiggnnrreeqq, --xxssiiggnn
+           calls the ccaa program to sign a certificate request. It expects the
+           request to be in the file "newreq.pem". The new certificate is
+           written to the file "newcert.pem" except in the case of the --xxssiiggnn
+           option when it is written to standard output.
+
+       --ssiiggnnCCAA
+           this option is the same as the --ssiiggnnrreeqq option except it uses the
+           configuration file section vv33__ccaa and so makes the signed request a
+           valid CA certificate. This is useful when creating intermediate CA
+           from a root CA.
+
+       --ssiiggnncceerrtt
+           this option is the same as --ssiiggnn except it expects a self signed
+           certificate to be present in the file "newreq.pem".
+
+       --vveerriiffyy
+           verifies certificates against the CA certificate for "demoCA". If
+           no certificates are specified on the command line it tries to
+           verify the file "newcert.pem".
+
+       ffiilleess
+           one or more optional certificate file names for use with the
+           --vveerriiffyy command.
+
+EEXXAAMMPPLLEESS
+       Create a CA hierarchy:
+
+        CA.pl -newca
+
+       Complete certificate creation example: create a CA, create a request,
+       sign the request and finally create a PKCS#12 file containing it.
+
+        CA.pl -newca
+        CA.pl -newreq
+        CA.pl -signreq
+        CA.pl -pkcs12 "My Test Certificate"
+
+DDSSAA CCEERRTTIIFFIICCAATTEESS
+       Although the CCAA..ppll creates RSA CAs and requests it is still possible to
+       use it with DSA certificates and requests using the rreeqq(1) command
+       directly. The following example shows the steps that would typically be
+       taken.
+
+       Create some DSA parameters:
+
+        openssl dsaparam -out dsap.pem 1024
+
+       Create a DSA CA certificate and private key:
+
+        openssl req -x509 -newkey dsa:dsap.pem -keyout cacert.pem -out cacert.pem
+
+       Create the CA directories and files:
+
+        CA.pl -newca
+
+       enter cacert.pem when prompted for the CA file name.
+
+       Create a DSA certificate request and private key (a different set of
+       parameters can optionally be created first):
+
+        openssl req -out newreq.pem -newkey dsa:dsap.pem
+
+       Sign the request:
+
+        CA.pl -signreq
+
+NNOOTTEESS
+       Most of the filenames mentioned can be modified by editing the CCAA..ppll
+       script.
+
+       If the demoCA directory already exists then the --nneewwccaa command will not
+       overwrite it and will do nothing. This can happen if a previous call
+       using the --nneewwccaa option terminated abnormally. To get the correct
+       behaviour delete the demoCA directory if it already exists.
+
+       Under some environments it may not be possible to run the CCAA..ppll script
+       directly (for example Win32) and the default configuration file
+       location may be wrong. In this case the command:
+
+        perl -S CA.pl
+
+       can be used and the OOPPEENNSSSSLL__CCOONNFF environment variable changed to point
+       to the correct path of the configuration file "openssl.cnf".
+
+       The script is intended as a simple front end for the ooppeennssssll program
+       for use by a beginner. Its behaviour isn't always what is wanted. For
+       more control over the behaviour of the certificate commands call the
+       ooppeennssssll command directly.
+
+EENNVVIIRROONNMMEENNTT VVAARRIIAABBLLEESS
+       The variable OOPPEENNSSSSLL__CCOONNFF if defined allows an alternative
+       configuration file location to be specified, it should contain the full
+       path to the configuration file, not just its directory.
+
+SSEEEE AALLSSOO
+       xx550099(1), ccaa(1), rreeqq(1), ppkkccss1122(1), ccoonnffiigg(5)
+
+
+
+0.9.8zh                           2015-12-03                          CA.PL(1)

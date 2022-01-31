@@ -1,0 +1,142 @@
+ECPARAM(1)                          OpenSSL                         ECPARAM(1)
+
+
+
+NNAAMMEE
+       ecparam - EC parameter manipulation and generation
+
+SSYYNNOOPPSSIISS
+       ooppeennssssll eeccppaarraamm [--iinnffoorrmm DDEERR||PPEEMM] [--oouuttffoorrmm DDEERR||PPEEMM] [--iinn ffiilleennaammee]
+       [--oouutt ffiilleennaammee] [--nnoooouutt] [--tteexxtt] [--CC] [--cchheecckk] [--nnaammee aarrgg]
+       [--lliisstt__ccuurrvveess] [--ccoonnvv__ffoorrmm aarrgg] [--ppaarraamm__eenncc aarrgg] [--nnoo__sseeeedd] [--rraanndd
+       ffiillee((ss))] [--ggeennkkeeyy] [--eennggiinnee iidd]
+
+DDEESSCCRRIIPPTTIIOONN
+       This command is used to manipulate or generate EC parameter files.
+
+OOPPTTIIOONNSS
+       --iinnffoorrmm DDEERR||PPEEMM
+           This specifies the input format. The DDEERR option uses an ASN.1 DER
+           encoded form compatible with RFC 3279 EcpkParameters. The PEM form
+           is the default format: it consists of the DDEERR format base64 encoded
+           with additional header and footer lines.
+
+       --oouuttffoorrmm DDEERR||PPEEMM
+           This specifies the output format, the options have the same meaning
+           as the --iinnffoorrmm option.
+
+       --iinn ffiilleennaammee
+           This specifies the input filename to read parameters from or
+           standard input if this option is not specified.
+
+       --oouutt ffiilleennaammee
+           This specifies the output filename parameters to. Standard output
+           is used if this option is not present. The output filename should
+           nnoott be the same as the input filename.
+
+       --nnoooouutt
+           This option inhibits the output of the encoded version of the
+           parameters.
+
+       --tteexxtt
+           This option prints out the EC parameters in human readable form.
+
+       --CC  This option converts the EC parameters into C code. The parameters
+           can then be loaded by calling the ggeett__eecc__ggrroouupp__XXXXXX(()) function.
+
+       --cchheecckk
+           Validate the elliptic curve parameters.
+
+       --nnaammee aarrgg
+           Use the EC parameters with the specified 'short' name. Use
+           --lliisstt__ccuurrvveess to get a list of all currently implemented EC
+           parameters.
+
+       --lliisstt__ccuurrvveess
+           If this options is specified eeccppaarraamm will print out a list of all
+           currently implemented EC parameters names and exit.
+
+       --ccoonnvv__ffoorrmm
+           This specifies how the points on the elliptic curve are converted
+           into octet strings. Possible values are: ccoommpprreesssseedd (the default
+           value), uunnccoommpprreesssseedd and hhyybbrriidd. For more information regarding the
+           point conversion forms please read the X9.62 standard.  NNoottee Due to
+           patent issues the ccoommpprreesssseedd option is disabled by default for
+           binary curves and can be enabled by defining the preprocessor macro
+           OOPPEENNSSSSLL__EECC__BBIINN__PPTT__CCOOMMPP at compile time.
+
+       --ppaarraamm__eenncc aarrgg
+           This specifies how the elliptic curve parameters are encoded.
+           Possible value are: nnaammeedd__ccuurrvvee, i.e. the ec parameters are
+           specified by a OID, or eexxpplliicciitt where the ec parameters are
+           explicitly given (see RFC 3279 for the definition of the EC
+           parameters structures). The default value is nnaammeedd__ccuurrvvee.  NNoottee the
+           iimmpplliicciittllyyCCAA alternative ,as specified in RFC 3279, is currently
+           not implemented in OpenSSL.
+
+       --nnoo__sseeeedd
+           This option inhibits that the 'seed' for the parameter generation
+           is included in the ECParameters structure (see RFC 3279).
+
+       --ggeennkkeeyy
+           This option will generate a EC private key using the specified
+           parameters.
+
+       --rraanndd ffiillee((ss))
+           a file or files containing random data used to seed the random
+           number generator, or an EGD socket (see RRAANNDD__eeggdd(3)).  Multiple
+           files can be specified separated by a OS-dependent character.  The
+           separator is ;; for MS-Windows, ,, for OpenVMS, and :: for all others.
+
+       --eennggiinnee iidd
+           specifying an engine (by its unique iidd string) will cause eeccppaarraamm
+           to attempt to obtain a functional reference to the specified
+           engine, thus initialising it if needed. The engine will then be set
+           as the default for all available algorithms.
+
+NNOOTTEESS
+       PEM format EC parameters use the header and footer lines:
+
+        -----BEGIN EC PARAMETERS-----
+        -----END EC PARAMETERS-----
+
+       OpenSSL is currently not able to generate new groups and therefore
+       eeccppaarraamm can only create EC parameters from known (named) curves.
+
+EEXXAAMMPPLLEESS
+       To create EC parameters with the group 'prime192v1':
+
+         openssl ecparam -out ec_param.pem -name prime192v1
+
+       To create EC parameters with explicit parameters:
+
+         openssl ecparam -out ec_param.pem -name prime192v1 -param_enc explicit
+
+       To validate given EC parameters:
+
+         openssl ecparam -in ec_param.pem -check
+
+       To create EC parameters and a private key:
+
+         openssl ecparam -out ec_key.pem -name prime192v1 -genkey
+
+       To change the point encoding to 'compressed':
+
+         openssl ecparam -in ec_in.pem -out ec_out.pem -conv_form compressed
+
+       To print out the EC parameters to standard output:
+
+         openssl ecparam -in ec_param.pem -noout -text
+
+SSEEEE AALLSSOO
+       eecc(1), ddssaappaarraamm(1)
+
+HHIISSTTOORRYY
+       The ecparam command was first introduced in OpenSSL 0.9.8.
+
+AAUUTTHHOORR
+       Nils Larsch for the OpenSSL project (http://www.openssl.org)
+
+
+
+1.0.1u                            2016-09-22                        ECPARAM(1)

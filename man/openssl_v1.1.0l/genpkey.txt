@@ -1,0 +1,246 @@
+GENPKEY(1)                          OpenSSL                         GENPKEY(1)
+
+
+
+NNAAMMEE
+       openssl-genpkey, genpkey - generate a private key
+
+SSYYNNOOPPSSIISS
+       ooppeennssssll ggeennppkkeeyy [--hheellpp] [--oouutt ffiilleennaammee] [--oouuttffoorrmm PPEEMM||DDEERR] [--ppaassss aarrgg]
+       [--_cc_ii_pp_hh_ee_rr] [--eennggiinnee iidd] [--ppaarraammffiillee ffiillee] [--aallggoorriitthhmm aallgg] [--ppkkeeyyoopptt
+       oopptt::vvaalluuee] [--ggeennppaarraamm] [--tteexxtt]
+
+DDEESSCCRRIIPPTTIIOONN
+       The ggeennppkkeeyy command generates a private key.
+
+OOPPTTIIOONNSS
+       --hheellpp
+           Print out a usage message.
+
+       --oouutt ffiilleennaammee
+           Output the key to the specified file. If this argument is not
+           specified then standard output is used.
+
+       --oouuttffoorrmm DDEERR||PPEEMM
+           This specifies the output format DER or PEM. The default format is
+           PEM.
+
+       --ppaassss aarrgg
+           The output file password source. For more information about the
+           format of aarrgg see the PPAASSSS PPHHRRAASSEE AARRGGUUMMEENNTTSS section in ooppeennssssll(1).
+
+       --_cc_ii_pp_hh_ee_rr
+           This option encrypts the private key with the supplied cipher. Any
+           algorithm name accepted by EEVVPP__ggeett__cciipphheerrbbyynnaammee(()) is acceptable
+           such as ddeess33.
+
+       --eennggiinnee iidd
+           Specifying an engine (by its unique iidd string) will cause ggeennppkkeeyy
+           to attempt to obtain a functional reference to the specified
+           engine, thus initialising it if needed. The engine will then be set
+           as the default for all available algorithms. If used this option
+           should precede all other options.
+
+       --aallggoorriitthhmm aallgg
+           Public key algorithm to use such as RSA, DSA or DH. If used this
+           option must precede any --ppkkeeyyoopptt options. The options --ppaarraammffiillee
+           and --aallggoorriitthhmm are mutually exclusive. Engines may add algorithms
+           in addition to the standard built-in ones.
+
+           Valid built-in algorithm names for private key generation are RSA
+           and EC.
+
+           Valid built-in algorithm names for parameter generation (see the
+           --ggeennppaarraamm option) are DH, DSA and EC.
+
+           Note that the algorithm name X9.42 DH may be used as a synonym for
+           the DH algorithm. These are identical and do not indicate the type
+           of parameters that will be generated. Use the ddhh__ppaarraammggeenn__ttyyppee
+           option to indicate whether PKCS#3 or X9.42 DH parameters are
+           required. See "DH Parameter Generation Options" below for more
+           details.
+
+       --ppkkeeyyoopptt oopptt::vvaalluuee
+           Set the public key algorithm option oopptt to vvaalluuee. The precise set
+           of options supported depends on the public key algorithm used and
+           its implementation. See "KEY GENERATION OPTIONS" and "PARAMETER
+           GENERATION OPTIONS" below for more details.
+
+       --ggeennppaarraamm
+           Generate a set of parameters instead of a private key. If used this
+           option must precede any --aallggoorriitthhmm, --ppaarraammffiillee or --ppkkeeyyoopptt options.
+
+       --ppaarraammffiillee ffiilleennaammee
+           Some public key algorithms generate a private key based on a set of
+           parameters.  They can be supplied using this option. If this option
+           is used the public key algorithm used is determined by the
+           parameters. If used this option must precede any --ppkkeeyyoopptt options.
+           The options --ppaarraammffiillee and --aallggoorriitthhmm are mutually exclusive.
+
+       --tteexxtt
+           Print an (unencrypted) text representation of private and public
+           keys and parameters along with the PEM or DER structure.
+
+KKEEYY GGEENNEERRAATTIIOONN OOPPTTIIOONNSS
+       The options supported by each algorithm and indeed each implementation
+       of an algorithm can vary. The options for the OpenSSL implementations
+       are detailed below.
+
+   RRSSAA KKeeyy GGeenneerraattiioonn OOppttiioonnss
+       rrssaa__kkeeyyggeenn__bbiittss::nnuummbbiittss
+           The number of bits in the generated key. If not specified 2048 is
+           used.
+
+       rrssaa__kkeeyyggeenn__ppuubbeexxpp::vvaalluuee
+           The RSA public exponent value. This can be a large decimal or
+           hexadecimal value if preceded by 00xx. Default value is 65537.
+
+   EECC KKeeyy GGeenneerraattiioonn OOppttiioonnss
+       The EC key generation options can also be used for parameter
+       generation.
+
+       eecc__ppaarraammggeenn__ccuurrvvee::ccuurrvvee
+           The EC curve to use. OpenSSL supports NIST curve names such as
+           "P-256".
+
+       eecc__ppaarraamm__eenncc::eennccooddiinngg
+           The encoding to use for parameters. The "encoding" parameter must
+           be either "named_curve" or "explicit". The default value is
+           "named_curve".
+
+PPAARRAAMMEETTEERR GGEENNEERRAATTIIOONN OOPPTTIIOONNSS
+       The options supported by each algorithm and indeed each implementation
+       of an algorithm can vary. The options for the OpenSSL implementations
+       are detailed below.
+
+   DDSSAA PPaarraammeetteerr GGeenneerraattiioonn OOppttiioonnss
+       ddssaa__ppaarraammggeenn__bbiittss::nnuummbbiittss
+           The number of bits in the generated prime. If not specified 2048 is
+           used.
+
+       ddssaa__ppaarraammggeenn__qq__bbiittss::nnuummbbiittss
+           The number of bits in the q parameter. Must be one of 160, 224 or
+           256. If not specified 224 is used.
+
+       ddssaa__ppaarraammggeenn__mmdd::ddiiggeesstt
+           The digest to use during parameter generation. Must be one of sshhaa11,
+           sshhaa222244 or sshhaa225566. If set, then the number of bits in qq will match
+           the output size of the specified digest and the ddssaa__ppaarraammggeenn__qq__bbiittss
+           parameter will be ignored. If not set, then a digest will be used
+           that gives an output matching the number of bits in qq, i.e. sshhaa11 if
+           q length is 160, sshhaa222244 if it 224 or sshhaa225566 if it is 256.
+
+   DDHH PPaarraammeetteerr GGeenneerraattiioonn OOppttiioonnss
+       ddhh__ppaarraammggeenn__pprriimmee__lleenn::nnuummbbiittss
+           The number of bits in the prime parameter pp. The default is 2048.
+
+       ddhh__ppaarraammggeenn__ssuubbpprriimmee__lleenn::nnuummbbiittss
+           The number of bits in the sub prime parameter qq. The default is 256
+           if the prime is at least 2048 bits long or 160 otherwise. Only
+           relevant if used in conjunction with the ddhh__ppaarraammggeenn__ttyyppee option to
+           generate X9.42 DH parameters.
+
+       ddhh__ppaarraammggeenn__ggeenneerraattoorr::vvaalluuee
+           The value to use for the generator gg. The default is 2.
+
+       ddhh__ppaarraammggeenn__ttyyppee::vvaalluuee
+           The type of DH parameters to generate. Use 0 for PKCS#3 DH and 1
+           for X9.42 DH.  The default is 0.
+
+       ddhh__rrffcc55111144::nnuumm
+           If this option is set, then the appropriate RFC5114 parameters are
+           used instead of generating new parameters. The value nnuumm can take
+           the values 1, 2 or 3 corresponding to RFC5114 DH parameters
+           consisting of 1024 bit group with 160 bit subgroup, 2048 bit group
+           with 224 bit subgroup and 2048 bit group with 256 bit subgroup as
+           mentioned in RFC5114 sections 2.1, 2.2 and 2.3 respectively. If
+           present this overrides all other DH parameter options.
+
+   EECC PPaarraammeetteerr GGeenneerraattiioonn OOppttiioonnss
+       The EC parameter generation options are the same as for key generation.
+       See "EC Key Generation Options" above.
+
+NNOOTTEESS
+       The use of the genpkey program is encouraged over the algorithm
+       specific utilities because additional algorithm options and ENGINE
+       provided algorithms can be used.
+
+EEXXAAMMPPLLEESS
+       Generate an RSA private key using default parameters:
+
+        openssl genpkey -algorithm RSA -out key.pem
+
+       Encrypt output private key using 128 bit AES and the passphrase
+       "hello":
+
+        openssl genpkey -algorithm RSA -out key.pem -aes-128-cbc -pass pass:hello
+
+       Generate a 2048 bit RSA key using 3 as the public exponent:
+
+        openssl genpkey -algorithm RSA -out key.pem -pkeyopt rsa_keygen_bits:2048 \
+                                                       -pkeyopt rsa_keygen_pubexp:3
+
+       Generate 2048 bit DSA parameters:
+
+        openssl genpkey -genparam -algorithm DSA -out dsap.pem \
+                                                       -pkeyopt dsa_paramgen_bits:2048
+
+       Generate DSA key from parameters:
+
+        openssl genpkey -paramfile dsap.pem -out dsakey.pem
+
+       Generate 2048 bit DH parameters:
+
+        openssl genpkey -genparam -algorithm DH -out dhp.pem \
+                                               -pkeyopt dh_paramgen_prime_len:2048
+
+       Generate 2048 bit X9.42 DH parameters:
+
+        openssl genpkey -genparam -algorithm DH -out dhpx.pem \
+                                               -pkeyopt dh_paramgen_prime_len:2048 \
+                                               -pkeyopt dh_paramgen_type:1
+
+       Output RFC5114 2048 bit DH parameters with 224 bit subgroup:
+
+        openssl genpkey -genparam -algorithm DH -out dhp.pem -pkeyopt dh_rfc5114:2
+
+       Generate DH key from parameters:
+
+        openssl genpkey -paramfile dhp.pem -out dhkey.pem
+
+       Generate EC parameters:
+
+        openssl genpkey -genparam -algorithm EC -out ecp.pem \
+               -pkeyopt ec_paramgen_curve:secp384r1 \
+               -pkeyopt ec_param_enc:named_curve
+
+       Generate EC key from parameters:
+
+        openssl genpkey -paramfile ecp.pem -out eckey.pem
+
+       Generate EC key directly:
+
+        openssl genpkey -algorithm EC -out eckey.pem \
+               -pkeyopt ec_paramgen_curve:P-384 \
+               -pkeyopt ec_param_enc:named_curve
+
+       Generate an X25519 private key:
+
+        openssl genpkey -algorithm X25519 -out xkey.pem
+
+HHIISSTTOORRYY
+       The ability to use NIST curve names, and to generate an EC key
+       directly, were added in OpenSSL 1.0.2. The ability to generate X25519
+       keys was added in OpenSSL 1.1.0.
+
+CCOOPPYYRRIIGGHHTT
+       Copyright 2006-2019 The OpenSSL Project Authors. All Rights Reserved.
+
+       Licensed under the OpenSSL license (the "License").  You may not use
+       this file except in compliance with the License.  You can obtain a copy
+       in the file LICENSE in the source distribution or at
+       <https://www.openssl.org/source/license.html>.
+
+
+
+1.1.0l                            2019-09-10                        GENPKEY(1)

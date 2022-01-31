@@ -1,0 +1,176 @@
+<!-- Creator     : groff version 1.22.4 -->
+<!-- CreationDate: Mon Jan 31 16:15:30 2022 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>OPENSSL-PKEYPARAM</title>
+
+</head>
+<body>
+
+<h1 align="center">OPENSSL-PKEYPARAM</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#OPTIONS">OPTIONS</a><br>
+<a href="#EXAMPLES">EXAMPLES</a><br>
+<a href="#NOTES">NOTES</a><br>
+<a href="#SEE ALSO">SEE ALSO</a><br>
+<a href="#HISTORY">HISTORY</a><br>
+<a href="#COPYRIGHT">COPYRIGHT</a><br>
+
+<hr>
+
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em">openssl-pkeyparam
+- public key algorithm parameter processing command</p>
+
+<h2>SYNOPSIS
+<a name="SYNOPSIS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>openssl
+pkeyparam</b> [<b>-help</b>] [<b>-in</b> <i>filename</i>]
+[<b>-out</b> <i>filename</i>] [<b>-text</b>] [<b>-noout</b>]
+[<b>-check</b>] [<b>-engine</b> <i>id</i>] [<b>-provider</b>
+<i>name</i>] [<b>-provider-path</b> <i>path</i>]
+[<b>-propquery</b> <i>propq</i>]</p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">This command
+processes public key algorithm parameters. They can be
+checked for correctness and their components printed
+out.</p>
+
+<h2>OPTIONS
+<a name="OPTIONS"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>-help</b></p>
+
+<p style="margin-left:17%;">Print out a usage message.</p>
+
+<p style="margin-left:11%;"><b>-in</b> <i>filename</i></p>
+
+<p style="margin-left:17%;">This specifies the input
+filename to read parameters from or standard input if this
+option is not specified.</p>
+
+<p style="margin-left:11%;"><b>-out</b> <i>filename</i></p>
+
+<p style="margin-left:17%;">This specifies the output
+filename to write parameters to or standard output if this
+option is not specified.</p>
+
+<p style="margin-left:11%;"><b>-text</b></p>
+
+<p style="margin-left:17%;">Prints out the parameters in
+plain text in addition to the encoded version.</p>
+
+<p style="margin-left:11%;"><b>-noout</b></p>
+
+<p style="margin-left:17%;">Do not output the encoded
+version of the parameters.</p>
+
+<p style="margin-left:11%;"><b>-check</b></p>
+
+<p style="margin-left:17%;">This option checks the
+correctness of parameters.</p>
+
+<p style="margin-left:11%;"><b>-engine</b> <i>id</i></p>
+
+<p style="margin-left:17%;">See &quot;Engine Options&quot;
+in <b>openssl</b>(1). This option is deprecated.</p>
+
+<p style="margin-left:11%;"><b>-provider</b> <i>name</i>
+<b><br>
+-provider-path</b> <i>path</i> <b><br>
+-propquery</b> <i>propq</i></p>
+
+<p style="margin-left:17%;">See &quot;Provider
+Options&quot; in <b>openssl</b>(1), <b>provider</b>(7), and
+<b>property</b>(7).</p>
+
+<h2>EXAMPLES
+<a name="EXAMPLES"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Print out text
+version of parameters:</p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl
+pkeyparam -in param.pem -text</p>
+
+<h2>NOTES
+<a name="NOTES"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">There are no
+<b>-inform</b> or <b>-outform</b> options for this command
+because only <small>PEM</small> format is supported because
+the key type is determined by the <small>PEM</small>
+headers.</p>
+
+<h2>SEE ALSO
+<a name="SEE ALSO"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>openssl</b>(1),
+<b>openssl-genpkey</b>(1), <b>openssl-rsa</b>(1),
+<b>openssl-pkcs8</b>(1), <b>openssl-dsa</b>(1),
+<b>openssl-genrsa</b>(1), <b>openssl-gendsa</b>(1)</p>
+
+<h2>HISTORY
+<a name="HISTORY"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The
+<b>-engine</b> option was deprecated in OpenSSL 3.0.</p>
+
+<h2>COPYRIGHT
+<a name="COPYRIGHT"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Copyright
+2006-2021 The OpenSSL Project Authors. All Rights
+Reserved.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Licensed under
+the Apache License 2.0 (the &quot;License&quot;). You may
+not use this file except in compliance with the License. You
+can obtain a copy in the file <small>LICENSE</small> in the
+source distribution or at
+&lt;https://www.openssl.org/source/license.html&gt;.</p>
+<hr>
+</body>
+</html>

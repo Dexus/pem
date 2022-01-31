@@ -1,0 +1,85 @@
+<!-- Creator     : groff version 1.22.4 -->
+<!-- CreationDate: Mon Jan 31 16:14:38 2022 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>SPEED</title>
+
+</head>
+<body>
+
+<h1 align="center">SPEED</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#OPTIONS">OPTIONS</a><br>
+
+<hr>
+
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">speed - test
+library performance</p>
+
+<h2>SYNOPSIS
+<a name="SYNOPSIS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>openssl
+speed</b> [<b>-engine id</b>] [<b>md2</b>] [<b>mdc2</b>]
+[<b>md5</b>] [<b>hmac</b>] [<b>sha1</b>] [<b>rmd160</b>]
+[<b>idea-cbc</b>] [<b>rc2-cbc</b>] [<b>rc5-cbc</b>]
+[<b>bf-cbc</b>] [<b>des-cbc</b>] [<b>des-ede3</b>]
+[<b>rc4</b>] [<b>rsa512</b>] [<b>rsa1024</b>]
+[<b>rsa2048</b>] [<b>rsa4096</b>] [<b>dsa512</b>]
+[<b>dsa1024</b>] [<b>dsa2048</b>] [<b>idea</b>] [<b>rc2</b>]
+[<b>des</b>] [<b>rsa</b>] [<b>blowfish</b>]</p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">This command is
+used to test the performance of cryptographic
+algorithms.</p>
+
+<h2>OPTIONS
+<a name="OPTIONS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>-engine
+id</b></p>
+
+<p style="margin-left:17%;">specifying an engine (by its
+unique <b>id</b> string) will cause <b>speed</b> to attempt
+to obtain a functional reference to the specified engine,
+thus initialising it if needed. The engine will then be set
+as the default for all available algorithms.</p>
+
+<p style="margin-left:11%;"><b>[zero or more test
+algorithms]</b></p>
+
+<p style="margin-left:17%;">If any options are given,
+<b>speed</b> tests those algorithms, otherwise all of the
+above are tested.</p>
+<hr>
+</body>
+</html>

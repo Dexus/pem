@@ -1,0 +1,257 @@
+<!-- Creator     : groff version 1.22.4 -->
+<!-- CreationDate: Mon Jan 31 16:15:25 2022 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>OPENSSL-SPEED</title>
+
+</head>
+<body>
+
+<h1 align="center">OPENSSL-SPEED</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#OPTIONS">OPTIONS</a><br>
+<a href="#BUGS">BUGS</a><br>
+<a href="#HISTORY">HISTORY</a><br>
+<a href="#COPYRIGHT">COPYRIGHT</a><br>
+
+<hr>
+
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">openssl-speed -
+test library performance</p>
+
+<h2>SYNOPSIS
+<a name="SYNOPSIS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>openssl
+speed</b> [<b>-help</b>] [<b>-elapsed</b>] [<b>-evp</b>
+<i>algo</i>] [<b>-hmac</b> <i>algo</i>] [<b>-cmac</b>
+<i>algo</i>] [<b>-mb</b>] [<b>-aead</b>] [<b>-multi</b>
+<i>num</i>] [<b>-async_jobs</b> <i>num</i>]
+[<b>-misalign</b> <i>num</i>] [<b>-decrypt</b>]
+[<b>-primes</b> <i>num</i>] [<b>-seconds</b> <i>num</i>]
+[<b>-bytes</b> <i>num</i>] [<b>-mr</b>] [<b>-rand</b>
+<i>files</i>] [<b>-writerand</b> <i>file</i>]
+[<b>-engine</b> <i>id</i>] [<b>-provider</b> <i>name</i>]
+[<b>-provider-path</b> <i>path</i>] [<b>-propquery</b>
+<i>propq</i>] [<i>algorithm</i> ...]</p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">This command is
+used to test the performance of cryptographic
+algorithms.</p>
+
+<h2>OPTIONS
+<a name="OPTIONS"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>-help</b></p>
+
+<p style="margin-left:17%;">Print out a usage message.</p>
+
+<p style="margin-left:11%;"><b>-elapsed</b></p>
+
+<p style="margin-left:17%;">When calculating operations- or
+bytes-per-second, use wall-clock time instead of
+<small>CPU</small> user time as divisor. It can be useful
+when testing speed of hardware engines.</p>
+
+<p style="margin-left:11%;"><b>-evp</b> <i>algo</i></p>
+
+<p style="margin-left:17%;">Use the specified cipher or
+message digest algorithm via the <small>EVP</small>
+interface. If <i>algo</i> is an <small>AEAD</small> cipher,
+then you can pass <b>-aead</b> to benchmark a TLS-like
+sequence. And if <i>algo</i> is a multi-buffer capable
+cipher, e.g. aes-128-cbc-hmac-sha1, then <b>-mb</b> will
+time multi-buffer operation.</p>
+
+<p style="margin-left:17%; margin-top: 1em">To see the
+algorithms supported with this option, use &quot;openssl
+list -digest-algorithms&quot; or &quot;openssl list
+-cipher-algorithms&quot; command.</p>
+
+<p style="margin-left:11%;"><b>-multi</b> <i>num</i></p>
+
+<p style="margin-left:17%;">Run multiple operations in
+parallel.</p>
+
+<p style="margin-left:11%;"><b>-async_jobs</b>
+<i>num</i></p>
+
+<p style="margin-left:17%;">Enable async mode and start
+specified number of jobs.</p>
+
+<p style="margin-left:11%;"><b>-misalign</b> <i>num</i></p>
+
+<p style="margin-left:17%;">Misalign the buffers by the
+specified number of bytes.</p>
+
+<p style="margin-left:11%;"><b>-hmac</b> <i>digest</i></p>
+
+<p style="margin-left:17%;">Time the <small>HMAC</small>
+algorithm using the specified message digest.</p>
+
+<p style="margin-left:11%;"><b>-cmac</b> <i>cipher</i></p>
+
+<p style="margin-left:17%;">Time the <small>CMAC</small>
+algorithm using the specified cipher e.g. &quot;openssl
+speed -cmac aes128&quot;.</p>
+
+<p style="margin-left:11%;"><b>-decrypt</b></p>
+
+<p style="margin-left:17%;">Time the decryption instead of
+encryption. Affects only the <small>EVP</small> testing.</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="4%">
+
+
+<p><b>-mb</b></p></td>
+<td width="2%"></td>
+<td width="68%">
+
+
+<p>Enable multi-block mode on EVP-named cipher.</p></td>
+<td width="15%">
+</td></tr>
+</table>
+
+<p style="margin-left:11%;"><b>-aead</b></p>
+
+<p style="margin-left:17%;">Benchmark EVP-named
+<small>AEAD</small> cipher in TLS-like sequence.</p>
+
+<p style="margin-left:11%;"><b>-primes</b> <i>num</i></p>
+
+<p style="margin-left:17%;">Generate a <i>num</i>-prime
+<small>RSA</small> key and use it to run the benchmarks.
+This option is only effective if <small>RSA</small>
+algorithm is specified to test.</p>
+
+<p style="margin-left:11%;"><b>-seconds</b> <i>num</i></p>
+
+<p style="margin-left:17%;">Run benchmarks for <i>num</i>
+seconds.</p>
+
+<p style="margin-left:11%;"><b>-bytes</b> <i>num</i></p>
+
+<p style="margin-left:17%;">Run benchmarks on
+<i>num</i>-byte buffers. Affects ciphers, digests and the
+<small>CSPRNG.</small></p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="4%">
+
+
+<p><b>-mr</b></p></td>
+<td width="2%"></td>
+<td width="83%">
+
+
+<p>Produce the summary in a mechanical, machine-readable,
+format.</p> </td></tr>
+</table>
+
+<p style="margin-left:11%;"><b>-rand</b> <i>files</i>,
+<b>-writerand</b> <i>file</i></p>
+
+<p style="margin-left:17%;">See &quot;Random State
+Options&quot; in <b>openssl</b>(1) for details.</p>
+
+<p style="margin-left:11%;"><b>-engine</b> <i>id</i></p>
+
+<p style="margin-left:17%;">See &quot;Engine Options&quot;
+in <b>openssl</b>(1). This option is deprecated.</p>
+
+<p style="margin-left:11%;"><b>-provider</b> <i>name</i>
+<b><br>
+-provider-path</b> <i>path</i> <b><br>
+-propquery</b> <i>propq</i></p>
+
+<p style="margin-left:17%;">See &quot;Provider
+Options&quot; in <b>openssl</b>(1), <b>provider</b>(7), and
+<b>property</b>(7).</p>
+
+<p style="margin-left:11%;"><i>algorithm</i> ...</p>
+
+<p style="margin-left:17%;">If any <i>algorithm</i> is
+given, then those algorithms are tested, otherwise a
+pre-compiled grand selection is tested.</p>
+
+<h2>BUGS
+<a name="BUGS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The
+<i>algorithm</i> can be selected only from a pre-compiled
+subset of things that the &quot;openssl speed&quot; command
+knows about. To test any additional digest or cipher
+algorithm supported by OpenSSL use the &quot;-evp&quot;
+option.</p>
+
+<p style="margin-left:11%; margin-top: 1em">There is no way
+to test the speed of any additional public key algorithms
+supported by third party providers with the &quot;openssl
+speed&quot; command.</p>
+
+<h2>HISTORY
+<a name="HISTORY"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The
+<b>-engine</b> option was deprecated in OpenSSL 3.0.</p>
+
+<h2>COPYRIGHT
+<a name="COPYRIGHT"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Copyright
+2000-2021 The OpenSSL Project Authors. All Rights
+Reserved.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Licensed under
+the Apache License 2.0 (the &quot;License&quot;). You may
+not use this file except in compliance with the License. You
+can obtain a copy in the file <small>LICENSE</small> in the
+source distribution or at
+&lt;https://www.openssl.org/source/license.html&gt;.</p>
+<hr>
+</body>
+</html>

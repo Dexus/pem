@@ -1,0 +1,299 @@
+<!-- Creator     : groff version 1.22.4 -->
+<!-- CreationDate: Mon Jan 31 16:15:06 2022 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>EC</title>
+
+</head>
+<body>
+
+<h1 align="center">EC</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#OPTIONS">OPTIONS</a><br>
+<a href="#NOTES">NOTES</a><br>
+<a href="#EXAMPLES">EXAMPLES</a><br>
+<a href="#SEE ALSO">SEE ALSO</a><br>
+<a href="#COPYRIGHT">COPYRIGHT</a><br>
+
+<hr>
+
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">openssl-ec, ec
+- EC key processing</p>
+
+<h2>SYNOPSIS
+<a name="SYNOPSIS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>openssl
+ec</b> [<b>-help</b>] [<b>-inform PEM|DER</b>] [<b>-outform
+PEM|DER</b>] [<b>-in filename</b>] [<b>-passin arg</b>]
+[<b>-out filename</b>] [<b>-passout arg</b>] [<b>-des</b>]
+[<b>-des3</b>] [<b>-idea</b>] [<b>-text</b>] [<b>-noout</b>]
+[<b>-param_out</b>] [<b>-pubin</b>] [<b>-pubout</b>]
+[<b>-conv_form arg</b>] [<b>-param_enc arg</b>]
+[<b>-no_public</b>] [<b>-check</b>] [<b>-engine id</b>]</p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The <b>ec</b>
+command processes <small>EC</small> keys. They can be
+converted between various forms and their components printed
+out. <b>Note</b> OpenSSL uses the private key format
+specified in &rsquo; <small>SEC 1:</small> Elliptic Curve
+Cryptography&rsquo; (http://www.secg.org/). To convert an
+OpenSSL <small>EC</small> private key into the PKCS#8
+private key format use the <b>pkcs8</b> command.</p>
+
+<h2>OPTIONS
+<a name="OPTIONS"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>-help</b></p>
+
+<p style="margin-left:17%;">Print out a usage message.</p>
+
+<p style="margin-left:11%;"><b>-inform DER|PEM</b></p>
+
+<p style="margin-left:17%;">This specifies the input
+format. The <b><small>DER</small></b> option with a private
+key uses an <small>ASN.1 DER</small> encoded
+<small>SEC1</small> private key. When used with a public key
+it uses the SubjectPublicKeyInfo structure as specified in
+<small>RFC 3280.</small> The <b><small>PEM</small></b> form
+is the default format: it consists of the
+<b><small>DER</small></b> format base64 encoded with
+additional header and footer lines. In the case of a private
+key PKCS#8 format is also accepted.</p>
+
+<p style="margin-left:11%;"><b>-outform DER|PEM</b></p>
+
+<p style="margin-left:17%;">This specifies the output
+format, the options have the same meaning and default as the
+<b>-inform</b> option.</p>
+
+<p style="margin-left:11%;"><b>-in filename</b></p>
+
+<p style="margin-left:17%;">This specifies the input
+filename to read a key from or standard input if this option
+is not specified. If the key is encrypted a pass phrase will
+be prompted for.</p>
+
+<p style="margin-left:11%;"><b>-passin arg</b></p>
+
+<p style="margin-left:17%;">The input file password source.
+For more information about the format of <b>arg</b> see
+&quot;Pass Phrase Options&quot; in <b>openssl</b>(1).</p>
+
+<p style="margin-left:11%;"><b>-out filename</b></p>
+
+<p style="margin-left:17%;">This specifies the output
+filename to write a key to or standard output by is not
+specified. If any encryption options are set then a pass
+phrase will be prompted for. The output filename should
+<b>not</b> be the same as the input filename.</p>
+
+<p style="margin-left:11%;"><b>-passout arg</b></p>
+
+<p style="margin-left:17%;">The output file password
+source. For more information about the format of <b>arg</b>
+see &quot;Pass Phrase Options&quot; in
+<b>openssl</b>(1).</p>
+
+<p style="margin-left:11%;"><b>-des|-des3|-idea</b></p>
+
+<p style="margin-left:17%;">These options encrypt the
+private key with the <small>DES,</small> triple <small>DES,
+IDEA</small> or any other cipher supported by OpenSSL before
+outputting it. A pass phrase is prompted for. If none of
+these options is specified the key is written in plain text.
+This means that using the <b>ec</b> utility to read in an
+encrypted key with no encryption option can be used to
+remove the pass phrase from a key, or by setting the
+encryption options it can be use to add or change the pass
+phrase. These options can only be used with
+<small>PEM</small> format output files.</p>
+
+<p style="margin-left:11%;"><b>-text</b></p>
+
+<p style="margin-left:17%;">Prints out the public, private
+key components and parameters.</p>
+
+<p style="margin-left:11%;"><b>-noout</b></p>
+
+<p style="margin-left:17%;">This option prevents output of
+the encoded version of the key.</p>
+
+<p style="margin-left:11%;"><b>-pubin</b></p>
+
+<p style="margin-left:17%;">By default, a private key is
+read from the input file. With this option a public key is
+read instead.</p>
+
+<p style="margin-left:11%;"><b>-pubout</b></p>
+
+<p style="margin-left:17%;">By default a private key is
+output. With this option a public key will be output
+instead. This option is automatically set if the input is a
+public key.</p>
+
+<p style="margin-left:11%;"><b>-conv_form</b></p>
+
+<p style="margin-left:17%;">This specifies how the points
+on the elliptic curve are converted into octet strings.
+Possible values are: <b>compressed</b> (the default value),
+<b>uncompressed</b> and <b>hybrid</b>. For more information
+regarding the point conversion forms please read the X9.62
+standard. <b>Note</b> Due to patent issues the
+<b>compressed</b> option is disabled by default for binary
+curves and can be enabled by defining the preprocessor macro
+<b><small>OPENSSL_EC_BIN_PT_COMP</small></b> at compile
+time.</p>
+
+<p style="margin-left:11%;"><b>-param_enc arg</b></p>
+
+<p style="margin-left:17%;">This specifies how the elliptic
+curve parameters are encoded. Possible value are:
+<b>named_curve</b>, i.e. the ec parameters are specified by
+an <small>OID,</small> or <b>explicit</b> where the ec
+parameters are explicitly given (see <small>RFC 3279</small>
+for the definition of the <small>EC</small> parameters
+structures). The default value is <b>named_curve</b>.
+<b>Note</b> the <b>implicitlyCA</b> alternative, as
+specified in <small>RFC 3279,</small> is currently not
+implemented in OpenSSL.</p>
+
+<p style="margin-left:11%;"><b>-no_public</b></p>
+
+<p style="margin-left:17%;">This option omits the public
+key components from the private key output.</p>
+
+<p style="margin-left:11%;"><b>-check</b></p>
+
+<p style="margin-left:17%;">This option checks the
+consistency of an <small>EC</small> private or public
+key.</p>
+
+<p style="margin-left:11%;"><b>-engine id</b></p>
+
+<p style="margin-left:17%;">Specifying an engine (by its
+unique <b>id</b> string) will cause <b>ec</b> to attempt to
+obtain a functional reference to the specified engine, thus
+initialising it if needed. The engine will then be set as
+the default for all available algorithms.</p>
+
+<h2>NOTES
+<a name="NOTES"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The
+<small>PEM</small> private key format uses the header and
+footer lines:</p>
+
+<p style="margin-left:11%; margin-top: 1em">-----BEGIN EC
+PRIVATE KEY----- <br>
+-----END EC PRIVATE KEY-----</p>
+
+<p style="margin-left:11%; margin-top: 1em">The
+<small>PEM</small> public key format uses the header and
+footer lines:</p>
+
+<p style="margin-left:11%; margin-top: 1em">-----BEGIN
+PUBLIC KEY----- <br>
+-----END PUBLIC KEY-----</p>
+
+<h2>EXAMPLES
+<a name="EXAMPLES"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">To encrypt a
+private key using triple <small>DES:</small></p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl ec -in
+key.pem -des3 -out keyout.pem</p>
+
+<p style="margin-left:11%; margin-top: 1em">To convert a
+private key from <small>PEM</small> to <small>DER</small>
+format:</p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl ec -in
+key.pem -outform DER -out keyout.der</p>
+
+<p style="margin-left:11%; margin-top: 1em">To print out
+the components of a private key to standard output:</p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl ec -in
+key.pem -text -noout</p>
+
+<p style="margin-left:11%; margin-top: 1em">To just output
+the public part of a private key:</p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl ec -in
+key.pem -pubout -out pubkey.pem</p>
+
+<p style="margin-left:11%; margin-top: 1em">To change the
+parameters encoding to <b>explicit</b>:</p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl ec -in
+key.pem -param_enc explicit -out keyout.pem</p>
+
+<p style="margin-left:11%; margin-top: 1em">To change the
+point conversion form to <b>compressed</b>:</p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl ec -in
+key.pem -conv_form compressed -out keyout.pem</p>
+
+<h2>SEE ALSO
+<a name="SEE ALSO"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>ecparam</b>(1),
+<b>dsa</b>(1), <b>rsa</b>(1)</p>
+
+<h2>COPYRIGHT
+<a name="COPYRIGHT"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Copyright
+2003-2021 The OpenSSL Project Authors. All Rights
+Reserved.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Licensed under
+the OpenSSL license (the &quot;License&quot;). You may not
+use this file except in compliance with the License. You can
+obtain a copy in the file <small>LICENSE</small> in the
+source distribution or at
+&lt;https://www.openssl.org/source/license.html&gt;.</p>
+<hr>
+</body>
+</html>

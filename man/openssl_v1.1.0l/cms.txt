@@ -1,0 +1,600 @@
+CMS(1)                              OpenSSL                             CMS(1)
+
+
+
+NNAAMMEE
+       openssl-cms, cms - CMS utility
+
+SSYYNNOOPPSSIISS
+       ooppeennssssll ccmmss [--hheellpp] [--eennccrryypptt] [--ddeeccrryypptt] [--ssiiggnn] [--vveerriiffyy] [--ccmmssoouutt]
+       [--rreessiiggnn] [--ddaattaa__ccrreeaattee] [--ddaattaa__oouutt] [--ddiiggeesstt__ccrreeaattee] [--ddiiggeesstt__vveerriiffyy]
+       [--ccoommpprreessss] [--uunnccoommpprreessss] [--EEnnccrryypptteeddDDaattaa__eennccrryypptt] [--ssiiggnn__rreecceeiipptt]
+       [--vveerriiffyy__rreecceeiipptt rreecceeiipptt] [--iinn ffiilleennaammee] [--iinnffoorrmm SSMMIIMMEE||PPEEMM||DDEERR]
+       [--rrccttffoorrmm SSMMIIMMEE||PPEEMM||DDEERR] [--oouutt ffiilleennaammee] [--oouuttffoorrmm SSMMIIMMEE||PPEEMM||DDEERR]
+       [--ssttrreeaamm --iinnddeeff --nnooiinnddeeff] [--nnooiinnddeeff] [--ccoonntteenntt ffiilleennaammee] [--tteexxtt]
+       [--nnoooouutt] [--pprriinntt] [--CCAAffiillee ffiillee] [--CCAAppaatthh ddiirr] [--nnoo--CCAAffiillee]
+       [--nnoo--CCAAppaatthh] [--aattttiimmee ttiimmeessttaammpp] [--cchheecckk__ssss__ssiigg] [--ccrrll__cchheecckk]
+       [--ccrrll__cchheecckk__aallll] [--eexxpplliicciitt__ppoolliiccyy] [--eexxtteennddeedd__ccrrll] [--iiggnnoorree__ccrriittiiccaall]
+       [--iinnhhiibbiitt__aannyy] [--iinnhhiibbiitt__mmaapp] [--nnoo__cchheecckk__ttiimmee] [--ppaarrttiiaall__cchhaaiinn]
+       [--ppoolliiccyy aarrgg] [--ppoolliiccyy__cchheecckk] [--ppoolliiccyy__pprriinntt] [--ppuurrppoossee ppuurrppoossee]
+       [--ssuuiitteeBB__112288] [--ssuuiitteeBB__112288__oonnllyy] [--ssuuiitteeBB__119922] [--ttrruusstteedd__ffiirrsstt]
+       [--nnoo__aalltt__cchhaaiinnss] [--uussee__ddeellttaass] [--aauutthh__lleevveell nnuumm] [--vveerriiffyy__ddeepptthh nnuumm]
+       [--vveerriiffyy__eemmaaiill eemmaaiill] [--vveerriiffyy__hhoossttnnaammee hhoossttnnaammee] [--vveerriiffyy__iipp iipp]
+       [--vveerriiffyy__nnaammee nnaammee] [--xx550099__ssttrriicctt] [--mmdd ddiiggeesstt] [--[[cciipphheerr]]] [--nnooiinntteerrnn]
+       [--nnoo__ssiiggnneerr__cceerrtt__vveerriiffyy] [--nnoocceerrttss] [--nnooaattttrr] [--nnoossmmiimmeeccaapp] [--bbiinnaarryy]
+       [--ccrrllffeeooll] [--aasscciiiiccrrllff] [--nnooddeettaacchh] [--cceerrttffiillee ffiillee] [--cceerrttssoouutt ffiillee]
+       [--ssiiggnneerr ffiillee] [--rreecciipp ffiillee] [--kkeeyyiidd] [--rreecceeiipptt__rreeqquueesstt__aallll
+       --rreecceeiipptt__rreeqquueesstt__ffiirrsstt] [--rreecceeiipptt__rreeqquueesstt__ffrroomm eemmaaiillaaddddrreessss]
+       [--rreecceeiipptt__rreeqquueesstt__ttoo eemmaaiillaaddddrreessss] [--rreecceeiipptt__rreeqquueesstt__pprriinntt] [--sseeccrreettkkeeyy
+       kkeeyy] [--sseeccrreettkkeeyyiidd iidd] [--eeccoonntteenntt__ttyyppee ttyyppee] [--iinnkkeeyy ffiillee] [--kkeeyyoopptt
+       nnaammee::ppaarraammeetteerr] [--ppaassssiinn aarrgg] [--rraanndd ffiillee((ss))] [cceerrtt..ppeemm......]  [--ttoo aaddddrr]
+       [--ffrroomm aaddddrr] [--ssuubbjjeecctt ssuubbjj] [cert.pem]...
+
+DDEESSCCRRIIPPTTIIOONN
+       The ccmmss command handles S/MIME v3.1 mail. It can encrypt, decrypt, sign
+       and verify, compress and uncompress S/MIME messages.
+
+OOPPTTIIOONNSS
+       There are fourteen operation options that set the type of operation to
+       be performed. The meaning of the other options varies according to the
+       operation type.
+
+       --hheellpp
+           Print out a usage message.
+
+       --eennccrryypptt
+           encrypt mail for the given recipient certificates. Input file is
+           the message to be encrypted. The output file is the encrypted mail
+           in MIME format. The actual CMS type is <B>EnvelopedData<B>.
+
+           Note that no revocation check is done for the recipient cert, so if
+           that key has been compromised, others may be able to decrypt the
+           text.
+
+       --ddeeccrryypptt
+           decrypt mail using the supplied certificate and private key.
+           Expects an encrypted mail message in MIME format for the input
+           file. The decrypted mail is written to the output file.
+
+       --ddeebbuugg__ddeeccrryypptt
+           this option sets the CCMMSS__DDEEBBUUGG__DDEECCRRYYPPTT flag. This option should be
+           used with caution: see the notes section below.
+
+       --ssiiggnn
+           sign mail using the supplied certificate and private key. Input
+           file is the message to be signed. The signed message in MIME format
+           is written to the output file.
+
+       --vveerriiffyy
+           verify signed mail. Expects a signed mail message on input and
+           outputs the signed data. Both clear text and opaque signing is
+           supported.
+
+       --ccmmssoouutt
+           takes an input message and writes out a PEM encoded CMS structure.
+
+       --rreessiiggnn
+           resign a message: take an existing message and one or more new
+           signers.
+
+       --ddaattaa__ccrreeaattee
+           Create a CMS DDaattaa type.
+
+       --ddaattaa__oouutt
+           DDaattaa type and output the content.
+
+       --ddiiggeesstt__ccrreeaattee
+           Create a CMS DDiiggeesstteeddDDaattaa type.
+
+       --ddiiggeesstt__vveerriiffyy
+           Verify a CMS DDiiggeesstteeddDDaattaa type and output the content.
+
+       --ccoommpprreessss
+           Create a CMS CCoommpprreesssseeddDDaattaa type. OpenSSL must be compiled with
+           zzlliibb support for this option to work, otherwise it will output an
+           error.
+
+       --uunnccoommpprreessss
+           Uncompress a CMS CCoommpprreesssseeddDDaattaa type and output the content.
+           OpenSSL must be compiled with zzlliibb support for this option to work,
+           otherwise it will output an error.
+
+       --EEnnccrryypptteeddDDaattaa__eennccrryypptt
+           Encrypt content using supplied symmetric key and algorithm using a
+           CMS EEnnccrryypptteeddDDaattaa type and output the content.
+
+       --ssiiggnn__rreecceeiipptt
+           Generate and output a signed receipt for the supplied message. The
+           input message mmuusstt contain a signed receipt request. Functionality
+           is otherwise similar to the --ssiiggnn operation.
+
+       --vveerriiffyy__rreecceeiipptt rreecceeiipptt
+           Verify a signed receipt in filename rreecceeiipptt. The input message mmuusstt
+           contain the original receipt request. Functionality is otherwise
+           similar to the --vveerriiffyy operation.
+
+       --iinn ffiilleennaammee
+           the input message to be encrypted or signed or the message to be
+           decrypted or verified.
+
+       --iinnffoorrmm SSMMIIMMEE||PPEEMM||DDEERR
+           this specifies the input format for the CMS structure. The default
+           is SSMMIIMMEE which reads an S/MIME format message. PPEEMM and DDEERR format
+           change this to expect PEM and DER format CMS structures instead.
+           This currently only affects the input format of the CMS structure,
+           if no CMS structure is being input (for example with --eennccrryypptt or
+           --ssiiggnn) this option has no effect.
+
+       --rrccttffoorrmm SSMMIIMMEE||PPEEMM||DDEERR
+           specify the format for a signed receipt for use with the
+           --rreecceeiipptt__vveerriiffyy operation.
+
+       --oouutt ffiilleennaammee
+           the message text that has been decrypted or verified or the output
+           MIME format message that has been signed or verified.
+
+       --oouuttffoorrmm SSMMIIMMEE||PPEEMM||DDEERR
+           this specifies the output format for the CMS structure. The default
+           is SSMMIIMMEE which writes an S/MIME format message. PPEEMM and DDEERR format
+           change this to write PEM and DER format CMS structures instead.
+           This currently only affects the output format of the CMS structure,
+           if no CMS structure is being output (for example with --vveerriiffyy or
+           --ddeeccrryypptt) this option has no effect.
+
+       --ssttrreeaamm --iinnddeeff --nnooiinnddeeff
+           the --ssttrreeaamm and --iinnddeeff options are equivalent and enable streaming
+           I/O for encoding operations. This permits single pass processing of
+           data without the need to hold the entire contents in memory,
+           potentially supporting very large files. Streaming is automatically
+           set for S/MIME signing with detached data if the output format is
+           SSMMIIMMEE it is currently off by default for all other operations.
+
+       --nnooiinnddeeff
+           disable streaming I/O where it would produce and indefinite length
+           constructed encoding. This option currently has no effect. In
+           future streaming will be enabled by default on all relevant
+           operations and this option will disable it.
+
+       --ccoonntteenntt ffiilleennaammee
+           This specifies a file containing the detached content, this is only
+           useful with the --vveerriiffyy command. This is only usable if the CMS
+           structure is using the detached signature form where the content is
+           not included. This option will override any content if the input
+           format is S/MIME and it uses the multipart/signed MIME content
+           type.
+
+       --tteexxtt
+           this option adds plain text (text/plain) MIME headers to the
+           supplied message if encrypting or signing. If decrypting or
+           verifying it strips off text headers: if the decrypted or verified
+           message is not of MIME type text/plain then an error occurs.
+
+       --nnoooouutt
+           for the --ccmmssoouutt operation do not output the parsed CMS structure.
+           This is useful when combined with the --pprriinntt option or if the
+           syntax of the CMS structure is being checked.
+
+       --pprriinntt
+           for the --ccmmssoouutt operation print out all fields of the CMS
+           structure. This is mainly useful for testing purposes.
+
+       --CCAAffiillee ffiillee
+           a file containing trusted CA certificates, only used with --vveerriiffyy.
+
+       --CCAAppaatthh ddiirr
+           a directory containing trusted CA certificates, only used with
+           --vveerriiffyy. This directory must be a standard certificate directory:
+           that is a hash of each subject name (using xx550099 --hhaasshh) should be
+           linked to each certificate.
+
+       --nnoo--CCAAffiillee
+           Do not load the trusted CA certificates from the default file
+           location
+
+       --nnoo--CCAAppaatthh
+           Do not load the trusted CA certificates from the default directory
+           location
+
+       --mmdd ddiiggeesstt
+           digest algorithm to use when signing or resigning. If not present
+           then the default digest algorithm for the signing key will be used
+           (usually SHA1).
+
+       --[[cciipphheerr]]
+           the encryption algorithm to use. For example triple DES (168 bits)
+           - --ddeess33 or 256 bit AES - --aaeess225566. Any standard algorithm name (as
+           used by the EEVVPP__ggeett__cciipphheerrbbyynnaammee(()) function) can also be used
+           preceded by a dash, for example --aaeess--112288--ccbbcc. See eenncc for a list of
+           ciphers supported by your version of OpenSSL.
+
+           If not specified triple DES is used. Only used with --eennccrryypptt and
+           --EEnnccrryypptteeddDDaattaa__ccrreeaattee commands.
+
+       --nnooiinntteerrnn
+           when verifying a message normally certificates (if any) included in
+           the message are searched for the signing certificate. With this
+           option only the certificates specified in the --cceerrttffiillee option are
+           used.  The supplied certificates can still be used as untrusted CAs
+           however.
+
+       --nnoo__ssiiggnneerr__cceerrtt__vveerriiffyy
+           do not verify the signers certificate of a signed message.
+
+       --nnoocceerrttss
+           when signing a message the signer's certificate is normally
+           included with this option it is excluded. This will reduce the size
+           of the signed message but the verifier must have a copy of the
+           signers certificate available locally (passed using the --cceerrttffiillee
+           option for example).
+
+       --nnooaattttrr
+           normally when a message is signed a set of attributes are included
+           which include the signing time and supported symmetric algorithms.
+           With this option they are not included.
+
+       --nnoossmmiimmeeccaapp
+           exclude the list of supported algorithms from signed attributes,
+           other options such as signing time and content type are still
+           included.
+
+       --bbiinnaarryy
+           normally the input message is converted to "canonical" format which
+           is effectively using CR and LF as end of line: as required by the
+           S/MIME specification. When this option is present no translation
+           occurs. This is useful when handling binary data which may not be
+           in MIME format.
+
+       --ccrrllffeeooll
+           normally the output file uses a single LLFF as end of line. When this
+           option is present CCRRLLFF is used instead.
+
+       --aasscciiiiccrrllff
+           when signing use ASCII CRLF format canonicalisation. This strips
+           trailing whitespace from all lines, deletes trailing blank lines at
+           EOF and sets the encapsulated content type. This option is normally
+           used with detached content and an output signature format of DER.
+           This option is not normally needed when verifying as it is enabled
+           automatically if the encapsulated content format is detected.
+
+       --nnooddeettaacchh
+           when signing a message use opaque signing: this form is more
+           resistant to translation by mail relays but it cannot be read by
+           mail agents that do not support S/MIME.  Without this option
+           cleartext signing with the MIME type multipart/signed is used.
+
+       --cceerrttffiillee ffiillee
+           allows additional certificates to be specified. When signing these
+           will be included with the message. When verifying these will be
+           searched for the signers certificates. The certificates should be
+           in PEM format.
+
+       --cceerrttssoouutt ffiillee
+           any certificates contained in the message are written to ffiillee.
+
+       --ssiiggnneerr ffiillee
+           a signing certificate when signing or resigning a message, this
+           option can be used multiple times if more than one signer is
+           required. If a message is being verified then the signers
+           certificates will be written to this file if the verification was
+           successful.
+
+       --rreecciipp ffiillee
+           when decrypting a message this specifies the recipients
+           certificate. The certificate must match one of the recipients of
+           the message or an error occurs.
+
+           When encrypting a message this option may be used multiple times to
+           specify each recipient. This form mmuusstt be used if customised
+           parameters are required (for example to specify RSA-OAEP).
+
+           Only certificates carrying RSA, Diffie-Hellman or EC keys are
+           supported by this option.
+
+       --kkeeyyiidd
+           use subject key identifier to identify certificates instead of
+           issuer name and serial number. The supplied certificate mmuusstt
+           include a subject key identifier extension. Supported by --ssiiggnn and
+           --eennccrryypptt options.
+
+       --rreecceeiipptt__rreeqquueesstt__aallll --rreecceeiipptt__rreeqquueesstt__ffiirrsstt
+           for --ssiiggnn option include a signed receipt request. Indicate
+           requests should be provided by all recipient or first tier
+           recipients (those mailed directly and not from a mailing list).
+           Ignored it --rreecceeiipptt__rreeqquueesstt__ffrroomm is included.
+
+       --rreecceeiipptt__rreeqquueesstt__ffrroomm eemmaaiillaaddddrreessss
+           for --ssiiggnn option include a signed receipt request. Add an explicit
+           email address where receipts should be supplied.
+
+       --rreecceeiipptt__rreeqquueesstt__ttoo eemmaaiillaaddddrreessss
+           Add an explicit email address where signed receipts should be sent
+           to. This option mmuusstt but supplied if a signed receipt it requested.
+
+       --rreecceeiipptt__rreeqquueesstt__pprriinntt
+           For the --vveerriiffyy operation print out the contents of any signed
+           receipt requests.
+
+       --sseeccrreettkkeeyy kkeeyy
+           specify symmetric key to use. The key must be supplied in hex
+           format and be consistent with the algorithm used. Supported by the
+           --EEnnccrryypptteeddDDaattaa__eennccrryypptt --EEnnccrryypptteeddDDaattaa__ddeeccrryypptt, --eennccrryypptt and
+           --ddeeccrryypptt options. When used with --eennccrryypptt or --ddeeccrryypptt the supplied
+           key is used to wrap or unwrap the content encryption key using an
+           AES key in the KKEEKKRReecciippiieennttIInnffoo type.
+
+       --sseeccrreettkkeeyyiidd iidd
+           the key identifier for the supplied symmetric key for
+           KKEEKKRReecciippiieennttIInnffoo type.  This option mmuusstt be present if the
+           --sseeccrreettkkeeyy option is used with --eennccrryypptt. With --ddeeccrryypptt operations
+           the iidd is used to locate the relevant key if it is not supplied
+           then an attempt is used to decrypt any KKEEKKRReecciippiieennttIInnffoo structures.
+
+       --eeccoonntteenntt__ttyyppee ttyyppee
+           set the encapsulated content type to ttyyppee if not supplied the DDaattaa
+           type is used. The ttyyppee argument can be any valid OID name in either
+           text or numerical format.
+
+       --iinnkkeeyy ffiillee
+           the private key to use when signing or decrypting. This must match
+           the corresponding certificate. If this option is not specified then
+           the private key must be included in the certificate file specified
+           with the --rreecciipp or --ssiiggnneerr file. When signing this option can be
+           used multiple times to specify successive keys.
+
+       --kkeeyyoopptt nnaammee::oopptt
+           for signing and encryption this option can be used multiple times
+           to set customised parameters for the preceding key or certificate.
+           It can currently be used to set RSA-PSS for signing, RSA-OAEP for
+           encryption or to modify default parameters for ECDH.
+
+       --ppaassssiinn aarrgg
+           the private key password source. For more information about the
+           format of aarrgg see the PPAASSSS PPHHRRAASSEE AARRGGUUMMEENNTTSS section in ooppeennssssll(1).
+
+       --rraanndd ffiillee((ss))
+           a file or files containing random data used to seed the random
+           number generator, or an EGD socket (see RRAANNDD__eeggdd(3)).  Multiple
+           files can be specified separated by an OS-dependent character.  The
+           separator is ;; for MS-Windows, ,, for OpenVMS, and :: for all others.
+
+       cceerrtt..ppeemm......
+           one or more certificates of message recipients: used when
+           encrypting a message.
+
+       --ttoo,, --ffrroomm,, --ssuubbjjeecctt
+           the relevant mail headers. These are included outside the signed
+           portion of a message so they may be included manually. If signing
+           then many S/MIME mail clients check the signers certificate's email
+           address matches that specified in the From: address.
+
+       --aattttiimmee, --cchheecckk__ssss__ssiigg, --ccrrll__cchheecckk, --ccrrll__cchheecckk__aallll, --eexxpplliicciitt__ppoolliiccyy,
+       --eexxtteennddeedd__ccrrll, --iiggnnoorree__ccrriittiiccaall, --iinnhhiibbiitt__aannyy, --iinnhhiibbiitt__mmaapp,
+       --nnoo__aalltt__cchhaaiinnss, --nnoo__cchheecckk__ttiimmee, --ppaarrttiiaall__cchhaaiinn, --ppoolliiccyy, --ppoolliiccyy__cchheecckk,
+       --ppoolliiccyy__pprriinntt, --ppuurrppoossee, --ssuuiitteeBB__112288, --ssuuiitteeBB__112288__oonnllyy, --ssuuiitteeBB__119922,
+       --ttrruusstteedd__ffiirrsstt, --uussee__ddeellttaass, --aauutthh__lleevveell, --vveerriiffyy__ddeepptthh, --vveerriiffyy__eemmaaiill,
+       --vveerriiffyy__hhoossttnnaammee, --vveerriiffyy__iipp, --vveerriiffyy__nnaammee, --xx550099__ssttrriicctt
+           Set various certificate chain validation options. See the vveerriiffyy(1)
+           manual page for details.
+
+NNOOTTEESS
+       The MIME message must be sent without any blank lines between the
+       headers and the output. Some mail programs will automatically add a
+       blank line. Piping the mail directly to sendmail is one way to achieve
+       the correct format.
+
+       The supplied message to be signed or encrypted must include the
+       necessary MIME headers or many S/MIME clients won't display it properly
+       (if at all). You can use the --tteexxtt option to automatically add plain
+       text headers.
+
+       A "signed and encrypted" message is one where a signed message is then
+       encrypted. This can be produced by encrypting an already signed
+       message: see the examples section.
+
+       This version of the program only allows one signer per message but it
+       will verify multiple signers on received messages. Some S/MIME clients
+       choke if a message contains multiple signers. It is possible to sign
+       messages "in parallel" by signing an already signed message.
+
+       The options --eennccrryypptt and --ddeeccrryypptt reflect common usage in S/MIME
+       clients. Strictly speaking these process CMS enveloped data: CMS
+       encrypted data is used for other purposes.
+
+       The --rreessiiggnn option uses an existing message digest when adding a new
+       signer. This means that attributes must be present in at least one
+       existing signer using the same message digest or this operation will
+       fail.
+
+       The --ssttrreeaamm and --iinnddeeff options enable streaming I/O support.  As a
+       result the encoding is BER using indefinite length constructed encoding
+       and no longer DER. Streaming is supported for the --eennccrryypptt operation
+       and the --ssiiggnn operation if the content is not detached.
+
+       Streaming is always used for the --ssiiggnn operation with detached data but
+       since the content is no longer part of the CMS structure the encoding
+       remains DER.
+
+       If the --ddeeccrryypptt option is used without a recipient certificate then an
+       attempt is made to locate the recipient by trying each potential
+       recipient in turn using the supplied private key. To thwart the MMA
+       attack (Bleichenbacher's attack on PKCS #1 v1.5 RSA padding) all
+       recipients are tried whether they succeed or not and if no recipients
+       match the message is "decrypted" using a random key which will
+       typically output garbage.  The --ddeebbuugg__ddeeccrryypptt option can be used to
+       disable the MMA attack protection and return an error if no recipient
+       can be found: this option should be used with caution. For a fuller
+       description see CCMMSS__ddeeccrryypptt(3)).
+
+EEXXIITT CCOODDEESS
+       0   the operation was completely successfully.
+
+       1   an error occurred parsing the command options.
+
+       2   one of the input files could not be read.
+
+       3   an error occurred creating the CMS file or when reading the MIME
+           message.
+
+       4   an error occurred decrypting or verifying the message.
+
+       5   the message was verified correctly but an error occurred writing
+           out the signers certificates.
+
+CCOOMMPPAATTIIBBIILLIITTYY WWIITTHH PPKKCCSS##77 ffoorrmmaatt..
+       The ssmmiimmee utility can only process the older PPKKCCSS##77 format. The ccmmss
+       utility supports Cryptographic Message Syntax format. Use of some
+       features will result in messages which cannot be processed by
+       applications which only support the older format. These are detailed
+       below.
+
+       The use of the --kkeeyyiidd option with --ssiiggnn or --eennccrryypptt.
+
+       The --oouuttffoorrmm PPEEMM option uses different headers.
+
+       The --ccoommpprreessss option.
+
+       The --sseeccrreettkkeeyy option when used with --eennccrryypptt.
+
+       The use of PSS with --ssiiggnn.
+
+       The use of OAEP or non-RSA keys with --eennccrryypptt.
+
+       Additionally the --EEnnccrryypptteeddDDaattaa__ccrreeaattee and --ddaattaa__ccrreeaattee type cannot be
+       processed by the older ssmmiimmee command.
+
+EEXXAAMMPPLLEESS
+       Create a cleartext signed message:
+
+        openssl cms -sign -in message.txt -text -out mail.msg \
+               -signer mycert.pem
+
+       Create an opaque signed message
+
+        openssl cms -sign -in message.txt -text -out mail.msg -nodetach \
+               -signer mycert.pem
+
+       Create a signed message, include some additional certificates and read
+       the private key from another file:
+
+        openssl cms -sign -in in.txt -text -out mail.msg \
+               -signer mycert.pem -inkey mykey.pem -certfile mycerts.pem
+
+       Create a signed message with two signers, use key identifier:
+
+        openssl cms -sign -in message.txt -text -out mail.msg \
+               -signer mycert.pem -signer othercert.pem -keyid
+
+       Send a signed message under Unix directly to sendmail, including
+       headers:
+
+        openssl cms -sign -in in.txt -text -signer mycert.pem \
+               -from steve@openssl.org -to someone@somewhere \
+               -subject "Signed message" | sendmail someone@somewhere
+
+       Verify a message and extract the signer's certificate if successful:
+
+        openssl cms -verify -in mail.msg -signer user.pem -out signedtext.txt
+
+       Send encrypted mail using triple DES:
+
+        openssl cms -encrypt -in in.txt -from steve@openssl.org \
+               -to someone@somewhere -subject "Encrypted message" \
+               -des3 user.pem -out mail.msg
+
+       Sign and encrypt mail:
+
+        openssl cms -sign -in ml.txt -signer my.pem -text \
+               | openssl cms -encrypt -out mail.msg \
+               -from steve@openssl.org -to someone@somewhere \
+               -subject "Signed and Encrypted message" -des3 user.pem
+
+       Note: the encryption command does not include the --tteexxtt option because
+       the message being encrypted already has MIME headers.
+
+       Decrypt mail:
+
+        openssl cms -decrypt -in mail.msg -recip mycert.pem -inkey key.pem
+
+       The output from Netscape form signing is a PKCS#7 structure with the
+       detached signature format. You can use this program to verify the
+       signature by line wrapping the base64 encoded structure and surrounding
+       it with:
+
+        -----BEGIN PKCS7-----
+        -----END PKCS7-----
+
+       and using the command,
+
+        openssl cms -verify -inform PEM -in signature.pem -content content.txt
+
+       alternatively you can base64 decode the signature and use
+
+        openssl cms -verify -inform DER -in signature.der -content content.txt
+
+       Create an encrypted message using 128 bit Camellia:
+
+        openssl cms -encrypt -in plain.txt -camellia128 -out mail.msg cert.pem
+
+       Add a signer to an existing message:
+
+        openssl cms -resign -in mail.msg -signer newsign.pem -out mail2.msg
+
+       Sign mail using RSA-PSS:
+
+        openssl cms -sign -in message.txt -text -out mail.msg \
+               -signer mycert.pem -keyopt rsa_padding_mode:pss
+
+       Create encrypted mail using RSA-OAEP:
+
+        openssl cms -encrypt -in plain.txt -out mail.msg \
+               -recip cert.pem -keyopt rsa_padding_mode:oaep
+
+       Use SHA256 KDF with an ECDH certificate:
+
+        openssl cms -encrypt -in plain.txt -out mail.msg \
+               -recip ecdhcert.pem -keyopt ecdh_kdf_md:sha256
+
+BBUUGGSS
+       The MIME parser isn't very clever: it seems to handle most messages
+       that I've thrown at it but it may choke on others.
+
+       The code currently will only write out the signer's certificate to a
+       file: if the signer has a separate encryption certificate this must be
+       manually extracted. There should be some heuristic that determines the
+       correct encryption certificate.
+
+       Ideally a database should be maintained of a certificates for each
+       email address.
+
+       The code doesn't currently take note of the permitted symmetric
+       encryption algorithms as supplied in the SMIMECapabilities signed
+       attribute. this means the user has to manually include the correct
+       encryption algorithm. It should store the list of permitted ciphers in
+       a database and only use those.
+
+       No revocation checking is done on the signer's certificate.
+
+HHIISSTTOORRYY
+       The use of multiple --ssiiggnneerr options and the --rreessiiggnn command were first
+       added in OpenSSL 1.0.0.
+
+       The kkeeyyoopptt option was first added in OpenSSL 1.0.2
+
+       Support for RSA-OAEP and RSA-PSS was first added to OpenSSL 1.0.2.
+
+       The use of non-RSA keys with --eennccrryypptt and --ddeeccrryypptt was first added to
+       OpenSSL 1.0.2.
+
+       The -no_alt_chains options was first added to OpenSSL 1.0.2b.
+
+CCOOPPYYRRIIGGHHTT
+       Copyright 2008-2018 The OpenSSL Project Authors. All Rights Reserved.
+
+       Licensed under the OpenSSL license (the "License").  You may not use
+       this file except in compliance with the License.  You can obtain a copy
+       in the file LICENSE in the source distribution or at
+       <https://www.openssl.org/source/license.html>.
+
+
+
+1.1.0l                            2019-09-10                            CMS(1)

@@ -1,0 +1,190 @@
+<!-- Creator     : groff version 1.22.4 -->
+<!-- CreationDate: Mon Jan 31 16:15:21 2022 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>OPENSSL-PKCS7</title>
+
+</head>
+<body>
+
+<h1 align="center">OPENSSL-PKCS7</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#OPTIONS">OPTIONS</a><br>
+<a href="#EXAMPLES">EXAMPLES</a><br>
+<a href="#SEE ALSO">SEE ALSO</a><br>
+<a href="#HISTORY">HISTORY</a><br>
+<a href="#COPYRIGHT">COPYRIGHT</a><br>
+
+<hr>
+
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">openssl-pkcs7 -
+PKCS#7 command</p>
+
+<h2>SYNOPSIS
+<a name="SYNOPSIS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>openssl
+pkcs7</b> [<b>-help</b>] [<b>-inform <small>DER</small></b>
+| <b><small>PEM</small></b> ] [<b>-outform
+<small>DER</small></b> | <b><small>PEM</small></b> ]
+[<b>-in</b> <i>filename</i>] [<b>-out</b> <i>filename</i>]
+[<b>-print</b>] [<b>-print_certs</b>] [<b>-text</b>]
+[<b>-noout</b>] [<b>-engine</b> <i>id</i>] [<b>-provider</b>
+<i>name</i>] [<b>-provider-path</b> <i>path</i>]
+[<b>-propquery</b> <i>propq</i>]</p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">This command
+processes PKCS#7 files. Note that it only understands PKCS#7
+v 1.5 as specified in <small>IETF RFC 2315.</small> It
+cannot currently parse <small>CMS</small> as described in
+<small>IETF RFC 2630.</small></p>
+
+<h2>OPTIONS
+<a name="OPTIONS"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>-help</b></p>
+
+<p style="margin-left:17%;">Print out a usage message.</p>
+
+<p style="margin-left:11%;"><b>-inform
+<small>DER</small></b> | <b><small>PEM</small></b> ,
+<b>-outform <small>DER</small></b> |
+<b><small>PEM</small></b></p>
+
+<p style="margin-left:17%;">The input and formats; the
+default is <b><small>PEM</small></b> . See
+<b>openssl-format-options</b>(1) for details.</p>
+
+<p style="margin-left:17%; margin-top: 1em">The data is a
+PKCS#7 Version 1.5 structure.</p>
+
+<p style="margin-left:11%;"><b>-in</b> <i>filename</i></p>
+
+<p style="margin-left:17%;">This specifies the input
+filename to read from or standard input if this option is
+not specified.</p>
+
+<p style="margin-left:11%;"><b>-out</b> <i>filename</i></p>
+
+<p style="margin-left:17%;">Specifies the output filename
+to write to or standard output by default.</p>
+
+<p style="margin-left:11%;"><b>-print</b></p>
+
+<p style="margin-left:17%;">Print out the full
+<small>PKCS7</small> object.</p>
+
+<p style="margin-left:11%;"><b>-print_certs</b></p>
+
+<p style="margin-left:17%;">Prints out any certificates or
+CRLs contained in the file. They are preceded by their
+subject and issuer names in one line format.</p>
+
+<p style="margin-left:11%;"><b>-text</b></p>
+
+<p style="margin-left:17%;">Prints out certificate details
+in full rather than just subject and issuer names.</p>
+
+<p style="margin-left:11%;"><b>-noout</b></p>
+
+<p style="margin-left:17%;">Don&rsquo;t output the encoded
+version of the PKCS#7 structure (or certificates if
+<b>-print_certs</b> is set).</p>
+
+<p style="margin-left:11%;"><b>-engine</b> <i>id</i></p>
+
+<p style="margin-left:17%;">See &quot;Engine Options&quot;
+in <b>openssl</b>(1). This option is deprecated.</p>
+
+<p style="margin-left:11%;"><b>-provider</b> <i>name</i>
+<b><br>
+-provider-path</b> <i>path</i> <b><br>
+-propquery</b> <i>propq</i></p>
+
+<p style="margin-left:17%;">See &quot;Provider
+Options&quot; in <b>openssl</b>(1), <b>provider</b>(7), and
+<b>property</b>(7).</p>
+
+<h2>EXAMPLES
+<a name="EXAMPLES"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Convert a
+PKCS#7 file from <small>PEM</small> to
+<small>DER:</small></p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl pkcs7
+-in file.pem -outform DER -out file.der</p>
+
+<p style="margin-left:11%; margin-top: 1em">Output all
+certificates in a file:</p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl pkcs7
+-in file.pem -print_certs -out certs.pem</p>
+
+<h2>SEE ALSO
+<a name="SEE ALSO"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>openssl</b>(1),
+<b>openssl-crl2pkcs7</b>(1)</p>
+
+<h2>HISTORY
+<a name="HISTORY"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The
+<b>-engine</b> option was deprecated in OpenSSL 3.0.</p>
+
+<h2>COPYRIGHT
+<a name="COPYRIGHT"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Copyright
+2000-2021 The OpenSSL Project Authors. All Rights
+Reserved.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Licensed under
+the Apache License 2.0 (the &quot;License&quot;). You may
+not use this file except in compliance with the License. You
+can obtain a copy in the file <small>LICENSE</small> in the
+source distribution or at
+&lt;https://www.openssl.org/source/license.html&gt;.</p>
+<hr>
+</body>
+</html>

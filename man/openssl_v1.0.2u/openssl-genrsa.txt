@@ -1,0 +1,86 @@
+GENRSA(1)                           OpenSSL                          GENRSA(1)
+
+
+
+NNAAMMEE
+       openssl-genrsa, genrsa - generate an RSA private key
+
+SSYYNNOOPPSSIISS
+       ooppeennssssll ggeennrrssaa [--hheellpp] [--oouutt ffiilleennaammee] [--ppaassssoouutt aarrgg] [--aaeess112288]
+       [--aaeess119922] [--aaeess225566] [--aarriiaa112288] [--aarriiaa119922] [--aarriiaa225566] [--ccaammeelllliiaa112288]
+       [--ccaammeelllliiaa119922] [--ccaammeelllliiaa225566] [--ddeess] [--ddeess33] [--iiddeeaa] [--ff44] [--33] [--rraanndd
+       ffiillee((ss))] [--eennggiinnee iidd] [nnuummbbiittss]
+
+DDEESSCCRRIIPPTTIIOONN
+       The ggeennrrssaa command generates an RSA private key.
+
+OOPPTTIIOONNSS
+       --hheellpp
+           Print out a usage message.
+
+       --oouutt ffiilleennaammee
+           Output the key to the specified file. If this argument is not
+           specified then standard output is used.
+
+       --ppaassssoouutt aarrgg
+           the output file password source. For more information about the
+           format of aarrgg see the PPAASSSS PPHHRRAASSEE AARRGGUUMMEENNTTSS section in ooppeennssssll(1).
+
+       --aaeess112288||--aaeess119922||--aaeess225566||--aarriiaa112288||--aarriiaa119922||--aarriiaa225566||--ccaammeelllliiaa112288||--ccaammeelllliiaa119922||--ccaammeelllliiaa225566||--ddeess||--ddeess33||--iiddeeaa
+           These options encrypt the private key with specified cipher before
+           outputting it. If none of these options is specified no encryption
+           is used. If encryption is used a pass phrase is prompted for if it
+           is not supplied via the --ppaassssoouutt argument.
+
+       --FF44||--33
+           the public exponent to use, either 65537 or 3. The default is
+           65537.
+
+       --rraanndd ffiillee((ss))
+           a file or files containing random data used to seed the random
+           number generator, or an EGD socket (see RRAANNDD__eeggdd(3)).  Multiple
+           files can be specified separated by an OS-dependent character.  The
+           separator is ;; for MS-Windows, ,, for OpenVMS, and :: for all others.
+
+       --eennggiinnee iidd
+           specifying an engine (by its unique iidd string) will cause ggeennrrssaa to
+           attempt to obtain a functional reference to the specified engine,
+           thus initialising it if needed. The engine will then be set as the
+           default for all available algorithms.
+
+       nnuummbbiittss
+           the size of the private key to generate in bits. This must be the
+           last option specified. The default is 2048.
+
+NNOOTTEESS
+       RSA private key generation essentially involves the generation of two
+       prime numbers. When generating a private key various symbols will be
+       output to indicate the progress of the generation. A .. represents each
+       number which has passed an initial sieve test, ++ means a number has
+       passed a single round of the Miller-Rabin primality test. A newline
+       means that the number has passed all the prime tests (the actual number
+       depends on the key size).
+
+       Because key generation is a random process the time taken to generate a
+       key may vary somewhat.
+
+BBUUGGSS
+       A quirk of the prime generation algorithm is that it cannot generate
+       small primes. Therefore the number of bits should not be less that 64.
+       For typical private keys this will not matter because for security
+       reasons they will be much larger (typically 1024 bits).
+
+SSEEEE AALLSSOO
+       ggeennddssaa(1)
+
+CCOOPPYYRRIIGGHHTT
+       Copyright 2000-2017 The OpenSSL Project Authors. All Rights Reserved.
+
+       Licensed under the OpenSSL license (the "License").  You may not use
+       this file except in compliance with the License.  You can obtain a copy
+       in the file LICENSE in the source distribution or at
+       <https://www.openssl.org/source/license.html>.
+
+
+
+1.0.2u                            2019-12-20                         GENRSA(1)

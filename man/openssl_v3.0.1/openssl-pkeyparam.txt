@@ -1,0 +1,74 @@
+OPENSSL-PKEYPARAM(1ossl)            OpenSSL           OPENSSL-PKEYPARAM(1ossl)
+
+
+
+NNAAMMEE
+       openssl-pkeyparam - public key algorithm parameter processing command
+
+SSYYNNOOPPSSIISS
+       ooppeennssssll ppkkeeyyppaarraamm [--hheellpp] [--iinn _f_i_l_e_n_a_m_e] [--oouutt _f_i_l_e_n_a_m_e] [--tteexxtt]
+       [--nnoooouutt] [--cchheecckk] [--eennggiinnee _i_d] [--pprroovviiddeerr _n_a_m_e] [--pprroovviiddeerr--ppaatthh _p_a_t_h]
+       [--pprrooppqquueerryy _p_r_o_p_q]
+
+DDEESSCCRRIIPPTTIIOONN
+       This command processes public key algorithm parameters.  They can be
+       checked for correctness and their components printed out.
+
+OOPPTTIIOONNSS
+       --hheellpp
+           Print out a usage message.
+
+       --iinn _f_i_l_e_n_a_m_e
+           This specifies the input filename to read parameters from or
+           standard input if this option is not specified.
+
+       --oouutt _f_i_l_e_n_a_m_e
+           This specifies the output filename to write parameters to or
+           standard output if this option is not specified.
+
+       --tteexxtt
+           Prints out the parameters in plain text in addition to the encoded
+           version.
+
+       --nnoooouutt
+           Do not output the encoded version of the parameters.
+
+       --cchheecckk
+           This option checks the correctness of parameters.
+
+       --eennggiinnee _i_d
+           See "Engine Options" in ooppeennssssll(1).  This option is deprecated.
+
+       --pprroovviiddeerr _n_a_m_e
+       --pprroovviiddeerr--ppaatthh _p_a_t_h
+       --pprrooppqquueerryy _p_r_o_p_q
+           See "Provider Options" in ooppeennssssll(1), pprroovviiddeerr(7), and pprrooppeerrttyy(7).
+
+EEXXAAMMPPLLEESS
+       Print out text version of parameters:
+
+        openssl pkeyparam -in param.pem -text
+
+NNOOTTEESS
+       There are no --iinnffoorrmm or --oouuttffoorrmm options for this command because only
+       PEM format is supported because the key type is determined by the PEM
+       headers.
+
+SSEEEE AALLSSOO
+       ooppeennssssll(1), ooppeennssssll--ggeennppkkeeyy(1), ooppeennssssll--rrssaa(1), ooppeennssssll--ppkkccss88(1),
+       ooppeennssssll--ddssaa(1), ooppeennssssll--ggeennrrssaa(1), ooppeennssssll--ggeennddssaa(1)
+
+HHIISSTTOORRYY
+       The --eennggiinnee option was deprecated in OpenSSL 3.0.
+
+CCOOPPYYRRIIGGHHTT
+       Copyright 2006-2021 The OpenSSL Project Authors. All Rights Reserved.
+
+       Licensed under the Apache License 2.0 (the "License").  You may not use
+       this file except in compliance with the License.  You can obtain a copy
+       in the file LICENSE in the source distribution or at
+       <https://www.openssl.org/source/license.html>.
+
+
+
+3.0.1                             2022-01-31          OPENSSL-PKEYPARAM(1ossl)

@@ -1,0 +1,156 @@
+<!-- Creator     : groff version 1.22.4 -->
+<!-- CreationDate: Mon Jan 31 16:15:06 2022 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>LIST</title>
+
+</head>
+<body>
+
+<h1 align="center">LIST</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#OPTIONS">OPTIONS</a><br>
+<a href="#COPYRIGHT">COPYRIGHT</a><br>
+
+<hr>
+
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">openssl-list,
+list - list algorithms and features</p>
+
+<h2>SYNOPSIS
+<a name="SYNOPSIS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>openssl
+list</b> [<b>-help</b>] [<b>-1</b>] [<b>-commands</b>]
+[<b>-digest-commands</b>] [<b>-digest-algorithms</b>]
+[<b>-cipher-commands</b>] [<b>-cipher-algorithms</b>]
+[<b>-public-key-algorithms</b>] [<b>-public-key-methods</b>]
+[<b>-disabled</b>]</p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">This command is
+used to generate list of algorithms or disabled
+features.</p>
+
+<h2>OPTIONS
+<a name="OPTIONS"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>-help</b></p>
+
+<p style="margin-left:17%;">Display a usage message.</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+<p><b>-1</b></p></td>
+<td width="3%"></td>
+<td width="83%">
+
+
+<p>List the commands, digest-commands, or cipher-commands
+in a single column. If used, this option must be given
+first.</p> </td></tr>
+</table>
+
+<p style="margin-left:11%;"><b>-commands</b></p>
+
+<p style="margin-left:17%;">Display a list of standard
+commands.</p>
+
+<p style="margin-left:11%;"><b>-digest-commands</b></p>
+
+<p style="margin-left:17%;">Display a list of message
+digest commands, which are typically used as input to the
+<b>dgst</b>(1) or <b>speed</b>(1) commands.</p>
+
+<p style="margin-left:11%;"><b>-digest-algorithms</b></p>
+
+<p style="margin-left:17%;">Display a list of message
+digest algorithms. If a line is of the form <br>
+foo =&gt; bar then <b>foo</b> is an alias for the official
+algorithm name, <b>bar</b>.</p>
+
+<p style="margin-left:11%;"><b>-cipher-commands</b></p>
+
+<p style="margin-left:17%;">Display a list of cipher
+commands, which are typically used as input to the
+<b>dgst</b>(1) or <b>speed</b>(1) commands.</p>
+
+<p style="margin-left:11%;"><b>-cipher-algorithms</b></p>
+
+<p style="margin-left:17%;">Display a list of cipher
+algorithms. If a line is of the form <br>
+foo =&gt; bar then <b>foo</b> is an alias for the official
+algorithm name, <b>bar</b>.</p>
+
+
+<p style="margin-left:11%;"><b>-public-key-algorithms</b></p>
+
+<p style="margin-left:17%;">Display a list of public key
+algorithms, with each algorithm as a block of multiple
+lines, all but the first are indented.</p>
+
+<p style="margin-left:11%;"><b>-public-key-methods</b></p>
+
+<p style="margin-left:17%;">Display a list of public key
+method OIDs: this also includes public key methods without
+an associated <small>ASN.1</small> method, for example,
+<small>KDF</small> algorithms.</p>
+
+<p style="margin-left:11%;"><b>-disabled</b></p>
+
+<p style="margin-left:17%;">Display a list of disabled
+features, those that were compiled out of the
+installation.</p>
+
+<h2>COPYRIGHT
+<a name="COPYRIGHT"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Copyright
+2016-2017 The OpenSSL Project Authors. All Rights
+Reserved.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Licensed under
+the OpenSSL license (the &quot;License&quot;). You may not
+use this file except in compliance with the License. You can
+obtain a copy in the file <small>LICENSE</small> in the
+source distribution or at
+&lt;https://www.openssl.org/source/license.html&gt;.</p>
+<hr>
+</body>
+</html>

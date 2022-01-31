@@ -1,0 +1,50 @@
+PRIME(1)                            OpenSSL                           PRIME(1)
+
+
+
+NNAAMMEE
+       openssl-prime, prime - compute prime numbers
+
+SSYYNNOOPPSSIISS
+       ooppeennssssll pprriimmee [--hheellpp] [--hheexx] [--ggeenneerraattee] [--bbiittss] [--ssaaffee] [--cchheecckkss]
+       [_n_u_m_b_e_r_._._.]
+
+DDEESSCCRRIIPPTTIIOONN
+       The pprriimmee command checks if the specified numbers are prime.
+
+       If no numbers are given on the command line, the --ggeenneerraattee flag should
+       be used to generate primes according to the requirements specified by
+       the rest of the flags.
+
+OOPPTTIIOONNSS
+       [--hheellpp]
+           Display an option summary.
+
+       [--hheexx]
+           Generate hex output.
+
+       [--ggeenneerraattee]
+           Generate a prime number.
+
+       [--bbiittss nnuumm]
+           Generate a prime with nnuumm bits.
+
+       [--ssaaffee]
+           When used with --ggeenneerraattee, generates a "safe" prime. If the number
+           generated is nn, then check that ((nn--11))//22 is also prime.
+
+       [--cchheecckkss nnuumm]
+           Perform the checks nnuumm times to see that the generated number is
+           prime.  The default is 20.
+
+CCOOPPYYRRIIGGHHTT
+       Copyright 2017 The OpenSSL Project Authors. All Rights Reserved.
+
+       Licensed under the OpenSSL license (the "License").  You may not use
+       this file except in compliance with the License.  You can obtain a copy
+       in the file LICENSE in the source distribution or at
+       <https://www.openssl.org/source/license.html>.
+
+
+
+1.1.1l                            2021-08-24                          PRIME(1)

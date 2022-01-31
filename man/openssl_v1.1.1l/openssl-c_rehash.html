@@ -1,0 +1,237 @@
+<!-- Creator     : groff version 1.22.4 -->
+<!-- CreationDate: Mon Jan 31 16:15:18 2022 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>REHASH</title>
+
+</head>
+<body>
+
+<h1 align="center">REHASH</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#OPTIONS">OPTIONS</a><br>
+<a href="#ENVIRONMENT">ENVIRONMENT</a><br>
+<a href="#SEE ALSO">SEE ALSO</a><br>
+<a href="#COPYRIGHT">COPYRIGHT</a><br>
+
+<hr>
+
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em">openssl-c_rehash,
+openssl-rehash, c_rehash, rehash - Create symbolic links to
+files named by the hash values</p>
+
+<h2>SYNOPSIS
+<a name="SYNOPSIS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>openssl
+rehash [-h] [-help] [-old] [-n] [-v]</b> [
+<i>directory</i>...]</p>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>c_rehash</b>
+<i>flags...</i></p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">On some
+platforms, the OpenSSL <b>rehash</b> command is available as
+an external script called <b>c_rehash</b>. They are
+functionally equivalent, except for minor differences noted
+below.</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>rehash</b>
+scans directories and calculates a hash value of each
+&quot;.pem&quot;, &quot;.crt&quot;, &quot;.cer&quot;, or
+&quot;.crl&quot; file in the specified directory list and
+creates symbolic links for each file, where the name of the
+link is the hash value. (If the platform does not support
+symbolic links, a copy is made.) This utility is useful as
+many programs that use OpenSSL require directories to be set
+up like this in order to find certificates.</p>
+
+<p style="margin-left:11%; margin-top: 1em">If any
+directories are named on the command line, then those are
+processed in turn. If not, then the
+<b><small>SSL_CERT_DIR</small></b> environment variable is
+consulted; this should be a colon-separated list of
+directories, like the Unix <b><small>PATH</small></b>
+variable. If that is not set then the default directory
+(installation-specific but often
+<b>/usr/local/ssl/certs</b>) is processed.</p>
+
+<p style="margin-left:11%; margin-top: 1em">In order for a
+directory to be processed, the user must have write
+permissions on that directory, otherwise an error will be
+generated.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The links
+created are of the form &quot;HHHHHHHH.D&quot;, where each
+<b>H</b> is a hexadecimal character and <b>D</b> is a single
+decimal digit. When processing a directory, <b>rehash</b>
+will first remove all links that have a name in that syntax,
+even if they are being used for some other purpose. To skip
+the removal step, use the <b>-n</b> flag. Hashes for
+<small>CRL</small> &rsquo;s look similar except the letter
+<b>r</b> appears after the period, like this:
+&quot;HHHHHHHH.rD&quot;.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Multiple
+objects may have the same hash; they will be indicated by
+incrementing the <b>D</b> value. Duplicates are found by
+comparing the full <small>SHA-1</small> fingerprint. A
+warning will be displayed if a duplicate is found.</p>
+
+<p style="margin-left:11%; margin-top: 1em">A warning will
+also be displayed if there are files that cannot be parsed
+as either a certificate or a <small>CRL</small> or if more
+than one such object appears in the file.</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>Script
+Configuration</b> <br>
+The <b>c_rehash</b> script uses the <b>openssl</b> program
+to compute the hashes and fingerprints. If not found in the
+user&rsquo;s <b><small>PATH</small></b> , then set the
+<b><small>OPENSSL</small></b> environment variable to the
+full pathname. Any program can be used, it will be invoked
+as follows for either a certificate or
+<small>CRL:</small></p>
+
+<p style="margin-left:11%; margin-top: 1em">$OPENSSL x509
+-hash -fingerprint -noout -in FILENAME <br>
+$OPENSSL crl -hash -fingerprint -noout -in FILENAME</p>
+
+<p style="margin-left:11%; margin-top: 1em">where
+<b><small>FILENAME</small></b> is the filename. It must
+output the hash of the file on the first line, and the
+fingerprint on the second, optionally prefixed with some
+text and an equals sign.</p>
+
+<h2>OPTIONS
+<a name="OPTIONS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>-help
+-h</b></p>
+
+<p style="margin-left:17%;">Display a brief usage
+message.</p>
+
+<p style="margin-left:11%;"><b>-old</b></p>
+
+<p style="margin-left:17%;">Use old-style hashing (
+<small>MD5,</small> as opposed to <small>SHA-1</small> ) for
+generating links to be used for releases before 1.0.0. Note
+that current versions will not use the old style.</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+<p><b>-n</b></p></td>
+<td width="3%"></td>
+<td width="83%">
+
+
+<p>Do not remove existing links. This is needed when
+keeping new and old-style links in the same directory.</p></td></tr>
+</table>
+
+<p style="margin-left:11%;"><b>-compat</b></p>
+
+<p style="margin-left:17%;">Generate links for both
+old-style ( <small>MD5</small> ) and new-style (
+<small>SHA1</small> ) hashing. This allows releases before
+1.0.0 to use these links along-side newer releases.</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+<p><b>-v</b></p></td>
+<td width="3%"></td>
+<td width="83%">
+
+
+<p>Print messages about old links removed and new links
+created. By default, <b>rehash</b> only lists each directory
+as it is processed.</p></td></tr>
+</table>
+
+<h2>ENVIRONMENT
+<a name="ENVIRONMENT"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b><small>OPENSSL</small></b></p>
+
+<p style="margin-left:17%;">The path to an executable to
+use to generate hashes and fingerprints (see above).</p>
+
+
+<p style="margin-left:11%;"><b><small>SSL_CERT_DIR</small></b></p>
+
+<p style="margin-left:17%;">Colon separated list of
+directories to operate on. Ignored if directories are listed
+on the command line.</p>
+
+<h2>SEE ALSO
+<a name="SEE ALSO"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>openssl</b>(1),
+<b>crl</b>(1). <b>x509</b>(1).</p>
+
+<h2>COPYRIGHT
+<a name="COPYRIGHT"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Copyright
+2015-2018 The OpenSSL Project Authors. All Rights
+Reserved.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Licensed under
+the OpenSSL license (the &quot;License&quot;). You may not
+use this file except in compliance with the License. You can
+obtain a copy in the file <small>LICENSE</small> in the
+source distribution or at
+&lt;https://www.openssl.org/source/license.html&gt;.</p>
+<hr>
+</body>
+</html>

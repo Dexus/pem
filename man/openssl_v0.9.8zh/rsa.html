@@ -1,0 +1,288 @@
+<!-- Creator     : groff version 1.22.4 -->
+<!-- CreationDate: Mon Jan 31 16:14:31 2022 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>RSA</title>
+
+</head>
+<body>
+
+<h1 align="center">RSA</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#COMMAND OPTIONS">COMMAND OPTIONS</a><br>
+<a href="#NOTES">NOTES</a><br>
+<a href="#EXAMPLES">EXAMPLES</a><br>
+<a href="#BUGS">BUGS</a><br>
+<a href="#SEE ALSO">SEE ALSO</a><br>
+
+<hr>
+
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">rsa - RSA key
+processing tool</p>
+
+<h2>SYNOPSIS
+<a name="SYNOPSIS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>openssl
+rsa</b> [<b>-inform PEM|NET|DER</b>] [<b>-outform
+PEM|NET|DER</b>] [<b>-in filename</b>] [<b>-passin arg</b>]
+[<b>-out filename</b>] [<b>-passout arg</b>]
+[<b>-sgckey</b>] [<b>-aes128</b>] [<b>-aes192</b>]
+[<b>-aes256</b>] [<b>-camellia128</b>] [<b>-camellia192</b>]
+[<b>-camellia256</b>] [<b>-des</b>] [<b>-des3</b>]
+[<b>-idea</b>] [<b>-text</b>] [<b>-noout</b>]
+[<b>-modulus</b>] [<b>-check</b>] [<b>-pubin</b>]
+[<b>-pubout</b>] [<b>-engine id</b>]</p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The <b>rsa</b>
+command processes <small>RSA</small> keys. They can be
+converted between various forms and their components printed
+out. <b>Note</b> this command uses the traditional SSLeay
+compatible format for private key encryption: newer
+applications should use the more secure PKCS#8 format using
+the <b>pkcs8</b> utility.</p>
+
+<h2>COMMAND OPTIONS
+<a name="COMMAND OPTIONS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>-inform
+DER|NET|PEM</b></p>
+
+<p style="margin-left:17%;">This specifies the input
+format. The <b><small>DER</small></b> option uses an
+<small>ASN1 DER</small> encoded form compatible with the
+PKCS#1 RSAPrivateKey or SubjectPublicKeyInfo format. The
+<b><small>PEM</small></b> form is the default format: it
+consists of the <b><small>DER</small></b> format base64
+encoded with additional header and footer lines. On input
+PKCS#8 format private keys are also accepted. The
+<b><small>NET</small></b> form is a format is described in
+the <b><small>NOTES</small></b> section.</p>
+
+<p style="margin-left:11%;"><b>-outform DER|NET|PEM</b></p>
+
+<p style="margin-left:17%;">This specifies the output
+format, the options have the same meaning as the
+<b>-inform</b> option.</p>
+
+<p style="margin-left:11%;"><b>-in filename</b></p>
+
+<p style="margin-left:17%;">This specifies the input
+filename to read a key from or standard input if this option
+is not specified. If the key is encrypted a pass phrase will
+be prompted for.</p>
+
+<p style="margin-left:11%;"><b>-passin arg</b></p>
+
+<p style="margin-left:17%;">the input file password source.
+For more information about the format of <b>arg</b> see the
+<b><small>PASS PHRASE ARGUMENTS</small></b> section in
+<b>openssl</b>(1).</p>
+
+<p style="margin-left:11%;"><b>-out filename</b></p>
+
+<p style="margin-left:17%;">This specifies the output
+filename to write a key to or standard output if this option
+is not specified. If any encryption options are set then a
+pass phrase will be prompted for. The output filename should
+<b>not</b> be the same as the input filename.</p>
+
+<p style="margin-left:11%;"><b>-passout password</b></p>
+
+<p style="margin-left:17%;">the output file password
+source. For more information about the format of <b>arg</b>
+see the <b><small>PASS PHRASE ARGUMENTS</small></b> section
+in <b>openssl</b>(1).</p>
+
+<p style="margin-left:11%;"><b>-sgckey</b></p>
+
+<p style="margin-left:17%;">use the modified
+<small>NET</small> algorithm used with some versions of
+Microsoft <small>IIS</small> and <small>SGC</small>
+keys.</p>
+
+
+<p style="margin-left:11%;"><b>-aes128|-aes192|-aes256|-camellia128|-camellia192|-camellia256|-des|-des3|-idea</b></p>
+
+<p style="margin-left:17%;">These options encrypt the
+private key with the specified cipher before outputting it.
+A pass phrase is prompted for. If none of these options is
+specified the key is written in plain text. This means that
+using the <b>rsa</b> utility to read in an encrypted key
+with no encryption option can be used to remove the pass
+phrase from a key, or by setting the encryption options it
+can be use to add or change the pass phrase. These options
+can only be used with <small>PEM</small> format output
+files.</p>
+
+<p style="margin-left:11%;"><b>-text</b></p>
+
+<p style="margin-left:17%;">prints out the various public
+or private key components in plain text in addition to the
+encoded version.</p>
+
+<p style="margin-left:11%;"><b>-noout</b></p>
+
+<p style="margin-left:17%;">this option prevents output of
+the encoded version of the key.</p>
+
+<p style="margin-left:11%;"><b>-modulus</b></p>
+
+<p style="margin-left:17%;">this option prints out the
+value of the modulus of the key.</p>
+
+<p style="margin-left:11%;"><b>-check</b></p>
+
+<p style="margin-left:17%;">this option checks the
+consistency of an <small>RSA</small> private key.</p>
+
+<p style="margin-left:11%;"><b>-pubin</b></p>
+
+<p style="margin-left:17%;">by default a private key is
+read from the input file: with this option a public key is
+read instead.</p>
+
+<p style="margin-left:11%;"><b>-pubout</b></p>
+
+<p style="margin-left:17%;">by default a private key is
+output: with this option a public key will be output
+instead. This option is automatically set if the input is a
+public key.</p>
+
+<p style="margin-left:11%;"><b>-engine id</b></p>
+
+<p style="margin-left:17%;">specifying an engine (by
+it&rsquo;s unique <b>id</b> string) will cause <b>req</b> to
+attempt to obtain a functional reference to the specified
+engine, thus initialising it if needed. The engine will then
+be set as the default for all available algorithms.</p>
+
+<h2>NOTES
+<a name="NOTES"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The
+<small>PEM</small> private key format uses the header and
+footer lines:</p>
+
+<p style="margin-left:11%; margin-top: 1em">-----BEGIN RSA
+PRIVATE KEY----- <br>
+-----END RSA PRIVATE KEY-----</p>
+
+<p style="margin-left:11%; margin-top: 1em">The
+<small>PEM</small> public key format uses the header and
+footer lines:</p>
+
+<p style="margin-left:11%; margin-top: 1em">-----BEGIN
+PUBLIC KEY----- <br>
+-----END PUBLIC KEY-----</p>
+
+<p style="margin-left:11%; margin-top: 1em">The
+<b><small>NET</small></b> form is a format compatible with
+older Netscape servers and Microsoft <small>IIS</small> .key
+files, this uses unsalted <small>RC4</small> for its
+encryption. It is not very secure and so should only be used
+when necessary.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Some newer
+version of <small>IIS</small> have additional data in the
+exported .key files. To use these with the utility, view the
+file with a binary editor and look for the string
+&quot;private-key&quot;, then trace back to the byte
+sequence 0x30, 0x82 (this is an <small>ASN1 SEQUENCE</small>
+). Copy all the data from this point onwards to another file
+and use that as the input to the <b>rsa</b> utility with the
+<b>-inform <small>NET</small></b> option. If you get an
+error after entering the password try the <b>-sgckey</b>
+option.</p>
+
+<h2>EXAMPLES
+<a name="EXAMPLES"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">To remove the
+pass phrase on an <small>RSA</small> private key:</p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl rsa -in
+key.pem -out keyout.pem</p>
+
+<p style="margin-left:11%; margin-top: 1em">To encrypt a
+private key using triple <small>DES:</small></p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl rsa -in
+key.pem -des3 -out keyout.pem</p>
+
+<p style="margin-left:11%; margin-top: 1em">To convert a
+private key from <small>PEM</small> to <small>DER</small>
+format:</p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl rsa -in
+key.pem -outform DER -out keyout.der</p>
+
+<p style="margin-left:11%; margin-top: 1em">To print out
+the components of a private key to standard output:</p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl rsa -in
+key.pem -text -noout</p>
+
+<p style="margin-left:11%; margin-top: 1em">To just output
+the public part of a private key:</p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl rsa -in
+key.pem -pubout -out pubkey.pem</p>
+
+<h2>BUGS
+<a name="BUGS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The command
+line password arguments don&rsquo;t currently work with
+<b><small>NET</small></b> format.</p>
+
+<p style="margin-left:11%; margin-top: 1em">There should be
+an option that automatically handles .key files, without
+having to manually edit them.</p>
+
+<h2>SEE ALSO
+<a name="SEE ALSO"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>pkcs8</b>(1),
+<b>dsa</b>(1), <b>genrsa</b>(1), <b>gendsa</b>(1)</p>
+<hr>
+</body>
+</html>

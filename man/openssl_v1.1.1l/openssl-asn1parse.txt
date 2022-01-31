@@ -1,0 +1,181 @@
+ASN1PARSE(1)                        OpenSSL                       ASN1PARSE(1)
+
+
+
+NNAAMMEE
+       openssl-asn1parse, asn1parse - ASN.1 parsing tool
+
+SSYYNNOOPPSSIISS
+       ooppeennssssll aassnn11ppaarrssee [--hheellpp] [--iinnffoorrmm PPEEMM||DDEERR] [--iinn ffiilleennaammee] [--oouutt
+       ffiilleennaammee] [--nnoooouutt] [--ooffffsseett nnuummbbeerr] [--lleennggtthh nnuummbbeerr] [--ii] [--ooiidd
+       ffiilleennaammee] [--dduummpp] [--ddlliimmiitt nnuumm] [--ssttrrppaarrssee ooffffsseett] [--ggeennssttrr ssttrriinngg]
+       [--ggeennccoonnff ffiillee] [--ssttrriiccttppeemm] [--iitteemm nnaammee]
+
+DDEESSCCRRIIPPTTIIOONN
+       The aassnn11ppaarrssee command is a diagnostic utility that can parse ASN.1
+       structures. It can also be used to extract data from ASN.1 formatted
+       data.
+
+OOPPTTIIOONNSS
+       --hheellpp
+           Print out a usage message.
+
+       --iinnffoorrmm DDEERR||PPEEMM
+           The input format. DDEERR is binary format and PPEEMM (the default) is
+           base64 encoded.
+
+       --iinn ffiilleennaammee
+           The input file, default is standard input.
+
+       --oouutt ffiilleennaammee
+           Output file to place the DER encoded data into. If this option is
+           not present then no data will be output. This is most useful when
+           combined with the --ssttrrppaarrssee option.
+
+       --nnoooouutt
+           Don't output the parsed version of the input file.
+
+       --ooffffsseett nnuummbbeerr
+           Starting offset to begin parsing, default is start of file.
+
+       --lleennggtthh nnuummbbeerr
+           Number of bytes to parse, default is until end of file.
+
+       --ii  Indents the output according to the "depth" of the structures.
+
+       --ooiidd ffiilleennaammee
+           A file containing additional OBJECT IDENTIFIERs (OIDs). The format
+           of this file is described in the NOTES section below.
+
+       --dduummpp
+           Dump unknown data in hex format.
+
+       --ddlliimmiitt nnuumm
+           Like --dduummpp, but only the first nnuumm bytes are output.
+
+       --ssttrrppaarrssee ooffffsseett
+           Parse the contents octets of the ASN.1 object starting at ooffffsseett.
+           This option can be used multiple times to "drill down" into a
+           nested structure.
+
+       --ggeennssttrr ssttrriinngg, --ggeennccoonnff ffiillee
+           Generate encoded data based on ssttrriinngg, ffiillee or both using
+           AASSNN11__ggeenneerraattee__nnccoonnff(3) format. If ffiillee only is present then the
+           string is obtained from the default section using the name aassnn11.
+           The encoded data is passed through the ASN1 parser and printed out
+           as though it came from a file, the contents can thus be examined
+           and written to a file using the oouutt option.
+
+       --ssttrriiccttppeemm
+           If this option is used then --iinnffoorrmm will be ignored. Without this
+           option any data in a PEM format input file will be treated as being
+           base64 encoded and processed whether it has the normal PEM BEGIN
+           and END markers or not. This option will ignore any data prior to
+           the start of the BEGIN marker, or after an END marker in a PEM
+           file.
+
+       --iitteemm nnaammee
+           Attempt to decode and print the data as AASSNN11__IITTEEMM nnaammee. This can be
+           used to print out the fields of any supported ASN.1 structure if
+           the type is known.
+
+   OOuuttppuutt
+       The output will typically contain lines like this:
+
+         0:d=0  hl=4 l= 681 cons: SEQUENCE
+
+       .....
+
+         229:d=3  hl=3 l= 141 prim: BIT STRING
+         373:d=2  hl=3 l= 162 cons: cont [ 3 ]
+         376:d=3  hl=3 l= 159 cons: SEQUENCE
+         379:d=4  hl=2 l=  29 cons: SEQUENCE
+         381:d=5  hl=2 l=   3 prim: OBJECT            :X509v3 Subject Key Identifier
+         386:d=5  hl=2 l=  22 prim: OCTET STRING
+         410:d=4  hl=2 l= 112 cons: SEQUENCE
+         412:d=5  hl=2 l=   3 prim: OBJECT            :X509v3 Authority Key Identifier
+         417:d=5  hl=2 l= 105 prim: OCTET STRING
+         524:d=4  hl=2 l=  12 cons: SEQUENCE
+
+       .....
+
+       This example is part of a self-signed certificate. Each line starts
+       with the offset in decimal. dd==XXXX specifies the current depth. The depth
+       is increased within the scope of any SET or SEQUENCE. hhll==XXXX gives the
+       header length (tag and length octets) of the current type. ll==XXXX gives
+       the length of the contents octets.
+
+       The --ii option can be used to make the output more readable.
+
+       Some knowledge of the ASN.1 structure is needed to interpret the
+       output.
+
+       In this example the BIT STRING at offset 229 is the certificate public
+       key.  The contents octets of this will contain the public key
+       information. This can be examined using the option --ssttrrppaarrssee 222299 to
+       yield:
+
+           0:d=0  hl=3 l= 137 cons: SEQUENCE
+           3:d=1  hl=3 l= 129 prim: INTEGER           :E5D21E1F5C8D208EA7A2166C7FAF9F6BDF2059669C60876DDB70840F1A5AAFA59699FE471F379F1DD6A487E7D5409AB6A88D4A9746E24B91D8CF55DB3521015460C8EDE44EE8A4189F7A7BE77D6CD3A9AF2696F486855CF58BF0EDF2B4068058C7A947F52548DDF7E15E96B385F86422BEA9064A3EE9E1158A56E4A6F47E5897
+         135:d=1  hl=2 l=   3 prim: INTEGER           :010001
+
+NNOOTTEESS
+       If an OID is not part of OpenSSL's internal table it will be
+       represented in numerical form (for example 1.2.3.4). The file passed to
+       the --ooiidd option allows additional OIDs to be included. Each line
+       consists of three columns, the first column is the OID in numerical
+       format and should be followed by white space. The second column is the
+       "short name" which is a single word followed by white space. The final
+       column is the rest of the line and is the "long name". aassnn11ppaarrssee
+       displays the long name. Example:
+
+       "1.2.3.4       shortName       A long name"
+
+EEXXAAMMPPLLEESS
+       Parse a file:
+
+        openssl asn1parse -in file.pem
+
+       Parse a DER file:
+
+        openssl asn1parse -inform DER -in file.der
+
+       Generate a simple UTF8String:
+
+        openssl asn1parse -genstr 'UTF8:Hello World'
+
+       Generate and write out a UTF8String, don't print parsed output:
+
+        openssl asn1parse -genstr 'UTF8:Hello World' -noout -out utf8.der
+
+       Generate using a config file:
+
+        openssl asn1parse -genconf asn1.cnf -noout -out asn1.der
+
+       Example config file:
+
+        asn1=SEQUENCE:seq_sect
+
+        [seq_sect]
+
+        field1=BOOL:TRUE
+        field2=EXP:0, UTF8:some random string
+
+BBUUGGSS
+       There should be options to change the format of output lines. The
+       output of some ASN.1 types is not well handled (if at all).
+
+SSEEEE AALLSSOO
+       AASSNN11__ggeenneerraattee__nnccoonnff(3)
+
+CCOOPPYYRRIIGGHHTT
+       Copyright 2000-2017 The OpenSSL Project Authors. All Rights Reserved.
+
+       Licensed under the OpenSSL license (the "License").  You may not use
+       this file except in compliance with the License.  You can obtain a copy
+       in the file LICENSE in the source distribution or at
+       <https://www.openssl.org/source/license.html>.
+
+
+
+1.1.1l                            2021-08-24                      ASN1PARSE(1)

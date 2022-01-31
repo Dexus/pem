@@ -1,0 +1,72 @@
+RAND(1)                             OpenSSL                            RAND(1)
+
+
+
+NNAAMMEE
+       openssl-rand, rand - generate pseudo-random bytes
+
+SSYYNNOOPPSSIISS
+       ooppeennssssll rraanndd [--hheellpp] [--oouutt _f_i_l_e] [--rraanndd ffiillee......]  [--wwrriitteerraanndd ffiillee]
+       [--bbaassee6644] [--hheexx] _n_u_m
+
+DDEESSCCRRIIPPTTIIOONN
+       This command generates _n_u_m random bytes using a cryptographically
+       secure pseudo random number generator (CSPRNG).
+
+       The random bytes are generated using the RRAANNDD__bbyytteess(3) function, which
+       provides a security level of 256 bits, provided it managed to seed
+       itself successfully from a trusted operating system entropy source.
+       Otherwise, the command will fail with a nonzero error code.  For more
+       details, see RRAANNDD__bbyytteess(3), RRAANNDD(7), and RRAANNDD__DDRRBBGG(7).
+
+OOPPTTIIOONNSS
+       --hheellpp
+           Print out a usage message.
+
+       --oouutt ffiillee
+           Write to _f_i_l_e instead of standard output.
+
+       --rraanndd ffiillee......
+           A file or files containing random data used to seed the random
+           number generator.  Multiple files can be specified separated by an
+           OS-dependent character.  The separator is ;; for MS-Windows, ,, for
+           OpenVMS, and :: for all others.  Explicitly specifying a seed file
+           is in general not necessary, see the "NOTES" section for more
+           information.
+
+       [--wwrriitteerraanndd ffiillee]
+           Writes random data to the specified _f_i_l_e upon exit.  This can be
+           used with a subsequent --rraanndd flag.
+
+       --bbaassee6644
+           Perform base64 encoding on the output.
+
+       --hheexx
+           Show the output as a hex string.
+
+NNOOTTEESS
+       Prior to OpenSSL 1.1.1, it was common for applications to store
+       information about the state of the random-number generator in a file
+       that was loaded at startup and rewritten upon exit. On modern operating
+       systems, this is generally no longer necessary as OpenSSL will seed
+       itself from a trusted entropy source provided by the operating system.
+       The --rraanndd  and --wwrriitteerraanndd  flags are still supported for special
+       platforms or circumstances that might require them.
+
+       It is generally an error to use the same seed file more than once and
+       every use of --rraanndd should be paired with --wwrriitteerraanndd.
+
+SSEEEE AALLSSOO
+       RRAANNDD__bbyytteess(3), RRAANNDD(7), RRAANNDD__DDRRBBGG(7)
+
+CCOOPPYYRRIIGGHHTT
+       Copyright 2000-2020 The OpenSSL Project Authors. All Rights Reserved.
+
+       Licensed under the OpenSSL license (the "License").  You may not use
+       this file except in compliance with the License.  You can obtain a copy
+       in the file LICENSE in the source distribution or at
+       <https://www.openssl.org/source/license.html>.
+
+
+
+1.1.1l                            2021-08-24                           RAND(1)

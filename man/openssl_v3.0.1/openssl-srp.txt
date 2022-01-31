@@ -1,0 +1,92 @@
+OPENSSL-SRP(1ossl)                  OpenSSL                 OPENSSL-SRP(1ossl)
+
+
+
+NNAAMMEE
+       openssl-srp - maintain SRP password file
+
+SSYYNNOOPPSSIISS
+       ooppeennssssll ssrrpp [--hheellpp] [--vveerrbboossee] [--aadddd] [--mmooddiiffyy] [--ddeelleettee] [--lliisstt]
+       [--nnaammee _s_e_c_t_i_o_n] [--ssrrppvvffiillee _f_i_l_e] [--ggnn _i_d_e_n_t_i_f_i_e_r] [--uusseerriinnffoo _t_e_x_t]
+       [--ppaassssiinn _a_r_g] [--ppaassssoouutt _a_r_g] [--eennggiinnee _i_d] [--rraanndd _f_i_l_e_s] [--wwrriitteerraanndd
+       _f_i_l_e] [--pprroovviiddeerr _n_a_m_e] [--pprroovviiddeerr--ppaatthh _p_a_t_h] [--pprrooppqquueerryy _p_r_o_p_q]
+       [--ccoonnffiigg _c_o_n_f_i_g_f_i_l_e] [_u_s_e_r ...]
+
+DDEESSCCRRIIPPTTIIOONN
+       This command is deprecated. It is used to maintain an SRP (secure
+       remote password) file. At most one of the --aadddd, --mmooddiiffyy, --ddeelleettee, and
+       --lliisstt options can be specified.  These options take zero or more
+       usernames as parameters and perform the appropriate operation on the
+       SRP file.  For --lliisstt, if no _u_s_e_r is given then all users are displayed.
+
+       The configuration file to use, and the section within the file, can be
+       specified with the --ccoonnffiigg and --nnaammee flags, respectively.
+
+OOPPTTIIOONNSS
+       --hheellpp
+           Display an option summary.
+
+       --vveerrbboossee
+           Generate verbose output while processing.
+
+       --aadddd
+           Add a user and SRP verifier.
+
+       --mmooddiiffyy
+           Modify the SRP verifier of an existing user.
+
+       --ddeelleettee
+           Delete user from verifier file.
+
+       --lliisstt
+           List users.
+
+       --nnaammee
+           The particular SRP definition to use.
+
+       --ssrrppvvffiillee _f_i_l_e
+           If the config file is not specified, --ssrrppvvffiillee can be used to
+           specify the file to operate on.
+
+       --ggnn Specifies the gg and NN values, using one of the strengths defined in
+           IETF RFC 5054.
+
+       --uusseerriinnffoo
+           specifies additional information to add when adding or modifying a
+           user.
+
+       --ppaassssiinn _a_r_g, --ppaassssoouutt _a_r_g
+           The password source for the input and output file.  For more
+           information about the format of aarrgg see
+           ooppeennssssll--ppaasssspphhrraassee--ooppttiioonnss(1).
+
+       --eennggiinnee _i_d
+           See "Engine Options" in ooppeennssssll(1).  This option is deprecated.
+
+       --rraanndd _f_i_l_e_s, --wwrriitteerraanndd _f_i_l_e
+           See "Random State Options" in ooppeennssssll(1) for details.
+
+       --pprroovviiddeerr _n_a_m_e
+       --pprroovviiddeerr--ppaatthh _p_a_t_h
+       --pprrooppqquueerryy _p_r_o_p_q
+           See "Provider Options" in ooppeennssssll(1), pprroovviiddeerr(7), and pprrooppeerrttyy(7).
+
+       --ccoonnffiigg _c_o_n_f_i_g_f_i_l_e
+           See "Configuration Option" in ooppeennssssll(1).
+
+           [--rraanndd _f_i_l_e_s] [--wwrriitteerraanndd _f_i_l_e]
+
+HHIISSTTOORRYY
+       The --eennggiinnee option was deprecated in OpenSSL 3.0.
+
+CCOOPPYYRRIIGGHHTT
+       Copyright 2017-2021 The OpenSSL Project Authors. All Rights Reserved.
+
+       Licensed under the Apache License 2.0 (the "License").  You may not use
+       this file except in compliance with the License.  You can obtain a copy
+       in the file LICENSE in the source distribution or at
+       <https://www.openssl.org/source/license.html>.
+
+
+
+3.0.1                             2022-01-31                OPENSSL-SRP(1ossl)

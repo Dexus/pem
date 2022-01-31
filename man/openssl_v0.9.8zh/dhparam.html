@@ -1,0 +1,241 @@
+<!-- Creator     : groff version 1.22.4 -->
+<!-- CreationDate: Mon Jan 31 16:14:32 2022 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>DHPARAM</title>
+
+</head>
+<body>
+
+<h1 align="center">DHPARAM</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#OPTIONS">OPTIONS</a><br>
+<a href="#WARNINGS">WARNINGS</a><br>
+<a href="#NOTES">NOTES</a><br>
+<a href="#BUGS">BUGS</a><br>
+<a href="#SEE ALSO">SEE ALSO</a><br>
+<a href="#HISTORY">HISTORY</a><br>
+
+<hr>
+
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">dhparam - DH
+parameter manipulation and generation</p>
+
+<h2>SYNOPSIS
+<a name="SYNOPSIS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>openssl
+dhparam</b> [<b>-inform DER|PEM</b>] [<b>-outform
+DER|PEM</b>] [<b>-in</b> <i>filename</i>] [<b>-out</b>
+<i>filename</i>] [<b>-dsaparam</b>] [<b>-check</b>]
+[<b>-noout</b>] [<b>-text</b>] [<b>-C</b>] [<b>-2</b>]
+[<b>-5</b>] [<b>-rand</b> <i>file(s)</i>] [<b>-engine
+id</b>] [<i>numbits</i>]</p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">This command is
+used to manipulate <small>DH</small> parameter files.</p>
+
+<h2>OPTIONS
+<a name="OPTIONS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>-inform
+DER|PEM</b></p>
+
+<p style="margin-left:17%;">This specifies the input
+format. The <b><small>DER</small></b> option uses an
+<small>ASN1 DER</small> encoded form compatible with the
+PKCS#3 DHparameter structure. The <small>PEM</small> form is
+the default format: it consists of the
+<b><small>DER</small></b> format base64 encoded with
+additional header and footer lines.</p>
+
+<p style="margin-left:11%;"><b>-outform DER|PEM</b></p>
+
+<p style="margin-left:17%;">This specifies the output
+format, the options have the same meaning as the
+<b>-inform</b> option.</p>
+
+<p style="margin-left:11%;"><b>-in</b> <i>filename</i></p>
+
+<p style="margin-left:17%;">This specifies the input
+filename to read parameters from or standard input if this
+option is not specified.</p>
+
+<p style="margin-left:11%;"><b>-out</b> <i>filename</i></p>
+
+<p style="margin-left:17%;">This specifies the output
+filename parameters to. Standard output is used if this
+option is not present. The output filename should <b>not</b>
+be the same as the input filename.</p>
+
+<p style="margin-left:11%;"><b>-dsaparam</b></p>
+
+<p style="margin-left:17%;">If this option is used,
+<small>DSA</small> rather than <small>DH</small> parameters
+are read or created; they are converted to <small>DH</small>
+format. Otherwise, &quot;strong&quot; primes (such that
+(p-1)/2 is also prime) will be used for <small>DH</small>
+parameter generation.</p>
+
+
+<p style="margin-left:17%; margin-top: 1em"><small>DH</small>
+parameter generation with the <b>-dsaparam</b> option is
+much faster, and the recommended exponent length is shorter,
+which makes <small>DH</small> key exchange more efficient.
+Beware that with such DSA-style <small>DH</small>
+parameters, a fresh <small>DH</small> key should be created
+for each use to avoid small-subgroup attacks that may be
+possible otherwise.</p>
+
+<p style="margin-left:11%;"><b>-check</b></p>
+
+<p style="margin-left:17%;">check if the parameters are
+valid primes and generator.</p>
+
+<p style="margin-left:11%;"><b>-2</b>, <b>-5</b></p>
+
+<p style="margin-left:17%;">The generator to use, either 2
+or 5. 2 is the default. If present then the input file is
+ignored and parameters are generated instead.</p>
+
+<p style="margin-left:11%;"><b>-rand</b> <i>file(s)</i></p>
+
+<p style="margin-left:17%;">a file or files containing
+random data used to seed the random number generator, or an
+<small>EGD</small> socket (see <b>RAND_egd</b>(3)). Multiple
+files can be specified separated by a OS-dependent
+character. The separator is <b>;</b> for MS-Windows,
+<b>,</b> for OpenVMS, and <b>:</b> for all others.</p>
+
+<p style="margin-left:11%;"><i>numbits</i></p>
+
+<p style="margin-left:17%;">this option specifies that a
+parameter set should be generated of size <i>numbits</i>. It
+must be the last option. If not present then a value of 512
+is used. If this option is present then the input file is
+ignored and parameters are generated instead.</p>
+
+<p style="margin-left:11%;"><b>-noout</b></p>
+
+<p style="margin-left:17%;">this option inhibits the output
+of the encoded version of the parameters.</p>
+
+<p style="margin-left:11%;"><b>-text</b></p>
+
+<p style="margin-left:17%;">this option prints out the
+<small>DH</small> parameters in human readable form.</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+<p><b>-C</b></p></td>
+<td width="3%"></td>
+<td width="83%">
+
+
+<p>this option converts the parameters into C code. The
+parameters can then be loaded by calling the
+<b>get_dh</b><i>numbits</i><b>()</b> function.</p></td></tr>
+</table>
+
+<p style="margin-left:11%;"><b>-engine id</b></p>
+
+<p style="margin-left:17%;">specifying an engine (by
+it&rsquo;s unique <b>id</b> string) will cause <b>req</b> to
+attempt to obtain a functional reference to the specified
+engine, thus initialising it if needed. The engine will then
+be set as the default for all available algorithms.</p>
+
+<h2>WARNINGS
+<a name="WARNINGS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The program
+<b>dhparam</b> combines the functionality of the programs
+<b>dh</b> and <b>gendh</b> in previous versions of OpenSSL
+and SSLeay. The <b>dh</b> and <b>gendh</b> programs are
+retained for now but may have different purposes in future
+versions of OpenSSL.</p>
+
+<h2>NOTES
+<a name="NOTES"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><small>PEM</small>
+format <small>DH</small> parameters use the header and
+footer lines:</p>
+
+<p style="margin-left:11%; margin-top: 1em">-----BEGIN DH
+PARAMETERS----- <br>
+-----END DH PARAMETERS-----</p>
+
+<p style="margin-left:11%; margin-top: 1em">OpenSSL
+currently only supports the older PKCS#3 <small>DH,</small>
+not the newer X9.42 <small>DH.</small></p>
+
+<p style="margin-left:11%; margin-top: 1em">This program
+manipulates <small>DH</small> parameters not keys.</p>
+
+<h2>BUGS
+<a name="BUGS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">There should be
+a way to generate and manipulate <small>DH</small> keys.</p>
+
+<h2>SEE ALSO
+<a name="SEE ALSO"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>dsaparam</b>(1)</p>
+
+<h2>HISTORY
+<a name="HISTORY"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The
+<b>dhparam</b> command was added in OpenSSL 0.9.5. The
+<b>-dsaparam</b> option was added in OpenSSL 0.9.6.</p>
+<hr>
+</body>
+</html>

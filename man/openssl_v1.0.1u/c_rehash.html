@@ -1,0 +1,144 @@
+<!-- Creator     : groff version 1.22.4 -->
+<!-- CreationDate: Mon Jan 31 16:14:40 2022 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>C_REHASH</title>
+
+</head>
+<body>
+
+<h1 align="center">C_REHASH</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#ENVIRONMENT">ENVIRONMENT</a><br>
+<a href="#SEE ALSO">SEE ALSO</a><br>
+
+<hr>
+
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">c_rehash -
+Create symbolic links to files named by the hash values</p>
+
+<h2>SYNOPSIS
+<a name="SYNOPSIS"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>c_rehash</b>
+[ <i>directory</i>...]</p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>c_rehash</b>
+scans directories and calculates a hash value of each
+&quot;.pem&quot; file in the specified directory list and
+creates symbolic links for each file, where the name of the
+link is the hash value. This utility is useful as many
+programs that use OpenSSL require directories to be set up
+like this in order to find certificates.</p>
+
+<p style="margin-left:11%; margin-top: 1em">If any
+directories are named on the command line, then those are
+processed in turn. If not, then the
+<b><small>SSL_CERT_DIR</small></b> environment variable is
+consulted; this shold be a colon-separated list of
+directories, like the Unix <b><small>PATH</small></b>
+variable. If that is not set then the default directory
+(installation-specific but often
+<b>/usr/local/ssl/certs</b>) is processed.</p>
+
+<p style="margin-left:11%; margin-top: 1em">In order for a
+directory to be processed, the user must have write
+permissions on that directory, otherwise it will be skipped.
+The links created are of the form &quot;HHHHHHHH.D&quot;,
+where each <b>H</b> is a hexadecimal character and <b>D</b>
+is a single decimal digit. When processing a directory,
+<b>c_rehash</b> will first remove all links that have a name
+in that syntax. If you have links in that format used for
+other purposes, they will be removed. Hashes for
+<small>CRL</small> &rsquo;s look similar except the letter
+<b>r</b> appears after the period, like this:
+&quot;HHHHHHHH.rD&quot;.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Multiple
+objects may have the same hash; they will be indicated by
+incrementing the <b>D</b> value. Duplicates are found by
+comparing the full <small>SHA-1</small> fingerprint. A
+warning will be displayed if a duplicate is found.</p>
+
+<p style="margin-left:11%; margin-top: 1em">A warning will
+also be displayed if there are <b>.pem</b> files that cannot
+be parsed as either a certificate or a
+<small>CRL.</small></p>
+
+<p style="margin-left:11%; margin-top: 1em">The program
+uses the <b>openssl</b> program to compute the hashes and
+fingerprints. If not found in the user&rsquo;s
+<b><small>PATH</small></b> , then set the
+<b><small>OPENSSL</small></b> environment variable to the
+full pathname. Any program can be used, it will be invoked
+as follows for either a certificate or
+<small>CRL:</small></p>
+
+<p style="margin-left:11%; margin-top: 1em">$OPENSSL x509
+-hash -fingerprint -noout -in FFFFFF <br>
+$OPENSSL crl -hash -fingerprint -noout -in FFFFFF</p>
+
+<p style="margin-left:11%; margin-top: 1em">where
+<b><small>FFFFFF</small></b> is the filename. It must output
+the hash of the file on the first line, and the fingerprint
+on the second, optionally prefixed with some text and an
+equals sign.</p>
+
+<h2>ENVIRONMENT
+<a name="ENVIRONMENT"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b><small>OPENSSL</small></b></p>
+
+<p style="margin-left:17%;">The path to an executable to
+use to generate hashes and fingerprints (see above).</p>
+
+
+<p style="margin-left:11%;"><b><small>SSL_CERT_DIR</small></b></p>
+
+<p style="margin-left:17%;">Colon separated list of
+directories to operate on. Ignored if directories are listed
+on the command line.</p>
+
+<h2>SEE ALSO
+<a name="SEE ALSO"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>openssl</b>(1),
+<b>crl</b>(1). <b>x509</b>(1).</p>
+<hr>
+</body>
+</html>

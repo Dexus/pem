@@ -1,0 +1,251 @@
+<!-- Creator     : groff version 1.22.4 -->
+<!-- CreationDate: Mon Jan 31 16:15:31 2022 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>OPENSSL-FORMAT-OPTIONS</title>
+
+</head>
+<body>
+
+<h1 align="center">OPENSSL-FORMAT-OPTIONS</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#OPTIONS">OPTIONS</a><br>
+<a href="#COPYRIGHT">COPYRIGHT</a><br>
+
+<hr>
+
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em">openssl-format-options
+- OpenSSL command input and output format options</p>
+
+<h2>SYNOPSIS
+<a name="SYNOPSIS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>openssl</b>
+<i>command</i> [ <i>options</i> ... ] [ <i>parameters</i>
+... ]</p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Several OpenSSL
+commands can take input or generate output in a variety of
+formats.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Since OpenSSL
+3.0 keys, single certificates, and CRLs can be read from
+files in any of the <b><small>DER</small></b> ,
+<b><small>PEM</small></b> or <b>P12</b> formats. Specifying
+their input format is no more needed and the openssl
+commands will automatically try all the possible formats.
+However if the <b><small>DER</small></b> or
+<b><small>PEM</small></b> input format is specified it will
+be enforced.</p>
+
+<p style="margin-left:11%; margin-top: 1em">In order to
+access a key via an engine the input format
+<b><small>ENGINE</small></b> may be used; alternatively the
+key identifier in the &lt;uri&gt; argument of the respective
+key option may be preceded by
+&quot;org.openssl.engine:&quot;. See &quot;Engine
+Options&quot; in <b>openssl</b>(1) for an example usage of
+the latter.</p>
+
+<h2>OPTIONS
+<a name="OPTIONS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>Format
+Options</b> <br>
+The options to specify the format are as follows. Refer to
+the individual man page to see which options are accepted.
+<b><br>
+-inform</b> <i>format</i>, <b>-outform</b> <i>format</i></p>
+
+<p style="margin-left:17%;">The format of the input or
+output streams.</p>
+
+<p style="margin-left:11%;"><b>-keyform</b>
+<i>format</i></p>
+
+<p style="margin-left:17%;">Format of a private key input
+source.</p>
+
+<p style="margin-left:11%;"><b>-CRLform</b>
+<i>format</i></p>
+
+<p style="margin-left:17%;">Format of a <small>CRL</small>
+input source.</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>Format
+Option Arguments</b> <br>
+The possible format arguments are described below. Both
+uppercase and lowercase are accepted.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The list of
+acceptable format arguments, and the default, is described
+in each command documentation.</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="4%">
+
+
+<p><b><small>DER</small></b></p></td>
+<td width="2%"></td>
+<td width="83%">
+
+
+<p>A binary format, encoded or parsed according to
+Distinguished Encoding Rules ( <small>DER</small> ) of the
+<small>ASN.1</small> data language.</p></td></tr>
+</table>
+
+
+<p style="margin-left:11%;"><b><small>ENGINE</small></b></p>
+
+<p style="margin-left:17%;">Used to specify that the
+cryptographic material is in an OpenSSL <b>engine</b>. An
+engine must be configured or specified using the
+<b>-engine</b> option. A password or <small>PIN</small> may
+be supplied to the engine using the <b>-passin</b>
+option.</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="4%">
+
+
+<p><b>P12</b></p></td>
+<td width="2%"></td>
+<td width="83%">
+
+
+<p>A DER-encoded file containing a PKCS#12 object. It might
+be necessary to provide a decryption password to retrieve
+the private key.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="4%">
+
+
+<p><b><small>PEM</small></b></p></td>
+<td width="2%"></td>
+<td width="83%">
+
+
+<p>A text format defined in <small>IETF RFC 1421</small>
+and <small>IETF RFC 7468.</small> Briefly, this is a block
+of base-64 encoding (defined in <small>IETF RFC 4648</small>
+), with specific lines used to mark the start and end:</p></td></tr>
+</table>
+
+<p style="margin-left:17%; margin-top: 1em">Text before the
+BEGIN line is ignored. <br>
+----- BEGIN object-type ----- <br>
+
+OT43gQKBgQC/2OHZoko6iRlNOAQ/tMVFNq7fL81GivoQ9F1U0Qr+DH3ZfaH8eIkX
+<br>
+
+xT0ToMPJUzWAn8pZv0snA0um6SIgvkCuxO84OkANCVbttzXImIsL7pFzfcwV/ERK
+<br>
+UM6j0ZuSMFOCr/lGPAoOQU0fskidGEHi1/kW+suSr28TqsyYZpwBDQ==
+<br>
+----- END object-type ----- <br>
+Text after the END line is also ignored</p>
+
+<p style="margin-left:17%; margin-top: 1em">The
+<i>object-type</i> must match the type of object that is
+expected. For example a &quot;BEGIN X509 CERTIFICATE&quot;
+will not match if the command is trying to read a private
+key. The types supported include:</p>
+
+<p style="margin-left:17%; margin-top: 1em">ANY PRIVATE KEY
+<br>
+CERTIFICATE <br>
+CERTIFICATE REQUEST <br>
+CMS <br>
+DH PARAMETERS <br>
+DSA PARAMETERS <br>
+DSA PUBLIC KEY <br>
+EC PARAMETERS <br>
+EC PRIVATE KEY <br>
+ECDSA PUBLIC KEY <br>
+ENCRYPTED PRIVATE KEY <br>
+PARAMETERS <br>
+PKCS #7 SIGNED DATA <br>
+PKCS7 <br>
+PRIVATE KEY <br>
+PUBLIC KEY <br>
+RSA PRIVATE KEY <br>
+SSL SESSION PARAMETERS <br>
+TRUSTED CERTIFICATE <br>
+X509 CRL <br>
+X9.42 DH PARAMETERS</p>
+
+<p style="margin-left:17%; margin-top: 1em">The following
+legacy <i>object-type</i>&rsquo;s are also supported for
+compatibility with earlier releases:</p>
+
+<p style="margin-left:17%; margin-top: 1em">DSA PRIVATE KEY
+<br>
+NEW CERTIFICATE REQUEST <br>
+RSA PUBLIC KEY <br>
+X509 CERTIFICATE</p>
+
+
+<p style="margin-left:11%;"><b><small>SMIME</small></b></p>
+
+<p style="margin-left:17%;">An S/MIME object as described
+in <small>IETF RFC 8551.</small> Earlier versions were known
+as <small>CMS</small> and are compatible. Note that the
+parsing is simple and might fail to parse some legal
+data.</p>
+
+<h2>COPYRIGHT
+<a name="COPYRIGHT"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Copyright
+2000-2021 The OpenSSL Project Authors. All Rights
+Reserved.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Licensed under
+the Apache License 2.0 (the &quot;License&quot;). You may
+not use this file except in compliance with the License. You
+can obtain a copy in the file <small>LICENSE</small> in the
+source distribution or at
+&lt;https://www.openssl.org/source/license.html&gt;.</p>
+<hr>
+</body>
+</html>

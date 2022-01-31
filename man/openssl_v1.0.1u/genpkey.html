@@ -1,0 +1,313 @@
+<!-- Creator     : groff version 1.22.4 -->
+<!-- CreationDate: Mon Jan 31 16:14:35 2022 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>GENPKEY</title>
+
+</head>
+<body>
+
+<h1 align="center">GENPKEY</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#OPTIONS">OPTIONS</a><br>
+<a href="#KEY GENERATION OPTIONS">KEY GENERATION OPTIONS</a><br>
+<a href="#RSA KEY GENERATION OPTIONS">RSA KEY GENERATION OPTIONS</a><br>
+<a href="#DSA PARAMETER GENERATION OPTIONS">DSA PARAMETER GENERATION OPTIONS</a><br>
+<a href="#DH PARAMETER GENERATION OPTIONS">DH PARAMETER GENERATION OPTIONS</a><br>
+<a href="#EC PARAMETER GENERATION OPTIONS">EC PARAMETER GENERATION OPTIONS</a><br>
+<a href="#GOST2001 KEY GENERATION AND PARAMETER OPTIONS">GOST2001 KEY GENERATION AND PARAMETER OPTIONS</a><br>
+<a href="#NOTES">NOTES</a><br>
+<a href="#EXAMPLES">EXAMPLES</a><br>
+
+<hr>
+
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">genpkey -
+generate a private key</p>
+
+<h2>SYNOPSIS
+<a name="SYNOPSIS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>openssl
+genpkey</b> [<b>-out filename</b>] [<b>-outform PEM|DER</b>]
+[<b>-pass arg</b>] [<b>-cipher</b>] [<b>-engine id</b>]
+[<b>-paramfile file</b>] [<b>-algorithm alg</b>]
+[<b>-pkeyopt opt:value</b>] [<b>-genparam</b>]
+[<b>-text</b>]</p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The
+<b>genpkey</b> command generates a private key.</p>
+
+<h2>OPTIONS
+<a name="OPTIONS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>-out
+filename</b></p>
+
+<p style="margin-left:17%;">the output filename. If this
+argument is not specified then standard output is used.</p>
+
+<p style="margin-left:11%;"><b>-outform DER|PEM</b></p>
+
+<p style="margin-left:17%;">This specifies the output
+format <small>DER</small> or <small>PEM.</small></p>
+
+<p style="margin-left:11%;"><b>-pass arg</b></p>
+
+<p style="margin-left:17%;">the output file password
+source. For more information about the format of <b>arg</b>
+see the <b><small>PASS PHRASE ARGUMENTS</small></b> section
+in <b>openssl</b>(1).</p>
+
+<p style="margin-left:11%;"><b>-cipher</b></p>
+
+<p style="margin-left:17%;">This option encrypts the
+private key with the supplied cipher. Any algorithm name
+accepted by <b>EVP_get_cipherbyname()</b> is acceptable such
+as <b>des3</b>.</p>
+
+<p style="margin-left:11%;"><b>-engine id</b></p>
+
+<p style="margin-left:17%;">specifying an engine (by its
+unique <b>id</b> string) will cause <b>genpkey</b> to
+attempt to obtain a functional reference to the specified
+engine, thus initialising it if needed. The engine will then
+be set as the default for all available algorithms. If used
+this option should precede all other options.</p>
+
+<p style="margin-left:11%;"><b>-algorithm alg</b></p>
+
+<p style="margin-left:17%;">public key algorithm to use
+such as <small>RSA, DSA</small> or <small>DH.</small> If
+used this option must precede any <b>-pkeyopt</b> options.
+The options <b>-paramfile</b> and <b>-algorithm</b> are
+mutually exclusive.</p>
+
+<p style="margin-left:11%;"><b>-pkeyopt opt:value</b></p>
+
+<p style="margin-left:17%;">set the public key algorithm
+option <b>opt</b> to <b>value</b>. The precise set of
+options supported depends on the public key algorithm used
+and its implementation. See <b><small>KEY GENERATION
+OPTIONS</small></b> below for more details.</p>
+
+<p style="margin-left:11%;"><b>-genparam</b></p>
+
+<p style="margin-left:17%;">generate a set of parameters
+instead of a private key. If used this option must precede
+and <b>-algorithm</b>, <b>-paramfile</b> or <b>-pkeyopt</b>
+options.</p>
+
+<p style="margin-left:11%;"><b>-paramfile filename</b></p>
+
+<p style="margin-left:17%;">Some public key algorithms
+generate a private key based on a set of parameters. They
+can be supplied using this option. If this option is used
+the public key algorithm used is determined by the
+parameters. If used this option must precede and
+<b>-pkeyopt</b> options. The options <b>-paramfile</b> and
+<b>-algorithm</b> are mutually exclusive.</p>
+
+<p style="margin-left:11%;"><b>-text</b></p>
+
+<p style="margin-left:17%;">Print an (unencrypted) text
+representation of private and public keys and parameters
+along with the <small>PEM</small> or <small>DER</small>
+structure.</p>
+
+<h2>KEY GENERATION OPTIONS
+<a name="KEY GENERATION OPTIONS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The options
+supported by each algorith and indeed each implementation of
+an algorithm can vary. The options for the OpenSSL
+implementations are detailed below.</p>
+
+<h2>RSA KEY GENERATION OPTIONS
+<a name="RSA KEY GENERATION OPTIONS"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>rsa_keygen_bits:numbits</b></p>
+
+<p style="margin-left:17%;">The number of bits in the
+generated key. If not specified 1024 is used.</p>
+
+
+<p style="margin-left:11%;"><b>rsa_keygen_pubexp:value</b></p>
+
+<p style="margin-left:17%;">The <small>RSA</small> public
+exponent value. This can be a large decimal or hexadecimal
+value if preceded by <b>0x</b>. Default value is 65537.</p>
+
+<h2>DSA PARAMETER GENERATION OPTIONS
+<a name="DSA PARAMETER GENERATION OPTIONS"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>dsa_paramgen_bits:numbits</b></p>
+
+<p style="margin-left:17%;">The number of bits in the
+generated parameters. If not specified 1024 is used.</p>
+
+<h2>DH PARAMETER GENERATION OPTIONS
+<a name="DH PARAMETER GENERATION OPTIONS"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>dh_paramgen_prime_len:numbits</b></p>
+
+<p style="margin-left:17%;">The number of bits in the prime
+parameter <b>p</b>.</p>
+
+
+<p style="margin-left:11%;"><b>dh_paramgen_generator:value</b></p>
+
+<p style="margin-left:17%;">The value to use for the
+generator <b>g</b>.</p>
+
+<h2>EC PARAMETER GENERATION OPTIONS
+<a name="EC PARAMETER GENERATION OPTIONS"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>ec_paramgen_curve:curve</b></p>
+
+<p style="margin-left:17%;">the <small>EC</small> curve to
+use.</p>
+
+<h2>GOST2001 KEY GENERATION AND PARAMETER OPTIONS
+<a name="GOST2001 KEY GENERATION AND PARAMETER OPTIONS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Gost 2001
+support is not enabled by default. To enable this algorithm,
+one should load the ccgost engine in the OpenSSL
+configuration file. See <small>README</small> .gost file in
+the engines/ccgost directiry of the source distribution for
+more details.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Use of a
+parameter file for the <small>GOST R 34.10</small> algorithm
+is optional. Parameters can be specified during key
+generation directly as well as during generation of
+parameter file. <b><br>
+paramset:name</b></p>
+
+<p style="margin-left:17%;">Specifies <small>GOST R
+34.10-2001</small> parameter set according to <small>RFC
+4357.</small> Parameter set can be specified using
+abbreviated name, object short name or numeric
+<small>OID.</small> Following parameter sets are
+supported:</p>
+
+<p style="margin-left:17%; margin-top: 1em">paramset OID
+Usage <br>
+A 1.2.643.2.2.35.1 Signature <br>
+B 1.2.643.2.2.35.2 Signature <br>
+C 1.2.643.2.2.35.3 Signature <br>
+XA 1.2.643.2.2.36.0 Key exchange <br>
+XB 1.2.643.2.2.36.1 Key exchange <br>
+test 1.2.643.2.2.35.0 Test purposes</p>
+
+<h2>NOTES
+<a name="NOTES"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The use of the
+genpkey program is encouraged over the algorithm specific
+utilities because additional algorithm options and
+<small>ENGINE</small> provided algorithms can be used.</p>
+
+<h2>EXAMPLES
+<a name="EXAMPLES"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Generate an
+<small>RSA</small> private key using default parameters:</p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl genpkey
+-algorithm RSA -out key.pem</p>
+
+<p style="margin-left:11%; margin-top: 1em">Encrypt output
+private key using 128 bit <small>AES</small> and the
+passphrase &quot;hello&quot;:</p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl genpkey
+-algorithm RSA -out key.pem -aes-128-cbc -pass
+pass:hello</p>
+
+<p style="margin-left:11%; margin-top: 1em">Generate a 2048
+bit <small>RSA</small> key using 3 as the public
+exponent:</p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl genpkey
+-algorithm RSA -out key.pem -pkeyopt rsa_keygen_bits:2048 \
+<br>
+-pkeyopt rsa_keygen_pubexp:3</p>
+
+<p style="margin-left:11%; margin-top: 1em">Generate 1024
+bit <small>DSA</small> parameters:</p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl genpkey
+-genparam -algorithm DSA -out dsap.pem \ <br>
+-pkeyopt dsa_paramgen_bits:1024</p>
+
+<p style="margin-left:11%; margin-top: 1em">Generate
+<small>DSA</small> key from parameters:</p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl genpkey
+-paramfile dsap.pem -out dsakey.pem</p>
+
+<p style="margin-left:11%; margin-top: 1em">Generate 1024
+bit <small>DH</small> parameters:</p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl genpkey
+-genparam -algorithm DH -out dhp.pem \ <br>
+-pkeyopt dh_paramgen_prime_len:1024</p>
+
+<p style="margin-left:11%; margin-top: 1em">Generate
+<small>DH</small> key from parameters:</p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl genpkey
+-paramfile dhp.pem -out dhkey.pem</p>
+<hr>
+</body>
+</html>

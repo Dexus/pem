@@ -1,0 +1,132 @@
+<!-- Creator     : groff version 1.22.4 -->
+<!-- CreationDate: Mon Jan 31 16:14:43 2022 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>PKEYPARAM</title>
+
+</head>
+<body>
+
+<h1 align="center">PKEYPARAM</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#COMMAND OPTIONS">COMMAND OPTIONS</a><br>
+<a href="#EXAMPLE">EXAMPLE</a><br>
+<a href="#NOTES">NOTES</a><br>
+<a href="#SEE ALSO">SEE ALSO</a><br>
+
+<hr>
+
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em">openssl-pkeyparam,
+pkeyparam - public key algorithm parameter processing
+tool</p>
+
+<h2>SYNOPSIS
+<a name="SYNOPSIS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>openssl
+pkeyparam</b> [<b>-in filename</b>] [<b>-out filename</b>]
+[<b>-text</b>] [<b>-noout</b>] [<b>-engine id</b>]</p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The <b>pkey</b>
+command processes public or private keys. They can be
+converted between various forms and their components printed
+out.</p>
+
+<h2>COMMAND OPTIONS
+<a name="COMMAND OPTIONS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>-in
+filename</b></p>
+
+<p style="margin-left:17%;">This specifies the input
+filename to read parameters from or standard input if this
+option is not specified.</p>
+
+<p style="margin-left:11%;"><b>-out filename</b></p>
+
+<p style="margin-left:17%;">This specifies the output
+filename to write parameters to or standard output if this
+option is not specified.</p>
+
+<p style="margin-left:11%;"><b>-text</b></p>
+
+<p style="margin-left:17%;">prints out the parameters in
+plain text in addition to the encoded version.</p>
+
+<p style="margin-left:11%;"><b>-noout</b></p>
+
+<p style="margin-left:17%;">do not output the encoded
+version of the parameters.</p>
+
+<p style="margin-left:11%;"><b>-engine id</b></p>
+
+<p style="margin-left:17%;">specifying an engine (by its
+unique <b>id</b> string) will cause <b>pkeyparam</b> to
+attempt to obtain a functional reference to the specified
+engine, thus initialising it if needed. The engine will then
+be set as the default for all available algorithms.</p>
+
+<h2>EXAMPLE
+<a name="EXAMPLE"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Print out text
+version of parameters:</p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl
+pkeyparam -in param.pem -text</p>
+
+<h2>NOTES
+<a name="NOTES"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">There are no
+<b>-inform</b> or <b>-outform</b> options for this command
+because only <small>PEM</small> format is supported because
+the key type is determined by the <small>PEM</small>
+headers.</p>
+
+<h2>SEE ALSO
+<a name="SEE ALSO"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>genpkey</b>(1),
+<b>rsa</b>(1), <b>pkcs8</b>(1), <b>dsa</b>(1),
+<b>genrsa</b>(1), <b>gendsa</b>(1)</p>
+<hr>
+</body>
+</html>

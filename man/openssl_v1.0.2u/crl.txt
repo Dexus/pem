@@ -1,0 +1,95 @@
+CRL(1)                              OpenSSL                             CRL(1)
+
+
+
+NNAAMMEE
+       openssl-crl, crl - CRL utility
+
+SSYYNNOOPPSSIISS
+       ooppeennssssll ccrrll [--iinnffoorrmm PPEEMM||DDEERR] [--oouuttffoorrmm PPEEMM||DDEERR] [--tteexxtt] [--iinn ffiilleennaammee]
+       [--oouutt ffiilleennaammee] [--nnaammeeoopptt ooppttiioonn] [--nnoooouutt] [--hhaasshh] [--iissssuueerr]
+       [--llaassttuuppddaattee] [--nneexxttuuppddaattee] [--CCAAffiillee ffiillee] [--CCAAppaatthh ddiirr]
+
+DDEESSCCRRIIPPTTIIOONN
+       The ccrrll command processes CRL files in DER or PEM format.
+
+CCOOMMMMAANNDD OOPPTTIIOONNSS
+       --iinnffoorrmm DDEERR||PPEEMM
+           This specifies the input format. DDEERR format is DER encoded CRL
+           structure. PPEEMM (the default) is a base64 encoded version of the DER
+           form with header and footer lines.
+
+       --oouuttffoorrmm DDEERR||PPEEMM
+           This specifies the output format, the options have the same meaning
+           as the --iinnffoorrmm option.
+
+       --iinn ffiilleennaammee
+           This specifies the input filename to read from or standard input if
+           this option is not specified.
+
+       --oouutt ffiilleennaammee
+           specifies the output filename to write to or standard output by
+           default.
+
+       --tteexxtt
+           print out the CRL in text form.
+
+       --nnaammeeoopptt ooppttiioonn
+           option which determines how the subject or issuer names are
+           displayed. See the description of --nnaammeeoopptt in xx550099(1).
+
+       --nnoooouutt
+           don't output the encoded version of the CRL.
+
+       --hhaasshh
+           output a hash of the issuer name. This can be use to lookup CRLs in
+           a directory by issuer name.
+
+       --hhaasshh__oolldd
+           outputs the "hash" of the CRL issuer name using the older algorithm
+           as used by OpenSSL versions before 1.0.0.
+
+       --iissssuueerr
+           output the issuer name.
+
+       --llaassttuuppddaattee
+           output the lastUpdate field.
+
+       --nneexxttuuppddaattee
+           output the nextUpdate field.
+
+       --CCAAffiillee ffiillee
+           verify the signature on a CRL by looking up the issuing certificate
+           in ffiillee
+
+       --CCAAppaatthh ddiirr
+           verify the signature on a CRL by looking up the issuing certificate
+           in ddiirr. This directory must be a standard certificate directory:
+           that is a hash of each subject name (using xx550099 --hhaasshh) should be
+           linked to each certificate.
+
+NNOOTTEESS
+       The PEM CRL format uses the header and footer lines:
+
+        -----BEGIN X509 CRL-----
+        -----END X509 CRL-----
+
+EEXXAAMMPPLLEESS
+       Convert a CRL file from PEM to DER:
+
+        openssl crl -in crl.pem -outform DER -out crl.der
+
+       Output the text form of a DER encoded certificate:
+
+        openssl crl -in crl.der -inform DER -text -noout
+
+BBUUGGSS
+       Ideally it should be possible to create a CRL using appropriate options
+       and files too.
+
+SSEEEE AALLSSOO
+       ccrrll22ppkkccss77(1), ccaa(1), xx550099(1)
+
+
+
+1.0.2u                            2019-12-20                            CRL(1)

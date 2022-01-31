@@ -1,0 +1,575 @@
+VERIFY(1)                           OpenSSL                          VERIFY(1)
+
+
+
+NNAAMMEE
+       openssl-verify, verify - Utility to verify certificates
+
+SSYYNNOOPPSSIISS
+       ooppeennssssll vveerriiffyy [--hheellpp] [--CCAAffiillee ffiillee] [--CCAAppaatthh ddiirreeccttoorryy] [--nnoo--CCAAffiillee]
+       [--nnoo--CCAAppaatthh] [--aallllooww__pprrooxxyy__cceerrttss] [--aattttiimmee ttiimmeessttaammpp] [--cchheecckk__ssss__ssiigg]
+       [--CCRRLLffiillee ffiillee] [--ccrrll__ddoowwnnllooaadd] [--ccrrll__cchheecckk] [--ccrrll__cchheecckk__aallll] [--eennggiinnee
+       iidd] [--eexxpplliicciitt__ppoolliiccyy] [--eexxtteennddeedd__ccrrll] [--iiggnnoorree__ccrriittiiccaall]
+       [--iinnhhiibbiitt__aannyy] [--iinnhhiibbiitt__mmaapp] [--nnoo__cchheecckk__ttiimmee] [--ppaarrttiiaall__cchhaaiinn]
+       [--ppoolliiccyy aarrgg] [--ppoolliiccyy__cchheecckk] [--ppoolliiccyy__pprriinntt] [--ppuurrppoossee ppuurrppoossee]
+       [--ssuuiitteeBB__112288] [--ssuuiitteeBB__112288__oonnllyy] [--ssuuiitteeBB__119922] [--ttrruusstteedd__ffiirrsstt]
+       [--nnoo__aalltt__cchhaaiinnss] [--uunnttrruusstteedd ffiillee] [--ttrruusstteedd ffiillee] [--uussee__ddeellttaass]
+       [--vveerrbboossee] [--aauutthh__lleevveell lleevveell] [--vveerriiffyy__ddeepptthh nnuumm] [--vveerriiffyy__eemmaaiill
+       eemmaaiill] [--vveerriiffyy__hhoossttnnaammee hhoossttnnaammee] [--vveerriiffyy__iipp iipp] [--vveerriiffyy__nnaammee nnaammee]
+       [--xx550099__ssttrriicctt] [--sshhooww__cchhaaiinn] [--] [certificates]
+
+DDEESSCCRRIIPPTTIIOONN
+       The vveerriiffyy command verifies certificate chains.
+
+OOPPTTIIOONNSS
+       --hheellpp
+           Print out a usage message.
+
+       --CCAAffiillee ffiillee
+           A ffiillee of trusted certificates.  The file should contain one or
+           more certificates in PEM format.
+
+       --CCAAppaatthh ddiirreeccttoorryy
+           A directory of trusted certificates. The certificates should have
+           names of the form: hash.0 or have symbolic links to them of this
+           form ("hash" is the hashed certificate subject name: see the --hhaasshh
+           option of the xx550099 utility). Under Unix the cc__rreehhaasshh script will
+           automatically create symbolic links to a directory of certificates.
+
+       --nnoo--CCAAffiillee
+           Do not load the trusted CA certificates from the default file
+           location
+
+       --nnoo--CCAAppaatthh
+           Do not load the trusted CA certificates from the default directory
+           location
+
+       --aallllooww__pprrooxxyy__cceerrttss
+           Allow the verification of proxy certificates
+
+       --aattttiimmee ttiimmeessttaammpp
+           Perform validation checks using time specified by ttiimmeessttaammpp and not
+           current system time. ttiimmeessttaammpp is the number of seconds since
+           01.01.1970 (UNIX time).
+
+       --cchheecckk__ssss__ssiigg
+           Verify the signature on the self-signed root CA. This is disabled
+           by default because it doesn't add any security.
+
+       --CCRRLLffiillee ffiillee
+           The ffiillee should contain one or more CRLs in PEM format.  This
+           option can be specified more than once to include CRLs from
+           multiple ffiilleess.
+
+       --ccrrll__ddoowwnnllooaadd
+           Attempt to download CRL information for this certificate.
+
+       --ccrrll__cchheecckk
+           Checks end entity certificate validity by attempting to look up a
+           valid CRL.  If a valid CRL cannot be found an error occurs.
+
+       --ccrrll__cchheecckk__aallll
+           Checks the validity of aallll certificates in the chain by attempting
+           to look up valid CRLs.
+
+       --eennggiinnee iidd
+           Specifying an engine iidd will cause vveerriiffyy(1) to attempt to load the
+           specified engine.  The engine will then be set as the default for
+           all its supported algorithms.  If you want to load certificates or
+           CRLs that require engine support via any of the --ttrruusstteedd,
+           --uunnttrruusstteedd or --CCRRLLffiillee options, the --eennggiinnee option must be
+           specified before those options.
+
+       --eexxpplliicciitt__ppoolliiccyy
+           Set policy variable require-explicit-policy (see RFC5280).
+
+       --eexxtteennddeedd__ccrrll
+           Enable extended CRL features such as indirect CRLs and alternate
+           CRL signing keys.
+
+       --iiggnnoorree__ccrriittiiccaall
+           Normally if an unhandled critical extension is present which is not
+           supported by OpenSSL the certificate is rejected (as required by
+           RFC5280).  If this option is set critical extensions are ignored.
+
+       --iinnhhiibbiitt__aannyy
+           Set policy variable inhibit-any-policy (see RFC5280).
+
+       --iinnhhiibbiitt__mmaapp
+           Set policy variable inhibit-policy-mapping (see RFC5280).
+
+       --nnoo__cchheecckk__ttiimmee
+           This option suppresses checking the validity period of certificates
+           and CRLs against the current time. If option --aattttiimmee ttiimmeessttaammpp is
+           used to specify a verification time, the check is not suppressed.
+
+       --ppaarrttiiaall__cchhaaiinn
+           Allow verification to succeed even if a _c_o_m_p_l_e_t_e chain cannot be
+           built to a self-signed trust-anchor, provided it is possible to
+           construct a chain to a trusted certificate that might not be self-
+           signed.
+
+       --ppoolliiccyy aarrgg
+           Enable policy processing and add aarrgg to the user-initial-policy-set
+           (see RFC5280). The policy aarrgg can be an object name an OID in
+           numeric form.  This argument can appear more than once.
+
+       --ppoolliiccyy__cchheecckk
+           Enables certificate policy processing.
+
+       --ppoolliiccyy__pprriinntt
+           Print out diagnostics related to policy processing.
+
+       --ppuurrppoossee ppuurrppoossee
+           The intended use for the certificate. If this option is not
+           specified, vveerriiffyy will not consider certificate purpose during
+           chain verification.  Currently accepted uses are ssssllcclliieenntt,
+           ssssllsseerrvveerr, nnssssssllsseerrvveerr, ssmmiimmeessiiggnn, ssmmiimmeeeennccrryypptt. See the VVEERRIIFFYY
+           OOPPEERRAATTIIOONN section for more information.
+
+       --ssuuiitteeBB__112288__oonnllyy, --ssuuiitteeBB__112288, --ssuuiitteeBB__119922
+           enable the Suite B mode operation at 128 bit Level of Security, 128
+           bit or 192 bit, or only 192 bit Level of Security respectively.
+           See RFC6460 for details. In particular the supported signature
+           algorithms are reduced to support only ECDSA and SHA256 or SHA384
+           and only the elliptic curves P-256 and P-384.
+
+       --ttrruusstteedd__ffiirrsstt
+           When constructing the certificate chain, use the trusted
+           certificates specified via --CCAAffiillee, --CCAAppaatthh or --ttrruusstteedd before any
+           certificates specified via --uunnttrruusstteedd.  This can be useful in
+           environments with Bridge or Cross-Certified CAs.  As of OpenSSL
+           1.1.0 this option is on by default and cannot be disabled.
+
+       --nnoo__aalltt__cchhaaiinnss
+           By default, unless --ttrruusstteedd__ffiirrsstt is specified, when building a
+           certificate chain, if the first certificate chain found is not
+           trusted, then OpenSSL will attempt to replace untrusted issuer
+           certificates with certificates from the trust store to see if an
+           alternative chain can be found that is trusted.  As of OpenSSL
+           1.1.0, with --ttrruusstteedd__ffiirrsstt always on, this option has no effect.
+
+       --uunnttrruusstteedd ffiillee
+           A ffiillee of additional untrusted certificates (intermediate issuer
+           CAs) used to construct a certificate chain from the subject
+           certificate to a trust-anchor.  The ffiillee should contain one or more
+           certificates in PEM format.  This option can be specified more than
+           once to include untrusted certificates from multiple ffiilleess.
+
+       --ttrruusstteedd ffiillee
+           A ffiillee of trusted certificates, which must be self-signed, unless
+           the --ppaarrttiiaall__cchhaaiinn option is specified.  The ffiillee contains one or
+           more certificates in PEM format.  With this option, no additional
+           (e.g., default) certificate lists are consulted.  That is, the only
+           trust-anchors are those listed in ffiillee.  This option can be
+           specified more than once to include trusted certificates from
+           multiple ffiilleess.  This option implies the --nnoo--CCAAffiillee and --nnoo--CCAAppaatthh
+           options.  This option cannot be used in combination with either of
+           the --CCAAffiillee or --CCAAppaatthh options.
+
+       --uussee__ddeellttaass
+           Enable support for delta CRLs.
+
+       --vveerrbboossee
+           Print extra information about the operations being performed.
+
+       --aauutthh__lleevveell lleevveell
+           Set the certificate chain authentication security level to lleevveell.
+           The authentication security level determines the acceptable
+           signature and public key strength when verifying certificate
+           chains.  For a certificate chain to validate, the public keys of
+           all the certificates must meet the specified security lleevveell.  The
+           signature algorithm security level is enforced for all the
+           certificates in the chain except for the chain's _t_r_u_s_t _a_n_c_h_o_r,
+           which is either directly trusted or validated by means other than
+           its signature.  See SSSSLL__CCTTXX__sseett__sseeccuurriittyy__lleevveell(3) for the
+           definitions of the available levels.  The default security level is
+           -1, or "not set".  At security level 0 or lower all algorithms are
+           acceptable.  Security level 1 requires at least 80-bit-equivalent
+           security and is broadly interoperable, though it will, for example,
+           reject MD5 signatures or RSA keys shorter than 1024 bits.
+
+       --vveerriiffyy__ddeepptthh nnuumm
+           Limit the certificate chain to nnuumm intermediate CA certificates.  A
+           maximal depth chain can have up to nnuumm++22 certificates, since
+           neither the end-entity certificate nor the trust-anchor certificate
+           count against the --vveerriiffyy__ddeepptthh limit.
+
+       --vveerriiffyy__eemmaaiill eemmaaiill
+           Verify if the eemmaaiill matches the email address in Subject
+           Alternative Name or the email in the subject Distinguished Name.
+
+       --vveerriiffyy__hhoossttnnaammee hhoossttnnaammee
+           Verify if the hhoossttnnaammee matches DNS name in Subject Alternative Name
+           or Common Name in the subject certificate.
+
+       --vveerriiffyy__iipp iipp
+           Verify if the iipp matches the IP address in Subject Alternative Name
+           of the subject certificate.
+
+       --vveerriiffyy__nnaammee nnaammee
+           Use default verification policies like trust model and required
+           certificate policies identified by nnaammee.  The trust model
+           determines which auxiliary trust or reject OIDs are applicable to
+           verifying the given certificate chain.  See the --aaddddttrruusstt and
+           --aaddddrreejjeecctt options of the xx550099(1) command-line utility.  Supported
+           policy names include: ddeeffaauulltt, ppkkccss77, ssmmiimmee__ssiiggnn, ssssll__cclliieenntt,
+           ssssll__sseerrvveerr.  These mimics the combinations of purpose and trust
+           settings used in SSL, CMS and S/MIME.  As of OpenSSL 1.1.0, the
+           trust model is inferred from the purpose when not specified, so the
+           --vveerriiffyy__nnaammee options are functionally equivalent to the
+           corresponding --ppuurrppoossee settings.
+
+       --xx550099__ssttrriicctt
+           For strict X.509 compliance, disable non-compliant workarounds for
+           broken certificates.
+
+       --sshhooww__cchhaaiinn
+           Display information about the certificate chain that has been built
+           (if successful). Certificates in the chain that came from the
+           untrusted list will be flagged as "untrusted".
+
+       --   Indicates the last option. All arguments following this are assumed
+           to be certificate files. This is useful if the first certificate
+           filename begins with a --.
+
+       cceerrttiiffiiccaatteess
+           One or more certificates to verify. If no certificates are given,
+           vveerriiffyy will attempt to read a certificate from standard input.
+           Certificates must be in PEM format.
+
+VVEERRIIFFYY OOPPEERRAATTIIOONN
+       The vveerriiffyy program uses the same functions as the internal SSL and
+       S/MIME verification, therefore this description applies to these verify
+       operations too.
+
+       There is one crucial difference between the verify operations performed
+       by the vveerriiffyy program: wherever possible an attempt is made to continue
+       after an error whereas normally the verify operation would halt on the
+       first error. This allows all the problems with a certificate chain to
+       be determined.
+
+       The verify operation consists of a number of separate steps.
+
+       Firstly a certificate chain is built up starting from the supplied
+       certificate and ending in the root CA.  It is an error if the whole
+       chain cannot be built up.  The chain is built up by looking up the
+       issuers certificate of the current certificate.  If a certificate is
+       found which is its own issuer it is assumed to be the root CA.
+
+       The process of 'looking up the issuers certificate' itself involves a
+       number of steps.  After all certificates whose subject name matches the
+       issuer name of the current certificate are subject to further tests.
+       The relevant authority key identifier components of the current
+       certificate (if present) must match the subject key identifier (if
+       present) and issuer and serial number of the candidate issuer, in
+       addition the keyUsage extension of the candidate issuer (if present)
+       must permit certificate signing.
+
+       The lookup first looks in the list of untrusted certificates and if no
+       match is found the remaining lookups are from the trusted certificates.
+       The root CA is always looked up in the trusted certificate list: if the
+       certificate to verify is a root certificate then an exact match must be
+       found in the trusted list.
+
+       The second operation is to check every untrusted certificate's
+       extensions for consistency with the supplied purpose. If the --ppuurrppoossee
+       option is not included then no checks are done. The supplied or "leaf"
+       certificate must have extensions compatible with the supplied purpose
+       and all other certificates must also be valid CA certificates. The
+       precise extensions required are described in more detail in the
+       CCEERRTTIIFFIICCAATTEE EEXXTTEENNSSIIOONNSS section of the xx550099 utility.
+
+       The third operation is to check the trust settings on the root CA. The
+       root CA should be trusted for the supplied purpose.  For compatibility
+       with previous versions of OpenSSL, a certificate with no trust settings
+       is considered to be valid for all purposes.
+
+       The final operation is to check the validity of the certificate chain.
+       The validity period is checked against the current system time and the
+       notBefore and notAfter dates in the certificate. The certificate
+       signatures are also checked at this point.
+
+       If all operations complete successfully then certificate is considered
+       valid. If any operation fails then the certificate is not valid.
+
+DDIIAAGGNNOOSSTTIICCSS
+       When a verify operation fails the output messages can be somewhat
+       cryptic. The general form of the error message is:
+
+        server.pem: /C=AU/ST=Queensland/O=CryptSoft Pty Ltd/CN=Test CA (1024 bit)
+        error 24 at 1 depth lookup:invalid CA certificate
+
+       The first line contains the name of the certificate being verified
+       followed by the subject name of the certificate. The second line
+       contains the error number and the depth. The depth is number of the
+       certificate being verified when a problem was detected starting with
+       zero for the certificate being verified itself then 1 for the CA that
+       signed the certificate and so on. Finally a text version of the error
+       number is presented.
+
+       A partial list of the error codes and messages is shown below, this
+       also includes the name of the error code as defined in the header file
+       x509_vfy.h Some of the error codes are defined but never returned:
+       these are described as "unused".
+
+       XX550099__VV__OOKK
+           The operation was successful.
+
+       XX550099__VV__EERRRR__UUNNSSPPEECCIIFFIIEEDD
+           Unspecified error; should not happen.
+
+       XX550099__VV__EERRRR__UUNNAABBLLEE__TTOO__GGEETT__IISSSSUUEERR__CCEERRTT
+           The issuer certificate of a looked up certificate could not be
+           found. This normally means the list of trusted certificates is not
+           complete.
+
+       XX550099__VV__EERRRR__UUNNAABBLLEE__TTOO__GGEETT__CCRRLL
+           The CRL of a certificate could not be found.
+
+       XX550099__VV__EERRRR__UUNNAABBLLEE__TTOO__DDEECCRRYYPPTT__CCEERRTT__SSIIGGNNAATTUURREE
+           The certificate signature could not be decrypted. This means that
+           the actual signature value could not be determined rather than it
+           not matching the expected value, this is only meaningful for RSA
+           keys.
+
+       XX550099__VV__EERRRR__UUNNAABBLLEE__TTOO__DDEECCRRYYPPTT__CCRRLL__SSIIGGNNAATTUURREE
+           The CRL signature could not be decrypted: this means that the
+           actual signature value could not be determined rather than it not
+           matching the expected value. Unused.
+
+       XX550099__VV__EERRRR__UUNNAABBLLEE__TTOO__DDEECCOODDEE__IISSSSUUEERR__PPUUBBLLIICC__KKEEYY
+           The public key in the certificate SubjectPublicKeyInfo could not be
+           read.
+
+       XX550099__VV__EERRRR__CCEERRTT__SSIIGGNNAATTUURREE__FFAAIILLUURREE
+           The signature of the certificate is invalid.
+
+       XX550099__VV__EERRRR__CCRRLL__SSIIGGNNAATTUURREE__FFAAIILLUURREE
+           The signature of the certificate is invalid.
+
+       XX550099__VV__EERRRR__CCEERRTT__NNOOTT__YYEETT__VVAALLIIDD
+           The certificate is not yet valid: the notBefore date is after the
+           current time.
+
+       XX550099__VV__EERRRR__CCEERRTT__HHAASS__EEXXPPIIRREEDD
+           The certificate has expired: that is the notAfter date is before
+           the current time.
+
+       XX550099__VV__EERRRR__CCRRLL__NNOOTT__YYEETT__VVAALLIIDD
+           The CRL is not yet valid.
+
+       XX550099__VV__EERRRR__CCRRLL__HHAASS__EEXXPPIIRREEDD
+           The CRL has expired.
+
+       XX550099__VV__EERRRR__EERRRROORR__IINN__CCEERRTT__NNOOTT__BBEEFFOORREE__FFIIEELLDD
+           The certificate notBefore field contains an invalid time.
+
+       XX550099__VV__EERRRR__EERRRROORR__IINN__CCEERRTT__NNOOTT__AAFFTTEERR__FFIIEELLDD
+           The certificate notAfter field contains an invalid time.
+
+       XX550099__VV__EERRRR__EERRRROORR__IINN__CCRRLL__LLAASSTT__UUPPDDAATTEE__FFIIEELLDD
+           The CRL lastUpdate field contains an invalid time.
+
+       XX550099__VV__EERRRR__EERRRROORR__IINN__CCRRLL__NNEEXXTT__UUPPDDAATTEE__FFIIEELLDD
+           The CRL nextUpdate field contains an invalid time.
+
+       XX550099__VV__EERRRR__OOUUTT__OOFF__MMEEMM
+           An error occurred trying to allocate memory. This should never
+           happen.
+
+       XX550099__VV__EERRRR__DDEEPPTTHH__ZZEERROO__SSEELLFF__SSIIGGNNEEDD__CCEERRTT
+           The passed certificate is self-signed and the same certificate
+           cannot be found in the list of trusted certificates.
+
+       XX550099__VV__EERRRR__SSEELLFF__SSIIGGNNEEDD__CCEERRTT__IINN__CCHHAAIINN
+           The certificate chain could be built up using the untrusted
+           certificates but the root could not be found locally.
+
+       XX550099__VV__EERRRR__UUNNAABBLLEE__TTOO__GGEETT__IISSSSUUEERR__CCEERRTT__LLOOCCAALLLLYY
+           The issuer certificate could not be found: this occurs if the
+           issuer certificate of an untrusted certificate cannot be found.
+
+       XX550099__VV__EERRRR__UUNNAABBLLEE__TTOO__VVEERRIIFFYY__LLEEAAFF__SSIIGGNNAATTUURREE
+           No signatures could be verified because the chain contains only one
+           certificate and it is not self signed.
+
+       XX550099__VV__EERRRR__CCEERRTT__CCHHAAIINN__TTOOOO__LLOONNGG
+           The certificate chain length is greater than the supplied maximum
+           depth. Unused.
+
+       XX550099__VV__EERRRR__CCEERRTT__RREEVVOOKKEEDD
+           The certificate has been revoked.
+
+       XX550099__VV__EERRRR__IINNVVAALLIIDD__CCAA
+           A CA certificate is invalid. Either it is not a CA or its
+           extensions are not consistent with the supplied purpose.
+
+       XX550099__VV__EERRRR__PPAATTHH__LLEENNGGTTHH__EEXXCCEEEEDDEEDD
+           The basicConstraints pathlength parameter has been exceeded.
+
+       XX550099__VV__EERRRR__IINNVVAALLIIDD__PPUURRPPOOSSEE
+           The supplied certificate cannot be used for the specified purpose.
+
+       XX550099__VV__EERRRR__CCEERRTT__UUNNTTRRUUSSTTEEDD
+           the root CA is not marked as trusted for the specified purpose.
+
+       XX550099__VV__EERRRR__CCEERRTT__RREEJJEECCTTEEDD
+           The root CA is marked to reject the specified purpose.
+
+       XX550099__VV__EERRRR__SSUUBBJJEECCTT__IISSSSUUEERR__MMIISSMMAATTCCHH
+           not used as of OpenSSL 1.1.0 as a result of the deprecation of the
+           --iissssuueerr__cchheecckkss option.
+
+       XX550099__VV__EERRRR__AAKKIIDD__SSKKIIDD__MMIISSMMAATTCCHH
+           Not used as of OpenSSL 1.1.0 as a result of the deprecation of the
+           --iissssuueerr__cchheecckkss option.
+
+       XX550099__VV__EERRRR__AAKKIIDD__IISSSSUUEERR__SSEERRIIAALL__MMIISSMMAATTCCHH
+           Not used as of OpenSSL 1.1.0 as a result of the deprecation of the
+           --iissssuueerr__cchheecckkss option.
+
+       XX550099__VV__EERRRR__KKEEYYUUSSAAGGEE__NNOO__CCEERRTTSSIIGGNN
+           Not used as of OpenSSL 1.1.0 as a result of the deprecation of the
+           --iissssuueerr__cchheecckkss option.
+
+       XX550099__VV__EERRRR__UUNNAABBLLEE__TTOO__GGEETT__CCRRLL__IISSSSUUEERR
+           Unable to get CRL issuer certificate.
+
+       XX550099__VV__EERRRR__UUNNHHAANNDDLLEEDD__CCRRIITTIICCAALL__EEXXTTEENNSSIIOONN
+           Unhandled critical extension.
+
+       XX550099__VV__EERRRR__KKEEYYUUSSAAGGEE__NNOO__CCRRLL__SSIIGGNN
+           Key usage does not include CRL signing.
+
+       XX550099__VV__EERRRR__UUNNHHAANNDDLLEEDD__CCRRIITTIICCAALL__CCRRLL__EEXXTTEENNSSIIOONN
+           Unhandled critical CRL extension.
+
+       XX550099__VV__EERRRR__IINNVVAALLIIDD__NNOONN__CCAA
+           Invalid non-CA certificate has CA markings.
+
+       XX550099__VV__EERRRR__PPRROOXXYY__PPAATTHH__LLEENNGGTTHH__EEXXCCEEEEDDEEDD
+           Proxy path length constraint exceeded.
+
+       XX550099__VV__EERRRR__PPRROOXXYY__SSUUBBJJEECCTT__IINNVVAALLIIDD
+           Proxy certificate subject is invalid.  It MUST be the same as the
+           issuer with a single CN component added.
+
+       XX550099__VV__EERRRR__KKEEYYUUSSAAGGEE__NNOO__DDIIGGIITTAALL__SSIIGGNNAATTUURREE
+           Key usage does not include digital signature.
+
+       XX550099__VV__EERRRR__PPRROOXXYY__CCEERRTTIIFFIICCAATTEESS__NNOOTT__AALLLLOOWWEEDD
+           Proxy certificates not allowed, please use --aallllooww__pprrooxxyy__cceerrttss.
+
+       XX550099__VV__EERRRR__IINNVVAALLIIDD__EEXXTTEENNSSIIOONN
+           Invalid or inconsistent certificate extension.
+
+       XX550099__VV__EERRRR__IINNVVAALLIIDD__PPOOLLIICCYY__EEXXTTEENNSSIIOONN
+           Invalid or inconsistent certificate policy extension.
+
+       XX550099__VV__EERRRR__NNOO__EEXXPPLLIICCIITT__PPOOLLIICCYY
+           No explicit policy.
+
+       XX550099__VV__EERRRR__DDIIFFFFEERREENNTT__CCRRLL__SSCCOOPPEE
+           Different CRL scope.
+
+       XX550099__VV__EERRRR__UUNNSSUUPPPPOORRTTEEDD__EEXXTTEENNSSIIOONN__FFEEAATTUURREE
+           Unsupported extension feature.
+
+       XX550099__VV__EERRRR__UUNNNNEESSTTEEDD__RREESSOOUURRCCEE
+           RFC 3779 resource not subset of parent's resources.
+
+       XX550099__VV__EERRRR__PPEERRMMIITTTTEEDD__VVIIOOLLAATTIIOONN
+           Permitted subtree violation.
+
+       XX550099__VV__EERRRR__EEXXCCLLUUDDEEDD__VVIIOOLLAATTIIOONN
+           Excluded subtree violation.
+
+       XX550099__VV__EERRRR__SSUUBBTTRREEEE__MMIINNMMAAXX
+           Name constraints minimum and maximum not supported.
+
+       XX550099__VV__EERRRR__AAPPPPLLIICCAATTIIOONN__VVEERRIIFFIICCAATTIIOONN
+           Application verification failure. Unused.
+
+       XX550099__VV__EERRRR__UUNNSSUUPPPPOORRTTEEDD__CCOONNSSTTRRAAIINNTT__TTYYPPEE
+           Unsupported name constraint type.
+
+       XX550099__VV__EERRRR__UUNNSSUUPPPPOORRTTEEDD__CCOONNSSTTRRAAIINNTT__SSYYNNTTAAXX
+           Unsupported or invalid name constraint syntax.
+
+       XX550099__VV__EERRRR__UUNNSSUUPPPPOORRTTEEDD__NNAAMMEE__SSYYNNTTAAXX
+           Unsupported or invalid name syntax.
+
+       XX550099__VV__EERRRR__CCRRLL__PPAATTHH__VVAALLIIDDAATTIIOONN__EERRRROORR
+           CRL path validation error.
+
+       XX550099__VV__EERRRR__PPAATTHH__LLOOOOPP
+           Path loop.
+
+       XX550099__VV__EERRRR__SSUUIITTEE__BB__IINNVVAALLIIDD__VVEERRSSIIOONN
+           Suite B: certificate version invalid.
+
+       XX550099__VV__EERRRR__SSUUIITTEE__BB__IINNVVAALLIIDD__AALLGGOORRIITTHHMM
+           Suite B: invalid public key algorithm.
+
+       XX550099__VV__EERRRR__SSUUIITTEE__BB__IINNVVAALLIIDD__CCUURRVVEE
+           Suite B: invalid ECC curve.
+
+       XX550099__VV__EERRRR__SSUUIITTEE__BB__IINNVVAALLIIDD__SSIIGGNNAATTUURREE__AALLGGOORRIITTHHMM
+           Suite B: invalid signature algorithm.
+
+       XX550099__VV__EERRRR__SSUUIITTEE__BB__LLOOSS__NNOOTT__AALLLLOOWWEEDD
+           Suite B: curve not allowed for this LOS.
+
+       XX550099__VV__EERRRR__SSUUIITTEE__BB__CCAANNNNOOTT__SSIIGGNN__PP__338844__WWIITTHH__PP__225566
+           Suite B: cannot sign P-384 with P-256.
+
+       XX550099__VV__EERRRR__HHOOSSTTNNAAMMEE__MMIISSMMAATTCCHH
+           Hostname mismatch.
+
+       XX550099__VV__EERRRR__EEMMAAIILL__MMIISSMMAATTCCHH
+           Email address mismatch.
+
+       XX550099__VV__EERRRR__IIPP__AADDDDRREESSSS__MMIISSMMAATTCCHH
+           IP address mismatch.
+
+       XX550099__VV__EERRRR__DDAANNEE__NNOO__MMAATTCCHH
+           DANE TLSA authentication is enabled, but no TLSA records matched
+           the certificate chain.  This error is only possible in ss__cclliieenntt(1).
+
+BBUUGGSS
+       Although the issuer checks are a considerable improvement over the old
+       technique they still suffer from limitations in the underlying
+       X509_LOOKUP API. One consequence of this is that trusted certificates
+       with matching subject name must either appear in a file (as specified
+       by the --CCAAffiillee option) or a directory (as specified by --CCAAppaatthh). If
+       they occur in both then only the certificates in the file will be
+       recognised.
+
+       Previous versions of OpenSSL assume certificates with matching subject
+       name are identical and mishandled them.
+
+       Previous versions of this documentation swapped the meaning of the
+       XX550099__VV__EERRRR__UUNNAABBLLEE__TTOO__GGEETT__IISSSSUUEERR__CCEERRTT and
+       XX550099__VV__EERRRR__UUNNAABBLLEE__TTOO__GGEETT__IISSSSUUEERR__CCEERRTT__LLOOCCAALLLLYY error codes.
+
+SSEEEE AALLSSOO
+       xx550099(1)
+
+HHIISSTTOORRYY
+       The --sshhooww__cchhaaiinn option was first added to OpenSSL 1.1.0.
+
+       The --iissssuueerr__cchheecckkss option is deprecated as of OpenSSL 1.1.0 and is
+       silently ignored.
+
+CCOOPPYYRRIIGGHHTT
+       Copyright 2000-2016 The OpenSSL Project Authors. All Rights Reserved.
+
+       Licensed under the OpenSSL license (the "License").  You may not use
+       this file except in compliance with the License.  You can obtain a copy
+       in the file LICENSE in the source distribution or at
+       <https://www.openssl.org/source/license.html>.
+
+
+
+1.1.0l                            2019-09-10                         VERIFY(1)

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>interfaces.ts</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="../docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page_wrapper">
+            <div id="jump_page">
+              
+                
+                <a class="source" href="ca.html">
+                  src/ca.ts
+                </a>
+              
+                
+                <a class="source" href="convert.html">
+                  src/convert.ts
+                </a>
+              
+                
+                <a class="source" href="debug.html">
+                  src/debug.ts
+                </a>
+              
+                
+                <a class="source" href="helper.html">
+                  src/helper.ts
+                </a>
+              
+                
+                <a class="source" href="interfaces.html">
+                  src/interfaces.ts
+                </a>
+              
+                
+                <a class="source" href="openssl.html">
+                  src/openssl.ts
+                </a>
+              
+                
+                <a class="source" href="pem.html">
+                  src/pem.ts
+                </a>
+              
+                
+                <a class="source" href="types.html">
+                  src/types.ts
+                </a>
+              
+            </div>
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>interfaces.ts</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="sswrap ">
+                <a class="ss" href="#section-1">&#x00a7;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> <span class="hljs-keyword">type</span> {<span class="hljs-title class_">Code</span>, <span class="hljs-title class_">StdOutErr</span>} <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;./types&quot;</span>
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">interface</span> <span class="hljs-title class_">NodeCallback</span>&lt;T1, T2, T3&gt; {
+  (<span class="hljs-attr">err</span>: <span class="hljs-built_in">any</span>, code?: <span class="hljs-variable constant_">T1</span> | <span class="hljs-literal">undefined</span> | <span class="hljs-literal">null</span>, stdout?: <span class="hljs-variable constant_">T2</span> | <span class="hljs-literal">undefined</span> | <span class="hljs-literal">null</span>, stderr?: <span class="hljs-variable constant_">T3</span> | <span class="hljs-literal">undefined</span> | <span class="hljs-literal">null</span>): <span class="hljs-built_in">void</span>;
+
+  (<span class="hljs-attr">err</span>: <span class="hljs-built_in">any</span>, stdout?: <span class="hljs-title class_">StdOutErr</span> | <span class="hljs-literal">undefined</span> | <span class="hljs-literal">null</span>): <span class="hljs-built_in">void</span>;
+
+  (<span class="hljs-attr">err</span>: <span class="hljs-literal">undefined</span> | <span class="hljs-literal">null</span>, <span class="hljs-attr">result</span>: <span class="hljs-variable constant_">T1</span>): <span class="hljs-built_in">void</span>;
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">interface</span> <span class="hljs-title class_">CallbackErrCodeStdoutStderr</span> {
+  (<span class="hljs-attr">err</span>: <span class="hljs-built_in">any</span>, code?: <span class="hljs-title class_">Code</span>, stdout?: <span class="hljs-title class_">StdOutErr</span>, stderr?: <span class="hljs-title class_">StdOutErr</span>): <span class="hljs-built_in">void</span>;
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">interface</span> <span class="hljs-title class_">CallbackErrStdout</span> {
+  (<span class="hljs-attr">err</span>: <span class="hljs-built_in">any</span>, stdout?: <span class="hljs-title class_">StdOutErr</span>): <span class="hljs-built_in">void</span>;
+}
+
+<span class="hljs-comment">/**
+ * Callback for return an error object.
+ *
+ * <span class="hljs-doctag">@callback</span> <span class="hljs-variable">CallbackError</span>
+ * <span class="hljs-doctag">@param</span> {<span class="hljs-type">Error</span>} <span class="hljs-variable">err</span> - An Error Object or null
+ */</span>
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">interface</span> <span class="hljs-title class_">CallbackError</span> {
+  (<span class="hljs-attr">err</span>: <span class="hljs-built_in">any</span>): <span class="hljs-built_in">void</span>;
+}</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

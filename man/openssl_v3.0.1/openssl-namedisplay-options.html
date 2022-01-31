@@ -1,0 +1,262 @@
+<!-- Creator     : groff version 1.22.4 -->
+<!-- CreationDate: Mon Jan 31 16:15:22 2022 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>OPENSSL-NAMEDISPLAY-OPTIONS</title>
+
+</head>
+<body>
+
+<h1 align="center">OPENSSL-NAMEDISPLAY-OPTIONS</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#OPTIONS">OPTIONS</a><br>
+<a href="#COPYRIGHT">COPYRIGHT</a><br>
+
+<hr>
+
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em">openssl-namedisplay-options
+- Distinguished name display options</p>
+
+<h2>SYNOPSIS
+<a name="SYNOPSIS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>openssl</b>
+<i>command</i> [ <i>options</i> ... ] [ <i>parameters</i>
+... ]</p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">OpenSSL
+provides fine-grain control over how the subject and issuer
+<small>DN</small> &rsquo;s are displayed. This is specified
+by using the <b>-nameopt</b> option, which takes a
+comma-separated list of options from the following set. An
+option may be preceded by a minus sign, &quot;-&quot;, to
+turn it off. The default value is &quot;oneline&quot;. The
+first four are the most commonly used.</p>
+
+<h2>OPTIONS
+<a name="OPTIONS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>Name Format
+Option Arguments</b> <br>
+The <small>DN</small> output format can be fine tuned with
+the following flags. <b><br>
+compat</b></p>
+
+<p style="margin-left:17%;">Display the name using an old
+format from previous OpenSSL versions.</p>
+
+
+<p style="margin-left:11%;"><b><small>RFC2253</small></b></p>
+
+<p style="margin-left:17%;">Display the name using the
+format defined in <small>RFC 2253.</small> It is equivalent
+to <b>esc_2253</b>, <b>esc_ctrl</b>, <b>esc_msb</b>,
+<b>utf8</b>, <b>dump_nostr</b>, <b>dump_unknown</b>,
+<b>dump_der</b>, <b>sep_comma_plus</b>, <b>dn_rev</b> and
+<b>sname</b>.</p>
+
+<p style="margin-left:11%;"><b>oneline</b></p>
+
+<p style="margin-left:17%;">Display the name in one line,
+using a format that is more readable <small>RFC
+2253.</small> It is equivalent to <b>esc_2253</b>,
+<b>esc_ctrl</b>, <b>esc_msb</b>, <b>utf8</b>,
+<b>dump_nostr</b>, <b>dump_der</b>, <b>use_quote</b>,
+<b>sep_comma_plus_space</b>, <b>space_eq</b> and
+<b>sname</b> options.</p>
+
+<p style="margin-left:11%;"><b>multiline</b></p>
+
+<p style="margin-left:17%;">Display the name using multiple
+lines. It is equivalent to <b>esc_ctrl</b>, <b>esc_msb</b>,
+<b>sep_multiline</b>, <b>space_eq</b>, <b>lname</b> and
+<b>align</b>.</p>
+
+<p style="margin-left:11%;"><b>esc_2253</b></p>
+
+<p style="margin-left:17%;">Escape the &quot;special&quot;
+characters in a field, as required by <small>RFC
+2253.</small> That is, any of the characters
+&quot;,+&quot;&lt;&gt;;&quot;, &quot;#&quot; at the
+beginning of a string and leading or trailing spaces.</p>
+
+<p style="margin-left:11%;"><b>esc_2254</b></p>
+
+<p style="margin-left:17%;">Escape the &quot;special&quot;
+characters in a field as required by <small>RFC 2254</small>
+in a field. That is, the <b><small>NUL</small></b> character
+and of &quot;()*&quot;.</p>
+
+<p style="margin-left:11%;"><b>esc_ctrl</b></p>
+
+<p style="margin-left:17%;">Escape non-printable
+<small>ASCII</small> characters, codes less than 0x20
+(space) or greater than 0x7F ( <small>DELETE</small> ). They
+are displayed using <small>RFC 2253</small> &quot;\XX&quot;
+notation where <b><small>XX</small></b> are the two hex
+digits representing the character value.</p>
+
+<p style="margin-left:11%;"><b>esc_msb</b></p>
+
+<p style="margin-left:17%;">Escape any characters with the
+most significant bit set, that is with values larger than
+127, as described in <b>esc_ctrl</b>.</p>
+
+<p style="margin-left:11%;"><b>use_quote</b></p>
+
+<p style="margin-left:17%;">Escapes some characters by
+surrounding the entire string with quotation marks,
+&quot;&quot;&quot;. Without this option, individual special
+characters are preceded with a backslash character,
+&quot;\&quot;.</p>
+
+<p style="margin-left:11%;"><b>utf8</b></p>
+
+<p style="margin-left:17%;">Convert all strings to
+<small>UTF-8</small> format first as required by <small>RFC
+2253.</small> If the output device is <small>UTF-8</small>
+compatible, then using this option (and not setting
+<b>esc_msb</b>) may give the correct display of multibyte
+characters. If this option is not set, then multibyte
+characters larger than 0xFF will be output as
+&quot;\UXXXX&quot; for 16 bits or &quot;\WXXXXXXXX&quot; for
+32 bits. In addition, any UTF8Strings will be converted to
+their character form first.</p>
+
+<p style="margin-left:11%;"><b>ignore_type</b></p>
+
+<p style="margin-left:17%;">This option does not attempt to
+interpret multibyte characters in any way. That is, the
+content octets are merely dumped as though one octet
+represents each character. This is useful for diagnostic
+purposes but will result in rather odd looking output.</p>
+
+<p style="margin-left:11%;"><b>show_type</b></p>
+
+<p style="margin-left:17%;">Display the type of the
+<small>ASN1</small> character string before the value, such
+as &quot;BMPSTRING: Hello World&quot;.</p>
+
+<p style="margin-left:11%;"><b>dump_der</b></p>
+
+<p style="margin-left:17%;">Any fields that would be output
+in hex format are displayed using the <small>DER</small>
+encoding of the field. If not set, just the content octets
+are displayed. Either way, the <b>#XXXX...</b> format of
+<small>RFC 2253</small> is used.</p>
+
+<p style="margin-left:11%;"><b>dump_nostr</b></p>
+
+<p style="margin-left:17%;">Dump non-character strings,
+such as <small>ASN.1 <b>OCTET STRING</b></small> . If this
+option is not set, then non character string types will be
+displayed as though each content octet represents a single
+character.</p>
+
+<p style="margin-left:11%;"><b>dump_all</b></p>
+
+<p style="margin-left:17%;">Dump all fields. When this used
+with <b>dump_der</b>, this allows the <small>DER</small>
+encoding of the structure to be unambiguously
+determined.</p>
+
+<p style="margin-left:11%;"><b>dump_unknown</b></p>
+
+<p style="margin-left:17%;">Dump any field whose
+<small>OID</small> is not recognised by OpenSSL.</p>
+
+<p style="margin-left:11%;"><b>sep_comma_plus</b>,
+<b>sep_comma_plus_space</b>, <b>sep_semi_plus_space</b>,
+<b><br>
+sep_multiline</b></p>
+
+<p style="margin-left:17%;">Specify the field separators.
+The first word is used between the Relative Distinguished
+Names (RDNs) and the second is between multiple Attribute
+Value Assertions (AVAs). Multiple AVAs are very rare and
+their use is discouraged. The options ending in
+&quot;space&quot; additionally place a space after the
+separator to make it more readable. The <b>sep_multiline</b>
+starts each field on its own line, and uses &quot;plus
+space&quot; for the <small>AVA</small> separator. It also
+indents the fields by four characters. The default value is
+<b>sep_comma_plus_space</b>.</p>
+
+<p style="margin-left:11%;"><b>dn_rev</b></p>
+
+<p style="margin-left:17%;">Reverse the fields of the
+<small>DN</small> as required by <small>RFC 2253.</small>
+This also reverses the order of multiple AVAs in a field,
+but this is permissible as there is no ordering on
+values.</p>
+
+<p style="margin-left:11%;"><b>nofname</b>, <b>sname</b>,
+<b>lname</b>, <b>oid</b></p>
+
+<p style="margin-left:17%;">Specify how the field name is
+displayed. <b>nofname</b> does not display the field at all.
+<b>sname</b> uses the &quot;short name&quot; form (
+<small>CN</small> for commonName for example). <b>lname</b>
+uses the long form. <b>oid</b> represents the
+<small>OID</small> in numerical form and is useful for
+diagnostic purpose.</p>
+
+<p style="margin-left:11%;"><b>align</b></p>
+
+<p style="margin-left:17%;">Align field values for a more
+readable output. Only usable with <b>sep_multiline</b>.</p>
+
+<p style="margin-left:11%;"><b>space_eq</b></p>
+
+<p style="margin-left:17%;">Places spaces round the equal
+sign, &quot;=&quot;, character which follows the field
+name.</p>
+
+<h2>COPYRIGHT
+<a name="COPYRIGHT"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Copyright
+2000-2020 The OpenSSL Project Authors. All Rights
+Reserved.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Licensed under
+the Apache License 2.0 (the &quot;License&quot;). You may
+not use this file except in compliance with the License. You
+can obtain a copy in the file <small>LICENSE</small> in the
+source distribution or at
+&lt;https://www.openssl.org/source/license.html&gt;.</p>
+<hr>
+</body>
+</html>

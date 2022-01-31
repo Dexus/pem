@@ -1,0 +1,206 @@
+<!-- Creator     : groff version 1.22.4 -->
+<!-- CreationDate: Mon Jan 31 16:15:22 2022 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>OPENSSL-SRP</title>
+
+</head>
+<body>
+
+<h1 align="center">OPENSSL-SRP</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#OPTIONS">OPTIONS</a><br>
+<a href="#HISTORY">HISTORY</a><br>
+<a href="#COPYRIGHT">COPYRIGHT</a><br>
+
+<hr>
+
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">openssl-srp -
+maintain SRP password file</p>
+
+<h2>SYNOPSIS
+<a name="SYNOPSIS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>openssl
+srp</b> [<b>-help</b>] [<b>-verbose</b>] [<b>-add</b>]
+[<b>-modify</b>] [<b>-delete</b>] [<b>-list</b>]
+[<b>-name</b> <i>section</i>] [<b>-srpvfile</b> <i>file</i>]
+[<b>-gn</b> <i>identifier</i>] [<b>-userinfo</b>
+<i>text</i>] [<b>-passin</b> <i>arg</i>] [<b>-passout</b>
+<i>arg</i>] [<b>-engine</b> <i>id</i>] [<b>-rand</b>
+<i>files</i>] [<b>-writerand</b> <i>file</i>]
+[<b>-provider</b> <i>name</i>] [<b>-provider-path</b>
+<i>path</i>] [<b>-propquery</b> <i>propq</i>]
+[<b>-config</b> <i>configfile</i>] [<i>user</i> ...]</p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">This command is
+deprecated. It is used to maintain an <small>SRP</small>
+(secure remote password) file. At most one of the
+<b>-add</b>, <b>-modify</b>, <b>-delete</b>, and
+<b>-list</b> options can be specified. These options take
+zero or more usernames as parameters and perform the
+appropriate operation on the <small>SRP</small> file. For
+<b>-list</b>, if no <i>user</i> is given then all users are
+displayed.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The
+configuration file to use, and the section within the file,
+can be specified with the <b>-config</b> and <b>-name</b>
+flags, respectively.</p>
+
+<h2>OPTIONS
+<a name="OPTIONS"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>-help</b></p>
+
+<p style="margin-left:17%;">Display an option summary.</p>
+
+<p style="margin-left:11%;"><b>-verbose</b></p>
+
+<p style="margin-left:17%;">Generate verbose output while
+processing.</p>
+
+<p style="margin-left:11%;"><b>-add</b></p>
+
+<p style="margin-left:17%;">Add a user and
+<small>SRP</small> verifier.</p>
+
+<p style="margin-left:11%;"><b>-modify</b></p>
+
+<p style="margin-left:17%;">Modify the <small>SRP</small>
+verifier of an existing user.</p>
+
+<p style="margin-left:11%;"><b>-delete</b></p>
+
+<p style="margin-left:17%;">Delete user from verifier
+file.</p>
+
+<p style="margin-left:11%;"><b>-list</b></p>
+
+<p style="margin-left:17%;">List users.</p>
+
+<p style="margin-left:11%;"><b>-name</b></p>
+
+<p style="margin-left:17%;">The particular
+<small>SRP</small> definition to use.</p>
+
+<p style="margin-left:11%;"><b>-srpvfile</b>
+<i>file</i></p>
+
+<p style="margin-left:17%;">If the config file is not
+specified, <b>-srpvfile</b> can be used to specify the file
+to operate on.</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="4%">
+
+
+<p><b>-gn</b></p></td>
+<td width="2%"></td>
+<td width="83%">
+
+
+<p>Specifies the <b>g</b> and <b>N</b> values, using one of
+the strengths defined in <small>IETF RFC 5054.</small></p></td></tr>
+</table>
+
+<p style="margin-left:11%;"><b>-userinfo</b></p>
+
+<p style="margin-left:17%;">specifies additional
+information to add when adding or modifying a user.</p>
+
+<p style="margin-left:11%;"><b>-passin</b> <i>arg</i>,
+<b>-passout</b> <i>arg</i></p>
+
+<p style="margin-left:17%;">The password source for the
+input and output file. For more information about the format
+of <b>arg</b> see <b>openssl-passphrase-options</b>(1).</p>
+
+<p style="margin-left:11%;"><b>-engine</b> <i>id</i></p>
+
+<p style="margin-left:17%;">See &quot;Engine Options&quot;
+in <b>openssl</b>(1). This option is deprecated.</p>
+
+<p style="margin-left:11%;"><b>-rand</b> <i>files</i>,
+<b>-writerand</b> <i>file</i></p>
+
+<p style="margin-left:17%;">See &quot;Random State
+Options&quot; in <b>openssl</b>(1) for details.</p>
+
+<p style="margin-left:11%;"><b>-provider</b> <i>name</i>
+<b><br>
+-provider-path</b> <i>path</i> <b><br>
+-propquery</b> <i>propq</i></p>
+
+<p style="margin-left:17%;">See &quot;Provider
+Options&quot; in <b>openssl</b>(1), <b>provider</b>(7), and
+<b>property</b>(7).</p>
+
+<p style="margin-left:11%;"><b>-config</b>
+<i>configfile</i></p>
+
+<p style="margin-left:17%;">See &quot;Configuration
+Option&quot; in <b>openssl</b>(1).</p>
+
+<p style="margin-left:17%; margin-top: 1em">[<b>-rand</b>
+<i>files</i>] [<b>-writerand</b> <i>file</i>]</p>
+
+<h2>HISTORY
+<a name="HISTORY"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The
+<b>-engine</b> option was deprecated in OpenSSL 3.0.</p>
+
+<h2>COPYRIGHT
+<a name="COPYRIGHT"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Copyright
+2017-2021 The OpenSSL Project Authors. All Rights
+Reserved.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Licensed under
+the Apache License 2.0 (the &quot;License&quot;). You may
+not use this file except in compliance with the License. You
+can obtain a copy in the file <small>LICENSE</small> in the
+source distribution or at
+&lt;https://www.openssl.org/source/license.html&gt;.</p>
+<hr>
+</body>
+</html>

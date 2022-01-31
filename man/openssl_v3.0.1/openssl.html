@@ -1,0 +1,1260 @@
+<!-- Creator     : groff version 1.22.4 -->
+<!-- CreationDate: Mon Jan 31 16:15:23 2022 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>OPENSSL</title>
+
+</head>
+<body>
+
+<h1 align="center">OPENSSL</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#COMMAND SUMMARY">COMMAND SUMMARY</a><br>
+<a href="#OPTIONS">OPTIONS</a><br>
+<a href="#ENVIRONMENT">ENVIRONMENT</a><br>
+<a href="#SEE ALSO">SEE ALSO</a><br>
+<a href="#HISTORY">HISTORY</a><br>
+<a href="#COPYRIGHT">COPYRIGHT</a><br>
+
+<hr>
+
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">openssl -
+OpenSSL command line program</p>
+
+<h2>SYNOPSIS
+<a name="SYNOPSIS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>openssl</b>
+<i>command</i> [ <i>options</i> ... ] [ <i>parameters</i>
+... ]</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>openssl list
+standard-commands</b> | <b>digest-commands</b> |
+<b>cipher-commands</b> | <b>cipher-algorithms</b> |
+<b>digest-algorithms</b> | <b>mac-algorithms</b> |
+<b>public-key-algorithms</b></p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>openssl
+no-</b> <i><small>XXX</small></i> [ <i>options</i> ]</p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">OpenSSL is a
+cryptography toolkit implementing the Secure Sockets Layer (
+<small>SSL</small> v2/v3) and Transport Layer Security (
+<small>TLS</small> v1) network protocols and related
+cryptography standards required by them.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The
+<b>openssl</b> program is a command line program for using
+the various cryptography functions of OpenSSL&rsquo;s
+<b>crypto</b> library from the shell. It can be used for</p>
+
+<p style="margin-left:11%; margin-top: 1em">o Creation and
+management of private keys, public keys and parameters <br>
+o Public key cryptographic operations <br>
+o Creation of X.509 certificates, CSRs and CRLs <br>
+o Calculation of Message Digests and Message Authentication
+Codes <br>
+o Encryption and Decryption with Ciphers <br>
+o SSL/TLS Client and Server Tests <br>
+o Handling of S/MIME signed or encrypted mail <br>
+o Timestamp requests, generation and verification</p>
+
+<h2>COMMAND SUMMARY
+<a name="COMMAND SUMMARY"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The
+<b>openssl</b> program provides a rich variety of commands
+(<i>command</i> in the &quot; <small>SYNOPSIS&quot;</small>
+above). Each command can have many options and argument
+parameters, shown above as <i>options</i> and
+<i>parameters</i>.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Detailed
+documentation and use cases for most standard subcommands
+are available (e.g., <b>openssl-x509</b>(1)).</p>
+
+<p style="margin-left:11%; margin-top: 1em">The list
+options <b>-standard-commands</b>, <b>-digest-commands</b>,
+and <b>-cipher-commands</b> output a list (one entry per
+line) of the names of all standard commands, message digest
+commands, or cipher commands, respectively, that are
+available.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The list
+parameters <b>-cipher-algorithms</b>,
+<b>-digest-algorithms</b>, and <b>-mac-algorithms</b> list
+all cipher, message digest, and message authentication code
+names, one entry per line. Aliases are listed as:</p>
+
+<p style="margin-left:11%; margin-top: 1em">from =&gt;
+to</p>
+
+<p style="margin-left:11%; margin-top: 1em">The list
+parameter <b>-public-key-algorithms</b> lists all supported
+public key algorithms.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The command
+<b>no-</b> <i><small>XXX</small></i> tests whether a command
+of the specified name is available. If no command named
+<i><small>XXX</small></i> exists, it returns 0 (success) and
+prints <b>no-</b> <i><small>XXX</small></i> ; otherwise it
+returns 1 and prints <i><small>XXX</small></i> . In both
+cases, the output goes to <b>stdout</b> and nothing is
+printed to <b>stderr</b>. Additional command line arguments
+are always ignored. Since for each cipher there is a command
+of the same name, this provides an easy way for shell
+scripts to test for the availability of ciphers in the
+<b>openssl</b> program. (<b>no-</b>
+<i><small>XXX</small></i> is not able to detect
+pseudo-commands such as <b>quit</b>, <b>list</b>, or
+<b>no-</b> <i><small>XXX</small></i> itself.)</p>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>Configuration
+Option</b> <br>
+Many commands use an external configuration file for some or
+all of their arguments and have a <b>-config</b> option to
+specify that file. The default name of the file is
+<i>openssl.cnf</i> in the default certificate storage area,
+which can be determined from the <b>openssl-version</b>(1)
+command using the <b>-d</b> or <b>-a</b> option. The
+environment variable <b><small>OPENSSL_CONF</small></b> can
+be used to specify a different file location or to disable
+loading a configuration (using the empty string).</p>
+
+<p style="margin-left:11%; margin-top: 1em">Among others,
+the configuration file can be used to load modules and to
+specify parameters for generating certificates and random
+numbers. See <b>config</b>(5) for details.</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>Standard
+Commands <br>
+asn1parse</b></p>
+
+<p style="margin-left:17%;">Parse an <small>ASN.1</small>
+sequence.</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+<p><b>ca</b></p></td>
+<td width="3%"></td>
+<td width="58%">
+
+
+<p>Certificate Authority ( <small>CA</small> )
+Management.</p> </td>
+<td width="25%">
+</td></tr>
+</table>
+
+<p style="margin-left:11%;"><b>ciphers</b></p>
+
+<p style="margin-left:17%;">Cipher Suite Description
+Determination.</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="4%">
+
+
+<p><b>cms</b></p></td>
+<td width="2%"></td>
+<td width="69%">
+
+
+<p><small>CMS</small> (Cryptographic Message Syntax)
+command.</p> </td>
+<td width="14%">
+</td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="4%">
+
+
+<p><b>crl</b></p></td>
+<td width="2%"></td>
+<td width="69%">
+
+
+<p>Certificate Revocation List ( <small>CRL</small> )
+Management.</p> </td>
+<td width="14%">
+</td></tr>
+</table>
+
+<p style="margin-left:11%;"><b>crl2pkcs7</b></p>
+
+<p style="margin-left:17%;"><small>CRL</small> to PKCS#7
+Conversion.</p>
+
+<p style="margin-left:11%;"><b>dgst</b></p>
+
+<p style="margin-left:17%;">Message Digest calculation.
+<small>MAC</small> calculations are superseded by
+<b>openssl-mac</b>(1).</p>
+
+<p style="margin-left:11%;"><b>dhparam</b></p>
+
+<p style="margin-left:17%;">Generation and Management of
+Diffie-Hellman Parameters. Superseded by
+<b>openssl-genpkey</b>(1) and
+<b>openssl-pkeyparam</b>(1).</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="4%">
+
+
+<p><b>dsa</b></p></td>
+<td width="2%"></td>
+<td width="31%">
+
+
+<p><small>DSA</small> Data Management.</p></td>
+<td width="52%">
+</td></tr>
+</table>
+
+<p style="margin-left:11%;"><b>dsaparam</b></p>
+
+<p style="margin-left:17%;"><small>DSA</small> Parameter
+Generation and Management. Superseded by
+<b>openssl-genpkey</b>(1) and
+<b>openssl-pkeyparam</b>(1).</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+<p><b>ec</b></p></td>
+<td width="3%"></td>
+<td width="54%">
+
+
+<p><small>EC</small> (Elliptic curve) key processing.</p></td>
+<td width="29%">
+</td></tr>
+</table>
+
+<p style="margin-left:11%;"><b>ecparam</b></p>
+
+<p style="margin-left:17%;"><small>EC</small> parameter
+manipulation and generation.</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="4%">
+
+
+<p><b>enc</b></p></td>
+<td width="2%"></td>
+<td width="57%">
+
+
+<p>Encryption, decryption, and encoding.</p></td>
+<td width="26%">
+</td></tr>
+</table>
+
+<p style="margin-left:11%;"><b>engine</b></p>
+
+<p style="margin-left:17%;">Engine (loadable module)
+information and manipulation.</p>
+
+<p style="margin-left:11%;"><b>errstr</b></p>
+
+<p style="margin-left:17%;">Error Number to Error String
+Conversion.</p>
+
+<p style="margin-left:11%;"><b>fipsinstall</b></p>
+
+<p style="margin-left:17%;"><small>FIPS</small>
+configuration installation.</p>
+
+<p style="margin-left:11%;"><b>gendsa</b></p>
+
+<p style="margin-left:17%;">Generation of
+<small>DSA</small> Private Key from Parameters. Superseded
+by <b>openssl-genpkey</b>(1) and <b>openssl-pkey</b>(1).</p>
+
+<p style="margin-left:11%;"><b>genpkey</b></p>
+
+<p style="margin-left:17%;">Generation of Private Key or
+Parameters.</p>
+
+<p style="margin-left:11%;"><b>genrsa</b></p>
+
+<p style="margin-left:17%;">Generation of
+<small>RSA</small> Private Key. Superseded by
+<b>openssl-genpkey</b>(1).</p>
+
+<p style="margin-left:11%;"><b>help</b></p>
+
+<p style="margin-left:17%;">Display information about a
+command&rsquo;s options.</p>
+
+<p style="margin-left:11%;"><b>info</b></p>
+
+<p style="margin-left:17%;">Display diverse information
+built into the OpenSSL libraries.</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="4%">
+
+
+<p><b>kdf</b></p></td>
+<td width="2%"></td>
+<td width="38%">
+
+
+<p>Key Derivation Functions.</p></td>
+<td width="45%">
+</td></tr>
+</table>
+
+<p style="margin-left:11%;"><b>list</b></p>
+
+<p style="margin-left:17%;">List algorithms and
+features.</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="4%">
+
+
+<p><b>mac</b></p></td>
+<td width="2%"></td>
+<td width="61%">
+
+
+<p>Message Authentication Code Calculation.</p></td>
+<td width="22%">
+</td></tr>
+</table>
+
+<p style="margin-left:11%;"><b>nseq</b></p>
+
+<p style="margin-left:17%;">Create or examine a Netscape
+certificate sequence.</p>
+
+<p style="margin-left:11%;"><b>ocsp</b></p>
+
+<p style="margin-left:17%;">Online Certificate Status
+Protocol command.</p>
+
+<p style="margin-left:11%;"><b>passwd</b></p>
+
+<p style="margin-left:17%;">Generation of hashed
+passwords.</p>
+
+<p style="margin-left:11%;"><b>pkcs12</b></p>
+
+<p style="margin-left:17%;">PKCS#12 Data Management.</p>
+
+<p style="margin-left:11%;"><b>pkcs7</b></p>
+
+<p style="margin-left:17%;">PKCS#7 Data Management.</p>
+
+<p style="margin-left:11%;"><b>pkcs8</b></p>
+
+<p style="margin-left:17%;">PKCS#8 format private key
+conversion command.</p>
+
+<p style="margin-left:11%;"><b>pkey</b></p>
+
+<p style="margin-left:17%;">Public and private key
+management.</p>
+
+<p style="margin-left:11%;"><b>pkeyparam</b></p>
+
+<p style="margin-left:17%;">Public key algorithm parameter
+management.</p>
+
+<p style="margin-left:11%;"><b>pkeyutl</b></p>
+
+<p style="margin-left:17%;">Public key algorithm
+cryptographic operation command.</p>
+
+<p style="margin-left:11%;"><b>prime</b></p>
+
+<p style="margin-left:17%;">Compute prime numbers.</p>
+
+<p style="margin-left:11%;"><b>rand</b></p>
+
+<p style="margin-left:17%;">Generate pseudo-random
+bytes.</p>
+
+<p style="margin-left:11%;"><b>rehash</b></p>
+
+<p style="margin-left:17%;">Create symbolic links to
+certificate and <small>CRL</small> files named by the hash
+values.</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="4%">
+
+
+<p><b>req</b></p></td>
+<td width="2%"></td>
+<td width="83%">
+
+
+<p>PKCS#10 X.509 Certificate Signing Request (
+<small>CSR</small> ) Management.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="4%">
+
+
+<p><b>rsa</b></p></td>
+<td width="2%"></td>
+<td width="83%">
+
+
+<p><small>RSA</small> key management.</p></td></tr>
+</table>
+
+<p style="margin-left:11%;"><b>rsautl</b></p>
+
+<p style="margin-left:17%;"><small>RSA</small> command for
+signing, verification, encryption, and decryption.
+Superseded by <b>openssl-pkeyutl</b>(1).</p>
+
+<p style="margin-left:11%;"><b>s_client</b></p>
+
+<p style="margin-left:17%;">This implements a generic
+<small>SSL/TLS</small> client which can establish a
+transparent connection to a remote server speaking
+<small>SSL/TLS.</small> It&rsquo;s intended for testing
+purposes only and provides only rudimentary interface
+functionality but internally uses mostly all functionality
+of the OpenSSL <b>ssl</b> library.</p>
+
+<p style="margin-left:11%;"><b>s_server</b></p>
+
+<p style="margin-left:17%;">This implements a generic
+<small>SSL/TLS</small> server which accepts connections from
+remote clients speaking <small>SSL/TLS.</small> It&rsquo;s
+intended for testing purposes only and provides only
+rudimentary interface functionality but internally uses
+mostly all functionality of the OpenSSL <b>ssl</b> library.
+It provides both an own command line oriented protocol for
+testing <small>SSL</small> functions and a simple
+<small>HTTP</small> response facility to emulate an
+SSL/TLS-aware webserver.</p>
+
+<p style="margin-left:11%;"><b>s_time</b></p>
+
+<p style="margin-left:17%;"><small>SSL</small> Connection
+Timer.</p>
+
+<p style="margin-left:11%;"><b>sess_id</b></p>
+
+<p style="margin-left:17%;"><small>SSL</small> Session Data
+Management.</p>
+
+<p style="margin-left:11%;"><b>smime</b></p>
+
+<p style="margin-left:17%;">S/MIME mail processing.</p>
+
+<p style="margin-left:11%;"><b>speed</b></p>
+
+<p style="margin-left:17%;">Algorithm Speed
+Measurement.</p>
+
+<p style="margin-left:11%;"><b>spkac</b></p>
+
+<p style="margin-left:17%;"><small>SPKAC</small> printing
+and generating command.</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="4%">
+
+
+<p><b>srp</b></p></td>
+<td width="2%"></td>
+<td width="83%">
+
+
+<p>Maintain <small>SRP</small> password file. This command
+is deprecated.</p></td></tr>
+</table>
+
+<p style="margin-left:11%;"><b>storeutl</b></p>
+
+<p style="margin-left:17%;">Command to list and display
+certificates, keys, CRLs, etc.</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+<p><b>ts</b></p></td>
+<td width="3%"></td>
+<td width="49%">
+
+
+<p>Time Stamping Authority command.</p></td>
+<td width="34%">
+</td></tr>
+</table>
+
+<p style="margin-left:11%;"><b>verify</b></p>
+
+<p style="margin-left:17%;">X.509 Certificate Verification.
+See also the <b>openssl-verification-options</b>(1) manual
+page.</p>
+
+<p style="margin-left:11%;"><b>version</b></p>
+
+<p style="margin-left:17%;">OpenSSL Version
+Information.</p>
+
+<p style="margin-left:11%;"><b>x509</b></p>
+
+<p style="margin-left:17%;">X.509 Certificate Data
+Management.</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>Message
+Digest Commands <br>
+blake2b512</b></p>
+
+<p style="margin-left:17%;">BLAKE2b-512 Digest</p>
+
+<p style="margin-left:11%;"><b>blake2s256</b></p>
+
+<p style="margin-left:17%;">BLAKE2s-256 Digest</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="4%">
+
+
+<p><b>md2</b></p></td>
+<td width="2%"></td>
+<td width="15%">
+
+
+<p><small>MD2</small> Digest</p></td>
+<td width="68%">
+</td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="4%">
+
+
+<p><b>md4</b></p></td>
+<td width="2%"></td>
+<td width="15%">
+
+
+<p><small>MD4</small> Digest</p></td>
+<td width="68%">
+</td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="4%">
+
+
+<p><b>md5</b></p></td>
+<td width="2%"></td>
+<td width="15%">
+
+
+<p><small>MD5</small> Digest</p></td>
+<td width="68%">
+</td></tr>
+</table>
+
+<p style="margin-left:11%;"><b>mdc2</b></p>
+
+<p style="margin-left:17%;"><small>MDC2</small> Digest</p>
+
+<p style="margin-left:11%;"><b>rmd160</b></p>
+
+<p style="margin-left:17%;"><small>RMD-160</small>
+Digest</p>
+
+<p style="margin-left:11%;"><b>sha1</b></p>
+
+<p style="margin-left:17%;"><small>SHA-1</small> Digest</p>
+
+<p style="margin-left:11%;"><b>sha224</b></p>
+
+<p style="margin-left:17%;"><small>SHA-2 224</small>
+Digest</p>
+
+<p style="margin-left:11%;"><b>sha256</b></p>
+
+<p style="margin-left:17%;"><small>SHA-2 256</small>
+Digest</p>
+
+<p style="margin-left:11%;"><b>sha384</b></p>
+
+<p style="margin-left:17%;"><small>SHA-2 384</small>
+Digest</p>
+
+<p style="margin-left:11%;"><b>sha512</b></p>
+
+<p style="margin-left:17%;"><small>SHA-2 512</small>
+Digest</p>
+
+<p style="margin-left:11%;"><b>sha3-224</b></p>
+
+<p style="margin-left:17%;"><small>SHA-3 224</small>
+Digest</p>
+
+<p style="margin-left:11%;"><b>sha3-256</b></p>
+
+<p style="margin-left:17%;"><small>SHA-3 256</small>
+Digest</p>
+
+<p style="margin-left:11%;"><b>sha3-384</b></p>
+
+<p style="margin-left:17%;"><small>SHA-3 384</small>
+Digest</p>
+
+<p style="margin-left:11%;"><b>sha3-512</b></p>
+
+<p style="margin-left:17%;"><small>SHA-3 512</small>
+Digest</p>
+
+<p style="margin-left:11%;"><b>shake128</b></p>
+
+<p style="margin-left:17%;"><small>SHA-3 SHAKE128</small>
+Digest</p>
+
+<p style="margin-left:11%;"><b>shake256</b></p>
+
+<p style="margin-left:17%;"><small>SHA-3 SHAKE256</small>
+Digest</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="4%">
+
+
+<p><b>sm3</b></p></td>
+<td width="2%"></td>
+<td width="15%">
+
+
+<p><small>SM3</small> Digest</p></td>
+<td width="68%">
+</td></tr>
+</table>
+
+<p style="margin-left:11%; margin-top: 1em"><b>Encryption,
+Decryption, and Encoding Commands</b> <br>
+The following aliases provide convenient access to the most
+used encodings and ciphers.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Depending on
+how OpenSSL was configured and built, not all ciphers listed
+here may be present. See <b>openssl-enc</b>(1) for more
+information. <b><br>
+aes128</b>, <b>aes-128-cbc</b>, <b>aes-128-cfb</b>,
+<b>aes-128-ctr</b>, <b>aes-128-ecb</b>,
+<b>aes-128-ofb</b></p>
+
+<p style="margin-left:17%;"><small>AES-128</small>
+Cipher</p>
+
+<p style="margin-left:11%;"><b>aes192</b>,
+<b>aes-192-cbc</b>, <b>aes-192-cfb</b>, <b>aes-192-ctr</b>,
+<b>aes-192-ecb</b>, <b>aes-192-ofb</b></p>
+
+<p style="margin-left:17%;"><small>AES-192</small>
+Cipher</p>
+
+<p style="margin-left:11%;"><b>aes256</b>,
+<b>aes-256-cbc</b>, <b>aes-256-cfb</b>, <b>aes-256-ctr</b>,
+<b>aes-256-ecb</b>, <b>aes-256-ofb</b></p>
+
+<p style="margin-left:17%;"><small>AES-256</small>
+Cipher</p>
+
+<p style="margin-left:11%;"><b>aria128</b>,
+<b>aria-128-cbc</b>, <b>aria-128-cfb</b>,
+<b>aria-128-ctr</b>, <b>aria-128-ecb</b>, <b><br>
+aria-128-ofb</b></p>
+
+<p style="margin-left:17%;">Aria-128 Cipher</p>
+
+<p style="margin-left:11%;"><b>aria192</b>,
+<b>aria-192-cbc</b>, <b>aria-192-cfb</b>,
+<b>aria-192-ctr</b>, <b>aria-192-ecb</b>, <b><br>
+aria-192-ofb</b></p>
+
+<p style="margin-left:17%;">Aria-192 Cipher</p>
+
+<p style="margin-left:11%;"><b>aria256</b>,
+<b>aria-256-cbc</b>, <b>aria-256-cfb</b>,
+<b>aria-256-ctr</b>, <b>aria-256-ecb</b>, <b><br>
+aria-256-ofb</b></p>
+
+<p style="margin-left:17%;">Aria-256 Cipher</p>
+
+<p style="margin-left:11%;"><b>base64</b></p>
+
+<p style="margin-left:17%;">Base64 Encoding</p>
+
+<p style="margin-left:11%;"><b>bf</b>, <b>bf-cbc</b>,
+<b>bf-cfb</b>, <b>bf-ecb</b>, <b>bf-ofb</b></p>
+
+<p style="margin-left:17%;">Blowfish Cipher</p>
+
+<p style="margin-left:11%;"><b>camellia128</b>,
+<b>camellia-128-cbc</b>, <b>camellia-128-cfb</b>,
+<b>camellia-128-ctr</b>, <b><br>
+camellia-128-ecb</b>, <b>camellia-128-ofb</b></p>
+
+<p style="margin-left:17%;">Camellia-128 Cipher</p>
+
+<p style="margin-left:11%;"><b>camellia192</b>,
+<b>camellia-192-cbc</b>, <b>camellia-192-cfb</b>,
+<b>camellia-192-ctr</b>, <b><br>
+camellia-192-ecb</b>, <b>camellia-192-ofb</b></p>
+
+<p style="margin-left:17%;">Camellia-192 Cipher</p>
+
+<p style="margin-left:11%;"><b>camellia256</b>,
+<b>camellia-256-cbc</b>, <b>camellia-256-cfb</b>,
+<b>camellia-256-ctr</b>, <b><br>
+camellia-256-ecb</b>, <b>camellia-256-ofb</b></p>
+
+<p style="margin-left:17%;">Camellia-256 Cipher</p>
+
+<p style="margin-left:11%;"><b>cast</b>,
+<b>cast-cbc</b></p>
+
+<p style="margin-left:17%;"><small>CAST</small> Cipher</p>
+
+<p style="margin-left:11%;"><b>cast5-cbc</b>,
+<b>cast5-cfb</b>, <b>cast5-ecb</b>, <b>cast5-ofb</b></p>
+
+<p style="margin-left:17%;"><small>CAST5</small> Cipher</p>
+
+<p style="margin-left:11%;"><b>chacha20</b></p>
+
+<p style="margin-left:17%;">Chacha20 Cipher</p>
+
+<p style="margin-left:11%;"><b>des</b>, <b>des-cbc</b>,
+<b>des-cfb</b>, <b>des-ecb</b>, <b>des-ede</b>,
+<b>des-ede-cbc</b>, <b>des-ede-cfb</b>, <b><br>
+des-ede-ofb</b>, <b>des-ofb</b></p>
+
+<p style="margin-left:17%;"><small>DES</small> Cipher</p>
+
+<p style="margin-left:11%;"><b>des3</b>, <b>desx</b>,
+<b>des-ede3</b>, <b>des-ede3-cbc</b>, <b>des-ede3-cfb</b>,
+<b>des-ede3-ofb</b></p>
+
+<p style="margin-left:17%;">Triple-DES Cipher</p>
+
+<p style="margin-left:11%;"><b>idea</b>, <b>idea-cbc</b>,
+<b>idea-cfb</b>, <b>idea-ecb</b>, <b>idea-ofb</b></p>
+
+<p style="margin-left:17%;"><small>IDEA</small> Cipher</p>
+
+<p style="margin-left:11%;"><b>rc2</b>, <b>rc2-cbc</b>,
+<b>rc2-cfb</b>, <b>rc2-ecb</b>, <b>rc2-ofb</b></p>
+
+<p style="margin-left:17%;"><small>RC2</small> Cipher</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="4%">
+
+
+<p><b>rc4</b></p></td>
+<td width="2%"></td>
+<td width="15%">
+
+
+<p><small>RC4</small> Cipher</p></td>
+<td width="68%">
+</td></tr>
+</table>
+
+<p style="margin-left:11%;"><b>rc5</b>, <b>rc5-cbc</b>,
+<b>rc5-cfb</b>, <b>rc5-ecb</b>, <b>rc5-ofb</b></p>
+
+<p style="margin-left:17%;"><small>RC5</small> Cipher</p>
+
+<p style="margin-left:11%;"><b>seed</b>, <b>seed-cbc</b>,
+<b>seed-cfb</b>, <b>seed-ecb</b>, <b>seed-ofb</b></p>
+
+<p style="margin-left:17%;"><small>SEED</small> Cipher</p>
+
+<p style="margin-left:11%;"><b>sm4</b>, <b>sm4-cbc</b>,
+<b>sm4-cfb</b>, <b>sm4-ctr</b>, <b>sm4-ecb</b>,
+<b>sm4-ofb</b></p>
+
+<p style="margin-left:17%;"><small>SM4</small> Cipher</p>
+
+<h2>OPTIONS
+<a name="OPTIONS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Details of
+which options are available depend on the specific command.
+This section describes some common options with common
+behavior.</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>Common
+Options <br>
+-help</b></p>
+
+<p style="margin-left:17%;">Provides a terse summary of all
+options. If an option takes an argument, the
+&quot;type&quot; of argument is also given.</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+<p><b>--</b></p></td>
+<td width="3%"></td>
+<td width="83%">
+
+
+<p>This terminates the list of options. It is mostly useful
+if any filename parameters start with a minus sign:</p></td></tr>
+</table>
+
+<p style="margin-left:17%; margin-top: 1em">openssl verify
+[flags...] -- -cert1.pem...</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>Format
+Options</b> <br>
+See <b>openssl-format-options</b>(1) for manual page.</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>Pass Phrase
+Options</b> <br>
+See the <b>openssl-passphrase-options</b>(1) manual
+page.</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>Random State
+Options</b> <br>
+Prior to OpenSSL 1.1.1, it was common for applications to
+store information about the state of the random-number
+generator in a file that was loaded at startup and rewritten
+upon exit. On modern operating systems, this is generally no
+longer necessary as OpenSSL will seed itself from a trusted
+entropy source provided by the operating system. These flags
+are still supported for special platforms or circumstances
+that might require them.</p>
+
+<p style="margin-left:11%; margin-top: 1em">It is generally
+an error to use the same seed file more than once and every
+use of <b>-rand</b> should be paired with <b>-writerand</b>.
+<b><br>
+-rand</b> <i>files</i></p>
+
+<p style="margin-left:17%;">A file or files containing
+random data used to seed the random number generator.
+Multiple files can be specified separated by an OS-dependent
+character. The separator is &quot;;&quot; for MS-Windows,
+&quot;,&quot; for OpenVMS, and &quot;:&quot; for all others.
+Another way to specify multiple files is to repeat this flag
+with different filenames.</p>
+
+<p style="margin-left:11%;"><b>-writerand</b>
+<i>file</i></p>
+
+<p style="margin-left:17%;">Writes the seed data to the
+specified <i>file</i> upon exit. This file can be used in a
+subsequent command invocation.</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>Certificate
+Verification Options</b> <br>
+See the <b>openssl-verification-options</b>(1) manual
+page.</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>Name Format
+Options</b> <br>
+See the <b>openssl-namedisplay-options</b>(1) manual
+page.</p>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b><small>TLS</small>
+Version Options</b> <br>
+Several commands use <small>SSL, TLS,</small> or
+<small>DTLS.</small> By default, the commands use
+<small>TLS</small> and clients will offer the lowest and
+highest protocol version they support, and servers will pick
+the highest version that the client offers that is also
+supported by the server.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The options
+below can be used to limit which protocol versions are used,
+and whether <small>TCP</small> ( <small>SSL</small> and
+<small>TLS</small> ) or <small>UDP</small> (
+<small>DTLS</small> ) is used. Note that not all protocols
+and flags may be available, depending on how OpenSSL was
+built. <b><br>
+-ssl3</b>, <b>-tls1</b>, <b>-tls1_1</b>, <b>-tls1_2</b>,
+<b>-tls1_3</b>, <b>-no_ssl3</b>, <b>-no_tls1</b>, <b><br>
+-no_tls1_1</b>, <b>-no_tls1_2</b>, <b>-no_tls1_3</b></p>
+
+<p style="margin-left:17%;">These options require or
+disable the use of the specified <small>SSL</small> or
+<small>TLS</small> protocols. When a specific
+<small>TLS</small> version is required, only that version
+will be offered or accepted. Only one specific protocol can
+be given and it cannot be combined with any of the
+<b>no_</b> options.</p>
+
+<p style="margin-left:11%;"><b>-dtls</b>, <b>-dtls1</b>,
+<b>-dtls1_2</b></p>
+
+<p style="margin-left:17%;">These options specify to use
+<small>DTLS</small> instead of <small>DLTS.</small> With
+<b>-dtls</b>, clients will negotiate any supported
+<small>DTLS</small> protocol version. Use the <b>-dtls1</b>
+or <b>-dtls1_2</b> options to support only
+<small>DTLS1.0</small> or <small>DTLS1.2,</small>
+respectively.</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>Engine
+Options <br>
+-engine</b> <i>id</i></p>
+
+<p style="margin-left:17%;">Load the engine identified by
+<i>id</i> and use all the methods it implements (algorithms,
+key storage, etc.), unless specified otherwise in the
+command-specific documentation or it is configured to do so,
+as described in &quot;Engine Configuration&quot; in
+<b>config</b>(5).</p>
+
+<p style="margin-left:17%; margin-top: 1em">The engine will
+be used for key ids specified with <b>-key</b> and similar
+options when an option like <b>-keyform engine</b> is
+given.</p>
+
+<p style="margin-left:17%; margin-top: 1em">A special case
+is the &quot;loader_attic&quot; engine, which is meant just
+for internal OpenSSL testing purposes and supports loading
+keys, parameters, certificates, and CRLs from files. When
+this engine is used, files with such credentials are read
+via this engine. Using the &quot;file:&quot; schema is
+optional; a plain file (path) name will do.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Options
+specifying keys, like <b>-key</b> and similar, can use the
+generic OpenSSL engine key loading <small>URI</small> scheme
+&quot;org.openssl.engine:&quot; to retrieve private keys and
+public keys. The <small>URI</small> syntax is as follows, in
+simplified form:</p>
+
+
+<p style="margin-left:11%; margin-top: 1em">org.openssl.engine:{engineid}:{keyid}</p>
+
+<p style="margin-left:11%; margin-top: 1em">Where
+&quot;{engineid}&quot; is the identity/name of the engine,
+and &quot;{keyid}&quot; is a key identifier that&rsquo;s
+acceptable by that engine. For example, when using an engine
+that interfaces against a PKCS#11 implementation, the
+generic key <small>URI</small> would be something like this
+(this happens to be an example for the PKCS#11 engine
+that&rsquo;s part of OpenSC):</p>
+
+<p style="margin-left:11%; margin-top: 1em">-key
+org.openssl.engine:pkcs11:label_some-private-key</p>
+
+<p style="margin-left:11%; margin-top: 1em">As a third
+possibility, for engines and providers that have implemented
+their own <b><small>OSSL_STORE_LOADER</small></b> (3),
+&quot;org.openssl.engine:&quot; should not be necessary. For
+a PKCS#11 implementation that has implemented such a loader,
+the PKCS#11 <small>URI</small> as defined in <small>RFC
+7512</small> should be possible to use directly:</p>
+
+<p style="margin-left:11%; margin-top: 1em">-key
+pkcs11:object=some-private-key;pin-value=1234</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>Provider
+Options <br>
+-provider</b> <i>name</i></p>
+
+<p style="margin-left:17%;">Load and initialize the
+provider identified by <i>name</i>. The <i>name</i> can be
+also a path to the provider module. In that case the
+provider name will be the specified path and not just the
+provider module name. Interpretation of relative paths is
+platform specific. The configured &quot;
+<small>MODULESDIR&quot;</small> path,
+<b><small>OPENSSL_MODULES</small></b> environment variable,
+or the path specified by <b>-provider-path</b> is prepended
+to relative paths. See <b>provider</b>(7) for a more
+detailed description.</p>
+
+<p style="margin-left:11%;"><b>-provider-path</b>
+<i>path</i></p>
+
+<p style="margin-left:17%;">Specifies the search path that
+is to be used for looking for providers. Equivalently, the
+<b><small>OPENSSL_MODULES</small></b> environment variable
+may be set.</p>
+
+<p style="margin-left:11%;"><b>-propquery</b>
+<i>propq</i></p>
+
+<p style="margin-left:17%;">Specifies the <i>property query
+clause</i> to be used when fetching algorithms from the
+loaded providers. See <b>property</b>(7) for a more detailed
+description.</p>
+
+<h2>ENVIRONMENT
+<a name="ENVIRONMENT"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The OpenSSL
+library can be take some configuration parameters from the
+environment. Some of these variables are listed below. For
+information about specific commands, see
+<b>openssl-engine</b>(1), <b>openssl-rehash</b>(1), and
+<b>tsget</b>(1).</p>
+
+<p style="margin-left:11%; margin-top: 1em">For information
+about the use of environment variables in configuration, see
+&quot; <small>ENVIRONMENT&quot;</small> in
+<b>config</b>(5).</p>
+
+<p style="margin-left:11%; margin-top: 1em">For information
+about querying or specifying <small>CPU</small> architecture
+flags, see <b>OPENSSL_ia32cap</b>(3), and
+<b>OPENSSL_s390xcap</b>(3).</p>
+
+<p style="margin-left:11%; margin-top: 1em">For information
+about all environment variables used by the OpenSSL
+libraries, see <b>openssl-env</b>(7). <b><br>
+OPENSSL_TRACE=</b><i>name</i>[,...]</p>
+
+<p style="margin-left:17%;">Enable tracing output of
+OpenSSL library, by name. This output will only make sense
+if you know OpenSSL internals well. Also, it might not give
+you any output at all, depending on how OpenSSL was
+built.</p>
+
+<p style="margin-left:17%; margin-top: 1em">The value is a
+comma separated list of names, with the following available:
+<b><small><br>
+TRACE</small></b></p>
+
+<p style="margin-left:23%;">The tracing functionality.</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="17%"></td>
+<td width="5%">
+
+
+<p><b><small>TLS</small></b></p></td>
+<td width="1%"></td>
+<td width="25%">
+
+
+<p>General <small>SSL/TLS.</small></p></td>
+<td width="52%">
+</td></tr>
+</table>
+
+
+<p style="margin-left:17%;"><small><b>TLS_CIPHER</b></small></p>
+
+<p style="margin-left:23%;"><small>SSL/TLS</small>
+cipher.</p>
+
+<p style="margin-left:17%;"><b><small>CONF</small></b></p>
+
+<p style="margin-left:23%;">Show details about provider and
+engine configuration.</p>
+
+
+<p style="margin-left:17%;"><b><small>ENGINE_TABLE</small></b></p>
+
+<p style="margin-left:23%;">The function that is used by
+<small>RSA, DSA</small> (etc) code to select registered
+ENGINEs, cache defaults and functional references (etc),
+will generate debugging summaries.</p>
+
+
+<p style="margin-left:17%;"><b><small>ENGINE_REF_COUNT</small></b></p>
+
+<p style="margin-left:23%;">Reference counts in the
+<small>ENGINE</small> structure will be monitored with a
+line of generated for each change.</p>
+
+
+<p style="margin-left:17%;"><b><small>PKCS5V2</small></b></p>
+
+<p style="margin-left:23%;">PKCS#5 v2 keygen.</p>
+
+
+<p style="margin-left:17%;"><b><small>PKCS12_KEYGEN</small></b></p>
+
+<p style="margin-left:23%;">PKCS#12 key generation.</p>
+
+
+<p style="margin-left:17%;"><b><small>PKCS12_DECRYPT</small></b></p>
+
+<p style="margin-left:23%;">PKCS#12 decryption.</p>
+
+<p style="margin-left:17%;"><b>X509V3_POLICY</b></p>
+
+<p style="margin-left:23%;">Generates the complete policy
+tree at various point during X.509 v3 policy evaluation.</p>
+
+
+<p style="margin-left:17%;"><b><small>BN_CTX</small></b></p>
+
+<p style="margin-left:23%;"><small>BIGNUM</small>
+context.</p>
+
+<h2>SEE ALSO
+<a name="SEE ALSO"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>openssl-asn1parse</b>(1),
+<b>openssl-ca</b>(1), <b>openssl-ciphers</b>(1),
+<b>openssl-cms</b>(1), <b>openssl-crl</b>(1),
+<b>openssl-crl2pkcs7</b>(1), <b>openssl-dgst</b>(1),
+<b>openssl-dhparam</b>(1), <b>openssl-dsa</b>(1),
+<b>openssl-dsaparam</b>(1), <b>openssl-ec</b>(1),
+<b>openssl-ecparam</b>(1), <b>openssl-enc</b>(1),
+<b>openssl-engine</b>(1), <b>openssl-errstr</b>(1),
+<b>openssl-gendsa</b>(1), <b>openssl-genpkey</b>(1),
+<b>openssl-genrsa</b>(1), <b>openssl-kdf</b>(1),
+<b>openssl-mac</b>(1), <b>openssl-nseq</b>(1),
+<b>openssl-ocsp</b>(1), <b>openssl-passwd</b>(1),
+<b>openssl-pkcs12</b>(1), <b>openssl-pkcs7</b>(1),
+<b>openssl-pkcs8</b>(1), <b>openssl-pkey</b>(1),
+<b>openssl-pkeyparam</b>(1), <b>openssl-pkeyutl</b>(1),
+<b>openssl-prime</b>(1), <b>openssl-rand</b>(1),
+<b>openssl-rehash</b>(1), <b>openssl-req</b>(1),
+<b>openssl-rsa</b>(1), <b>openssl-rsautl</b>(1),
+<b>openssl-s_client</b>(1), <b>openssl-s_server</b>(1),
+<b>openssl-s_time</b>(1), <b>openssl-sess_id</b>(1),
+<b>openssl-smime</b>(1), <b>openssl-speed</b>(1),
+<b>openssl-spkac</b>(1), <b>openssl-srp</b>(1),
+<b>openssl-storeutl</b>(1), <b>openssl-ts</b>(1),
+<b>openssl-verify</b>(1), <b>openssl-version</b>(1),
+<b>openssl-x509</b>(1), <b>config</b>(5), <b>crypto</b>(7),
+<b>openssl-env</b>(7). <b>ssl</b>(7),
+<b>x509v3_config</b>(5)</p>
+
+<h2>HISTORY
+<a name="HISTORY"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The <b>list</b>
+- <i><small>XXX</small></i> <b>-algorithms</b> options were
+added in OpenSSL 1.0.0; For notes on the availability of
+other commands, see their individual manual pages.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The
+<b>-issuer_checks</b> option is deprecated as of OpenSSL
+1.1.0 and is silently ignored.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The
+<b>-xcertform</b> and <b>-xkeyform</b> options are obsolete
+since OpenSSL 3.0 and have no effect.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The interactive
+mode, which could be invoked by running &quot;openssl&quot;
+with no further arguments, was removed in OpenSSL 3.0, and
+running that program with no arguments is now equivalent to
+&quot;openssl help&quot;.</p>
+
+<h2>COPYRIGHT
+<a name="COPYRIGHT"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Copyright
+2000-2021 The OpenSSL Project Authors. All Rights
+Reserved.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Licensed under
+the Apache License 2.0 (the &quot;License&quot;). You may
+not use this file except in compliance with the License. You
+can obtain a copy in the file <small>LICENSE</small> in the
+source distribution or at
+&lt;https://www.openssl.org/source/license.html&gt;.</p>
+<hr>
+</body>
+</html>

@@ -1,0 +1,321 @@
+<!-- Creator     : groff version 1.22.4 -->
+<!-- CreationDate: Mon Jan 31 16:15:25 2022 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>TSGET</title>
+
+</head>
+<body>
+
+<h1 align="center">TSGET</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#OPTIONS">OPTIONS</a><br>
+<a href="#ENVIRONMENT VARIABLES">ENVIRONMENT VARIABLES</a><br>
+<a href="#EXAMPLES">EXAMPLES</a><br>
+<a href="#SEE ALSO">SEE ALSO</a><br>
+<a href="#COPYRIGHT">COPYRIGHT</a><br>
+
+<hr>
+
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">tsget - Time
+Stamping HTTP/HTTPS client</p>
+
+<h2>SYNOPSIS
+<a name="SYNOPSIS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>tsget -h</b>
+<i>server_url</i> [<b>-e</b> <i>extension</i>] [<b>-o</b>
+<i>output</i>] [<b>-v</b>] [<b>-d</b>] [<b>-k</b>
+<i>private_key.pem</i>] [<b>-p</b> <i>key_password</i>]
+[<b>-c</b> <i>client_cert.pem</i>] [<b>-C</b>
+<i>CA_certs.pem</i>] [<b>-P</b> <i>CA_path</i>] [<b>-r</b>
+<i>files</i>] [<b>-g</b> <i>EGD_socket</i>] [<i>request</i>
+...]</p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">This command
+can be used for sending a timestamp request, as specified in
+<small>RFC 3161,</small> to a timestamp server over
+<small>HTTP</small> or <small>HTTPS</small> and storing the
+timestamp response in a file. It cannot be used for creating
+the requests and verifying responses, you have to use
+<b>openssl-ts</b>(1) to do that. This command can send
+several requests to the server without closing the
+<small>TCP</small> connection if more than one requests are
+specified on the command line.</p>
+
+<p style="margin-left:11%; margin-top: 1em">This command
+sends the following <small>HTTP</small> request for each
+timestamp request:</p>
+
+<p style="margin-left:11%; margin-top: 1em">POST url
+HTTP/1.1 <br>
+User-Agent: OpenTSA tsget.pl/&lt;version&gt; <br>
+Host: &lt;host&gt;:&lt;port&gt; <br>
+Pragma: no-cache <br>
+Content-Type: application/timestamp-query <br>
+Accept: application/timestamp-reply <br>
+Content-Length: length of body <br>
+...binary request specified by the user...</p>
+
+<p style="margin-left:11%; margin-top: 1em">It expects a
+response of type application/timestamp-reply, which is
+written to a file without any interpretation.</p>
+
+<h2>OPTIONS
+<a name="OPTIONS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>-h</b>
+<i>server_url</i></p>
+
+<p style="margin-left:17%;">The <small>URL</small> of the
+<small>HTTP/HTTPS</small> server listening for timestamp
+requests.</p>
+
+<p style="margin-left:11%;"><b>-e</b> <i>extension</i></p>
+
+<p style="margin-left:17%;">If the <b>-o</b> option is not
+given this argument specifies the extension of the output
+files. The base name of the output file will be the same as
+those of the input files. Default extension is <i>.tsr</i>.
+(Optional)</p>
+
+<p style="margin-left:11%;"><b>-o</b> <i>output</i></p>
+
+<p style="margin-left:17%;">This option can be specified
+only when just one request is sent to the server. The
+timestamp response will be written to the given output file.
+&rsquo;-&rsquo; means standard output. In case of multiple
+timestamp requests or the absence of this argument the names
+of the output files will be derived from the names of the
+input files and the default or specified extension argument.
+(Optional)</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+<p><b>-v</b></p></td>
+<td width="3%"></td>
+<td width="83%">
+
+
+<p>The name of the currently processed request is printed
+on standard error. (Optional)</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+<p><b>-d</b></p></td>
+<td width="3%"></td>
+<td width="83%">
+
+
+<p>Switches on verbose mode for the underlying perl module
+WWW::Curl::Easy. You can see detailed debug messages for the
+connection. (Optional)</p></td></tr>
+</table>
+
+<p style="margin-left:11%;"><b>-k</b>
+<i>private_key.pem</i></p>
+
+<p style="margin-left:17%;">( <small>HTTPS</small> ) In
+case of certificate-based client authentication over
+<small>HTTPS</small> <i>private_key.pem</i> must contain the
+private key of the user. The private key file can optionally
+be protected by a passphrase. The <b>-c</b> option must also
+be specified. (Optional)</p>
+
+<p style="margin-left:11%;"><b>-p</b>
+<i>key_password</i></p>
+
+<p style="margin-left:17%;">( <small>HTTPS</small> )
+Specifies the passphrase for the private key specified by
+the <b>-k</b> argument. If this option is omitted and the
+key is passphrase protected, it will be prompted for.
+(Optional)</p>
+
+<p style="margin-left:11%;"><b>-c</b>
+<i>client_cert.pem</i></p>
+
+<p style="margin-left:17%;">( <small>HTTPS</small> ) In
+case of certificate-based client authentication over
+<small>HTTPS</small> <i>client_cert.pem</i> must contain the
+X.509 certificate of the user. The <b>-k</b> option must
+also be specified. If this option is not specified no
+certificate-based client authentication will take place.
+(Optional)</p>
+
+<p style="margin-left:11%;"><b>-C</b>
+<i>CA_certs.pem</i></p>
+
+<p style="margin-left:17%;">( <small>HTTPS</small> ) The
+trusted <small>CA</small> certificate store. The certificate
+chain of the peer&rsquo;s certificate must include one of
+the <small>CA</small> certificates specified in this file.
+Either option <b>-C</b> or option <b>-P</b> must be given in
+case of <small>HTTPS.</small> (Optional)</p>
+
+<p style="margin-left:11%;"><b>-P</b> <i>CA_path</i></p>
+
+<p style="margin-left:17%;">( <small>HTTPS</small> ) The
+path containing the trusted <small>CA</small> certificates
+to verify the peer&rsquo;s certificate. The directory must
+be prepared with <b>openssl-rehash</b>(1). Either option
+<b>-C</b> or option <b>-P</b> must be given in case of
+<small>HTTPS.</small> (Optional)</p>
+
+<p style="margin-left:11%;"><b>-r</b> <i>files</i></p>
+
+<p style="margin-left:17%;">See &quot;Random State
+Options&quot; in <b>openssl</b>(1) for more information.</p>
+
+<p style="margin-left:11%;"><b>-g</b> <i>EGD_socket</i></p>
+
+<p style="margin-left:17%;">The name of an
+<small>EGD</small> socket to get random data from.
+(Optional)</p>
+
+<p style="margin-left:11%;"><i>request</i> ...</p>
+
+<p style="margin-left:17%;">List of files containing
+<small>RFC 3161</small> DER-encoded timestamp requests. If
+no requests are specified only one request will be sent to
+the server and it will be read from the standard input.
+(Optional)</p>
+
+<h2>ENVIRONMENT VARIABLES
+<a name="ENVIRONMENT VARIABLES"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The
+<b><small>TSGET</small></b> environment variable can
+optionally contain default arguments. The content of this
+variable is added to the list of command line arguments.</p>
+
+<h2>EXAMPLES
+<a name="EXAMPLES"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The examples
+below presume that <i>file1.tsq</i> and <i>file2.tsq</i>
+contain valid timestamp requests, tsa.opentsa.org listens at
+port 8080 for <small>HTTP</small> requests and at port 8443
+for <small>HTTPS</small> requests, the <small>TSA</small>
+service is available at the /tsa absolute path.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Get a timestamp
+response for <i>file1.tsq</i> over <small>HTTP,</small>
+output is written to <i>file1.tsr</i>:</p>
+
+<p style="margin-left:11%; margin-top: 1em">tsget -h
+http://tsa.opentsa.org:8080/tsa file1.tsq</p>
+
+<p style="margin-left:11%; margin-top: 1em">Get a timestamp
+response for <i>file1.tsq</i> and <i>file2.tsq</i> over
+<small>HTTP</small> showing progress, output is written to
+<i>file1.reply</i> and <i>file2.reply</i> respectively:</p>
+
+<p style="margin-left:11%; margin-top: 1em">tsget -h
+http://tsa.opentsa.org:8080/tsa -v -e .reply \ <br>
+file1.tsq file2.tsq</p>
+
+<p style="margin-left:11%; margin-top: 1em">Create a
+timestamp request, write it to <i>file3.tsq</i>, send it to
+the server and write the response to <i>file3.tsr</i>:</p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl ts
+-query -data file3.txt -cert | tee file3.tsq \ <br>
+| tsget -h http://tsa.opentsa.org:8080/tsa \ <br>
+-o file3.tsr</p>
+
+<p style="margin-left:11%; margin-top: 1em">Get a timestamp
+response for <i>file1.tsq</i> over <small>HTTPS</small>
+without client authentication:</p>
+
+<p style="margin-left:11%; margin-top: 1em">tsget -h
+https://tsa.opentsa.org:8443/tsa \ <br>
+-C cacerts.pem file1.tsq</p>
+
+<p style="margin-left:11%; margin-top: 1em">Get a timestamp
+response for <i>file1.tsq</i> over <small>HTTPS</small> with
+certificate-based client authentication (it will ask for the
+passphrase if <i>client_key.pem</i> is protected):</p>
+
+<p style="margin-left:11%; margin-top: 1em">tsget -h
+https://tsa.opentsa.org:8443/tsa -C cacerts.pem \ <br>
+-k client_key.pem -c client_cert.pem file1.tsq</p>
+
+<p style="margin-left:11%; margin-top: 1em">You can shorten
+the previous command line if you make use of the
+<b><small>TSGET</small></b> environment variable. The
+following commands do the same as the previous example:</p>
+
+<p style="margin-left:11%; margin-top: 1em">TSGET='-h
+https://tsa.opentsa.org:8443/tsa -C cacerts.pem \ <br>
+-k client_key.pem -c client_cert.pem' <br>
+export TSGET <br>
+tsget file1.tsq</p>
+
+<h2>SEE ALSO
+<a name="SEE ALSO"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>openssl</b>(1),
+<b>openssl-ts</b>(1), WWW::Curl::Easy,
+&lt;https://www.rfc-editor.org/rfc/rfc3161.html&gt;</p>
+
+<h2>COPYRIGHT
+<a name="COPYRIGHT"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Copyright
+2006-2020 The OpenSSL Project Authors. All Rights
+Reserved.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Licensed under
+the Apache License 2.0 (the &quot;License&quot;). You may
+not use this file except in compliance with the License. You
+can obtain a copy in the file <small>LICENSE</small> in the
+source distribution or at
+&lt;https://www.openssl.org/source/license.html&gt;.</p>
+<hr>
+</body>
+</html>

@@ -1,0 +1,276 @@
+<!-- Creator     : groff version 1.22.4 -->
+<!-- CreationDate: Mon Jan 31 16:15:32 2022 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>OPENSSL-MAC</title>
+
+</head>
+<body>
+
+<h1 align="center">OPENSSL-MAC</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#OPTIONS">OPTIONS</a><br>
+<a href="#EXAMPLES">EXAMPLES</a><br>
+<a href="#NOTES">NOTES</a><br>
+<a href="#SEE ALSO">SEE ALSO</a><br>
+<a href="#COPYRIGHT">COPYRIGHT</a><br>
+
+<hr>
+
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">openssl-mac -
+perform Message Authentication Code operations</p>
+
+<h2>SYNOPSIS
+<a name="SYNOPSIS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>openssl
+mac</b> [<b>-help</b>] [<b>-cipher</b>] [<b>-digest</b>]
+[<b>-macopt</b>] [<b>-in</b> <i>filename</i>] [<b>-out</b>
+<i>filename</i>] [<b>-binary</b>] [<b>-provider</b>
+<i>name</i>] [<b>-provider-path</b> <i>path</i>]
+[<b>-propquery</b> <i>propq</i>] <i>mac_name</i></p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The message
+authentication code functions output the <small>MAC</small>
+of a supplied input file.</p>
+
+<h2>OPTIONS
+<a name="OPTIONS"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>-help</b></p>
+
+<p style="margin-left:17%;">Print a usage message.</p>
+
+<p style="margin-left:11%;"><b>-in</b> <i>filename</i></p>
+
+<p style="margin-left:17%;">Input filename to calculate a
+<small>MAC</small> for, or standard input by default.
+Standard input is used if the filename is &rsquo;-&rsquo;.
+Files are expected to be in binary format, standard input
+uses hexadecimal text format.</p>
+
+<p style="margin-left:11%;"><b>-out</b> <i>filename</i></p>
+
+<p style="margin-left:17%;">Filename to output to, or
+standard output by default.</p>
+
+<p style="margin-left:11%;"><b>-binary</b></p>
+
+<p style="margin-left:17%;">Output the <small>MAC</small>
+in binary form. Uses hexadecimal text format if not
+specified.</p>
+
+<p style="margin-left:11%;"><b>-cipher</b> <i>name</i></p>
+
+<p style="margin-left:17%;">Used by <small>CMAC</small> and
+<small>GMAC</small> to specify the cipher algorithm. For
+<small>CMAC</small> it must be one of <small>AES-128-CBC,
+AES-192-CBC, AES-256-CBC</small> or
+<small>DES-EDE3-CBC.</small> For <small>GMAC</small> it
+should be a <small>GCM</small> mode cipher e.g.
+<small>AES-128-GCM.</small></p>
+
+<p style="margin-left:11%;"><b>-digest</b> <i>name</i></p>
+
+<p style="margin-left:17%;">Used by <small>HMAC</small> as
+an alphanumeric string (use if the key contains printable
+characters only). The string length must conform to any
+restrictions of the <small>MAC</small> algorithm. To see the
+list of supported digests, use &quot;openssl list
+-digest-commands&quot;.</p>
+
+<p style="margin-left:11%;"><b>-macopt</b>
+<i>nm</i>:<i>v</i></p>
+
+<p style="margin-left:17%;">Passes options to the
+<small>MAC</small> algorithm. A comprehensive list of
+controls can be found in the <small>EVP_MAC</small>
+implementation documentation. Common parameter names used by
+<b>EVP_MAC_CTX_get_params()</b> are: <b><br>
+key:</b><i>string</i></p>
+
+<p style="margin-left:23%;">Specifies the
+<small>MAC</small> key as an alphanumeric string (use if the
+key contains printable characters only). The string length
+must conform to any restrictions of the <small>MAC</small>
+algorithm. A key must be specified for every
+<small>MAC</small> algorithm.</p>
+
+
+<p style="margin-left:17%;"><b>hexkey:</b><i>string</i></p>
+
+<p style="margin-left:23%;">Specifies the
+<small>MAC</small> key in hexadecimal form (two hex digits
+per byte). The key length must conform to any restrictions
+of the <small>MAC</small> algorithm. A key must be specified
+for every <small>MAC</small> algorithm.</p>
+
+<p style="margin-left:17%;"><b>iv:</b><i>string</i></p>
+
+<p style="margin-left:23%;">Used by <small>GMAC</small> to
+specify an <small>IV</small> as an alphanumeric string (use
+if the <small>IV</small> contains printable characters
+only).</p>
+
+<p style="margin-left:17%;"><b>hexiv:</b><i>string</i></p>
+
+<p style="margin-left:23%;">Used by <small>GMAC</small> to
+specify an <small>IV</small> in hexadecimal form (two hex
+digits per byte).</p>
+
+<p style="margin-left:17%;"><b>size:</b><i>int</i></p>
+
+<p style="margin-left:23%;">Used by <small>KMAC128</small>
+or <small>KMAC256</small> to specify an output length. The
+default sizes are 32 or 64 bytes respectively.</p>
+
+
+<p style="margin-left:17%;"><b>custom:</b><i>string</i></p>
+
+<p style="margin-left:23%;">Used by <small>KMAC128</small>
+or <small>KMAC256</small> to specify a customization string.
+The default is the empty string &quot;&quot;.</p>
+
+
+<p style="margin-left:17%;"><b>digest:</b><i>string</i></p>
+
+<p style="margin-left:23%;">This option is identical to the
+<b>-digest</b> option.</p>
+
+
+<p style="margin-left:17%;"><b>cipher:</b><i>string</i></p>
+
+<p style="margin-left:23%;">This option is identical to the
+<b>-cipher</b> option.</p>
+
+<p style="margin-left:11%;"><b>-provider</b> <i>name</i>
+<b><br>
+-provider-path</b> <i>path</i> <b><br>
+-propquery</b> <i>propq</i></p>
+
+<p style="margin-left:17%;">See &quot;Provider
+Options&quot; in <b>openssl</b>(1), <b>provider</b>(7), and
+<b>property</b>(7).</p>
+
+<p style="margin-left:11%;"><i>mac_name</i></p>
+
+<p style="margin-left:17%;">Specifies the name of a
+supported <small>MAC</small> algorithm which will be used.
+To see the list of supported <small>MAC</small> &rsquo;s use
+the command &quot;openssl list -mac-algorithms&quot;.</p>
+
+<h2>EXAMPLES
+<a name="EXAMPLES"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">To create a
+hex-encoded <small>HMAC-SHA1 MAC</small> of a file and write
+to stdout: \ <br>
+openssl mac -digest <small>SHA1</small> \ <br>
+-macopt hexkey:000102030405060708090A0B0C0D0E0F10111213 \
+<br>
+-in msg.bin <small>HMAC</small></p>
+
+<p style="margin-left:11%; margin-top: 1em">To create a
+SipHash <small>MAC</small> from a file with a binary file
+output: \ <br>
+openssl mac -macopt hexkey:000102030405060708090A0B0C0D0E0F
+\ <br>
+-in msg.bin -out out.bin -binary SipHash</p>
+
+<p style="margin-left:11%; margin-top: 1em">To create a
+hex-encoded <small>CMAC-AES-128-CBC MAC</small> from a
+file:\ <br>
+openssl mac -cipher <small>AES-128-CBC</small> \ <br>
+-macopt hexkey:77A77FAF290C1FA30C683DF16BA7A77B \ <br>
+-in msg.bin <small>CMAC</small></p>
+
+<p style="margin-left:11%; margin-top: 1em">To create a
+hex-encoded <small>KMAC128 MAC</small> from a file with a
+Customisation String &rsquo;Tag&rsquo; and output length of
+16: \ <br>
+openssl mac -macopt custom:Tag -macopt hexkey:40414243444546
+\ <br>
+-macopt size:16 -in msg.bin <small>KMAC128</small></p>
+
+<p style="margin-left:11%; margin-top: 1em">To create a
+hex-encoded <small>GMAC-AES-128-GCM</small> with a
+<small>IV</small> from a file: \ <br>
+openssl mac -cipher <small>AES-128-GCM</small> -macopt
+hexiv:E0E00F19FED7BA0136A797F3 \ <br>
+-macopt hexkey:77A77FAF290C1FA30C683DF16BA7A77B -in msg.bin
+<small>GMAC</small></p>
+
+<h2>NOTES
+<a name="NOTES"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The
+<small>MAC</small> mechanisms that are available will depend
+on the options used when building OpenSSL. Use &quot;openssl
+list -mac-algorithms&quot; to list them.</p>
+
+<h2>SEE ALSO
+<a name="SEE ALSO"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>openssl</b>(1),
+<b><small>EVP_MAC</small></b> (3),
+<b><small>EVP_MAC-CMAC</small></b> (7),
+<b><small>EVP_MAC-GMAC</small></b> (7),
+<b><small>EVP_MAC-HMAC</small></b> (7),
+<b><small>EVP_MAC-KMAC</small></b> (7),
+<b>EVP_MAC-Siphash</b>(7), <b>EVP_MAC-Poly1305</b>(7)</p>
+
+<h2>COPYRIGHT
+<a name="COPYRIGHT"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Copyright
+2018-2021 The OpenSSL Project Authors. All Rights
+Reserved.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Licensed under
+the Apache License 2.0 (the &quot;License&quot;). You may
+not use this file except in compliance with the License. You
+can obtain a copy in the file <small>LICENSE</small> in the
+source distribution or at
+&lt;https://www.openssl.org/source/license.html&gt;.</p>
+<hr>
+</body>
+</html>

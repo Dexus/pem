@@ -1,0 +1,203 @@
+<!-- Creator     : groff version 1.22.4 -->
+<!-- CreationDate: Mon Jan 31 16:15:17 2022 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>STOREUTL</title>
+
+</head>
+<body>
+
+<h1 align="center">STOREUTL</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#OPTIONS">OPTIONS</a><br>
+<a href="#SEE ALSO">SEE ALSO</a><br>
+<a href="#HISTORY">HISTORY</a><br>
+<a href="#COPYRIGHT">COPYRIGHT</a><br>
+
+<hr>
+
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em">openssl-storeutl,
+storeutl - STORE utility</p>
+
+<h2>SYNOPSIS
+<a name="SYNOPSIS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>openssl
+storeutl</b> [<b>-help</b>] [<b>-out file</b>]
+[<b>-noout</b>] [<b>-passin arg</b>] [<b>-text arg</b>]
+[<b>-engine id</b>] [<b>-r</b>] [<b>-certs</b>]
+[<b>-keys</b>] [<b>-crls</b>] [<b>-subject arg</b>]
+[<b>-issuer arg</b>] [<b>-serial arg</b>] [<b>-alias
+arg</b>] [<b>-fingerprint arg</b>]
+[<b>-</b><b><i>digest</i></b>] <b>uri</b> ...</p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The
+<b>storeutl</b> command can be used to display the contents
+(after decryption as the case may be) fetched from the given
+URIs.</p>
+
+<h2>OPTIONS
+<a name="OPTIONS"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>-help</b></p>
+
+<p style="margin-left:17%;">Print out a usage message.</p>
+
+<p style="margin-left:11%;"><b>-out filename</b></p>
+
+<p style="margin-left:17%;">specifies the output filename
+to write to or standard output by default.</p>
+
+<p style="margin-left:11%;"><b>-noout</b></p>
+
+<p style="margin-left:17%;">this option prevents output of
+the <small>PEM</small> data.</p>
+
+<p style="margin-left:11%;"><b>-passin arg</b></p>
+
+<p style="margin-left:17%;">the key password source. For
+more information about the format of <b>arg</b> see
+&quot;Pass Phrase Options&quot; in <b>openssl</b>(1).</p>
+
+<p style="margin-left:11%;"><b>-text</b></p>
+
+<p style="margin-left:17%;">Prints out the objects in text
+form, similarly to the <b>-text</b> output from <b>openssl
+x509</b>, <b>openssl pkey</b>, etc.</p>
+
+<p style="margin-left:11%;"><b>-engine id</b></p>
+
+<p style="margin-left:17%;">specifying an engine (by its
+unique <b>id</b> string) will cause <b>storeutl</b> to
+attempt to obtain a functional reference to the specified
+engine, thus initialising it if needed. The engine will then
+be set as the default for all available algorithms.</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+<p><b>-r</b></p></td>
+<td width="3%"></td>
+<td width="61%">
+
+
+<p>Fetch objects recursively when possible.</p></td>
+<td width="22%">
+</td></tr>
+</table>
+
+<p style="margin-left:11%;"><b>-certs <br>
+-keys <br>
+-crls</b></p>
+
+<p style="margin-left:17%;">Only select the certificates,
+keys or CRLs from the given <small>URI.</small> However, if
+this <small>URI</small> would return a set of names (URIs),
+those are always returned.</p>
+
+<p style="margin-left:11%;"><b>-subject arg</b></p>
+
+<p style="margin-left:17%;">Search for an object having the
+subject name <b>arg</b>. The arg must be formatted as
+<i>/type0=value0/type1=value1/type2=...</i>. Keyword
+characters may be escaped by \ (backslash), and whitespace
+is retained. Empty values are permitted but are ignored for
+the search. That is, a search with an empty value will have
+the same effect as not specifying the type at all.</p>
+
+<p style="margin-left:11%;"><b>-issuer arg <br>
+-serial arg</b></p>
+
+<p style="margin-left:17%;">Search for an object having the
+given issuer name and serial number. These two options
+<i>must</i> be used together. The issuer arg must be
+formatted as <i>/type0=value0/type1=value1/type2=...</i>,
+characters may be escaped by \ (backslash), no spaces are
+skipped. The serial arg may be specified as a decimal value
+or a hex value if preceded by <b>0x</b>.</p>
+
+<p style="margin-left:11%;"><b>-alias arg</b></p>
+
+<p style="margin-left:17%;">Search for an object having the
+given alias.</p>
+
+<p style="margin-left:11%;"><b>-fingerprint arg</b></p>
+
+<p style="margin-left:17%;">Search for an object having the
+given fingerprint.</p>
+
+
+<p style="margin-left:11%;"><b>-</b><b><i>digest</i></b></p>
+
+<p style="margin-left:17%;">The digest that was used to
+compute the fingerprint given with <b>-fingerprint</b>.</p>
+
+<h2>SEE ALSO
+<a name="SEE ALSO"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>openssl</b>(1)</p>
+
+<h2>HISTORY
+<a name="HISTORY"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The <b>openssl
+storeutl</b> app was added in OpenSSL 1.1.1.</p>
+
+<h2>COPYRIGHT
+<a name="COPYRIGHT"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Copyright
+2016-2021 The OpenSSL Project Authors. All Rights
+Reserved.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Licensed under
+the OpenSSL license (the &quot;License&quot;). You may not
+use this file except in compliance with the License. You can
+obtain a copy in the file <small>LICENSE</small> in the
+source distribution or at
+&lt;https://www.openssl.org/source/license.html&gt;.</p>
+<hr>
+</body>
+</html>

@@ -1,0 +1,63 @@
+OPENSSL-RAND(1ossl)                 OpenSSL                OPENSSL-RAND(1ossl)
+
+
+
+NNAAMMEE
+       openssl-rand - generate pseudo-random bytes
+
+SSYYNNOOPPSSIISS
+       ooppeennssssll rraanndd [--hheellpp] [--oouutt _f_i_l_e] [--bbaassee6644] [--hheexx] [--eennggiinnee _i_d] [--rraanndd
+       _f_i_l_e_s] [--wwrriitteerraanndd _f_i_l_e] [--pprroovviiddeerr _n_a_m_e] [--pprroovviiddeerr--ppaatthh _p_a_t_h]
+       [--pprrooppqquueerryy _p_r_o_p_q] _n_u_m
+
+DDEESSCCRRIIPPTTIIOONN
+       This command generates _n_u_m random bytes using a cryptographically
+       secure pseudo random number generator (CSPRNG).
+
+       The random bytes are generated using the RRAANNDD__bbyytteess(3) function, which
+       provides a security level of 256 bits, provided it managed to seed
+       itself successfully from a trusted operating system entropy source.
+       Otherwise, the command will fail with a nonzero error code.  For more
+       details, see RRAANNDD__bbyytteess(3), RRAANNDD(7), and EEVVPP__RRAANNDD(7).
+
+OOPPTTIIOONNSS
+       --hheellpp
+           Print out a usage message.
+
+       --oouutt _f_i_l_e
+           Write to _f_i_l_e instead of standard output.
+
+       --bbaassee6644
+           Perform base64 encoding on the output.
+
+       --hheexx
+           Show the output as a hex string.
+
+       --eennggiinnee _i_d
+           See "Engine Options" in ooppeennssssll(1).  This option is deprecated.
+
+       --rraanndd _f_i_l_e_s, --wwrriitteerraanndd _f_i_l_e
+           See "Random State Options" in ooppeennssssll(1) for details.
+
+       --pprroovviiddeerr _n_a_m_e
+       --pprroovviiddeerr--ppaatthh _p_a_t_h
+       --pprrooppqquueerryy _p_r_o_p_q
+           See "Provider Options" in ooppeennssssll(1), pprroovviiddeerr(7), and pprrooppeerrttyy(7).
+
+SSEEEE AALLSSOO
+       ooppeennssssll(1), RRAANNDD__bbyytteess(3), RRAANNDD(7), EEVVPP__RRAANNDD(7)
+
+HHIISSTTOORRYY
+       The --eennggiinnee option was deprecated in OpenSSL 3.0.
+
+CCOOPPYYRRIIGGHHTT
+       Copyright 2000-2021 The OpenSSL Project Authors. All Rights Reserved.
+
+       Licensed under the Apache License 2.0 (the "License").  You may not use
+       this file except in compliance with the License.  You can obtain a copy
+       in the file LICENSE in the source distribution or at
+       <https://www.openssl.org/source/license.html>.
+
+
+
+3.0.1                             2022-01-31               OPENSSL-RAND(1ossl)

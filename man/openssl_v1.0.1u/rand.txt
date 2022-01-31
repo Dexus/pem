@@ -1,0 +1,39 @@
+RAND(1)                             OpenSSL                            RAND(1)
+
+
+
+NNAAMMEE
+       rand - generate pseudo-random bytes
+
+SSYYNNOOPPSSIISS
+       ooppeennssssll rraanndd [--oouutt _f_i_l_e] [--rraanndd _f_i_l_e_(_s_)] [--bbaassee6644] [--hheexx] _n_u_m
+
+DDEESSCCRRIIPPTTIIOONN
+       The rraanndd command outputs _n_u_m pseudo-random bytes after seeding the
+       random number generator once.  As in other ooppeennssssll command line tools,
+       PRNG seeding uses the file _$_H_O_M_E_/..rrnndd or ..rrnndd in addition to the files
+       given in the --rraanndd option.  A new _$_H_O_M_E/..rrnndd or ..rrnndd file will be
+       written back if enough seeding was obtained from these sources.
+
+OOPPTTIIOONNSS
+       --oouutt _f_i_l_e
+           Write to _f_i_l_e instead of standard output.
+
+       --rraanndd _f_i_l_e_(_s_)
+           Use specified file or files or EGD socket (see RRAANNDD__eeggdd(3)) for
+           seeding the random number generator.  Multiple files can be
+           specified separated by a OS-dependent character.  The separator is
+           ;; for MS-Windows, ,, for OpenVMS, and :: for all others.
+
+       --bbaassee6644
+           Perform base64 encoding on the output.
+
+       --hheexx
+           Show the output as a hex string.
+
+SSEEEE AALLSSOO
+       RRAANNDD__bbyytteess(3)
+
+
+
+1.0.1u                            2016-09-22                           RAND(1)

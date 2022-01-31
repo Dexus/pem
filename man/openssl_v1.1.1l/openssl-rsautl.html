@@ -1,0 +1,316 @@
+<!-- Creator     : groff version 1.22.4 -->
+<!-- CreationDate: Mon Jan 31 16:15:14 2022 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>RSAUTL</title>
+
+</head>
+<body>
+
+<h1 align="center">RSAUTL</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#OPTIONS">OPTIONS</a><br>
+<a href="#NOTES">NOTES</a><br>
+<a href="#EXAMPLES">EXAMPLES</a><br>
+<a href="#SEE ALSO">SEE ALSO</a><br>
+<a href="#COPYRIGHT">COPYRIGHT</a><br>
+
+<hr>
+
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em">openssl-rsautl,
+rsautl - RSA utility</p>
+
+<h2>SYNOPSIS
+<a name="SYNOPSIS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>openssl
+rsautl</b> [<b>-help</b>] [<b>-in file</b>] [<b>-out
+file</b>] [<b>-inkey file</b>] [<b>-keyform
+PEM|DER|ENGINE</b>] [<b>-pubin</b>] [<b>-certin</b>]
+[<b>-sign</b>] [<b>-verify</b>] [<b>-encrypt</b>]
+[<b>-decrypt</b>] [<b>-rand file...</b>] [<b>-writerand
+file</b>] [<b>-pkcs</b>] [<b>-ssl</b>] [<b>-raw</b>]
+[<b>-hexdump</b>] [<b>-asn1parse</b>]</p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The
+<b>rsautl</b> command can be used to sign, verify, encrypt
+and decrypt data using the <small>RSA</small> algorithm.</p>
+
+<h2>OPTIONS
+<a name="OPTIONS"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>-help</b></p>
+
+<p style="margin-left:17%;">Print out a usage message.</p>
+
+<p style="margin-left:11%;"><b>-in filename</b></p>
+
+<p style="margin-left:17%;">This specifies the input
+filename to read data from or standard input if this option
+is not specified.</p>
+
+<p style="margin-left:11%;"><b>-out filename</b></p>
+
+<p style="margin-left:17%;">Specifies the output filename
+to write to or standard output by default.</p>
+
+<p style="margin-left:11%;"><b>-inkey file</b></p>
+
+<p style="margin-left:17%;">The input key file, by default
+it should be an <small>RSA</small> private key.</p>
+
+<p style="margin-left:11%;"><b>-keyform
+PEM|DER|ENGINE</b></p>
+
+<p style="margin-left:17%;">The key format <small>PEM,
+DER</small> or <small>ENGINE.</small></p>
+
+<p style="margin-left:11%;"><b>-pubin</b></p>
+
+<p style="margin-left:17%;">The input file is an
+<small>RSA</small> public key.</p>
+
+<p style="margin-left:11%;"><b>-certin</b></p>
+
+<p style="margin-left:17%;">The input is a certificate
+containing an <small>RSA</small> public key.</p>
+
+<p style="margin-left:11%;"><b>-sign</b></p>
+
+<p style="margin-left:17%;">Sign the input data and output
+the signed result. This requires an <small>RSA</small>
+private key.</p>
+
+<p style="margin-left:11%;"><b>-verify</b></p>
+
+<p style="margin-left:17%;">Verify the input data and
+output the recovered data.</p>
+
+<p style="margin-left:11%;"><b>-encrypt</b></p>
+
+<p style="margin-left:17%;">Encrypt the input data using an
+<small>RSA</small> public key.</p>
+
+<p style="margin-left:11%;"><b>-decrypt</b></p>
+
+<p style="margin-left:17%;">Decrypt the input data using an
+<small>RSA</small> private key.</p>
+
+<p style="margin-left:11%;"><b>-rand file...</b></p>
+
+<p style="margin-left:17%;">A file or files containing
+random data used to seed the random number generator.
+Multiple files can be specified separated by an OS-dependent
+character. The separator is <b>;</b> for MS-Windows,
+<b>,</b> for OpenVMS, and <b>:</b> for all others.</p>
+
+<p style="margin-left:11%;">[<b>-writerand file</b>]</p>
+
+<p style="margin-left:17%;">Writes random data to the
+specified <i>file</i> upon exit. This can be used with a
+subsequent <b>-rand</b> flag.</p>
+
+<p style="margin-left:11%;"><b>-pkcs, -oaep, -ssl,
+-raw</b></p>
+
+<p style="margin-left:17%;">The padding to use: PKCS#1 v1.5
+(the default), PKCS#1 <small>OAEP,</small> special padding
+used in <small>SSL</small> v2 backwards compatible
+handshakes, or no padding, respectively. For signatures,
+only <b>-pkcs</b> and <b>-raw</b> can be used.</p>
+
+<p style="margin-left:11%;"><b>-hexdump</b></p>
+
+<p style="margin-left:17%;">Hex dump the output data.</p>
+
+<p style="margin-left:11%;"><b>-asn1parse</b></p>
+
+<p style="margin-left:17%;">Parse the <small>ASN.1</small>
+output data, this is useful when combined with the
+<b>-verify</b> option.</p>
+
+<h2>NOTES
+<a name="NOTES"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>rsautl</b>
+because it uses the <small>RSA</small> algorithm directly
+can only be used to sign or verify small pieces of data.</p>
+
+<h2>EXAMPLES
+<a name="EXAMPLES"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Sign some data
+using a private key:</p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl rsautl
+-sign -in file -inkey key.pem -out sig</p>
+
+<p style="margin-left:11%; margin-top: 1em">Recover the
+signed data</p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl rsautl
+-verify -in sig -inkey key.pem</p>
+
+<p style="margin-left:11%; margin-top: 1em">Examine the raw
+signed data:</p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl rsautl
+-verify -in sig -inkey key.pem -raw -hexdump <br>
+0000 - 00 01 ff ff ff ff ff ff-ff ff ff ff ff ff ff ff
+................ <br>
+0010 - ff ff ff ff ff ff ff ff-ff ff ff ff ff ff ff ff
+................ <br>
+0020 - ff ff ff ff ff ff ff ff-ff ff ff ff ff ff ff ff
+................ <br>
+0030 - ff ff ff ff ff ff ff ff-ff ff ff ff ff ff ff ff
+................ <br>
+0040 - ff ff ff ff ff ff ff ff-ff ff ff ff ff ff ff ff
+................ <br>
+0050 - ff ff ff ff ff ff ff ff-ff ff ff ff ff ff ff ff
+................ <br>
+0060 - ff ff ff ff ff ff ff ff-ff ff ff ff ff ff ff ff
+................ <br>
+0070 - ff ff ff ff 00 68 65 6c-6c 6f 20 77 6f 72 6c 64
+.....hello world</p>
+
+<p style="margin-left:11%; margin-top: 1em">The PKCS#1
+block formatting is evident from this. If this was done
+using encrypt and decrypt the block would have been of type
+2 (the second byte) and random padding data visible instead
+of the 0xff bytes.</p>
+
+<p style="margin-left:11%; margin-top: 1em">It is possible
+to analyse the signature of certificates using this utility
+in conjunction with <b>asn1parse</b>. Consider the self
+signed example in certs/pca-cert.pem . Running
+<b>asn1parse</b> as follows yields:</p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl
+asn1parse -in pca-cert.pem <br>
+0:d=0 hl=4 l= 742 cons: SEQUENCE <br>
+4:d=1 hl=4 l= 591 cons: SEQUENCE <br>
+8:d=2 hl=2 l= 3 cons: cont [ 0 ] <br>
+10:d=3 hl=2 l= 1 prim: INTEGER :02 <br>
+13:d=2 hl=2 l= 1 prim: INTEGER :00 <br>
+16:d=2 hl=2 l= 13 cons: SEQUENCE <br>
+18:d=3 hl=2 l= 9 prim: OBJECT :md5WithRSAEncryption <br>
+29:d=3 hl=2 l= 0 prim: NULL <br>
+31:d=2 hl=2 l= 92 cons: SEQUENCE <br>
+33:d=3 hl=2 l= 11 cons: SET <br>
+35:d=4 hl=2 l= 9 cons: SEQUENCE <br>
+37:d=5 hl=2 l= 3 prim: OBJECT :countryName <br>
+42:d=5 hl=2 l= 2 prim: PRINTABLESTRING :AU <br>
+.... <br>
+599:d=1 hl=2 l= 13 cons: SEQUENCE <br>
+601:d=2 hl=2 l= 9 prim: OBJECT :md5WithRSAEncryption <br>
+612:d=2 hl=2 l= 0 prim: NULL <br>
+614:d=1 hl=3 l= 129 prim: BIT STRING</p>
+
+<p style="margin-left:11%; margin-top: 1em">The final
+<small>BIT STRING</small> contains the actual signature. It
+can be extracted with:</p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl
+asn1parse -in pca-cert.pem -out sig -noout -strparse 614</p>
+
+<p style="margin-left:11%; margin-top: 1em">The certificate
+public key can be extracted with:</p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl x509
+-in test/testx509.pem -pubkey -noout &gt;pubkey.pem</p>
+
+<p style="margin-left:11%; margin-top: 1em">The signature
+can be analysed with:</p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl rsautl
+-in sig -verify -asn1parse -inkey pubkey.pem -pubin <br>
+0:d=0 hl=2 l= 32 cons: SEQUENCE <br>
+2:d=1 hl=2 l= 12 cons: SEQUENCE <br>
+4:d=2 hl=2 l= 8 prim: OBJECT :md5 <br>
+14:d=2 hl=2 l= 0 prim: NULL <br>
+16:d=1 hl=2 l= 16 prim: OCTET STRING <br>
+0000 - f3 46 9e aa 1a 4a 73 c9-37 ea 93 00 48 25 08 b5
+.F...Js.7...H%..</p>
+
+<p style="margin-left:11%; margin-top: 1em">This is the
+parsed version of an <small>ASN1</small> DigestInfo
+structure. It can be seen that the digest used was md5. The
+actual part of the certificate that was signed can be
+extracted with:</p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl
+asn1parse -in pca-cert.pem -out tbs -noout -strparse 4</p>
+
+<p style="margin-left:11%; margin-top: 1em">and its digest
+computed with:</p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl md5 -c
+tbs <br>
+MD5(tbs)=
+f3:46:9e:aa:1a:4a:73:c9:37:ea:93:00:48:25:08:b5</p>
+
+<p style="margin-left:11%; margin-top: 1em">which it can be
+seen agrees with the recovered value above.</p>
+
+<h2>SEE ALSO
+<a name="SEE ALSO"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>dgst</b>(1),
+<b>rsa</b>(1), <b>genrsa</b>(1)</p>
+
+<h2>COPYRIGHT
+<a name="COPYRIGHT"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Copyright
+2000-2017 The OpenSSL Project Authors. All Rights
+Reserved.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Licensed under
+the OpenSSL license (the &quot;License&quot;). You may not
+use this file except in compliance with the License. You can
+obtain a copy in the file <small>LICENSE</small> in the
+source distribution or at
+&lt;https://www.openssl.org/source/license.html&gt;.</p>
+<hr>
+</body>
+</html>

@@ -1,0 +1,271 @@
+S_SERVER(1)                         OpenSSL                        S_SERVER(1)
+
+
+
+NNAAMMEE
+       s_server - SSL/TLS server program
+
+SSYYNNOOPPSSIISS
+       ooppeennssssll ss__sseerrvveerr [--aacccceepptt ppoorrtt] [--ccoonntteexxtt iidd] [--vveerriiffyy ddeepptthh] [--VVeerriiffyy
+       ddeepptthh] [--ccrrll__cchheecckk] [--ccrrll__cchheecckk__aallll] [--cceerrtt ffiilleennaammee] [--cceerrttffoorrmm
+       DDEERR||PPEEMM] [--kkeeyy kkeeyyffiillee] [--kkeeyyffoorrmm DDEERR||PPEEMM] [--ppaassss aarrgg] [--ddcceerrtt
+       ffiilleennaammee] [--ddcceerrttffoorrmm DDEERR||PPEEMM] [--ddkkeeyy kkeeyyffiillee] [--ddkkeeyyffoorrmm DDEERR||PPEEMM]
+       [--ddppaassss aarrgg] [--ddhhppaarraamm ffiilleennaammee] [--nnbbiioo] [--nnbbiioo__tteesstt] [--ccrrllff] [--ddeebbuugg]
+       [--mmssgg] [--ssttaattee] [--CCAAppaatthh ddiirreeccttoorryy] [--CCAAffiillee ffiilleennaammee] [--nnoocceerrtt]
+       [--cciipphheerr cciipphheerrlliisstt] [--sseerrvveerrpprreeff] [--qquuiieett] [--nnoo__ttmmpp__rrssaa] [--ssssll22]
+       [--ssssll33] [--ttllss11] [--nnoo__ssssll22] [--nnoo__ssssll33] [--nnoo__ttllss11] [--nnoo__ddhhee] [--bbuuggss]
+       [--hhaacckk] [--wwwwww] [--WWWWWW] [--HHTTTTPP] [--eennggiinnee iidd] [--ttllsseexxttddeebbuugg] [--nnoo__ttiicckkeett]
+       [--iidd__pprreeffiixx aarrgg] [--rraanndd ffiillee((ss))]
+
+DDEESSCCRRIIPPTTIIOONN
+       The ss__sseerrvveerr command implements a generic SSL/TLS server which listens
+       for connections on a given port using SSL/TLS.
+
+OOPPTTIIOONNSS
+       --aacccceepptt ppoorrtt
+           the TCP port to listen on for connections. If not specified 4433 is
+           used.
+
+       --ccoonntteexxtt iidd
+           sets the SSL context id. It can be given any string value. If this
+           option is not present a default value will be used.
+
+       --cceerrtt cceerrttnnaammee
+           The certificate to use, most servers cipher suites require the use
+           of a certificate and some require a certificate with a certain
+           public key type: for example the DSS cipher suites require a
+           certificate containing a DSS (DSA) key. If not specified then the
+           filename "server.pem" will be used.
+
+       --cceerrttffoorrmm ffoorrmmaatt
+           The certificate format to use: DER or PEM. PEM is the default.
+
+       --kkeeyy kkeeyyffiillee
+           The private key to use. If not specified then the certificate file
+           will be used.
+
+       --kkeeyyffoorrmm ffoorrmmaatt
+           The private format to use: DER or PEM. PEM is the default.
+
+       --ppaassss aarrgg
+           the private key password source. For more information about the
+           format of aarrgg see the PPAASSSS PPHHRRAASSEE AARRGGUUMMEENNTTSS section in ooppeennssssll(1).
+
+       --ddcceerrtt ffiilleennaammee, --ddkkeeyy kkeeyynnaammee
+           specify an additional certificate and private key, these behave in
+           the same manner as the --cceerrtt and --kkeeyy options except there is no
+           default if they are not specified (no additional certificate and
+           key is used). As noted above some cipher suites require a
+           certificate containing a key of a certain type. Some cipher suites
+           need a certificate carrying an RSA key and some a DSS (DSA) key. By
+           using RSA and DSS certificates and keys a server can support
+           clients which only support RSA or DSS cipher suites by using an
+           appropriate certificate.
+
+       --ddcceerrttffoorrmm ffoorrmmaatt, --ddkkeeyyffoorrmm ffoorrmmaatt, --ddppaassss aarrgg
+           addtional certificate and private key format and passphrase
+           respectively.
+
+       --nnoocceerrtt
+           if this option is set then no certificate is used. This restricts
+           the cipher suites available to the anonymous ones (currently just
+           anonymous DH).
+
+       --ddhhppaarraamm ffiilleennaammee
+           the DH parameter file to use. The ephemeral DH cipher suites
+           generate keys using a set of DH parameters. If not specified then
+           an attempt is made to load the parameters from the server
+           certificate file. If this fails then a static set of parameters
+           hard coded into the s_server program will be used.
+
+       --nnoo__ddhhee
+           if this option is set then no DH parameters will be loaded
+           effectively disabling the ephemeral DH cipher suites.
+
+       --nnoo__ttmmpp__rrssaa
+           certain export cipher suites sometimes use a temporary RSA key,
+           this option disables temporary RSA key generation.
+
+       --vveerriiffyy ddeepptthh, --VVeerriiffyy ddeepptthh
+           The verify depth to use. This specifies the maximum length of the
+           client certificate chain and makes the server request a certificate
+           from the client. With the --vveerriiffyy option a certificate is requested
+           but the client does not have to send one, with the --VVeerriiffyy option
+           the client must supply a certificate or an error occurs.
+
+           If the ciphersuite cannot request a client certificate (for example
+           an anonymous ciphersuite or PSK) this option has no effect.
+
+       --ccrrll__cchheecckk, --ccrrll__cchheecckk__aallll
+           Check the peer certificate has not been revoked by its CA.  The
+           CRL(s) are appended to the certificate file. With the
+           --ccrrll__cchheecckk__aallll option all CRLs of all CAs in the chain are checked.
+
+       --CCAAppaatthh ddiirreeccttoorryy
+           The directory to use for client certificate verification. This
+           directory must be in "hash format", see vveerriiffyy for more
+           information. These are also used when building the server
+           certificate chain.
+
+       --CCAAffiillee ffiillee
+           A file containing trusted certificates to use during client
+           authentication and to use when attempting to build the server
+           certificate chain. The list is also used in the list of acceptable
+           client CAs passed to the client when a certificate is requested.
+
+       --ssttaattee
+           prints out the SSL session states.
+
+       --ddeebbuugg
+           print extensive debugging information including a hex dump of all
+           traffic.
+
+       --mmssgg
+           show all protocol messages with hex dump.
+
+       --nnbbiioo__tteesstt
+           tests non blocking I/O
+
+       --nnbbiioo
+           turns on non blocking I/O
+
+       --ccrrllff
+           this option translated a line feed from the terminal into CR+LF.
+
+       --qquuiieett
+           inhibit printing of session and certificate information.
+
+       --ssssll22, --ssssll33, --ttllss11, --nnoo__ssssll22, --nnoo__ssssll33, --nnoo__ttllss11
+           these options disable the use of certain SSL or TLS protocols. By
+           default the initial handshake uses a method which should be
+           compatible with all servers and permit them to use SSL v3, SSL v2
+           or TLS as appropriate.
+
+       --bbuuggss
+           there are several known bug in SSL and TLS implementations. Adding
+           this option enables various workarounds.
+
+       --hhaacckk
+           this option enables a further workaround for some some early
+           Netscape SSL code (?).
+
+       --cciipphheerr cciipphheerrlliisstt
+           this allows the cipher list used by the server to be modified.
+           When the client sends a list of supported ciphers the first client
+           cipher also included in the server list is used. Because the client
+           specifies the preference order, the order of the server cipherlist
+           irrelevant. See the cciipphheerrss command for more information.
+
+       --sseerrvveerrpprreeff
+           use the server's cipher preferences, rather than the client's
+           preferences.
+
+       --ttllsseexxttddeebbuugg
+           print out a hex dump of any TLS extensions received from the
+           server.
+
+       --nnoo__ttiicckkeett
+           disable RFC4507bis session ticket support.
+
+       --wwwwww
+           sends a status message back to the client when it connects. This
+           includes lots of information about the ciphers used and various
+           session parameters.  The output is in HTML format so this option
+           will normally be used with a web browser.
+
+       --WWWWWW
+           emulates a simple web server. Pages will be resolved relative to
+           the current directory, for example if the URL
+           https://myhost/page.html is requested the file ./page.html will be
+           loaded.
+
+       --HHTTTTPP
+           emulates a simple web server. Pages will be resolved relative to
+           the current directory, for example if the URL
+           https://myhost/page.html is requested the file ./page.html will be
+           loaded. The files loaded are assumed to contain a complete and
+           correct HTTP response (lines that are part of the HTTP response
+           line and headers must end with CRLF).
+
+       --eennggiinnee iidd
+           specifying an engine (by it's unique iidd string) will cause ss__sseerrvveerr
+           to attempt to obtain a functional reference to the specified
+           engine, thus initialising it if needed. The engine will then be set
+           as the default for all available algorithms.
+
+       --iidd__pprreeffiixx aarrgg
+           generate SSL/TLS session IDs prefixed by aarrgg. This is mostly useful
+           for testing any SSL/TLS code (eg. proxies) that wish to deal with
+           multiple servers, when each of which might be generating a unique
+           range of session IDs (eg. with a certain prefix).
+
+       --rraanndd ffiillee((ss))
+           a file or files containing random data used to seed the random
+           number generator, or an EGD socket (see RRAANNDD__eeggdd(3)).  Multiple
+           files can be specified separated by a OS-dependent character.  The
+           separator is ;; for MS-Windows, ,, for OpenVMS, and :: for all others.
+
+CCOONNNNEECCTTEEDD CCOOMMMMAANNDDSS
+       If a connection request is established with an SSL client and neither
+       the --wwwwww nor the --WWWWWW option has been used then normally any data
+       received from the client is displayed and any key presses will be sent
+       to the client.
+
+       Certain single letter commands are also recognized which perform
+       special operations: these are listed below.
+
+       qq   end the current SSL connection but still accept new connections.
+
+       QQ   end the current SSL connection and exit.
+
+       rr   renegotiate the SSL session.
+
+       RR   renegotiate the SSL session and request a client certificate.
+
+       PP   send some plain text down the underlying TCP connection: this
+           should cause the client to disconnect due to a protocol violation.
+
+       SS   print out some session cache status information.
+
+NNOOTTEESS
+       ss__sseerrvveerr can be used to debug SSL clients. To accept connections from a
+       web browser the command:
+
+        openssl s_server -accept 443 -www
+
+       can be used for example.
+
+       Most web browsers (in particular Netscape and MSIE) only support RSA
+       cipher suites, so they cannot connect to servers which don't use a
+       certificate carrying an RSA key or a version of OpenSSL with RSA
+       disabled.
+
+       Although specifying an empty list of CAs when requesting a client
+       certificate is strictly speaking a protocol violation, some SSL clients
+       interpret this to mean any CA is acceptable. This is useful for
+       debugging purposes.
+
+       The session parameters can printed out using the sseessss__iidd program.
+
+       TLS extensions are only supported in OpenSSL 0.9.8 if they are
+       explictly enabled at compile time using for example the eennaabbllee--ttllsseexxtt
+       switch.
+
+BBUUGGSS
+       Because this program has a lot of options and also because some of the
+       techniques used are rather old, the C source of s_server is rather hard
+       to read and not a model of how things should be done. A typical SSL
+       server program would be much simpler.
+
+       The output of common ciphers is wrong: it just gives the list of
+       ciphers that OpenSSL recognizes and the client supports.
+
+       There should be a way for the ss__sseerrvveerr program to print out details of
+       any unknown cipher suites a client says it supports.
+
+SSEEEE AALLSSOO
+       sseessss__iidd(1), ss__cclliieenntt(1), cciipphheerrss(1)
+
+
+
+0.9.8zh                           2015-12-03                       S_SERVER(1)

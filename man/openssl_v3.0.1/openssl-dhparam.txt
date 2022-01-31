@@ -1,0 +1,110 @@
+OPENSSL-DHPARAM(1ossl)              OpenSSL             OPENSSL-DHPARAM(1ossl)
+
+
+
+NNAAMMEE
+       openssl-dhparam - DH parameter manipulation and generation
+
+SSYYNNOOPPSSIISS
+       ooppeennssssll ddhhppaarraamm [--hheellpp] [--iinnffoorrmm DDEERR|PPEEMM] [--oouuttffoorrmm DDEERR|PPEEMM] [--iinn
+       _f_i_l_e_n_a_m_e] [--oouutt _f_i_l_e_n_a_m_e] [--ddssaappaarraamm] [--cchheecckk] [--nnoooouutt] [--tteexxtt] [--22]
+       [--33] [--55] [--eennggiinnee _i_d] [--rraanndd _f_i_l_e_s] [--wwrriitteerraanndd _f_i_l_e] [--pprroovviiddeerr _n_a_m_e]
+       [--pprroovviiddeerr--ppaatthh _p_a_t_h] [--pprrooppqquueerryy _p_r_o_p_q] [_n_u_m_b_i_t_s]
+
+DDEESSCCRRIIPPTTIIOONN
+       This command is used to manipulate DH parameter files.
+
+       See "EXAMPLES" in ooppeennssssll--ggeennppkkeeyy(1) for examples on how to generate a
+       key using a named safe prime group without generating intermediate
+       parameters.
+
+OOPPTTIIOONNSS
+       --hheellpp
+           Print out a usage message.
+
+       --iinnffoorrmm DDEERR|PPEEMM, --oouuttffoorrmm DDEERR|PPEEMM
+           The input format and output format; the default is PPEEMM.  The object
+           is compatible with the PKCS#3 DDHHppaarraammeetteerr structure.  See
+           ooppeennssssll--ffoorrmmaatt--ooppttiioonnss(1) for details.
+
+       --iinn _f_i_l_e_n_a_m_e
+           This specifies the input filename to read parameters from or
+           standard input if this option is not specified.
+
+       --oouutt _f_i_l_e_n_a_m_e
+           This specifies the output filename parameters to. Standard output
+           is used if this option is not present. The output filename should
+           nnoott be the same as the input filename.
+
+       --ddssaappaarraamm
+           If this option is used, DSA rather than DH parameters are read or
+           created; they are converted to DH format.  Otherwise, "strong"
+           primes (such that (p-1)/2 is also prime) will be used for DH
+           parameter generation.
+
+           DH parameter generation with the --ddssaappaarraamm option is much faster,
+           and the recommended exponent length is shorter, which makes DH key
+           exchange more efficient.  Beware that with such DSA-style DH
+           parameters, a fresh DH key should be created for each use to avoid
+           small-subgroup attacks that may be possible otherwise.
+
+       --cchheecckk
+           Performs numerous checks to see if the supplied parameters are
+           valid and displays a warning if not.
+
+       --22, --33, --55
+           The generator to use, either 2, 3 or 5. If present then the input
+           file is ignored and parameters are generated instead. If not
+           present but _n_u_m_b_i_t_s is present, parameters are generated with the
+           default generator 2.
+
+       _n_u_m_b_i_t_s
+           This option specifies that a parameter set should be generated of
+           size _n_u_m_b_i_t_s. It must be the last option. If this option is present
+           then the input file is ignored and parameters are generated
+           instead. If this option is not present but a generator (--22, --33 or
+           --55) is present, parameters are generated with a default length of
+           2048 bits.  The minimim length is 512 bits. The maximum length is
+           10000 bits.
+
+       --nnoooouutt
+           This option inhibits the output of the encoded version of the
+           parameters.
+
+       --tteexxtt
+           This option prints out the DH parameters in human readable form.
+
+       --eennggiinnee _i_d
+           See "Engine Options" in ooppeennssssll(1).  This option is deprecated.
+
+       --rraanndd _f_i_l_e_s, --wwrriitteerraanndd _f_i_l_e
+           See "Random State Options" in ooppeennssssll(1) for details.
+
+       --pprroovviiddeerr _n_a_m_e
+       --pprroovviiddeerr--ppaatthh _p_a_t_h
+       --pprrooppqquueerryy _p_r_o_p_q
+           See "Provider Options" in ooppeennssssll(1), pprroovviiddeerr(7), and pprrooppeerrttyy(7).
+
+NNOOTTEESS
+       This command replaces the ddhh and ggeennddhh commands of previous releases.
+
+SSEEEE AALLSSOO
+       ooppeennssssll(1), ooppeennssssll--ppkkeeyyppaarraamm(1), ooppeennssssll--ddssaappaarraamm(1),
+       ooppeennssssll--ggeennppkkeeyy(1).
+
+HHIISSTTOORRYY
+       The --eennggiinnee option was deprecated in OpenSSL 3.0.
+
+       The --CC option was removed in OpenSSL 3.0.
+
+CCOOPPYYRRIIGGHHTT
+       Copyright 2000-2021 The OpenSSL Project Authors. All Rights Reserved.
+
+       Licensed under the Apache License 2.0 (the "License").  You may not use
+       this file except in compliance with the License.  You can obtain a copy
+       in the file LICENSE in the source distribution or at
+       <https://www.openssl.org/source/license.html>.
+
+
+
+3.0.1                             2022-01-31            OPENSSL-DHPARAM(1ossl)

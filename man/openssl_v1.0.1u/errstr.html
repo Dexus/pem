@@ -1,0 +1,93 @@
+<!-- Creator     : groff version 1.22.4 -->
+<!-- CreationDate: Mon Jan 31 16:14:40 2022 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>ERRSTR</title>
+
+</head>
+<body>
+
+<h1 align="center">ERRSTR</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#EXAMPLE">EXAMPLE</a><br>
+<a href="#SEE ALSO">SEE ALSO</a><br>
+
+<hr>
+
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">errstr - lookup
+error codes</p>
+
+<h2>SYNOPSIS
+<a name="SYNOPSIS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>openssl
+errstr error_code</b></p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Sometimes an
+application will not load error message and only numerical
+forms will be available. The <b>errstr</b> utility can be
+used to display the meaning of the hex code. The hex code is
+the hex digits after the second colon.</p>
+
+<h2>EXAMPLE
+<a name="EXAMPLE"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The error
+code:</p>
+
+
+<p style="margin-left:11%; margin-top: 1em">27594:error:2006D080:lib(32):func(109):reason(128):bss_file.c:107:</p>
+
+<p style="margin-left:11%; margin-top: 1em">can be
+displayed with:</p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl errstr
+2006D080</p>
+
+<p style="margin-left:11%; margin-top: 1em">to produce the
+error message:</p>
+
+
+<p style="margin-left:11%; margin-top: 1em">error:2006D080:BIO
+routines:BIO_new_file:no such file</p>
+
+<h2>SEE ALSO
+<a name="SEE ALSO"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>err</b>(3),
+<b>ERR_load_crypto_strings</b>(3),
+<b>SSL_load_error_strings</b>(3)</p>
+<hr>
+</body>
+</html>

@@ -1,0 +1,84 @@
+OPENSSL-PKCS7(1ossl)                OpenSSL               OPENSSL-PKCS7(1ossl)
+
+
+
+NNAAMMEE
+       openssl-pkcs7 - PKCS#7 command
+
+SSYYNNOOPPSSIISS
+       ooppeennssssll ppkkccss77 [--hheellpp] [--iinnffoorrmm DDEERR|PPEEMM] [--oouuttffoorrmm DDEERR|PPEEMM] [--iinn
+       _f_i_l_e_n_a_m_e] [--oouutt _f_i_l_e_n_a_m_e] [--pprriinntt] [--pprriinntt__cceerrttss] [--tteexxtt] [--nnoooouutt]
+       [--eennggiinnee _i_d] [--pprroovviiddeerr _n_a_m_e] [--pprroovviiddeerr--ppaatthh _p_a_t_h] [--pprrooppqquueerryy _p_r_o_p_q]
+
+DDEESSCCRRIIPPTTIIOONN
+       This command processes PKCS#7 files.  Note that it only understands
+       PKCS#7 v 1.5 as specified in IETF RFC 2315.  It cannot currently parse
+       CMS as described in IETF RFC 2630.
+
+OOPPTTIIOONNSS
+       --hheellpp
+           Print out a usage message.
+
+       --iinnffoorrmm DDEERR|PPEEMM, --oouuttffoorrmm DDEERR|PPEEMM
+           The input and formats; the default is PPEEMM.  See
+           ooppeennssssll--ffoorrmmaatt--ooppttiioonnss(1) for details.
+
+           The data is a PKCS#7 Version 1.5 structure.
+
+       --iinn _f_i_l_e_n_a_m_e
+           This specifies the input filename to read from or standard input if
+           this option is not specified.
+
+       --oouutt _f_i_l_e_n_a_m_e
+           Specifies the output filename to write to or standard output by
+           default.
+
+       --pprriinntt
+           Print out the full PKCS7 object.
+
+       --pprriinntt__cceerrttss
+           Prints out any certificates or CRLs contained in the file. They are
+           preceded by their subject and issuer names in one line format.
+
+       --tteexxtt
+           Prints out certificate details in full rather than just subject and
+           issuer names.
+
+       --nnoooouutt
+           Don't output the encoded version of the PKCS#7 structure (or
+           certificates if --pprriinntt__cceerrttss is set).
+
+       --eennggiinnee _i_d
+           See "Engine Options" in ooppeennssssll(1).  This option is deprecated.
+
+       --pprroovviiddeerr _n_a_m_e
+       --pprroovviiddeerr--ppaatthh _p_a_t_h
+       --pprrooppqquueerryy _p_r_o_p_q
+           See "Provider Options" in ooppeennssssll(1), pprroovviiddeerr(7), and pprrooppeerrttyy(7).
+
+EEXXAAMMPPLLEESS
+       Convert a PKCS#7 file from PEM to DER:
+
+        openssl pkcs7 -in file.pem -outform DER -out file.der
+
+       Output all certificates in a file:
+
+        openssl pkcs7 -in file.pem -print_certs -out certs.pem
+
+SSEEEE AALLSSOO
+       ooppeennssssll(1), ooppeennssssll--ccrrll22ppkkccss77(1)
+
+HHIISSTTOORRYY
+       The --eennggiinnee option was deprecated in OpenSSL 3.0.
+
+CCOOPPYYRRIIGGHHTT
+       Copyright 2000-2021 The OpenSSL Project Authors. All Rights Reserved.
+
+       Licensed under the Apache License 2.0 (the "License").  You may not use
+       this file except in compliance with the License.  You can obtain a copy
+       in the file LICENSE in the source distribution or at
+       <https://www.openssl.org/source/license.html>.
+
+
+
+3.0.1                             2022-01-31              OPENSSL-PKCS7(1ossl)

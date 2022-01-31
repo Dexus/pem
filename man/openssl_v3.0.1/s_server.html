@@ -1,0 +1,150 @@
+<!-- Creator     : groff version 1.22.4 -->
+<!-- CreationDate: Mon Jan 31 16:15:33 2022 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>OPENSSL-CMDS</title>
+
+</head>
+<body>
+
+<h1 align="center">OPENSSL-CMDS</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#OPTIONS">OPTIONS</a><br>
+<a href="#SEE ALSO">SEE ALSO</a><br>
+<a href="#HISTORY">HISTORY</a><br>
+<a href="#COPYRIGHT">COPYRIGHT</a><br>
+
+<hr>
+
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">asn1parse, ca,
+ciphers, cms, crl, crl2pkcs7, dgst, dhparam, dsa, dsaparam,
+ec, ecparam, enc, engine, errstr, gendsa, genpkey, genrsa,
+info, kdf, mac, nseq, ocsp, passwd, pkcs12, pkcs7, pkcs8,
+pkey, pkeyparam, pkeyutl, prime, rand, rehash, req, rsa,
+rsautl, s_client, s_server, s_time, sess_id, smime, speed,
+spkac, srp, storeutl, ts, verify, version, x509 - OpenSSL
+application commands</p>
+
+<h2>SYNOPSIS
+<a name="SYNOPSIS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>openssl</b>
+<i>cmd</i> <b>-help</b> | [<i>-option</i> | <i>-option
+arg</i>] ... [<i>arg</i>] ...</p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Every
+<i>cmd</i> listed above is a (sub-)command of the
+<b>openssl</b>(1) application. It has its own detailed
+manual page at <b>openssl-</b><b><i>cmd</i></b>(1). For
+example, to view the manual page for the <b>openssl dgst</b>
+command, type &quot;man openssl-dgst&quot;.</p>
+
+<h2>OPTIONS
+<a name="OPTIONS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Among others,
+every subcommand has a help option. <b><br>
+-help</b></p>
+
+<p style="margin-left:17%;">Print out a usage message for
+the subcommand.</p>
+
+<h2>SEE ALSO
+<a name="SEE ALSO"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>openssl</b>(1),
+<b>openssl-asn1parse</b>(1), <b>openssl-ca</b>(1),
+<b>openssl-ciphers</b>(1), <b>openssl-cms</b>(1),
+<b>openssl-crl</b>(1), <b>openssl-crl2pkcs7</b>(1),
+<b>openssl-dgst</b>(1), <b>openssl-dhparam</b>(1),
+<b>openssl-dsa</b>(1), <b>openssl-dsaparam</b>(1),
+<b>openssl-ec</b>(1), <b>openssl-ecparam</b>(1),
+<b>openssl-enc</b>(1), <b>openssl-engine</b>(1),
+<b>openssl-errstr</b>(1), <b>openssl-gendsa</b>(1),
+<b>openssl-genpkey</b>(1), <b>openssl-genrsa</b>(1),
+<b>openssl-info</b>(1), <b>openssl-kdf</b>(1),
+<b>openssl-mac</b>(1), <b>openssl-nseq</b>(1),
+<b>openssl-ocsp</b>(1), <b>openssl-passwd</b>(1),
+<b>openssl-pkcs12</b>(1), <b>openssl-pkcs7</b>(1),
+<b>openssl-pkcs8</b>(1), <b>openssl-pkey</b>(1),
+<b>openssl-pkeyparam</b>(1), <b>openssl-pkeyutl</b>(1),
+<b>openssl-prime</b>(1), <b>openssl-rand</b>(1),
+<b>openssl-rehash</b>(1), <b>openssl-req</b>(1),
+<b>openssl-rsa</b>(1), <b>openssl-rsautl</b>(1),
+<b>openssl-s_client</b>(1), <b>openssl-s_server</b>(1),
+<b>openssl-s_time</b>(1), <b>openssl-sess_id</b>(1),
+<b>openssl-smime</b>(1), <b>openssl-speed</b>(1),
+<b>openssl-spkac</b>(1), <b>openssl-srp</b>(1),
+<b>openssl-storeutl</b>(1), <b>openssl-ts</b>(1),
+<b>openssl-verify</b>(1), <b>openssl-version</b>(1),
+<b>openssl-x509</b>(1),</p>
+
+<h2>HISTORY
+<a name="HISTORY"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Initially, the
+manual page entry for the &quot;openssl <i>cmd</i>&quot;
+command used to be available at <i>cmd</i>(1). Later, the
+alias <b>openssl-</b><b><i>cmd</i></b>(1) was introduced,
+which made it easier to group the openssl commands using the
+<b>apropos</b>(1) command or the shell&rsquo;s tab
+completion.</p>
+
+<p style="margin-left:11%; margin-top: 1em">In order to
+reduce cluttering of the global manual page namespace, the
+manual page entries without the &rsquo;openssl-&rsquo;
+prefix have been deprecated in OpenSSL 3.0 and will be
+removed in OpenSSL 4.0.</p>
+
+<h2>COPYRIGHT
+<a name="COPYRIGHT"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Copyright
+2019-2020 The OpenSSL Project Authors. All Rights
+Reserved.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Licensed under
+the Apache License 2.0 (the &quot;License&quot;). You may
+not use this file except in compliance with the License. You
+can obtain a copy in the file <small>LICENSE</small> in the
+source distribution or at
+&lt;https://www.openssl.org/source/license.html&gt;.</p>
+<hr>
+</body>
+</html>

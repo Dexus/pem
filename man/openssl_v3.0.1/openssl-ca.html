@@ -1,0 +1,1157 @@
+<!-- Creator     : groff version 1.22.4 -->
+<!-- CreationDate: Mon Jan 31 16:15:22 2022 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>OPENSSL-CA</title>
+
+</head>
+<body>
+
+<h1 align="center">OPENSSL-CA</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#OPTIONS">OPTIONS</a><br>
+<a href="#CRL OPTIONS">CRL OPTIONS</a><br>
+<a href="#CONFIGURATION FILE OPTIONS">CONFIGURATION FILE OPTIONS</a><br>
+<a href="#POLICY FORMAT">POLICY FORMAT</a><br>
+<a href="#SPKAC FORMAT">SPKAC FORMAT</a><br>
+<a href="#EXAMPLES">EXAMPLES</a><br>
+<a href="#FILES">FILES</a><br>
+<a href="#RESTRICTIONS">RESTRICTIONS</a><br>
+<a href="#BUGS">BUGS</a><br>
+<a href="#WARNINGS">WARNINGS</a><br>
+<a href="#HISTORY">HISTORY</a><br>
+<a href="#SEE ALSO">SEE ALSO</a><br>
+<a href="#COPYRIGHT">COPYRIGHT</a><br>
+
+<hr>
+
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">openssl-ca -
+sample minimal CA application</p>
+
+<h2>SYNOPSIS
+<a name="SYNOPSIS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>openssl
+ca</b> [<b>-help</b>] [<b>-verbose</b>] [<b>-config</b>
+<i>filename</i>] [<b>-name</b> <i>section</i>]
+[<b>-section</b> <i>section</i>] [<b>-gencrl</b>]
+[<b>-revoke</b> <i>file</i>] [<b>-valid</b> <i>file</i>]
+[<b>-status</b> <i>serial</i>] [<b>-updatedb</b>]
+[<b>-crl_reason</b> <i>reason</i>] [<b>-crl_hold</b>
+<i>instruction</i>] [<b>-crl_compromise</b> <i>time</i>]
+[<b>-crl_CA_compromise</b> <i>time</i>]
+[<b>-crl_lastupdate</b> <i>date</i>] [<b>-crl_nextupdate</b>
+<i>date</i>] [<b>-crldays</b> <i>days</i>] [<b>-crlhours</b>
+<i>hours</i>] [<b>-crlsec</b> <i>seconds</i>]
+[<b>-crlexts</b> <i>section</i>] [<b>-startdate</b>
+<i>date</i>] [<b>-enddate</b> <i>date</i>] [<b>-days</b>
+<i>arg</i>] [<b>-md</b> <i>arg</i>] [<b>-policy</b>
+<i>arg</i>] [<b>-keyfile</b> <i>filename</i>|<i>uri</i>]
+[<b>-keyform <small>DER</small></b> |
+<b><small>PEM</small></b> |<b>P12</b>|
+<b><small>ENGINE</small></b> ] [<b>-key</b> <i>arg</i>]
+[<b>-passin</b> <i>arg</i>] [<b>-cert</b> <i>file</i>]
+[<b>-certform <small>DER</small></b> |
+<b><small>PEM</small></b> |<b>P12</b>] [<b>-selfsign</b>]
+[<b>-in</b> <i>file</i>] [<b>-inform <small>DER</small></b>
+|&lt; <small>PEM</small> &gt;] [<b>-out</b> <i>file</i>]
+[<b>-notext</b>] [<b>-dateopt</b>] [<b>-outdir</b>
+<i>dir</i>] [<b>-infiles</b>] [<b>-spkac</b> <i>file</i>]
+[<b>-ss_cert</b> <i>file</i>] [<b>-preserveDN</b>]
+[<b>-noemailDN</b>] [<b>-batch</b>] [<b>-msie_hack</b>]
+[<b>-extensions</b> <i>section</i>] [<b>-extfile</b>
+<i>section</i>] [<b>-subj</b> <i>arg</i>] [<b>-utf8</b>]
+[<b>-sigopt</b> <i>nm</i>:<i>v</i>] [<b>-vfyopt</b>
+<i>nm</i>:<i>v</i>] [<b>-create_serial</b>]
+[<b>-rand_serial</b>] [<b>-multivalue-rdn</b>] [<b>-rand</b>
+<i>files</i>] [<b>-writerand</b> <i>file</i>]
+[<b>-engine</b> <i>id</i>] [<b>-provider</b> <i>name</i>]
+[<b>-provider-path</b> <i>path</i>] [<b>-propquery</b>
+<i>propq</i>] [<i>certreq</i>...]</p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">This command
+emulates a <small>CA</small> application. See the
+<b><small>WARNINGS</small></b> especially when considering
+to use it productively. It can be used to sign certificate
+requests (CSRs) in a variety of forms and generate
+certificate revocation lists (CRLs). It also maintains a
+text database of issued certificates and their status. When
+signing certificates, a single request can be specified with
+the <b>-in</b> option, or multiple requests can be processed
+by specifying a set of <b>certreq</b> files after all
+options.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Note that there
+are also very lean ways of generating certificates: the
+<b>req</b> and <b>x509</b> commands can be used for directly
+creating certificates. See <b>openssl-req</b>(1) and
+<b>openssl-x509</b>(1) for details.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The
+descriptions of the <b>ca</b> command options are divided
+into each purpose.</p>
+
+<h2>OPTIONS
+<a name="OPTIONS"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>-help</b></p>
+
+<p style="margin-left:17%;">Print out a usage message.</p>
+
+<p style="margin-left:11%;"><b>-verbose</b></p>
+
+<p style="margin-left:17%;">This prints extra details about
+the operations being performed.</p>
+
+<p style="margin-left:11%;"><b>-config</b>
+<i>filename</i></p>
+
+<p style="margin-left:17%;">Specifies the configuration
+file to use. Optional; for a description of the default
+value, see &quot; <small>COMMAND SUMMARY&quot;</small> in
+<b>openssl</b>(1).</p>
+
+<p style="margin-left:11%;"><b>-name</b> <i>section</i>,
+<b>-section</b> <i>section</i></p>
+
+<p style="margin-left:17%;">Specifies the configuration
+file section to use (overrides <b>default_ca</b> in the
+<b>ca</b> section).</p>
+
+<p style="margin-left:11%;"><b>-in</b> <i>filename</i></p>
+
+<p style="margin-left:17%;">An input filename containing a
+single certificate request ( <small>CSR</small> ) to be
+signed by the <small>CA.</small></p>
+
+<p style="margin-left:11%;"><b>-inform
+<small>DER</small></b> | <b><small>PEM</small></b></p>
+
+<p style="margin-left:17%;">The format of the data in
+certificate request input files; unspecified by default. See
+<b>openssl-format-options</b>(1) for details.</p>
+
+<p style="margin-left:11%;"><b>-ss_cert</b>
+<i>filename</i></p>
+
+<p style="margin-left:17%;">A single self-signed
+certificate to be signed by the <small>CA.</small></p>
+
+<p style="margin-left:11%;"><b>-spkac</b>
+<i>filename</i></p>
+
+<p style="margin-left:17%;">A file containing a single
+Netscape signed public key and challenge and additional
+field values to be signed by the <small>CA.</small> See the
+<b><small>SPKAC FORMAT</small></b> section for information
+on the required input and output format.</p>
+
+<p style="margin-left:11%;"><b>-infiles</b></p>
+
+<p style="margin-left:17%;">If present this should be the
+last option, all subsequent arguments are taken as the names
+of files containing certificate requests.</p>
+
+<p style="margin-left:11%;"><b>-out</b> <i>filename</i></p>
+
+<p style="margin-left:17%;">The output file to output
+certificates to. The default is standard output. The
+certificate details will also be printed out to this file in
+<small>PEM</small> format (except that <b>-spkac</b> outputs
+<small>DER</small> format).</p>
+
+<p style="margin-left:11%;"><b>-outdir</b>
+<i>directory</i></p>
+
+<p style="margin-left:17%;">The directory to output
+certificates to. The certificate will be written to a
+filename consisting of the serial number in hex with
+<i>.pem</i> appended.</p>
+
+<p style="margin-left:11%;"><b>-cert</b>
+<i>filename</i></p>
+
+<p style="margin-left:17%;">The <small>CA</small>
+certificate, which must match with <b>-keyfile</b>.</p>
+
+<p style="margin-left:11%;"><b>-certform
+<small>DER</small></b> | <b><small>PEM</small></b>
+|<b>P12</b></p>
+
+<p style="margin-left:17%;">The format of the data in
+certificate input files; unspecified by default. See
+<b>openssl-format-options</b>(1) for details.</p>
+
+<p style="margin-left:11%;"><b>-keyfile</b>
+<i>filename</i>|<i>uri</i></p>
+
+<p style="margin-left:17%;">The <small>CA</small> private
+key to sign certificate requests with. This must match with
+<b>-cert</b>.</p>
+
+<p style="margin-left:11%;"><b>-keyform
+<small>DER</small></b> | <b><small>PEM</small></b>
+|<b>P12</b>| <b><small>ENGINE</small></b></p>
+
+<p style="margin-left:17%;">The format of the private key
+input file; unspecified by default. See
+<b>openssl-format-options</b>(1) for details.</p>
+
+<p style="margin-left:11%;"><b>-sigopt</b>
+<i>nm</i>:<i>v</i></p>
+
+<p style="margin-left:17%;">Pass options to the signature
+algorithm during sign operations. Names and values of these
+options are algorithm-specific.</p>
+
+<p style="margin-left:11%;"><b>-vfyopt</b>
+<i>nm</i>:<i>v</i></p>
+
+<p style="margin-left:17%;">Pass options to the signature
+algorithm during verify operations. Names and values of
+these options are algorithm-specific.</p>
+
+<p style="margin-left:17%; margin-top: 1em">This often
+needs to be given while signing too, because the
+self-signature of a certificate signing request (
+<small>CSR</small> ) is verified against the included public
+key, and that verification may need its own set of
+options.</p>
+
+<p style="margin-left:11%;"><b>-key</b> <i>password</i></p>
+
+<p style="margin-left:17%;">The password used to encrypt
+the private key. Since on some systems the command line
+arguments are visible (e.g., when using <b>ps</b>(1) on
+Unix), this option should be used with caution. Better use
+<b>-passin</b>.</p>
+
+<p style="margin-left:11%;"><b>-passin</b> <i>arg</i></p>
+
+<p style="margin-left:17%;">The key password source for key
+files and certificate PKCS#12 files. For more information
+about the format of <b>arg</b> see
+<b>openssl-passphrase-options</b>(1).</p>
+
+<p style="margin-left:11%;"><b>-selfsign</b></p>
+
+<p style="margin-left:17%;">Indicates the issued
+certificates are to be signed with the key the certificate
+requests were signed with (given with <b>-keyfile</b>).
+Certificate requests signed with a different key are
+ignored. If <b>-spkac</b>, <b>-ss_cert</b> or <b>-gencrl</b>
+are given, <b>-selfsign</b> is ignored.</p>
+
+<p style="margin-left:17%; margin-top: 1em">A consequence
+of using <b>-selfsign</b> is that the self-signed
+certificate appears among the entries in the certificate
+database (see the configuration option <b>database</b>), and
+uses the same serial number counter as all other
+certificates sign with the self-signed certificate.</p>
+
+<p style="margin-left:11%;"><b>-notext</b></p>
+
+<p style="margin-left:17%;">Don&rsquo;t output the text
+form of a certificate to the output file.</p>
+
+<p style="margin-left:11%;"><b>-dateopt</b></p>
+
+<p style="margin-left:17%;">Specify the date output format.
+Values are: rfc_822 and iso_8601. Defaults to rfc_822.</p>
+
+<p style="margin-left:11%;"><b>-startdate</b>
+<i>date</i></p>
+
+<p style="margin-left:17%;">This allows the start date to
+be explicitly set. The format of the date is
+<small>YYMMDDHHMMSSZ</small> (the same as an
+<small>ASN1</small> UTCTime structure), or
+<small>YYYYMMDDHHMMSSZ</small> (the same as an
+<small>ASN1</small> GeneralizedTime structure). In both
+formats, seconds <small>SS</small> and timezone Z must be
+present.</p>
+
+<p style="margin-left:11%;"><b>-enddate</b> <i>date</i></p>
+
+<p style="margin-left:17%;">This allows the expiry date to
+be explicitly set. The format of the date is
+<small>YYMMDDHHMMSSZ</small> (the same as an
+<small>ASN1</small> UTCTime structure), or
+<small>YYYYMMDDHHMMSSZ</small> (the same as an
+<small>ASN1</small> GeneralizedTime structure). In both
+formats, seconds <small>SS</small> and timezone Z must be
+present.</p>
+
+<p style="margin-left:11%;"><b>-days</b> <i>arg</i></p>
+
+<p style="margin-left:17%;">The number of days to certify
+the certificate for.</p>
+
+<p style="margin-left:11%;"><b>-md</b> <i>alg</i></p>
+
+<p style="margin-left:17%;">The message digest to use. Any
+digest supported by the <b>openssl-dgst</b>(1) command can
+be used. For signing algorithms that do not support a digest
+(i.e. Ed25519 and Ed448) any message digest that is set is
+ignored. This option also applies to CRLs.</p>
+
+<p style="margin-left:11%;"><b>-policy</b> <i>arg</i></p>
+
+<p style="margin-left:17%;">This option defines the
+<small>CA</small> &quot;policy&quot; to use. This is a
+section in the configuration file which decides which fields
+should be mandatory or match the <small>CA</small>
+certificate. Check out the <b><small>POLICY
+FORMAT</small></b> section for more information.</p>
+
+<p style="margin-left:11%;"><b>-msie_hack</b></p>
+
+<p style="margin-left:17%;">This is a deprecated option to
+make this command work with very old versions of the
+<small>IE</small> certificate enrollment control
+&quot;certenr3&quot;. It used UniversalStrings for almost
+everything. Since the old control has various security bugs
+its use is strongly discouraged.</p>
+
+<p style="margin-left:11%;"><b>-preserveDN</b></p>
+
+<p style="margin-left:17%;">Normally the <small>DN</small>
+order of a certificate is the same as the order of the
+fields in the relevant policy section. When this option is
+set the order is the same as the request. This is largely
+for compatibility with the older <small>IE</small>
+enrollment control which would only accept certificates if
+their DNs match the order of the request. This is not needed
+for Xenroll.</p>
+
+<p style="margin-left:11%;"><b>-noemailDN</b></p>
+
+<p style="margin-left:17%;">The <small>DN</small> of a
+certificate can contain the <small>EMAIL</small> field if
+present in the request <small>DN,</small> however, it is
+good policy just having the e-mail set into the altName
+extension of the certificate. When this option is set the
+<small>EMAIL</small> field is removed from the
+certificate&rsquo; subject and set only in the, eventually
+present, extensions. The <b>email_in_dn</b> keyword can be
+used in the configuration file to enable this behaviour.</p>
+
+<p style="margin-left:11%;"><b>-batch</b></p>
+
+<p style="margin-left:17%;">This sets the batch mode. In
+this mode no questions will be asked and all certificates
+will be certified automatically.</p>
+
+<p style="margin-left:11%;"><b>-extensions</b>
+<i>section</i></p>
+
+<p style="margin-left:17%;">The section of the
+configuration file containing certificate extensions to be
+added when a certificate is issued (defaults to
+<b>x509_extensions</b> unless the <b>-extfile</b> option is
+used). If no X.509 extensions are specified then a V1
+certificate is created, else a V3 certificate is created.
+See the <b>x509v3_config</b>(5) manual page for details of
+the extension section format.</p>
+
+<p style="margin-left:11%;"><b>-extfile</b> <i>file</i></p>
+
+<p style="margin-left:17%;">An additional configuration
+file to read certificate extensions from (using the default
+section unless the <b>-extensions</b> option is also
+used).</p>
+
+<p style="margin-left:11%;"><b>-subj</b> <i>arg</i></p>
+
+<p style="margin-left:17%;">Supersedes subject name given
+in the request.</p>
+
+<p style="margin-left:17%; margin-top: 1em">The arg must be
+formatted as
+&quot;/type0=value0/type1=value1/type2=...&quot;. Special
+characters may be escaped by &quot;\&quot; (backslash),
+whitespace is retained. Empty values are permitted, but the
+corresponding type will not be included in the resulting
+certificate. Giving a single &quot;/&quot; will lead to an
+empty sequence of RDNs (a NULL-DN). Multi-valued RDNs can be
+formed by placing a &quot;+&quot; character instead of a
+&quot;/&quot; between the AttributeValueAssertions (AVAs)
+that specify the members of the set. Example:</p>
+
+
+<p style="margin-left:17%; margin-top: 1em">&quot;/DC=org/DC=OpenSSL/DC=users/UID=123456+CN=John
+Doe&quot;</p>
+
+<p style="margin-left:11%;"><b>-utf8</b></p>
+
+<p style="margin-left:17%;">This option causes field values
+to be interpreted as <small>UTF8</small> strings, by default
+they are interpreted as <small>ASCII.</small> This means
+that the field values, whether prompted from a terminal or
+obtained from a configuration file, must be valid
+<small>UTF8</small> strings.</p>
+
+<p style="margin-left:11%;"><b>-create_serial</b></p>
+
+<p style="margin-left:17%;">If reading serial from the text
+file as specified in the configuration fails, specifying
+this option creates a new random serial to be used as next
+serial number. To get random serial numbers, use the
+<b>-rand_serial</b> flag instead; this should only be used
+for simple error-recovery.</p>
+
+<p style="margin-left:11%;"><b>-rand_serial</b></p>
+
+<p style="margin-left:17%;">Generate a large random number
+to use as the serial number. This overrides any option or
+configuration to use a serial number file.</p>
+
+<p style="margin-left:11%;"><b>-multivalue-rdn</b></p>
+
+<p style="margin-left:17%;">This option has been deprecated
+and has no effect.</p>
+
+<p style="margin-left:11%;"><b>-rand</b> <i>files</i>,
+<b>-writerand</b> <i>file</i></p>
+
+<p style="margin-left:17%;">See &quot;Random State
+Options&quot; in <b>openssl</b>(1) for details.</p>
+
+<p style="margin-left:11%;"><b>-engine</b> <i>id</i></p>
+
+<p style="margin-left:17%;">See &quot;Engine Options&quot;
+in <b>openssl</b>(1). This option is deprecated.</p>
+
+<p style="margin-left:11%;"><b>-provider</b> <i>name</i>
+<b><br>
+-provider-path</b> <i>path</i> <b><br>
+-propquery</b> <i>propq</i></p>
+
+<p style="margin-left:17%;">See &quot;Provider
+Options&quot; in <b>openssl</b>(1), <b>provider</b>(7), and
+<b>property</b>(7).</p>
+
+<h2>CRL OPTIONS
+<a name="CRL OPTIONS"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>-gencrl</b></p>
+
+<p style="margin-left:17%;">This option generates a
+<small>CRL</small> based on information in the index
+file.</p>
+
+<p style="margin-left:11%;"><b>-crl_lastupdate</b>
+<i>time</i></p>
+
+<p style="margin-left:17%;">Allows the value of the
+<small>CRL</small> &rsquo;s lastUpdate field to be
+explicitly set; if this option is not present, the current
+time is used. Accepts times in <small>YYMMDDHHMMSSZ</small>
+format (the same as an <small>ASN1</small> UTCTime
+structure) or <small>YYYYMMDDHHMMSSZ</small> format (the
+same as an <small>ASN1</small> GeneralizedTime
+structure).</p>
+
+<p style="margin-left:11%;"><b>-crl_nextupdate</b>
+<i>time</i></p>
+
+<p style="margin-left:17%;">Allows the value of the
+<small>CRL</small> &rsquo;s nextUpdate field to be
+explicitly set; if this option is present, any values given
+for <b>-crldays</b>, <b>-crlhours</b> and <b>-crlsec</b> are
+ignored. Accepts times in the same formats as
+<b>-crl_lastupdate</b>.</p>
+
+<p style="margin-left:11%;"><b>-crldays</b> <i>num</i></p>
+
+<p style="margin-left:17%;">The number of days before the
+next <small>CRL</small> is due. That is the days from now to
+place in the <small>CRL</small> nextUpdate field.</p>
+
+<p style="margin-left:11%;"><b>-crlhours</b> <i>num</i></p>
+
+<p style="margin-left:17%;">The number of hours before the
+next <small>CRL</small> is due.</p>
+
+<p style="margin-left:11%;"><b>-crlsec</b> <i>num</i></p>
+
+<p style="margin-left:17%;">The number of seconds before
+the next <small>CRL</small> is due.</p>
+
+<p style="margin-left:11%;"><b>-revoke</b>
+<i>filename</i></p>
+
+<p style="margin-left:17%;">A filename containing a
+certificate to revoke.</p>
+
+<p style="margin-left:11%;"><b>-valid</b>
+<i>filename</i></p>
+
+<p style="margin-left:17%;">A filename containing a
+certificate to add a Valid certificate entry.</p>
+
+<p style="margin-left:11%;"><b>-status</b>
+<i>serial</i></p>
+
+<p style="margin-left:17%;">Displays the revocation status
+of the certificate with the specified serial number and
+exits.</p>
+
+<p style="margin-left:11%;"><b>-updatedb</b></p>
+
+<p style="margin-left:17%;">Updates the database index to
+purge expired certificates.</p>
+
+<p style="margin-left:11%;"><b>-crl_reason</b>
+<i>reason</i></p>
+
+<p style="margin-left:17%;">Revocation reason, where
+<i>reason</i> is one of: <b>unspecified</b>,
+<b>keyCompromise</b>, <b>CACompromise</b>,
+<b>affiliationChanged</b>, <b>superseded</b>,
+<b>cessationOfOperation</b>, <b>certificateHold</b> or
+<b>removeFromCRL</b>. The matching of <i>reason</i> is case
+insensitive. Setting any revocation reason will make the
+<small>CRL</small> v2.</p>
+
+<p style="margin-left:17%; margin-top: 1em">In practice
+<b>removeFromCRL</b> is not particularly useful because it
+is only used in delta CRLs which are not currently
+implemented.</p>
+
+<p style="margin-left:11%;"><b>-crl_hold</b>
+<i>instruction</i></p>
+
+<p style="margin-left:17%;">This sets the
+<small>CRL</small> revocation reason code to
+<b>certificateHold</b> and the hold instruction to
+<i>instruction</i> which must be an <small>OID.</small>
+Although any <small>OID</small> can be used only
+<b>holdInstructionNone</b> (the use of which is discouraged
+by <small>RFC2459</small> ) <b>holdInstructionCallIssuer</b>
+or <b>holdInstructionReject</b> will normally be used.</p>
+
+<p style="margin-left:11%;"><b>-crl_compromise</b>
+<i>time</i></p>
+
+<p style="margin-left:17%;">This sets the revocation reason
+to <b>keyCompromise</b> and the compromise time to
+<i>time</i>. <i>time</i> should be in GeneralizedTime format
+that is <i><small>YYYYMMDDHHMMSSZ</small></i> .</p>
+
+<p style="margin-left:11%;"><b>-crl_CA_compromise</b>
+<i>time</i></p>
+
+<p style="margin-left:17%;">This is the same as
+<b>crl_compromise</b> except the revocation reason is set to
+<b>CACompromise</b>.</p>
+
+<p style="margin-left:11%;"><b>-crlexts</b>
+<i>section</i></p>
+
+<p style="margin-left:17%;">The section of the
+configuration file containing <small>CRL</small> extensions
+to include. If no <small>CRL</small> extension section is
+present then a V1 <small>CRL</small> is created, if the
+<small>CRL</small> extension section is present (even if it
+is empty) then a V2 <small>CRL</small> is created. The
+<small>CRL</small> extensions specified are
+<small>CRL</small> extensions and <b>not</b>
+<small>CRL</small> entry extensions. It should be noted that
+some software (for example Netscape) can&rsquo;t handle V2
+CRLs. See <b>x509v3_config</b>(5) manual page for details of
+the extension section format.</p>
+
+<h2>CONFIGURATION FILE OPTIONS
+<a name="CONFIGURATION FILE OPTIONS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The section of
+the configuration file containing options for this command
+is found as follows: If the <b>-name</b> command line option
+is used, then it names the section to be used. Otherwise the
+section to be used must be named in the <b>default_ca</b>
+option of the <b>ca</b> section of the configuration file
+(or in the default section of the configuration file).
+Besides <b>default_ca</b>, the following options are read
+directly from the <b>ca</b> section: <small><br>
+RANDFILE</small> <br>
+preserve <br>
+msie_hack With the exception of
+<b><small>RANDFILE</small></b> , this is probably a bug and
+may change in future releases.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Many of the
+configuration file options are identical to command line
+options. Where the option is present in the configuration
+file and the command line the command line value is used.
+Where an option is described as mandatory then it must be
+present in the configuration file or the command line
+equivalent (if any) used. <b><br>
+oid_file</b></p>
+
+<p style="margin-left:17%;">This specifies a file
+containing additional <b><small>OBJECT
+IDENTIFIERS</small></b> . Each line of the file should
+consist of the numerical form of the object identifier
+followed by whitespace then the short name followed by
+whitespace and finally the long name.</p>
+
+<p style="margin-left:11%;"><b>oid_section</b></p>
+
+<p style="margin-left:17%;">This specifies a section in the
+configuration file containing extra object identifiers. Each
+line should consist of the short name of the object
+identifier followed by <b>=</b> and the numerical form. The
+short and long names are the same when this option is
+used.</p>
+
+<p style="margin-left:11%;"><b>new_certs_dir</b></p>
+
+<p style="margin-left:17%;">The same as the <b>-outdir</b>
+command line option. It specifies the directory where new
+certificates will be placed. Mandatory.</p>
+
+<p style="margin-left:11%;"><b>certificate</b></p>
+
+<p style="margin-left:17%;">The same as <b>-cert</b>. It
+gives the file containing the <small>CA</small> certificate.
+Mandatory.</p>
+
+<p style="margin-left:11%;"><b>private_key</b></p>
+
+<p style="margin-left:17%;">Same as the <b>-keyfile</b>
+option. The file containing the <small>CA</small> private
+key. Mandatory.</p>
+
+
+<p style="margin-left:11%;"><b><small>RANDFILE</small></b></p>
+
+<p style="margin-left:17%;">At startup the specified file
+is loaded into the random number generator, and at exit 256
+bytes will be written to it. (Note: Using a
+<small>RANDFILE</small> is not necessary anymore, see the
+&quot; <small>HISTORY&quot;</small> section.</p>
+
+<p style="margin-left:11%;"><b>default_days</b></p>
+
+<p style="margin-left:17%;">The same as the <b>-days</b>
+option. The number of days to certify a certificate for.</p>
+
+<p style="margin-left:11%;"><b>default_startdate</b></p>
+
+<p style="margin-left:17%;">The same as the
+<b>-startdate</b> option. The start date to certify a
+certificate for. If not set the current time is used.</p>
+
+<p style="margin-left:11%;"><b>default_enddate</b></p>
+
+<p style="margin-left:17%;">The same as the <b>-enddate</b>
+option. Either this option or <b>default_days</b> (or the
+command line equivalents) must be present.</p>
+
+<p style="margin-left:11%;"><b>default_crl_hours
+default_crl_days</b></p>
+
+<p style="margin-left:17%;">The same as the
+<b>-crlhours</b> and the <b>-crldays</b> options. These will
+only be used if neither command line option is present. At
+least one of these must be present to generate a
+<small>CRL.</small></p>
+
+<p style="margin-left:11%;"><b>default_md</b></p>
+
+<p style="margin-left:17%;">The same as the <b>-md</b>
+option. Mandatory except where the signing algorithm does
+not require a digest (i.e. Ed25519 and Ed448).</p>
+
+<p style="margin-left:11%;"><b>database</b></p>
+
+<p style="margin-left:17%;">The text database file to use.
+Mandatory. This file must be present though initially it
+will be empty.</p>
+
+<p style="margin-left:11%;"><b>unique_subject</b></p>
+
+<p style="margin-left:17%;">If the value <b>yes</b> is
+given, the valid certificate entries in the database must
+have unique subjects. if the value <b>no</b> is given,
+several valid certificate entries may have the exact same
+subject. The default value is <b>yes</b>, to be compatible
+with older (pre 0.9.8) versions of OpenSSL. However, to make
+<small>CA</small> certificate roll-over easier, it&rsquo;s
+recommended to use the value <b>no</b>, especially if
+combined with the <b>-selfsign</b> command line option.</p>
+
+<p style="margin-left:17%; margin-top: 1em">Note that it is
+valid in some circumstances for certificates to be created
+without any subject. In the case where there are multiple
+certificates without subjects this does not count as a
+duplicate.</p>
+
+<p style="margin-left:11%;"><b>serial</b></p>
+
+<p style="margin-left:17%;">A text file containing the next
+serial number to use in hex. Mandatory. This file must be
+present and contain a valid serial number.</p>
+
+<p style="margin-left:11%;"><b>crlnumber</b></p>
+
+<p style="margin-left:17%;">A text file containing the next
+<small>CRL</small> number to use in hex. The crl number will
+be inserted in the CRLs only if this file exists. If this
+file is present, it must contain a valid <small>CRL</small>
+number.</p>
+
+<p style="margin-left:11%;"><b>x509_extensions</b></p>
+
+<p style="margin-left:17%;">A fallback to the
+<b>-extensions</b> option.</p>
+
+<p style="margin-left:11%;"><b>crl_extensions</b></p>
+
+<p style="margin-left:17%;">A fallback to the
+<b>-crlexts</b> option.</p>
+
+<p style="margin-left:11%;"><b>preserve</b></p>
+
+<p style="margin-left:17%;">The same as
+<b>-preserveDN</b></p>
+
+<p style="margin-left:11%;"><b>email_in_dn</b></p>
+
+<p style="margin-left:17%;">The same as <b>-noemailDN</b>.
+If you want the <small>EMAIL</small> field to be removed
+from the <small>DN</small> of the certificate simply set
+this to &rsquo;no&rsquo;. If not present the default is to
+allow for the <small>EMAIL</small> filed in the
+certificate&rsquo;s <small>DN.</small></p>
+
+<p style="margin-left:11%;"><b>msie_hack</b></p>
+
+<p style="margin-left:17%;">The same as
+<b>-msie_hack</b></p>
+
+<p style="margin-left:11%;"><b>policy</b></p>
+
+<p style="margin-left:17%;">The same as <b>-policy</b>.
+Mandatory. See the <b><small>POLICY FORMAT</small></b>
+section for more information.</p>
+
+<p style="margin-left:11%;"><b>name_opt</b>,
+<b>cert_opt</b></p>
+
+<p style="margin-left:17%;">These options allow the format
+used to display the certificate details when asking the user
+to confirm signing. All the options supported by the
+<b>x509</b> utilities <b>-nameopt</b> and <b>-certopt</b>
+switches can be used here, except the <b>no_signame</b> and
+<b>no_sigdump</b> are permanently set and cannot be disabled
+(this is because the certificate signature cannot be
+displayed because the certificate has not been signed at
+this point).</p>
+
+<p style="margin-left:17%; margin-top: 1em">For convenience
+the values <b>ca_default</b> are accepted by both to produce
+a reasonable output.</p>
+
+<p style="margin-left:17%; margin-top: 1em">If neither
+option is present the format used in earlier versions of
+OpenSSL is used. Use of the old format is <b>strongly</b>
+discouraged because it only displays fields mentioned in the
+<b>policy</b> section, mishandles multicharacter string
+types and does not display extensions.</p>
+
+<p style="margin-left:11%;"><b>copy_extensions</b></p>
+
+<p style="margin-left:17%;">Determines how extensions in
+certificate requests should be handled. If set to
+<b>none</b> or this option is not present then extensions
+are ignored and not copied to the certificate. If set to
+<b>copy</b> then any extensions present in the request that
+are not already present are copied to the certificate. If
+set to <b>copyall</b> then all extensions in the request are
+copied to the certificate: if the extension is already
+present in the certificate it is deleted first. See the
+<b><small>WARNINGS</small></b> section before using this
+option.</p>
+
+<p style="margin-left:17%; margin-top: 1em">The main use of
+this option is to allow a certificate request to supply
+values for certain extensions such as subjectAltName.</p>
+
+<h2>POLICY FORMAT
+<a name="POLICY FORMAT"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The policy
+section consists of a set of variables corresponding to
+certificate <small>DN</small> fields. If the value is
+&quot;match&quot; then the field value must match the same
+field in the <small>CA</small> certificate. If the value is
+&quot;supplied&quot; then it must be present. If the value
+is &quot;optional&quot; then it may be present. Any fields
+not mentioned in the policy section are silently deleted,
+unless the <b>-preserveDN</b> option is set but this can be
+regarded more of a quirk than intended behaviour.</p>
+
+<h2>SPKAC FORMAT
+<a name="SPKAC FORMAT"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The input to
+the <b>-spkac</b> command line option is a Netscape signed
+public key and challenge. This will usually come from the
+<b><small>KEYGEN</small></b> tag in an <small>HTML</small>
+form to create a new private key. It is however possible to
+create SPKACs using <b>openssl-spkac</b>(1).</p>
+
+<p style="margin-left:11%; margin-top: 1em">The file should
+contain the variable <small>SPKAC</small> set to the value
+of the <small>SPKAC</small> and also the required
+<small>DN</small> components as name value pairs. If you
+need to include the same component twice then it can be
+preceded by a number and a &rsquo;.&rsquo;.</p>
+
+<p style="margin-left:11%; margin-top: 1em">When processing
+<small>SPKAC</small> format, the output is
+<small>DER</small> if the <b>-out</b> flag is used, but
+<small>PEM</small> format if sending to stdout or the
+<b>-outdir</b> flag is used.</p>
+
+<h2>EXAMPLES
+<a name="EXAMPLES"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Note: these
+examples assume that the directory structure this command
+assumes is already set up and the relevant files already
+exist. This usually involves creating a <small>CA</small>
+certificate and private key with <b>openssl-req</b>(1), a
+serial number file and an empty index file and placing them
+in the relevant directories.</p>
+
+<p style="margin-left:11%; margin-top: 1em">To use the
+sample configuration file below the directories
+<i>demoCA</i>, <i>demoCA/private</i> and
+<i>demoCA/newcerts</i> would be created. The
+<small>CA</small> certificate would be copied to
+<i>demoCA/cacert.pem</i> and its private key to
+<i>demoCA/private/cakey.pem</i>. A file <i>demoCA/serial</i>
+would be created containing for example &quot;01&quot; and
+the empty index file <i>demoCA/index.txt</i>.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Sign a
+certificate request:</p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl ca -in
+req.pem -out newcert.pem</p>
+
+<p style="margin-left:11%; margin-top: 1em">Sign an
+<small>SM2</small> certificate request:</p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl ca -in
+sm2.csr -out sm2.crt -md sm3 \ <br>
+-sigopt &quot;distid:1234567812345678&quot; \ <br>
+-vfyopt &quot;distid:1234567812345678&quot;</p>
+
+<p style="margin-left:11%; margin-top: 1em">Sign a
+certificate request, using <small>CA</small> extensions:</p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl ca -in
+req.pem -extensions v3_ca -out newcert.pem</p>
+
+<p style="margin-left:11%; margin-top: 1em">Generate a
+<small>CRL</small></p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl ca
+-gencrl -out crl.pem</p>
+
+<p style="margin-left:11%; margin-top: 1em">Sign several
+requests:</p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl ca
+-infiles req1.pem req2.pem req3.pem</p>
+
+<p style="margin-left:11%; margin-top: 1em">Certify a
+Netscape <small>SPKAC:</small></p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl ca
+-spkac spkac.txt</p>
+
+<p style="margin-left:11%; margin-top: 1em">A sample
+<small>SPKAC</small> file (the <small>SPKAC</small> line has
+been truncated for clarity):</p>
+
+
+<p style="margin-left:11%; margin-top: 1em">SPKAC=MIG0MGAwXDANBgkqhkiG9w0BAQEFAANLADBIAkEAn7PDhCeV/xIxUg8V70YRxK2A5
+<br>
+CN=Steve Test <br>
+emailAddress=steve@openssl.org <br>
+0.OU=OpenSSL Group <br>
+1.OU=Another Group</p>
+
+<p style="margin-left:11%; margin-top: 1em">A sample
+configuration file with the relevant sections for this
+command:</p>
+
+<p style="margin-left:11%; margin-top: 1em">[ ca ] <br>
+default_ca = CA_default # The default ca section <br>
+[ CA_default ] <br>
+dir = ./demoCA # top dir <br>
+database = $dir/index.txt # index file. <br>
+new_certs_dir = $dir/newcerts # new certs dir <br>
+certificate = $dir/cacert.pem # The CA cert <br>
+serial = $dir/serial # serial no file <br>
+#rand_serial = yes # for random serial#'s <br>
+private_key = $dir/private/cakey.pem# CA private key <br>
+default_days = 365 # how long to certify for <br>
+default_crl_days= 30 # how long before next CRL <br>
+default_md = md5 # md to use <br>
+policy = policy_any # default policy <br>
+email_in_dn = no # Don't add the email into cert DN <br>
+name_opt = ca_default # Subject name display option <br>
+cert_opt = ca_default # Certificate display option <br>
+copy_extensions = none # Don't copy extensions from request
+<br>
+[ policy_any ] <br>
+countryName = supplied <br>
+stateOrProvinceName = optional <br>
+organizationName = optional <br>
+organizationalUnitName = optional <br>
+commonName = supplied <br>
+emailAddress = optional</p>
+
+<h2>FILES
+<a name="FILES"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Note: the
+location of all files can change either by compile time
+options, configuration file entries, environment variables
+or command line options. The values below reflect the
+default values.</p>
+
+
+<p style="margin-left:11%; margin-top: 1em">/usr/local/ssl/lib/openssl.cnf
+- master configuration file <br>
+./demoCA - main CA directory <br>
+./demoCA/cacert.pem - CA certificate <br>
+./demoCA/private/cakey.pem - CA private key <br>
+./demoCA/serial - CA serial number file <br>
+./demoCA/serial.old - CA serial number backup file <br>
+./demoCA/index.txt - CA text database file <br>
+./demoCA/index.txt.old - CA text database backup file <br>
+./demoCA/certs - certificate output file</p>
+
+<h2>RESTRICTIONS
+<a name="RESTRICTIONS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The text
+database index file is a critical part of the process and if
+corrupted it can be difficult to fix. It is theoretically
+possible to rebuild the index file from all the issued
+certificates and a current <small>CRL:</small> however there
+is no option to do this.</p>
+
+<p style="margin-left:11%; margin-top: 1em">V2
+<small>CRL</small> features like delta CRLs are not
+currently supported.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Although
+several requests can be input and handled at once it is only
+possible to include one <small>SPKAC</small> or self-signed
+certificate.</p>
+
+<h2>BUGS
+<a name="BUGS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">This command is
+quirky and at times downright unfriendly.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The use of an
+in-memory text database can cause problems when large
+numbers of certificates are present because, as the name
+implies the database has to be kept in memory.</p>
+
+<p style="margin-left:11%; margin-top: 1em">This command
+really needs rewriting or the required functionality exposed
+at either a command or interface level so that a more
+user-friendly replacement could handle things properly. The
+script <b><small>CA</small> .pl</b> helps a little but not
+very much.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Any fields in a
+request that are not present in a policy are silently
+deleted. This does not happen if the <b>-preserveDN</b>
+option is used. To enforce the absence of the
+<small>EMAIL</small> field within the <small>DN,</small> as
+suggested by RFCs, regardless the contents of the
+request&rsquo; subject the <b>-noemailDN</b> option can be
+used. The behaviour should be more friendly and
+configurable.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Canceling some
+commands by refusing to certify a certificate can create an
+empty file.</p>
+
+<h2>WARNINGS
+<a name="WARNINGS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">This command
+was originally meant as an example of how to do things in a
+<small>CA.</small> Its code does not have production
+quality. It was not supposed to be used as a full blown
+<small>CA</small> itself, nevertheless some people are using
+it for this purpose at least internally. When doing so,
+specific care should be taken to properly secure the private
+key(s) used for signing certificates. It is advisable to
+keep them in a secure <small>HW</small> storage such as a
+smart card or <small>HSM</small> and access them via a
+suitable engine or crypto provider.</p>
+
+<p style="margin-left:11%; margin-top: 1em">This command
+command is effectively a single user command: no locking is
+done on the various files and attempts to run more than one
+<b>openssl ca</b> command on the same database can have
+unpredictable results.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The
+<b>copy_extensions</b> option should be used with caution.
+If care is not taken then it can be a security risk. For
+example if a certificate request contains a basicConstraints
+extension with <small>CA:TRUE</small> and the
+<b>copy_extensions</b> value is set to <b>copyall</b> and
+the user does not spot this when the certificate is
+displayed then this will hand the requester a valid
+<small>CA</small> certificate. This situation can be avoided
+by setting <b>copy_extensions</b> to <b>copy</b> and
+including basicConstraints with <small>CA:FALSE</small> in
+the configuration file. Then if the request contains a
+basicConstraints extension it will be ignored.</p>
+
+<p style="margin-left:11%; margin-top: 1em">It is advisable
+to also include values for other extensions such as
+<b>keyUsage</b> to prevent a request supplying its own
+values.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Additional
+restrictions can be placed on the <small>CA</small>
+certificate itself. For example if the <small>CA</small>
+certificate has:</p>
+
+
+<p style="margin-left:11%; margin-top: 1em">basicConstraints
+= CA:TRUE, pathlen:0</p>
+
+<p style="margin-left:11%; margin-top: 1em">then even if a
+certificate is issued with <small>CA:TRUE</small> it will
+not be valid.</p>
+
+<h2>HISTORY
+<a name="HISTORY"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Since OpenSSL
+1.1.1, the program follows <small>RFC5280.</small>
+Specifically, certificate validity period (specified by any
+of <b>-startdate</b>, <b>-enddate</b> and <b>-days</b>) and
+<small>CRL</small> last/next update time (specified by any
+of <b>-crl_lastupdate</b>, <b>-crl_nextupdate</b>,
+<b>-crldays</b>, <b>-crlhours</b> and <b>-crlsec</b>) will
+be encoded as UTCTime if the dates are earlier than year
+2049 (included), and as GeneralizedTime if the dates are in
+year 2050 or later.</p>
+
+<p style="margin-left:11%; margin-top: 1em">OpenSSL 1.1.1
+introduced a new random generator ( <small>CSPRNG</small> )
+with an improved seeding mechanism. The new seeding
+mechanism makes it unnecessary to define a
+<small>RANDFILE</small> for saving and restoring randomness.
+This option is retained mainly for compatibility
+reasons.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The
+<b>-section</b> option was added in OpenSSL 3.0.0.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The
+<b>-multivalue-rdn</b> option has become obsolete in OpenSSL
+3.0.0 and has no effect.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The
+<b>-engine</b> option was deprecated in OpenSSL 3.0.</p>
+
+<h2>SEE ALSO
+<a name="SEE ALSO"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>openssl</b>(1),
+<b>openssl-req</b>(1), <b>openssl-spkac</b>(1),
+<b>openssl-x509</b>(1), <b><small>CA</small> .pl</b>(1),
+<b>config</b>(5), <b>x509v3_config</b>(5)</p>
+
+<h2>COPYRIGHT
+<a name="COPYRIGHT"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Copyright
+2000-2021 The OpenSSL Project Authors. All Rights
+Reserved.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Licensed under
+the Apache License 2.0 (the &quot;License&quot;). You may
+not use this file except in compliance with the License. You
+can obtain a copy in the file <small>LICENSE</small> in the
+source distribution or at
+&lt;https://www.openssl.org/source/license.html&gt;.</p>
+<hr>
+</body>
+</html>

@@ -1,0 +1,295 @@
+<!-- Creator     : groff version 1.22.4 -->
+<!-- CreationDate: Mon Jan 31 16:14:30 2022 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>CA.PL</title>
+
+</head>
+<body>
+
+<h1 align="center">CA.PL</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#COMMAND OPTIONS">COMMAND OPTIONS</a><br>
+<a href="#EXAMPLES">EXAMPLES</a><br>
+<a href="#DSA CERTIFICATES">DSA CERTIFICATES</a><br>
+<a href="#NOTES">NOTES</a><br>
+<a href="#ENVIRONMENT VARIABLES">ENVIRONMENT VARIABLES</a><br>
+<a href="#SEE ALSO">SEE ALSO</a><br>
+
+<hr>
+
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">CA.pl -
+friendlier interface for OpenSSL certificate programs</p>
+
+<h2>SYNOPSIS
+<a name="SYNOPSIS"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b><small>CA</small>
+.pl</b> [<b>-?</b>] [<b>-h</b>] [<b>-help</b>]
+[<b>-newcert</b>] [<b>-newreq</b>] [<b>-newreq-nodes</b>]
+[<b>-newca</b>] [<b>-xsign</b>] [<b>-sign</b>]
+[<b>-signreq</b>] [<b>-signcert</b>] [<b>-verify</b>]
+[<b>files</b>]</p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The
+<b><small>CA</small> .pl</b> script is a perl script that
+supplies the relevant command line arguments to the
+<b>openssl</b> command for some common certificate
+operations. It is intended to simplify the process of
+certificate creation and management by the use of some
+simple options.</p>
+
+<h2>COMMAND OPTIONS
+<a name="COMMAND OPTIONS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>?</b>,
+<b>-h</b>, <b>-help</b></p>
+
+<p style="margin-left:17%;">prints a usage message.</p>
+
+<p style="margin-left:11%;"><b>-newcert</b></p>
+
+<p style="margin-left:17%;">creates a new self signed
+certificate. The private key is written to the file
+&quot;newkey.pem&quot; and the request written to the file
+&quot;newreq.pem&quot;.</p>
+
+<p style="margin-left:11%;"><b>-newreq</b></p>
+
+<p style="margin-left:17%;">creates a new certificate
+request. The private key is written to the file
+&quot;newkey.pem&quot; and the request written to the file
+&quot;newreq.pem&quot;.</p>
+
+<p style="margin-left:11%;"><b>-newreq-nodes</b></p>
+
+<p style="margin-left:17%;">is like <b>-newreq</b> except
+that the private key will not be encrypted.</p>
+
+<p style="margin-left:11%;"><b>-newca</b></p>
+
+<p style="margin-left:17%;">creates a new <small>CA</small>
+hierarchy for use with the <b>ca</b> program (or the
+<b>-signcert</b> and <b>-xsign</b> options). The user is
+prompted to enter the filename of the <small>CA</small>
+certificates (which should also contain the private key) or
+by hitting <small>ENTER</small> details of the
+<small>CA</small> will be prompted for. The relevant files
+and directories are created in a directory called
+&quot;demoCA&quot; in the current directory.</p>
+
+<p style="margin-left:11%;"><b>-pkcs12</b></p>
+
+<p style="margin-left:17%;">create a PKCS#12 file
+containing the user certificate, private key and
+<small>CA</small> certificate. It expects the user
+certificate and private key to be in the file
+&quot;newcert.pem&quot; and the <small>CA</small>
+certificate to be in the file demoCA/cacert.pem, it creates
+a file &quot;newcert.p12&quot;. This command can thus be
+called after the <b>-sign</b> option. The PKCS#12 file can
+be imported directly into a browser. If there is an
+additional argument on the command line it will be used as
+the &quot;friendly name&quot; for the certificate (which is
+typically displayed in the browser list box), otherwise the
+name &quot;My Certificate&quot; is used.</p>
+
+<p style="margin-left:11%;"><b>-sign</b>, <b>-signreq</b>,
+<b>-xsign</b></p>
+
+<p style="margin-left:17%;">calls the <b>ca</b> program to
+sign a certificate request. It expects the request to be in
+the file &quot;newreq.pem&quot;. The new certificate is
+written to the file &quot;newcert.pem&quot; except in the
+case of the <b>-xsign</b> option when it is written to
+standard output.</p>
+
+<p style="margin-left:11%;"><b>-signCA</b></p>
+
+<p style="margin-left:17%;">this option is the same as the
+<b>-signreq</b> option except it uses the configuration file
+section <b>v3_ca</b> and so makes the signed request a valid
+<small>CA</small> certificate. This is useful when creating
+intermediate <small>CA</small> from a root
+<small>CA.</small></p>
+
+<p style="margin-left:11%;"><b>-signcert</b></p>
+
+<p style="margin-left:17%;">this option is the same as
+<b>-sign</b> except it expects a self signed certificate to
+be present in the file &quot;newreq.pem&quot;.</p>
+
+<p style="margin-left:11%;"><b>-verify</b></p>
+
+<p style="margin-left:17%;">verifies certificates against
+the <small>CA</small> certificate for &quot;demoCA&quot;. If
+no certificates are specified on the command line it tries
+to verify the file &quot;newcert.pem&quot;.</p>
+
+<p style="margin-left:11%;"><b>files</b></p>
+
+<p style="margin-left:17%;">one or more optional
+certificate file names for use with the <b>-verify</b>
+command.</p>
+
+<h2>EXAMPLES
+<a name="EXAMPLES"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Create a
+<small>CA</small> hierarchy:</p>
+
+<p style="margin-left:11%; margin-top: 1em">CA.pl
+-newca</p>
+
+<p style="margin-left:11%; margin-top: 1em">Complete
+certificate creation example: create a <small>CA,</small>
+create a request, sign the request and finally create a
+PKCS#12 file containing it.</p>
+
+<p style="margin-left:11%; margin-top: 1em">CA.pl -newca
+<br>
+CA.pl -newreq <br>
+CA.pl -signreq <br>
+CA.pl -pkcs12 &quot;My Test Certificate&quot;</p>
+
+<h2>DSA CERTIFICATES
+<a name="DSA CERTIFICATES"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Although the
+<b><small>CA</small> .pl</b> creates <small>RSA</small> CAs
+and requests it is still possible to use it with
+<small>DSA</small> certificates and requests using the
+<b>req</b>(1) command directly. The following example shows
+the steps that would typically be taken.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Create some
+<small>DSA</small> parameters:</p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl
+dsaparam -out dsap.pem 1024</p>
+
+<p style="margin-left:11%; margin-top: 1em">Create a
+<small>DSA CA</small> certificate and private key:</p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl req
+-x509 -newkey dsa:dsap.pem -keyout cacert.pem -out
+cacert.pem</p>
+
+<p style="margin-left:11%; margin-top: 1em">Create the
+<small>CA</small> directories and files:</p>
+
+<p style="margin-left:11%; margin-top: 1em">CA.pl
+-newca</p>
+
+<p style="margin-left:11%; margin-top: 1em">enter
+cacert.pem when prompted for the <small>CA</small> file
+name.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Create a
+<small>DSA</small> certificate request and private key (a
+different set of parameters can optionally be created
+first):</p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl req
+-out newreq.pem -newkey dsa:dsap.pem</p>
+
+<p style="margin-left:11%; margin-top: 1em">Sign the
+request:</p>
+
+<p style="margin-left:11%; margin-top: 1em">CA.pl
+-signreq</p>
+
+<h2>NOTES
+<a name="NOTES"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Most of the
+filenames mentioned can be modified by editing the
+<b><small>CA</small> .pl</b> script.</p>
+
+<p style="margin-left:11%; margin-top: 1em">If the demoCA
+directory already exists then the <b>-newca</b> command will
+not overwrite it and will do nothing. This can happen if a
+previous call using the <b>-newca</b> option terminated
+abnormally. To get the correct behaviour delete the demoCA
+directory if it already exists.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Under some
+environments it may not be possible to run the
+<b><small>CA</small> .pl</b> script directly (for example
+Win32) and the default configuration file location may be
+wrong. In this case the command:</p>
+
+<p style="margin-left:11%; margin-top: 1em">perl -S
+CA.pl</p>
+
+<p style="margin-left:11%; margin-top: 1em">can be used and
+the <b><small>OPENSSL_CONF</small></b> environment variable
+changed to point to the correct path of the configuration
+file &quot;openssl.cnf&quot;.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The script is
+intended as a simple front end for the <b>openssl</b>
+program for use by a beginner. Its behaviour isn&rsquo;t
+always what is wanted. For more control over the behaviour
+of the certificate commands call the <b>openssl</b> command
+directly.</p>
+
+<h2>ENVIRONMENT VARIABLES
+<a name="ENVIRONMENT VARIABLES"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The variable
+<b><small>OPENSSL_CONF</small></b> if defined allows an
+alternative configuration file location to be specified, it
+should contain the full path to the configuration file, not
+just its directory.</p>
+
+<h2>SEE ALSO
+<a name="SEE ALSO"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>x509</b>(1),
+<b>ca</b>(1), <b>req</b>(1), <b>pkcs12</b>(1),
+<b>config</b>(5)</p>
+<hr>
+</body>
+</html>

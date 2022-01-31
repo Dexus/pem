@@ -1,0 +1,166 @@
+EC(1)                               OpenSSL                              EC(1)
+
+
+
+NNAAMMEE
+       openssl-ec, ec - EC key processing
+
+SSYYNNOOPPSSIISS
+       ooppeennssssll eecc [--hheellpp] [--iinnffoorrmm PPEEMM||DDEERR] [--oouuttffoorrmm PPEEMM||DDEERR] [--iinn ffiilleennaammee]
+       [--ppaassssiinn aarrgg] [--oouutt ffiilleennaammee] [--ppaassssoouutt aarrgg] [--ddeess] [--ddeess33] [--iiddeeaa]
+       [--tteexxtt] [--nnoooouutt] [--ppaarraamm__oouutt] [--ppuubbiinn] [--ppuubboouutt] [--ccoonnvv__ffoorrmm aarrgg]
+       [--ppaarraamm__eenncc aarrgg] [--nnoo__ppuubblliicc] [--cchheecckk] [--eennggiinnee iidd]
+
+DDEESSCCRRIIPPTTIIOONN
+       The eecc command processes EC keys. They can be converted between various
+       forms and their components printed out. NNoottee OpenSSL uses the private
+       key format specified in 'SEC 1: Elliptic Curve Cryptography'
+       (http://www.secg.org/). To convert an OpenSSL EC private key into the
+       PKCS#8 private key format use the ppkkccss88 command.
+
+OOPPTTIIOONNSS
+       --hheellpp
+           Print out a usage message.
+
+       --iinnffoorrmm DDEERR||PPEEMM
+           This specifies the input format. The DDEERR option with a private key
+           uses an ASN.1 DER encoded SEC1 private key. When used with a public
+           key it uses the SubjectPublicKeyInfo structure as specified in RFC
+           3280.  The PPEEMM form is the default format: it consists of the DDEERR
+           format base64 encoded with additional header and footer lines. In
+           the case of a private key PKCS#8 format is also accepted.
+
+       --oouuttffoorrmm DDEERR||PPEEMM
+           This specifies the output format, the options have the same meaning
+           as the --iinnffoorrmm option.
+
+       --iinn ffiilleennaammee
+           This specifies the input filename to read a key from or standard
+           input if this option is not specified. If the key is encrypted a
+           pass phrase will be prompted for.
+
+       --ppaassssiinn aarrgg
+           the input file password source. For more information about the
+           format of aarrgg see the PPAASSSS PPHHRRAASSEE AARRGGUUMMEENNTTSS section in ooppeennssssll(1).
+
+       --oouutt ffiilleennaammee
+           This specifies the output filename to write a key to or standard
+           output by is not specified. If any encryption options are set then
+           a pass phrase will be prompted for. The output filename should nnoott
+           be the same as the input filename.
+
+       --ppaassssoouutt aarrgg
+           the output file password source. For more information about the
+           format of aarrgg see the PPAASSSS PPHHRRAASSEE AARRGGUUMMEENNTTSS section in ooppeennssssll(1).
+
+       --ddeess||--ddeess33||--iiddeeaa
+           These options encrypt the private key with the DES, triple DES,
+           IDEA or any other cipher supported by OpenSSL before outputting it.
+           A pass phrase is prompted for.  If none of these options is
+           specified the key is written in plain text. This means that using
+           the eecc utility to read in an encrypted key with no encryption
+           option can be used to remove the pass phrase from a key, or by
+           setting the encryption options it can be use to add or change the
+           pass phrase.  These options can only be used with PEM format output
+           files.
+
+       --tteexxtt
+           prints out the public, private key components and parameters.
+
+       --nnoooouutt
+           this option prevents output of the encoded version of the key.
+
+       --mmoodduulluuss
+           this option prints out the value of the public key component of the
+           key.
+
+       --ppuubbiinn
+           by default a private key is read from the input file: with this
+           option a public key is read instead.
+
+       --ppuubboouutt
+           by default a private key is output. With this option a public key
+           will be output instead. This option is automatically set if the
+           input is a public key.
+
+       --ccoonnvv__ffoorrmm
+           This specifies how the points on the elliptic curve are converted
+           into octet strings. Possible values are: ccoommpprreesssseedd (the default
+           value), uunnccoommpprreesssseedd and hhyybbrriidd. For more information regarding the
+           point conversion forms please read the X9.62 standard.  NNoottee Due to
+           patent issues the ccoommpprreesssseedd option is disabled by default for
+           binary curves and can be enabled by defining the preprocessor macro
+           OOPPEENNSSSSLL__EECC__BBIINN__PPTT__CCOOMMPP at compile time.
+
+       --ppaarraamm__eenncc aarrgg
+           This specifies how the elliptic curve parameters are encoded.
+           Possible value are: nnaammeedd__ccuurrvvee, i.e. the ec parameters are
+           specified by an OID, or eexxpplliicciitt where the ec parameters are
+           explicitly given (see RFC 3279 for the definition of the EC
+           parameters structures). The default value is nnaammeedd__ccuurrvvee.  NNoottee the
+           iimmpplliicciittllyyCCAA alternative, as specified in RFC 3279, is currently
+           not implemented in OpenSSL.
+
+       --nnoo__ppuubblliicc
+           This option omits the public key components from the private key
+           output.
+
+       --cchheecckk
+           this option checks the consistency of an EC private or public key.
+
+       --eennggiinnee iidd
+           specifying an engine (by its unique iidd string) will cause eecc to
+           attempt to obtain a functional reference to the specified engine,
+           thus initialising it if needed. The engine will then be set as the
+           default for all available algorithms.
+
+NNOOTTEESS
+       The PEM private key format uses the header and footer lines:
+
+        -----BEGIN EC PRIVATE KEY-----
+        -----END EC PRIVATE KEY-----
+
+       The PEM public key format uses the header and footer lines:
+
+        -----BEGIN PUBLIC KEY-----
+        -----END PUBLIC KEY-----
+
+EEXXAAMMPPLLEESS
+       To encrypt a private key using triple DES:
+
+        openssl ec -in key.pem -des3 -out keyout.pem
+
+       To convert a private key from PEM to DER format:
+
+        openssl ec -in key.pem -outform DER -out keyout.der
+
+       To print out the components of a private key to standard output:
+
+        openssl ec -in key.pem -text -noout
+
+       To just output the public part of a private key:
+
+        openssl ec -in key.pem -pubout -out pubkey.pem
+
+       To change the parameters encoding to eexxpplliicciitt:
+
+        openssl ec -in key.pem -param_enc explicit -out keyout.pem
+
+       To change the point conversion form to ccoommpprreesssseedd:
+
+        openssl ec -in key.pem -conv_form compressed -out keyout.pem
+
+SSEEEE AALLSSOO
+       eeccppaarraamm(1), ddssaa(1), rrssaa(1)
+
+CCOOPPYYRRIIGGHHTT
+       Copyright 2003-2016 The OpenSSL Project Authors. All Rights Reserved.
+
+       Licensed under the OpenSSL license (the "License").  You may not use
+       this file except in compliance with the License.  You can obtain a copy
+       in the file LICENSE in the source distribution or at
+       <https://www.openssl.org/source/license.html>.
+
+
+
+1.1.0l                            2019-09-10                             EC(1)

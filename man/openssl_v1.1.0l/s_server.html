@@ -1,0 +1,831 @@
+<!-- Creator     : groff version 1.22.4 -->
+<!-- CreationDate: Mon Jan 31 16:15:03 2022 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>S_SERVER</title>
+
+</head>
+<body>
+
+<h1 align="center">S_SERVER</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#OPTIONS">OPTIONS</a><br>
+<a href="#CONNECTED COMMANDS">CONNECTED COMMANDS</a><br>
+<a href="#NOTES">NOTES</a><br>
+<a href="#BUGS">BUGS</a><br>
+<a href="#SEE ALSO">SEE ALSO</a><br>
+<a href="#HISTORY">HISTORY</a><br>
+<a href="#COPYRIGHT">COPYRIGHT</a><br>
+
+<hr>
+
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em">openssl-s_server,
+s_server - SSL/TLS server program</p>
+
+<h2>SYNOPSIS
+<a name="SYNOPSIS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>openssl
+s_server</b> [<b>-help</b>] [<b>-port port</b>] [<b>-accept
+val</b>] [<b>-naccept count</b>] [<b>-unix val</b>]
+[<b>-unlink</b>] [<b>-4</b>] [<b>-6</b>] [<b>-context
+id</b>] [<b>-verify depth</b>] [<b>-Verify depth</b>]
+[<b>-crl_check</b>] [<b>-crl_check_all</b>] [<b>-cert
+filename</b>] [<b>-certform DER|PEM</b>] [<b>-key
+keyfile</b>] [<b>-keyform DER|PEM</b>] [<b>-pass arg</b>]
+[<b>-dcert filename</b>] [<b>-dcertform DER|PEM</b>]
+[<b>-dkey keyfile</b>] [<b>-dkeyform DER|PEM</b>] [<b>-dpass
+arg</b>] [<b>-dhparam filename</b>] [<b>-nbio</b>]
+[<b>-nbio_test</b>] [<b>-crlf</b>] [<b>-debug</b>]
+[<b>-msg</b>] [<b>-state</b>] [<b>-CApath directory</b>]
+[<b>-CAfile filename</b>] [<b>-no-CAfile</b>]
+[<b>-no-CApath</b>] [<b>-attime timestamp</b>]
+[<b>-check_ss_sig</b>] [<b>-explicit_policy</b>]
+[<b>-extended_crl</b>] [<b>-ignore_critical</b>]
+[<b>-inhibit_any</b>] [<b>-inhibit_map</b>]
+[<b>-no_check_time</b>] [<b>-partial_chain</b>] [<b>-policy
+arg</b>] [<b>-policy_check</b>] [<b>-policy_print</b>]
+[<b>-purpose purpose</b>] [<b>-suiteB_128</b>]
+[<b>-suiteB_128_only</b>] [<b>-suiteB_192</b>]
+[<b>-trusted_first</b>] [<b>-no_alt_chains</b>]
+[<b>-use_deltas</b>] [<b>-auth_level num</b>]
+[<b>-verify_depth num</b>] [<b>-verify_return_error</b>]
+[<b>-verify_email email</b>] [<b>-verify_hostname
+hostname</b>] [<b>-verify_ip ip</b>] [<b>-verify_name
+name</b>] [<b>-x509_strict</b>] [<b>-nocert</b>]
+[<b>-client_sigalgs sigalglist</b>] [<b>-named_curve
+curve</b>] [<b>-cipher cipherlist</b>] [<b>-serverpref</b>]
+[<b>-quiet</b>] [<b>-ssl3</b>] [<b>-tls1</b>]
+[<b>-tls1_1</b>] [<b>-tls1_2</b>] [<b>-dtls</b>]
+[<b>-dtls1</b>] [<b>-dtls1_2</b>] [<b>-listen</b>]
+[<b>-async</b>] [<b>-split_send_frag</b>]
+[<b>-max_pipelines</b>] [<b>-read_buf</b>] [<b>-no_ssl3</b>]
+[<b>-no_tls1</b>] [<b>-no_tls1_1</b>] [<b>-no_tls1_2</b>]
+[<b>-no_dhe</b>] [<b>-bugs</b>] [<b>-comp</b>]
+[<b>-no_comp</b>] [<b>-brief</b>] [<b>-www</b>]
+[<b>-WWW</b>] [<b>-HTTP</b>] [<b>-engine id</b>]
+[<b>-tlsextdebug</b>] [<b>-no_ticket</b>] [<b>-id_prefix
+arg</b>] [<b>-rand file(s)</b>] [<b>-serverinfo file</b>]
+[<b>-no_resumption_on_reneg</b>] [<b>-status</b>]
+[<b>-status_verbose</b>] [<b>-status_timeout nsec</b>]
+[<b>-status_url url</b>] [<b>-alpn protocols</b>]
+[<b>-nextprotoneg protocols</b>]</p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The
+<b>s_server</b> command implements a generic
+<small>SSL/TLS</small> server which listens for connections
+on a given port using <small>SSL/TLS.</small></p>
+
+<h2>OPTIONS
+<a name="OPTIONS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">In addition to
+the options below the <b>s_server</b> utility also supports
+the common and server only options documented in the in the
+&quot;Supported Command Line Commands&quot; section of the
+<b>SSL_CONF_cmd</b>(3) manual page. <b><br>
+-help</b></p>
+
+<p style="margin-left:17%;">Print out a usage message.</p>
+
+<p style="margin-left:11%;"><b>-port port</b></p>
+
+<p style="margin-left:17%;">The <small>TCP</small> port to
+listen on for connections. If not specified 4433 is
+used.</p>
+
+<p style="margin-left:11%;"><b>-accept val</b></p>
+
+<p style="margin-left:17%;">The optional <small>TCP</small>
+host and port to listen on for connections. If not
+specified, *:4433 is used.</p>
+
+<p style="margin-left:11%;"><b>-naccept count</b></p>
+
+<p style="margin-left:17%;">The server will exit after
+receiving <b>number</b> connections, default unlimited.</p>
+
+<p style="margin-left:11%;"><b>-unix val</b></p>
+
+<p style="margin-left:17%;">Unix domain socket to accept
+on.</p>
+
+<p style="margin-left:11%;"><b>-unlink</b></p>
+
+<p style="margin-left:17%;">For -unix, unlink existing
+socket first.</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+<p><b>-4</b></p></td>
+<td width="3%"></td>
+<td width="21%">
+
+
+<p>Use IPv4 only.</p></td>
+<td width="62%">
+</td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+<p><b>-6</b></p></td>
+<td width="3%"></td>
+<td width="21%">
+
+
+<p>Use IPv6 only.</p></td>
+<td width="62%">
+</td></tr>
+</table>
+
+<p style="margin-left:11%;"><b>-context id</b></p>
+
+<p style="margin-left:17%;">Sets the <small>SSL</small>
+context id. It can be given any string value. If this option
+is not present a default value will be used.</p>
+
+<p style="margin-left:11%;"><b>-cert certname</b></p>
+
+<p style="margin-left:17%;">The certificate to use, most
+servers cipher suites require the use of a certificate and
+some require a certificate with a certain public key type:
+for example the <small>DSS</small> cipher suites require a
+certificate containing a <small>DSS</small> (
+<small>DSA</small> ) key. If not specified then the filename
+&quot;server.pem&quot; will be used.</p>
+
+<p style="margin-left:11%;"><b>-certform format</b></p>
+
+<p style="margin-left:17%;">The certificate format to use:
+<small>DER</small> or <small>PEM. PEM</small> is the
+default.</p>
+
+<p style="margin-left:11%;"><b>-key keyfile</b></p>
+
+<p style="margin-left:17%;">The private key to use. If not
+specified then the certificate file will be used.</p>
+
+<p style="margin-left:11%;"><b>-keyform format</b></p>
+
+<p style="margin-left:17%;">The private format to use:
+<small>DER</small> or <small>PEM. PEM</small> is the
+default.</p>
+
+<p style="margin-left:11%;"><b>-pass arg</b></p>
+
+<p style="margin-left:17%;">The private key password
+source. For more information about the format of <b>arg</b>
+see the <b><small>PASS PHRASE ARGUMENTS</small></b> section
+in <b>openssl</b>(1).</p>
+
+<p style="margin-left:11%;"><b>-dcert filename</b>,
+<b>-dkey keyname</b></p>
+
+<p style="margin-left:17%;">Specify an additional
+certificate and private key, these behave in the same manner
+as the <b>-cert</b> and <b>-key</b> options except there is
+no default if they are not specified (no additional
+certificate and key is used). As noted above some cipher
+suites require a certificate containing a key of a certain
+type. Some cipher suites need a certificate carrying an
+<small>RSA</small> key and some a <small>DSS</small> (
+<small>DSA</small> ) key. By using <small>RSA</small> and
+<small>DSS</small> certificates and keys a server can
+support clients which only support <small>RSA</small> or
+<small>DSS</small> cipher suites by using an appropriate
+certificate.</p>
+
+<p style="margin-left:11%;"><b>-dcertform format</b>,
+<b>-dkeyform format</b>, <b>-dpass arg</b></p>
+
+<p style="margin-left:17%;">Additional certificate and
+private key format and passphrase respectively.</p>
+
+<p style="margin-left:11%;"><b>-nocert</b></p>
+
+<p style="margin-left:17%;">If this option is set then no
+certificate is used. This restricts the cipher suites
+available to the anonymous ones (currently just anonymous
+<small>DH</small> ).</p>
+
+<p style="margin-left:11%;"><b>-dhparam filename</b></p>
+
+<p style="margin-left:17%;">The <small>DH</small> parameter
+file to use. The ephemeral <small>DH</small> cipher suites
+generate keys using a set of <small>DH</small> parameters.
+If not specified then an attempt is made to load the
+parameters from the server certificate file. If this fails
+then a static set of parameters hard coded into the
+<b>s_server</b> program will be used.</p>
+
+<p style="margin-left:11%;"><b>-no_dhe</b></p>
+
+<p style="margin-left:17%;">If this option is set then no
+<small>DH</small> parameters will be loaded effectively
+disabling the ephemeral <small>DH</small> cipher suites.</p>
+
+<p style="margin-left:11%;"><b>-crl_check</b>,
+<b>-crl_check_all</b></p>
+
+<p style="margin-left:17%;">Check the peer certificate has
+not been revoked by its <small>CA.</small> The
+<small>CRL</small> (s) are appended to the certificate file.
+With the <b>-crl_check_all</b> option all CRLs of all CAs in
+the chain are checked.</p>
+
+<p style="margin-left:11%;"><b>-CApath directory</b></p>
+
+<p style="margin-left:17%;">The directory to use for client
+certificate verification. This directory must be in
+&quot;hash format&quot;, see <b>verify</b> for more
+information. These are also used when building the server
+certificate chain.</p>
+
+<p style="margin-left:11%;"><b>-CAfile file</b></p>
+
+<p style="margin-left:17%;">A file containing trusted
+certificates to use during client authentication and to use
+when attempting to build the server certificate chain. The
+list is also used in the list of acceptable client CAs
+passed to the client when a certificate is requested.</p>
+
+<p style="margin-left:11%;"><b>-no-CAfile</b></p>
+
+<p style="margin-left:17%;">Do not load the trusted
+<small>CA</small> certificates from the default file
+location</p>
+
+<p style="margin-left:11%;"><b>-no-CApath</b></p>
+
+<p style="margin-left:17%;">Do not load the trusted
+<small>CA</small> certificates from the default directory
+location</p>
+
+<p style="margin-left:11%;"><b>-verify depth</b>,
+<b>-Verify depth</b></p>
+
+<p style="margin-left:17%;">The verify depth to use. This
+specifies the maximum length of the client certificate chain
+and makes the server request a certificate from the client.
+With the <b>-verify</b> option a certificate is requested
+but the client does not have to send one, with the
+<b>-Verify</b> option the client must supply a certificate
+or an error occurs.</p>
+
+<p style="margin-left:17%; margin-top: 1em">If the
+ciphersuite cannot request a client certificate (for example
+an anonymous ciphersuite or <small>PSK</small> ) this option
+has no effect.</p>
+
+<p style="margin-left:11%;"><b>-attime</b>,
+<b>-check_ss_sig</b>, <b>-crl_check</b>,
+<b>-crl_check_all</b>, <b>-explicit_policy</b>, <b><br>
+-extended_crl</b>, <b>-ignore_critical</b>,
+<b>-inhibit_any</b>, <b>-inhibit_map</b>, <b><br>
+-no_alt_chains</b>, <b>-no_check_time</b>,
+<b>-partial_chain</b>, <b>-policy</b>, <b>-policy_check</b>,
+<b><br>
+-policy_print</b>, <b>-purpose</b>, <b>-suiteB_128</b>,
+<b>-suiteB_128_only</b>, <b>-suiteB_192</b>, <b><br>
+-trusted_first</b>, <b>-use_deltas</b>, <b>-auth_level</b>,
+<b>-verify_depth</b>, <b>-verify_email</b>, <b><br>
+-verify_hostname</b>, <b>-verify_ip</b>,
+<b>-verify_name</b>, <b>-x509_strict</b></p>
+
+<p style="margin-left:17%;">Set different peer certificate
+verification options. See the <b>verify</b>(1) manual page
+for details.</p>
+
+
+<p style="margin-left:11%;"><b>-verify_return_error</b></p>
+
+<p style="margin-left:17%;">Verification errors normally
+just print a message but allow the connection to continue,
+for debugging purposes. If this option is used, then
+verification errors close the connection.</p>
+
+<p style="margin-left:11%;"><b>-state</b></p>
+
+<p style="margin-left:17%;">Prints the <small>SSL</small>
+session states.</p>
+
+<p style="margin-left:11%;"><b>-debug</b></p>
+
+<p style="margin-left:17%;">Print extensive debugging
+information including a hex dump of all traffic.</p>
+
+<p style="margin-left:11%;"><b>-msg</b></p>
+
+<p style="margin-left:17%;">Show all protocol messages with
+hex dump.</p>
+
+<p style="margin-left:11%;"><b>-trace</b></p>
+
+<p style="margin-left:17%;">Show verbose trace output of
+protocol messages. OpenSSL needs to be compiled with
+<b>enable-ssl-trace</b> for this option to work.</p>
+
+<p style="margin-left:11%;"><b>-msgfile</b></p>
+
+<p style="margin-left:17%;">File to send output of
+<b>-msg</b> or <b>-trace</b> to, default standard
+output.</p>
+
+<p style="margin-left:11%;"><b>-nbio_test</b></p>
+
+<p style="margin-left:17%;">Tests non blocking I/O</p>
+
+<p style="margin-left:11%;"><b>-nbio</b></p>
+
+<p style="margin-left:17%;">Turns on non blocking I/O</p>
+
+<p style="margin-left:11%;"><b>-crlf</b></p>
+
+<p style="margin-left:17%;">This option translated a line
+feed from the terminal into <small>CR+LF.</small></p>
+
+<p style="margin-left:11%;"><b>-quiet</b></p>
+
+<p style="margin-left:17%;">Inhibit printing of session and
+certificate information.</p>
+
+<p style="margin-left:11%;"><b>-psk_hint hint</b></p>
+
+<p style="margin-left:17%;">Use the <small>PSK</small>
+identity hint <b>hint</b> when using a <small>PSK</small>
+cipher suite.</p>
+
+<p style="margin-left:11%;"><b>-psk key</b></p>
+
+<p style="margin-left:17%;">Use the <small>PSK</small> key
+<b>key</b> when using a <small>PSK</small> cipher suite. The
+key is given as a hexadecimal number without leading 0x, for
+example -psk 1a2b3c4d. This option must be provided in order
+to use a <small>PSK</small> cipher.</p>
+
+<p style="margin-left:11%;"><b>-ssl2</b>, <b>-ssl3</b>,
+<b>-tls1</b>, <b>-tls1_1</b>, <b>-tls1_2</b>,
+<b>-no_ssl2</b>, <b>-no_ssl3</b>, <b>-no_tls1</b>, <b><br>
+-no_tls1_1</b>, <b>-no_tls1_2</b></p>
+
+<p style="margin-left:17%;">These options require or
+disable the use of the specified <small>SSL</small> or
+<small>TLS</small> protocols. By default <b>s_server</b>
+will negotiate the highest mutually supported protocol
+version. When a specific <small>TLS</small> version is
+required, only that version will be accepted from the
+client.</p>
+
+<p style="margin-left:11%;"><b>-dtls</b>, <b>-dtls1</b>,
+<b>-dtls1_2</b></p>
+
+<p style="margin-left:17%;">These options make
+<b>s_server</b> use <small>DTLS</small> protocols instead of
+<small>TLS.</small> With <b>-dtls</b>, <b>s_server</b> will
+negotiate any supported <small>DTLS</small> protocol
+version, whilst <b>-dtls1</b> and <b>-dtls1_2</b> will only
+support DTLSv1.0 and DTLSv1.2 respectively.</p>
+
+<p style="margin-left:11%;"><b>-listen</b></p>
+
+<p style="margin-left:17%;">This option can only be used in
+conjunction with one of the <small>DTLS</small> options
+above. With this option <b>s_server</b> will listen on a
+<small>UDP</small> port for incoming connections. Any
+ClientHellos that arrive will be checked to see if they have
+a cookie in them or not. Any without a cookie will be
+responded to with a HelloVerifyRequest. If a ClientHello
+with a cookie is received then <b>s_server</b> will connect
+to that peer and complete the handshake.</p>
+
+<p style="margin-left:11%;"><b>-async</b></p>
+
+<p style="margin-left:17%;">Switch on asynchronous mode.
+Cryptographic operations will be performed asynchronously.
+This will only have an effect if an asynchronous capable
+engine is also used via the <b>-engine</b> option. For test
+purposes the dummy async engine (dasync) can be used (if
+available).</p>
+
+<p style="margin-left:11%;"><b>-split_send_frag int</b></p>
+
+<p style="margin-left:17%;">The size used to split data for
+encrypt pipelines. If more data is written in one go than
+this value then it will be split into multiple pipelines, up
+to the maximum number of pipelines defined by max_pipelines.
+This only has an effect if a suitable ciphersuite has been
+negotiated, an engine that supports pipelining has been
+loaded, and max_pipelines is greater than 1. See
+<b>SSL_CTX_set_split_send_fragment</b>(3) for further
+information.</p>
+
+<p style="margin-left:11%;"><b>-max_pipelines int</b></p>
+
+<p style="margin-left:17%;">The maximum number of
+encrypt/decrypt pipelines to be used. This will only have an
+effect if an engine has been loaded that supports pipelining
+(e.g. the dasync engine) and a suitable ciphersuite has been
+negotiated. The default value is 1. See
+<b>SSL_CTX_set_max_pipelines</b>(3) for further
+information.</p>
+
+<p style="margin-left:11%;"><b>-read_buf int</b></p>
+
+<p style="margin-left:17%;">The default read buffer size to
+be used for connections. This will only have an effect if
+the buffer size is larger than the size that would otherwise
+be used and pipelining is in use (see
+<b>SSL_CTX_set_default_read_buffer_len</b>(3) for further
+information).</p>
+
+<p style="margin-left:11%;"><b>-bugs</b></p>
+
+<p style="margin-left:17%;">There are several known bug in
+<small>SSL</small> and <small>TLS</small> implementations.
+Adding this option enables various workarounds.</p>
+
+<p style="margin-left:11%;"><b>-comp</b></p>
+
+<p style="margin-left:17%;">Enable negotiation of
+<small>TLS</small> compression. This option was introduced
+in OpenSSL 1.1.0. <small>TLS</small> compression is not
+recommended and is off by default as of OpenSSL 1.1.0.</p>
+
+<p style="margin-left:11%;"><b>-no_comp</b></p>
+
+<p style="margin-left:17%;">Disable negotiation of
+<small>TLS</small> compression. <small>TLS</small>
+compression is not recommended and is off by default as of
+OpenSSL 1.1.0.</p>
+
+<p style="margin-left:11%;"><b>-brief</b></p>
+
+<p style="margin-left:17%;">Provide a brief summary of
+connection parameters instead of the normal verbose
+output.</p>
+
+<p style="margin-left:11%;"><b>-client_sigalgs
+sigalglist</b></p>
+
+<p style="margin-left:17%;">Signature algorithms to support
+for client certificate authentication (colon-separated
+list)</p>
+
+<p style="margin-left:11%;"><b>-named_curve curve</b></p>
+
+<p style="margin-left:17%;">Specifies the elliptic curve to
+use. <small>NOTE:</small> this is single curve, not a list.
+For a list of all possible curves, use:</p>
+
+<p style="margin-left:17%; margin-top: 1em">$ openssl
+ecparam -list_curves</p>
+
+<p style="margin-left:11%;"><b>-cipher cipherlist</b></p>
+
+<p style="margin-left:17%;">This allows the cipher list
+used by the server to be modified. When the client sends a
+list of supported ciphers the first client cipher also
+included in the server list is used. Because the client
+specifies the preference order, the order of the server
+cipherlist irrelevant. See the <b>ciphers</b> command for
+more information.</p>
+
+<p style="margin-left:11%;"><b>-serverpref</b></p>
+
+<p style="margin-left:17%;">Use the server&rsquo;s cipher
+preferences, rather than the client&rsquo;s preferences.</p>
+
+<p style="margin-left:11%;"><b>-tlsextdebug</b></p>
+
+<p style="margin-left:17%;">Print a hex dump of any
+<small>TLS</small> extensions received from the server.</p>
+
+<p style="margin-left:11%;"><b>-no_ticket</b></p>
+
+<p style="margin-left:17%;">Disable RFC4507bis session
+ticket support.</p>
+
+<p style="margin-left:11%;"><b>-www</b></p>
+
+<p style="margin-left:17%;">Sends a status message back to
+the client when it connects. This includes information about
+the ciphers used and various session parameters. The output
+is in <small>HTML</small> format so this option will
+normally be used with a web browser.</p>
+
+<p style="margin-left:11%;"><b>-WWW</b></p>
+
+<p style="margin-left:17%;">Emulates a simple web server.
+Pages will be resolved relative to the current directory,
+for example if the <small>URL</small>
+https://myhost/page.html is requested the file ./page.html
+will be loaded.</p>
+
+<p style="margin-left:11%;"><b>-HTTP</b></p>
+
+<p style="margin-left:17%;">Emulates a simple web server.
+Pages will be resolved relative to the current directory,
+for example if the <small>URL</small>
+https://myhost/page.html is requested the file ./page.html
+will be loaded. The files loaded are assumed to contain a
+complete and correct <small>HTTP</small> response (lines
+that are part of the <small>HTTP</small> response line and
+headers must end with <small>CRLF</small> ).</p>
+
+<p style="margin-left:11%;"><b>-rev</b></p>
+
+<p style="margin-left:17%;">Simple test server which just
+reverses the text received from the client and sends it back
+to the server. Also sets <b>-brief</b>.</p>
+
+<p style="margin-left:11%;"><b>-engine id</b></p>
+
+<p style="margin-left:17%;">Specifying an engine (by its
+unique <b>id</b> string) will cause <b>s_server</b> to
+attempt to obtain a functional reference to the specified
+engine, thus initialising it if needed. The engine will then
+be set as the default for all available algorithms.</p>
+
+<p style="margin-left:11%;"><b>-id_prefix arg</b></p>
+
+<p style="margin-left:17%;">Generate <small>SSL/TLS</small>
+session IDs prefixed by <b>arg</b>. This is mostly useful
+for testing any <small>SSL/TLS</small> code (eg. proxies)
+that wish to deal with multiple servers, when each of which
+might be generating a unique range of session IDs (eg. with
+a certain prefix).</p>
+
+<p style="margin-left:11%;"><b>-rand file(s)</b></p>
+
+<p style="margin-left:17%;">A file or files containing
+random data used to seed the random number generator, or an
+<small>EGD</small> socket (see <b>RAND_egd</b>(3)). Multiple
+files can be specified separated by an OS-dependent
+character. The separator is <b>;</b> for MS-Windows,
+<b>,</b> for OpenVMS, and <b>:</b> for all others.</p>
+
+<p style="margin-left:11%;"><b>-serverinfo file</b></p>
+
+<p style="margin-left:17%;">A file containing one or more
+blocks of <small>PEM</small> data. Each <small>PEM</small>
+block must encode a <small>TLS</small> ServerHello extension
+(2 bytes type, 2 bytes length, followed by
+&quot;length&quot; bytes of extension data). If the client
+sends an empty <small>TLS</small> ClientHello extension
+matching the type, the corresponding ServerHello extension
+will be returned.</p>
+
+
+<p style="margin-left:11%;"><b>-no_resumption_on_reneg</b></p>
+
+<p style="margin-left:17%;">Set the
+<b><small>SSL_OP_NO_SESSION_RESUMPTION_ON_RENEGOTIATION</small></b>
+option.</p>
+
+<p style="margin-left:11%;"><b>-status</b></p>
+
+<p style="margin-left:17%;">Enables certificate status
+request support (aka <small>OCSP</small> stapling).</p>
+
+<p style="margin-left:11%;"><b>-status_verbose</b></p>
+
+<p style="margin-left:17%;">Enables certificate status
+request support (aka <small>OCSP</small> stapling) and gives
+a verbose printout of the <small>OCSP</small> response.</p>
+
+<p style="margin-left:11%;"><b>-status_timeout nsec</b></p>
+
+<p style="margin-left:17%;">Sets the timeout for
+<small>OCSP</small> response to <b>nsec</b> seconds.</p>
+
+<p style="margin-left:11%;"><b>-status_url url</b></p>
+
+<p style="margin-left:17%;">Sets a fallback responder
+<small>URL</small> to use if no responder <small>URL</small>
+is present in the server certificate. Without this option an
+error is returned if the server certificate does not contain
+a responder address.</p>
+
+<p style="margin-left:11%;"><b>-alpn protocols</b>,
+<b>-nextprotoneg protocols</b></p>
+
+<p style="margin-left:17%;">these flags enable the Enable
+the Application-Layer Protocol Negotiation or Next Protocol
+Negotiation extension, respectively. <small>ALPN</small> is
+the <small>IETF</small> standard and replaces
+<small>NPN.</small> The <b>protocols</b> list is a
+comma-separated list of supported protocol names. The list
+should contain most wanted protocols first. Protocol names
+are printable <small>ASCII</small> strings, for example
+&quot;http/1.1&quot; or &quot;spdy/3&quot;.</p>
+
+<h2>CONNECTED COMMANDS
+<a name="CONNECTED COMMANDS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">If a connection
+request is established with an <small>SSL</small> client and
+neither the <b>-www</b> nor the <b>-WWW</b> option has been
+used then normally any data received from the client is
+displayed and any key presses will be sent to the
+client.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Certain single
+letter commands are also recognized which perform special
+operations: these are listed below.</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="1%">
+
+
+<p><b>q</b></p></td>
+<td width="5%"></td>
+<td width="83%">
+
+
+<p>end the current <small>SSL</small> connection but still
+accept new connections.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="1%">
+
+
+<p><b>Q</b></p></td>
+<td width="5%"></td>
+<td width="83%">
+
+
+<p>end the current <small>SSL</small> connection and
+exit.</p> </td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="1%">
+
+
+<p><b>r</b></p></td>
+<td width="5%"></td>
+<td width="83%">
+
+
+<p>renegotiate the <small>SSL</small> session.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="1%">
+
+
+<p><b>R</b></p></td>
+<td width="5%"></td>
+<td width="83%">
+
+
+<p>renegotiate the <small>SSL</small> session and request a
+client certificate.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="1%">
+
+
+<p><b>P</b></p></td>
+<td width="5%"></td>
+<td width="83%">
+
+
+<p>send some plain text down the underlying
+<small>TCP</small> connection: this should cause the client
+to disconnect due to a protocol violation.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="1%">
+
+
+<p><b>S</b></p></td>
+<td width="5%"></td>
+<td width="83%">
+
+
+<p>print out some session cache status information.</p></td></tr>
+</table>
+
+<h2>NOTES
+<a name="NOTES"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>s_server</b>
+can be used to debug <small>SSL</small> clients. To accept
+connections from a web browser the command:</p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl
+s_server -accept 443 -www</p>
+
+<p style="margin-left:11%; margin-top: 1em">can be used for
+example.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Although
+specifying an empty list of CAs when requesting a client
+certificate is strictly speaking a protocol violation, some
+<small>SSL</small> clients interpret this to mean any
+<small>CA</small> is acceptable. This is useful for
+debugging purposes.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The session
+parameters can printed out using the <b>sess_id</b>
+program.</p>
+
+<h2>BUGS
+<a name="BUGS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Because this
+program has a lot of options and also because some of the
+techniques used are rather old, the C source of
+<b>s_server</b> is rather hard to read and not a model of
+how things should be done. A typical <small>SSL</small>
+server program would be much simpler.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The output of
+common ciphers is wrong: it just gives the list of ciphers
+that OpenSSL recognizes and the client supports.</p>
+
+<p style="margin-left:11%; margin-top: 1em">There should be
+a way for the <b>s_server</b> program to print out details
+of any unknown cipher suites a client says it supports.</p>
+
+<h2>SEE ALSO
+<a name="SEE ALSO"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>SSL_CONF_cmd</b>(3),
+<b>sess_id</b>(1), <b>s_client</b>(1), <b>ciphers</b>(1)</p>
+
+<h2>HISTORY
+<a name="HISTORY"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The
+-no_alt_chains options was first added to OpenSSL 1.1.0.</p>
+
+<h2>COPYRIGHT
+<a name="COPYRIGHT"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Copyright
+2000-2016 The OpenSSL Project Authors. All Rights
+Reserved.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Licensed under
+the OpenSSL license (the &quot;License&quot;). You may not
+use this file except in compliance with the License. You can
+obtain a copy in the file <small>LICENSE</small> in the
+source distribution or at
+&lt;https://www.openssl.org/source/license.html&gt;.</p>
+<hr>
+</body>
+</html>

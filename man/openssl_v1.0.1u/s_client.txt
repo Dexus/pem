@@ -1,0 +1,281 @@
+S_CLIENT(1)                         OpenSSL                        S_CLIENT(1)
+
+
+
+NNAAMMEE
+       s_client - SSL/TLS client program
+
+SSYYNNOOPPSSIISS
+       ooppeennssssll ss__cclliieenntt [--ccoonnnneecctt hhoosstt::ppoorrtt] [--sseerrvveerrnnaammee nnaammee] [--vveerriiffyy
+       ddeepptthh] [--vveerriiffyy__rreettuurrnn__eerrrroorr] [--cceerrtt ffiilleennaammee] [--cceerrttffoorrmm DDEERR||PPEEMM]
+       [--kkeeyy ffiilleennaammee] [--kkeeyyffoorrmm DDEERR||PPEEMM] [--ppaassss aarrgg] [--CCAAppaatthh ddiirreeccttoorryy]
+       [--CCAAffiillee ffiilleennaammee] [--nnoo__aalltt__cchhaaiinnss] [--rreeccoonnnneecctt] [--ppaauussee] [--sshhoowwcceerrttss]
+       [--ddeebbuugg] [--mmssgg] [--nnbbiioo__tteesstt] [--ssttaattee] [--nnbbiioo] [--ccrrllff] [--iiggnn__eeooff]
+       [--nnoo__iiggnn__eeooff] [--qquuiieett] [--ssssll22] [--ssssll33] [--ttllss11] [--nnoo__ssssll22] [--nnoo__ssssll33]
+       [--nnoo__ttllss11] [--bbuuggss] [--cciipphheerr cciipphheerrlliisstt] [--sseerrvveerrpprreeff] [--ssttaarrttttllss
+       pprroottooccooll] [--eennggiinnee iidd] [--ttllsseexxttddeebbuugg] [--nnoo__ttiicckkeett] [--sseessss__oouutt ffiilleennaammee]
+       [--sseessss__iinn ffiilleennaammee] [--rraanndd ffiillee((ss))] [--ssttaattuuss] [--nneexxttpprroottoonneegg pprroottooccoollss]
+
+DDEESSCCRRIIPPTTIIOONN
+       The ss__cclliieenntt command implements a generic SSL/TLS client which connects
+       to a remote host using SSL/TLS. It is a _v_e_r_y useful diagnostic tool for
+       SSL servers.
+
+OOPPTTIIOONNSS
+       --ccoonnnneecctt hhoosstt::ppoorrtt
+           This specifies the host and optional port to connect to. If not
+           specified then an attempt is made to connect to the local host on
+           port 4433.
+
+       --sseerrvveerrnnaammee nnaammee
+           Set the TLS SNI (Server Name Indication) extension in the
+           ClientHello message.
+
+       --cceerrtt cceerrttnnaammee
+           The certificate to use, if one is requested by the server. The
+           default is not to use a certificate.
+
+       --cceerrttffoorrmm ffoorrmmaatt
+           The certificate format to use: DER or PEM. PEM is the default.
+
+       --kkeeyy kkeeyyffiillee
+           The private key to use. If not specified then the certificate file
+           will be used.
+
+       --kkeeyyffoorrmm ffoorrmmaatt
+           The private format to use: DER or PEM. PEM is the default.
+
+       --ppaassss aarrgg
+           the private key password source. For more information about the
+           format of aarrgg see the PPAASSSS PPHHRRAASSEE AARRGGUUMMEENNTTSS section in ooppeennssssll(1).
+
+       --vveerriiffyy ddeepptthh
+           The verify depth to use. This specifies the maximum length of the
+           server certificate chain and turns on server certificate
+           verification.  Currently the verify operation continues after
+           errors so all the problems with a certificate chain can be seen. As
+           a side effect the connection will never fail due to a server
+           certificate verify failure.
+
+       --vveerriiffyy__rreettuurrnn__eerrrroorr
+           Return verification errors instead of continuing. This will
+           typically abort the handshake with a fatal error.
+
+       --CCAAppaatthh ddiirreeccttoorryy
+           The directory to use for server certificate verification. This
+           directory must be in "hash format", see vveerriiffyy for more
+           information. These are also used when building the client
+           certificate chain.
+
+       --CCAAffiillee ffiillee
+           A file containing trusted certificates to use during server
+           authentication and to use when attempting to build the client
+           certificate chain.
+
+       --ppuurrppoossee,, --iiggnnoorree__ccrriittiiccaall,, --iissssuueerr__cchheecckkss,, --ccrrll__cchheecckk,, --ccrrll__cchheecckk__aallll,,
+       --ppoolliiccyy__cchheecckk,, --eexxtteennddeedd__ccrrll,, --xx550099__ssttrriicctt,, --ppoolliiccyy --cchheecckk__ssss__ssiigg
+       --nnoo__aalltt__cchhaaiinnss
+           Set various certificate chain valiadition option. See the vveerriiffyy
+           manual page for details.
+
+       --rreeccoonnnneecctt
+           reconnects to the same server 5 times using the same session ID,
+           this can be used as a test that session caching is working.
+
+       --ppaauussee
+           pauses 1 second between each read and write call.
+
+       --sshhoowwcceerrttss
+           display the whole server certificate chain: normally only the
+           server certificate itself is displayed.
+
+       --pprreexxiitt
+           print session information when the program exits. This will always
+           attempt to print out information even if the connection fails.
+           Normally information will only be printed out once if the
+           connection succeeds. This option is useful because the cipher in
+           use may be renegotiated or the connection may fail because a client
+           certificate is required or is requested only after an attempt is
+           made to access a certain URL. Note: the output produced by this
+           option is not always accurate because a connection might never have
+           been established.
+
+       --ssttaattee
+           prints out the SSL session states.
+
+       --ddeebbuugg
+           print extensive debugging information including a hex dump of all
+           traffic.
+
+       --mmssgg
+           show all protocol messages with hex dump.
+
+       --nnbbiioo__tteesstt
+           tests non-blocking I/O
+
+       --nnbbiioo
+           turns on non-blocking I/O
+
+       --ccrrllff
+           this option translated a line feed from the terminal into CR+LF as
+           required by some servers.
+
+       --iiggnn__eeooff
+           inhibit shutting down the connection when end of file is reached in
+           the input.
+
+       --qquuiieett
+           inhibit printing of session and certificate information.  This
+           implicitly turns on --iiggnn__eeooff as well.
+
+       --nnoo__iiggnn__eeooff
+           shut down the connection when end of file is reached in the input.
+           Can be used to override the implicit --iiggnn__eeooff after --qquuiieett.
+
+       --ppsskk__iiddeennttiittyy iiddeennttiittyy
+           Use the PSK identity iiddeennttiittyy when using a PSK cipher suite.
+
+       --ppsskk kkeeyy
+           Use the PSK key kkeeyy when using a PSK cipher suite. The key is given
+           as a hexadecimal number without leading 0x, for example -psk
+           1a2b3c4d.
+
+       --ssssll22, --ssssll33, --ttllss11, --ttllss11__11, --ttllss11__22, --nnoo__ssssll22, --nnoo__ssssll33, --nnoo__ttllss11,
+       --nnoo__ttllss11__11, --nnoo__ttllss11__22
+           These options require or disable the use of the specified SSL or
+           TLS protocols.  By default the initial handshake uses a _v_e_r_s_i_o_n_-
+           _f_l_e_x_i_b_l_e method which will negotiate the highest mutually supported
+           protocol version.
+
+       --bbuuggss
+           there are several known bug in SSL and TLS implementations. Adding
+           this option enables various workarounds.
+
+       --cciipphheerr cciipphheerrlliisstt
+           this allows the cipher list sent by the client to be modified.
+           Although the server determines which cipher suite is used it should
+           take the first supported cipher in the list sent by the client. See
+           the cciipphheerrss command for more information.
+
+       --sseerrvveerrpprreeff
+           use the server's cipher preferences; only used for SSLV2.
+
+       --ssttaarrttttllss pprroottooccooll
+           send the protocol-specific message(s) to switch to TLS for
+           communication.  pprroottooccooll is a keyword for the intended protocol.
+           Currently, the only supported keywords are "smtp", "pop3", "imap",
+           and "ftp".
+
+       --ttllsseexxttddeebbuugg
+           print out a hex dump of any TLS extensions received from the
+           server.
+
+       --nnoo__ttiicckkeett
+           disable RFC4507bis session ticket support.
+
+       --sseessss__oouutt ffiilleennaammee
+           output SSL session to ffiilleennaammee
+
+       --sseessss__iinn sseessss..ppeemm
+           load SSL session from ffiilleennaammee. The client will attempt to resume a
+           connection from this session.
+
+       --eennggiinnee iidd
+           specifying an engine (by its unique iidd string) will cause ss__cclliieenntt
+           to attempt to obtain a functional reference to the specified
+           engine, thus initialising it if needed. The engine will then be set
+           as the default for all available algorithms.
+
+       --rraanndd ffiillee((ss))
+           a file or files containing random data used to seed the random
+           number generator, or an EGD socket (see RRAANNDD__eeggdd(3)).  Multiple
+           files can be specified separated by a OS-dependent character.  The
+           separator is ;; for MS-Windows, ,, for OpenVMS, and :: for all others.
+
+       --ssttaattuuss
+           sends a certificate status request to the server (OCSP stapling).
+           The server response (if any) is printed out.
+
+       --nneexxttpprroottoonneegg pprroottooccoollss
+           enable Next Protocol Negotiation TLS extension and provide a list
+           of comma-separated protocol names that the client should advertise
+           support for. The list should contain most wanted protocols first.
+           Protocol names are printable ASCII strings, for example "http/1.1"
+           or "spdy/3".  Empty list of protocols is treated specially and will
+           cause the client to advertise support for the TLS extension but
+           disconnect just after reciving ServerHello with a list of server
+           supported protocols.
+
+CCOONNNNEECCTTEEDD CCOOMMMMAANNDDSS
+       If a connection is established with an SSL server then any data
+       received from the server is displayed and any key presses will be sent
+       to the server. When used interactively (which means neither --qquuiieett nor
+       --iiggnn__eeooff have been given), the session will be renegotiated if the line
+       begins with an RR, and if the line begins with a QQ or if end of file is
+       reached, the connection will be closed down.
+
+NNOOTTEESS
+       ss__cclliieenntt can be used to debug SSL servers. To connect to an SSL HTTP
+       server the command:
+
+        openssl s_client -connect servername:443
+
+       would typically be used (https uses port 443). If the connection
+       succeeds then an HTTP command can be given such as "GET /" to retrieve
+       a web page.
+
+       If the handshake fails then there are several possible causes, if it is
+       nothing obvious like no client certificate then the --bbuuggss, --ssssll22,
+       --ssssll33, --ttllss11, --nnoo__ssssll22, --nnoo__ssssll33, --nnoo__ttllss11 options can be tried in case
+       it is a buggy server. In particular you should play with these options
+       bbeeffoorree submitting a bug report to an OpenSSL mailing list.
+
+       A frequent problem when attempting to get client certificates working
+       is that a web client complains it has no certificates or gives an empty
+       list to choose from. This is normally because the server is not sending
+       the clients certificate authority in its "acceptable CA list" when it
+       requests a certificate. By using ss__cclliieenntt the CA list can be viewed and
+       checked. However some servers only request client authentication after
+       a specific URL is requested. To obtain the list in this case it is
+       necessary to use the --pprreexxiitt option and send an HTTP request for an
+       appropriate page.
+
+       If a certificate is specified on the command line using the --cceerrtt
+       option it will not be used unless the server specifically requests a
+       client certificate. Therefor merely including a client certificate on
+       the command line is no guarantee that the certificate works.
+
+       If there are problems verifying a server certificate then the
+       --sshhoowwcceerrttss option can be used to show the whole chain.
+
+       Since the SSLv23 client hello cannot include compression methods or
+       extensions these will only be supported if its use is disabled, for
+       example by using the --nnoo__ssssllvv22 option.
+
+       The ss__cclliieenntt utility is a test tool and is designed to continue the
+       handshake after any certificate verification errors. As a result it
+       will accept any certificate chain (trusted or not) sent by the peer.
+       None test applications should nnoott do this as it makes them vulnerable
+       to a MITM attack. This behaviour can be changed by with the
+       --vveerriiffyy__rreettuurrnn__eerrrroorr option: any verify errors are then returned
+       aborting the handshake.
+
+BBUUGGSS
+       Because this program has a lot of options and also because some of the
+       techniques used are rather old, the C source of s_client is rather hard
+       to read and not a model of how things should be done. A typical SSL
+       client program would be much simpler.
+
+       The --pprreexxiitt option is a bit of a hack. We should really report
+       information whenever a session is renegotiated.
+
+SSEEEE AALLSSOO
+       sseessss__iidd(1), ss__sseerrvveerr(1), cciipphheerrss(1)
+
+HHIISSTTOORRYY
+       The -no_alt_chains options was first added to OpenSSL 1.0.1n and
+       1.0.2b.
+
+
+
+1.0.1u                            2016-09-22                       S_CLIENT(1)

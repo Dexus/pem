@@ -1,0 +1,113 @@
+OPENSSL-SPEED(1ossl)                OpenSSL               OPENSSL-SPEED(1ossl)
+
+
+
+NNAAMMEE
+       openssl-speed - test library performance
+
+SSYYNNOOPPSSIISS
+       ooppeennssssll ssppeeeedd [--hheellpp] [--eellaappsseedd] [--eevvpp _a_l_g_o] [--hhmmaacc _a_l_g_o] [--ccmmaacc _a_l_g_o]
+       [--mmbb] [--aaeeaadd] [--mmuullttii _n_u_m] [--aassyynncc__jjoobbss _n_u_m] [--mmiissaalliiggnn _n_u_m] [--ddeeccrryypptt]
+       [--pprriimmeess _n_u_m] [--sseeccoonnddss _n_u_m] [--bbyytteess _n_u_m] [--mmrr] [--rraanndd _f_i_l_e_s]
+       [--wwrriitteerraanndd _f_i_l_e] [--eennggiinnee _i_d] [--pprroovviiddeerr _n_a_m_e] [--pprroovviiddeerr--ppaatthh _p_a_t_h]
+       [--pprrooppqquueerryy _p_r_o_p_q] [_a_l_g_o_r_i_t_h_m ...]
+
+DDEESSCCRRIIPPTTIIOONN
+       This command is used to test the performance of cryptographic
+       algorithms.
+
+OOPPTTIIOONNSS
+       --hheellpp
+           Print out a usage message.
+
+       --eellaappsseedd
+           When calculating operations- or bytes-per-second, use wall-clock
+           time instead of CPU user time as divisor. It can be useful when
+           testing speed of hardware engines.
+
+       --eevvpp _a_l_g_o
+           Use the specified cipher or message digest algorithm via the EVP
+           interface.  If _a_l_g_o is an AEAD cipher, then you can pass --aaeeaadd to
+           benchmark a TLS-like sequence. And if _a_l_g_o is a multi-buffer
+           capable cipher, e.g.  aes-128-cbc-hmac-sha1, then --mmbb will time
+           multi-buffer operation.
+
+           To see the algorithms supported with this option, use "openssl list
+           -digest-algorithms" or "openssl list -cipher-algorithms" command.
+
+       --mmuullttii _n_u_m
+           Run multiple operations in parallel.
+
+       --aassyynncc__jjoobbss _n_u_m
+           Enable async mode and start specified number of jobs.
+
+       --mmiissaalliiggnn _n_u_m
+           Misalign the buffers by the specified number of bytes.
+
+       --hhmmaacc _d_i_g_e_s_t
+           Time the HMAC algorithm using the specified message digest.
+
+       --ccmmaacc _c_i_p_h_e_r
+           Time the CMAC algorithm using the specified cipher e.g.  "openssl
+           speed -cmac aes128".
+
+       --ddeeccrryypptt
+           Time the decryption instead of encryption. Affects only the EVP
+           testing.
+
+       --mmbb Enable multi-block mode on EVP-named cipher.
+
+       --aaeeaadd
+           Benchmark EVP-named AEAD cipher in TLS-like sequence.
+
+       --pprriimmeess _n_u_m
+           Generate a _n_u_m-prime RSA key and use it to run the benchmarks. This
+           option is only effective if RSA algorithm is specified to test.
+
+       --sseeccoonnddss _n_u_m
+           Run benchmarks for _n_u_m seconds.
+
+       --bbyytteess _n_u_m
+           Run benchmarks on _n_u_m-byte buffers. Affects ciphers, digests and
+           the CSPRNG.
+
+       --mmrr Produce the summary in a mechanical, machine-readable, format.
+
+       --rraanndd _f_i_l_e_s, --wwrriitteerraanndd _f_i_l_e
+           See "Random State Options" in ooppeennssssll(1) for details.
+
+       --eennggiinnee _i_d
+           See "Engine Options" in ooppeennssssll(1).  This option is deprecated.
+
+       --pprroovviiddeerr _n_a_m_e
+       --pprroovviiddeerr--ppaatthh _p_a_t_h
+       --pprrooppqquueerryy _p_r_o_p_q
+           See "Provider Options" in ooppeennssssll(1), pprroovviiddeerr(7), and pprrooppeerrttyy(7).
+
+       _a_l_g_o_r_i_t_h_m ...
+           If any _a_l_g_o_r_i_t_h_m is given, then those algorithms are tested,
+           otherwise a pre-compiled grand selection is tested.
+
+BBUUGGSS
+       The _a_l_g_o_r_i_t_h_m can be selected only from a pre-compiled subset of things
+       that the "openssl speed" command knows about. To test any additional
+       digest or cipher algorithm supported by OpenSSL use the "-evp" option.
+
+       There is no way to test the speed of any additional public key
+       algorithms supported by third party providers with the "openssl speed"
+       command.
+
+HHIISSTTOORRYY
+       The --eennggiinnee option was deprecated in OpenSSL 3.0.
+
+CCOOPPYYRRIIGGHHTT
+       Copyright 2000-2021 The OpenSSL Project Authors. All Rights Reserved.
+
+       Licensed under the Apache License 2.0 (the "License").  You may not use
+       this file except in compliance with the License.  You can obtain a copy
+       in the file LICENSE in the source distribution or at
+       <https://www.openssl.org/source/license.html>.
+
+
+
+3.0.1                             2022-01-31              OPENSSL-SPEED(1ossl)

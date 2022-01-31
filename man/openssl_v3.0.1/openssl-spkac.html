@@ -1,0 +1,274 @@
+<!-- Creator     : groff version 1.22.4 -->
+<!-- CreationDate: Mon Jan 31 16:15:29 2022 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>OPENSSL-SPKAC</title>
+
+</head>
+<body>
+
+<h1 align="center">OPENSSL-SPKAC</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#OPTIONS">OPTIONS</a><br>
+<a href="#EXAMPLES">EXAMPLES</a><br>
+<a href="#NOTES">NOTES</a><br>
+<a href="#SEE ALSO">SEE ALSO</a><br>
+<a href="#HISTORY">HISTORY</a><br>
+<a href="#COPYRIGHT">COPYRIGHT</a><br>
+
+<hr>
+
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">openssl-spkac -
+SPKAC printing and generating command</p>
+
+<h2>SYNOPSIS
+<a name="SYNOPSIS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>openssl
+spkac</b> [<b>-help</b>] [<b>-in</b> <i>filename</i>]
+[<b>-out</b> <i>filename</i>] [<b>-digest</b> <i>digest</i>]
+[<b>-key</b> <i>filename</i>|<i>uri</i>] [<b>-keyform
+<small>DER</small></b> | <b><small>PEM</small></b>
+|<b>P12</b>| <b><small>ENGINE</small></b> ] [<b>-passin</b>
+<i>arg</i>] [<b>-challenge</b> <i>string</i>]
+[<b>-pubkey</b>] [<b>-spkac</b> <i>spkacname</i>]
+[<b>-spksect</b> <i>section</i>] [<b>-noout</b>]
+[<b>-verify</b>] [<b>-engine</b> <i>id</i>]
+[<b>-provider</b> <i>name</i>] [<b>-provider-path</b>
+<i>path</i>] [<b>-propquery</b> <i>propq</i>]</p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">This command
+processes Netscape signed public key and challenge (
+<small>SPKAC</small> ) files. It can print out their
+contents, verify the signature and produce its own SPKACs
+from a supplied private key.</p>
+
+<h2>OPTIONS
+<a name="OPTIONS"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>-help</b></p>
+
+<p style="margin-left:17%;">Print out a usage message.</p>
+
+<p style="margin-left:11%;"><b>-in</b> <i>filename</i></p>
+
+<p style="margin-left:17%;">This specifies the input
+filename to read from or standard input if this option is
+not specified. Ignored if the <b>-key</b> option is
+used.</p>
+
+<p style="margin-left:11%;"><b>-out</b> <i>filename</i></p>
+
+<p style="margin-left:17%;">Specifies the output filename
+to write to or standard output by default.</p>
+
+<p style="margin-left:11%;"><b>-digest</b>
+<i>digest</i></p>
+
+<p style="margin-left:17%;">Use the specified <i>digest</i>
+to sign a created <small>SPKAC</small> file. The default
+digest algorithm is <small>MD5.</small></p>
+
+<p style="margin-left:11%;"><b>-key</b>
+<i>filename</i>|<i>uri</i></p>
+
+<p style="margin-left:17%;">Create an <small>SPKAC</small>
+file using the private key specified by <i>filename</i> or
+<i>uri</i>. The <b>-in</b>, <b>-noout</b>, <b>-spksect</b>
+and <b>-verify</b> options are ignored if present.</p>
+
+<p style="margin-left:11%;"><b>-keyform
+<small>DER</small></b> | <b><small>PEM</small></b>
+|<b>P12</b>| <b><small>ENGINE</small></b></p>
+
+<p style="margin-left:17%;">The key format; unspecified by
+default. See <b>openssl-format-options</b>(1) for
+details.</p>
+
+<p style="margin-left:11%;"><b>-passin</b> <i>arg</i></p>
+
+<p style="margin-left:17%;">The input file password source.
+For more information about the format of <i>arg</i> see
+<b>openssl-passphrase-options</b>(1).</p>
+
+<p style="margin-left:11%;"><b>-challenge</b>
+<i>string</i></p>
+
+<p style="margin-left:17%;">Specifies the challenge string
+if an <small>SPKAC</small> is being created.</p>
+
+<p style="margin-left:11%;"><b>-spkac</b>
+<i>spkacname</i></p>
+
+<p style="margin-left:17%;">Allows an alternative name form
+the variable containing the <small>SPKAC.</small> The
+default is &quot; <small>SPKAC&quot;.</small> This option
+affects both generated and input <small>SPKAC</small>
+files.</p>
+
+<p style="margin-left:11%;"><b>-spksect</b>
+<i>section</i></p>
+
+<p style="margin-left:17%;">Allows an alternative name form
+the section containing the <small>SPKAC.</small> The default
+is the default section.</p>
+
+<p style="margin-left:11%;"><b>-noout</b></p>
+
+<p style="margin-left:17%;">Don&rsquo;t output the text
+version of the <small>SPKAC</small> (not used if an
+<small>SPKAC</small> is being created).</p>
+
+<p style="margin-left:11%;"><b>-pubkey</b></p>
+
+<p style="margin-left:17%;">Output the public key of an
+<small>SPKAC</small> (not used if an <small>SPKAC</small> is
+being created).</p>
+
+<p style="margin-left:11%;"><b>-verify</b></p>
+
+<p style="margin-left:17%;">Verifies the digital signature
+on the supplied <small>SPKAC.</small></p>
+
+<p style="margin-left:11%;"><b>-engine</b> <i>id</i></p>
+
+<p style="margin-left:17%;">See &quot;Engine Options&quot;
+in <b>openssl</b>(1). This option is deprecated.</p>
+
+<p style="margin-left:11%;"><b>-provider</b> <i>name</i>
+<b><br>
+-provider-path</b> <i>path</i> <b><br>
+-propquery</b> <i>propq</i></p>
+
+<p style="margin-left:17%;">See &quot;Provider
+Options&quot; in <b>openssl</b>(1), <b>provider</b>(7), and
+<b>property</b>(7).</p>
+
+<h2>EXAMPLES
+<a name="EXAMPLES"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Print out the
+contents of an <small>SPKAC:</small></p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl spkac
+-in spkac.cnf</p>
+
+<p style="margin-left:11%; margin-top: 1em">Verify the
+signature of an <small>SPKAC:</small></p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl spkac
+-in spkac.cnf -noout -verify</p>
+
+<p style="margin-left:11%; margin-top: 1em">Create an
+<small>SPKAC</small> using the challenge string
+&quot;hello&quot;:</p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl spkac
+-key key.pem -challenge hello -out spkac.cnf</p>
+
+<p style="margin-left:11%; margin-top: 1em">Example of an
+<small>SPKAC,</small> (long lines split up for clarity):</p>
+
+
+<p style="margin-left:11%; margin-top: 1em">SPKAC=MIG5MGUwXDANBgkqhkiG9w0BAQEFAANLADBIAkEA\
+<br>
+1cCoq2Wa3Ixs47uI7FPVwHVIPDx5yso105Y6zpozam135a\ <br>
+8R0CpoRvkkigIyXfcCjiVi5oWk+6FfPaD03uPFoQIDAQAB\ <br>
+FgVoZWxsbzANBgkqhkiG9w0BAQQFAANBAFpQtY/FojdwkJ\ <br>
+h1bEIYuc2EeM2KHTWPEepWYeawvHD0gQ3DngSC75YCWnnD\ <br>
+dq+NQ3F+X4deMx9AaEglZtULwV4=</p>
+
+<h2>NOTES
+<a name="NOTES"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">A created
+<small>SPKAC</small> with suitable <small>DN</small>
+components appended can be fed to <b>openssl-ca</b>(1).</p>
+
+<p style="margin-left:11%; margin-top: 1em">SPKACs are
+typically generated by Netscape when a form is submitted
+containing the <b><small>KEYGEN</small></b> tag as part of
+the certificate enrollment process.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The challenge
+string permits a primitive form of proof of possession of
+private key. By checking the <small>SPKAC</small> signature
+and a random challenge string some guarantee is given that
+the user knows the private key corresponding to the public
+key being certified. This is important in some applications.
+Without this it is possible for a previous
+<small>SPKAC</small> to be used in a &quot;replay
+attack&quot;.</p>
+
+<h2>SEE ALSO
+<a name="SEE ALSO"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>openssl</b>(1),
+<b>openssl-ca</b>(1)</p>
+
+<h2>HISTORY
+<a name="HISTORY"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The
+<b>-engine</b> option was deprecated in OpenSSL 3.0.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The
+<b>-digest</b> option was added in OpenSSL 3.0.</p>
+
+<h2>COPYRIGHT
+<a name="COPYRIGHT"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Copyright
+2000-2021 The OpenSSL Project Authors. All Rights
+Reserved.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Licensed under
+the Apache License 2.0 (the &quot;License&quot;). You may
+not use this file except in compliance with the License. You
+can obtain a copy in the file <small>LICENSE</small> in the
+source distribution or at
+&lt;https://www.openssl.org/source/license.html&gt;.</p>
+<hr>
+</body>
+</html>

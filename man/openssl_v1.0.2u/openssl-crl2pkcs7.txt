@@ -1,0 +1,76 @@
+CRL2PKCS7(1)                        OpenSSL                       CRL2PKCS7(1)
+
+
+
+NNAAMMEE
+       openssl-crl2pkcs7, crl2pkcs7 - Create a PKCS#7 structure from a CRL and
+       certificates.
+
+SSYYNNOOPPSSIISS
+       ooppeennssssll ccrrll22ppkkccss77 [--iinnffoorrmm PPEEMM||DDEERR] [--oouuttffoorrmm PPEEMM||DDEERR] [--iinn ffiilleennaammee]
+       [--oouutt ffiilleennaammee] [--cceerrttffiillee ffiilleennaammee] [--nnooccrrll]
+
+DDEESSCCRRIIPPTTIIOONN
+       The ccrrll22ppkkccss77 command takes an optional CRL and one or more
+       certificates and converts them into a PKCS#7 degenerate "certificates
+       only" structure.
+
+CCOOMMMMAANNDD OOPPTTIIOONNSS
+       --iinnffoorrmm DDEERR||PPEEMM
+           This specifies the CRL input format. DDEERR format is DER encoded CRL
+           structure.PPEEMM (the default) is a base64 encoded version of the DER
+           form with header and footer lines.
+
+       --oouuttffoorrmm DDEERR||PPEEMM
+           This specifies the PKCS#7 structure output format. DDEERR format is
+           DER encoded PKCS#7 structure.PPEEMM (the default) is a base64 encoded
+           version of the DER form with header and footer lines.
+
+       --iinn ffiilleennaammee
+           This specifies the input filename to read a CRL from or standard
+           input if this option is not specified.
+
+       --oouutt ffiilleennaammee
+           specifies the output filename to write the PKCS#7 structure to or
+           standard output by default.
+
+       --cceerrttffiillee ffiilleennaammee
+           specifies a filename containing one or more certificates in PPEEMM
+           format.  All certificates in the file will be added to the PKCS#7
+           structure. This option can be used more than once to read
+           certificates form multiple files.
+
+       --nnooccrrll
+           normally a CRL is included in the output file. With this option no
+           CRL is included in the output file and a CRL is not read from the
+           input file.
+
+EEXXAAMMPPLLEESS
+       Create a PKCS#7 structure from a certificate and CRL:
+
+        openssl crl2pkcs7 -in crl.pem -certfile cert.pem -out p7.pem
+
+       Creates a PKCS#7 structure in DER format with no CRL from several
+       different certificates:
+
+        openssl crl2pkcs7 -nocrl -certfile newcert.pem
+               -certfile demoCA/cacert.pem -outform DER -out p7.der
+
+NNOOTTEESS
+       The output file is a PKCS#7 signed data structure containing no signers
+       and just certificates and an optional CRL.
+
+       This utility can be used to send certificates and CAs to Netscape as
+       part of the certificate enrollment process. This involves sending the
+       DER encoded output as MIME type application/x-x509-user-cert.
+
+       The PPEEMM encoded form with the header and footer lines removed can be
+       used to install user certificates and CAs in MSIE using the Xenroll
+       control.
+
+SSEEEE AALLSSOO
+       ppkkccss77(1)
+
+
+
+1.0.2u                            2019-12-20                      CRL2PKCS7(1)

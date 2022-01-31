@@ -1,0 +1,165 @@
+<!-- Creator     : groff version 1.22.4 -->
+<!-- CreationDate: Mon Jan 31 16:14:52 2022 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>CRL2PKCS7</title>
+
+</head>
+<body>
+
+<h1 align="center">CRL2PKCS7</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#COMMAND OPTIONS">COMMAND OPTIONS</a><br>
+<a href="#EXAMPLES">EXAMPLES</a><br>
+<a href="#NOTES">NOTES</a><br>
+<a href="#SEE ALSO">SEE ALSO</a><br>
+
+<hr>
+
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em">openssl-crl2pkcs7,
+crl2pkcs7 - Create a PKCS#7 structure from a CRL and
+certificates.</p>
+
+<h2>SYNOPSIS
+<a name="SYNOPSIS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>openssl
+crl2pkcs7</b> [<b>-inform PEM|DER</b>] [<b>-outform
+PEM|DER</b>] [<b>-in filename</b>] [<b>-out filename</b>]
+[<b>-certfile filename</b>] [<b>-nocrl</b>]</p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The
+<b>crl2pkcs7</b> command takes an optional
+<small>CRL</small> and one or more certificates and converts
+them into a PKCS#7 degenerate &quot;certificates only&quot;
+structure.</p>
+
+<h2>COMMAND OPTIONS
+<a name="COMMAND OPTIONS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>-inform
+DER|PEM</b></p>
+
+<p style="margin-left:17%;">This specifies the
+<small>CRL</small> input format. <b><small>DER</small></b>
+format is <small>DER</small> encoded <small>CRL</small>
+structure. <b><small>PEM</small></b> (the default) is a
+base64 encoded version of the <small>DER</small> form with
+header and footer lines.</p>
+
+<p style="margin-left:11%;"><b>-outform DER|PEM</b></p>
+
+<p style="margin-left:17%;">This specifies the PKCS#7
+structure output format. <b><small>DER</small></b> format is
+<small>DER</small> encoded PKCS#7 structure.
+<b><small>PEM</small></b> (the default) is a base64 encoded
+version of the <small>DER</small> form with header and
+footer lines.</p>
+
+<p style="margin-left:11%;"><b>-in filename</b></p>
+
+<p style="margin-left:17%;">This specifies the input
+filename to read a <small>CRL</small> from or standard input
+if this option is not specified.</p>
+
+<p style="margin-left:11%;"><b>-out filename</b></p>
+
+<p style="margin-left:17%;">specifies the output filename
+to write the PKCS#7 structure to or standard output by
+default.</p>
+
+<p style="margin-left:11%;"><b>-certfile filename</b></p>
+
+<p style="margin-left:17%;">specifies a filename containing
+one or more certificates in <b><small>PEM</small></b>
+format. All certificates in the file will be added to the
+PKCS#7 structure. This option can be used more than once to
+read certificates form multiple files.</p>
+
+<p style="margin-left:11%;"><b>-nocrl</b></p>
+
+<p style="margin-left:17%;">normally a <small>CRL</small>
+is included in the output file. With this option no
+<small>CRL</small> is included in the output file and a
+<small>CRL</small> is not read from the input file.</p>
+
+<h2>EXAMPLES
+<a name="EXAMPLES"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Create a PKCS#7
+structure from a certificate and <small>CRL:</small></p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl
+crl2pkcs7 -in crl.pem -certfile cert.pem -out p7.pem</p>
+
+<p style="margin-left:11%; margin-top: 1em">Creates a
+PKCS#7 structure in <small>DER</small> format with no
+<small>CRL</small> from several different certificates:</p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl
+crl2pkcs7 -nocrl -certfile newcert.pem <br>
+-certfile demoCA/cacert.pem -outform DER -out p7.der</p>
+
+<h2>NOTES
+<a name="NOTES"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The output file
+is a PKCS#7 signed data structure containing no signers and
+just certificates and an optional <small>CRL.</small></p>
+
+<p style="margin-left:11%; margin-top: 1em">This utility
+can be used to send certificates and CAs to Netscape as part
+of the certificate enrollment process. This involves sending
+the <small>DER</small> encoded output as <small>MIME</small>
+type application/x-x509-user-cert.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The
+<b><small>PEM</small></b> encoded form with the header and
+footer lines removed can be used to install user
+certificates and CAs in <small>MSIE</small> using the
+Xenroll control.</p>
+
+<h2>SEE ALSO
+<a name="SEE ALSO"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>pkcs7</b>(1)</p>
+<hr>
+</body>
+</html>

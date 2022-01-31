@@ -1,0 +1,94 @@
+PASSWD(1)                           OpenSSL                          PASSWD(1)
+
+
+
+NNAAMMEE
+       openssl-passwd, passwd - compute password hashes
+
+SSYYNNOOPPSSIISS
+       ooppeennssssll ppaasssswwdd [--hheellpp] [--ccrryypptt] [--11] [--aapprr11] [--aaiixxmmdd55] [--55] [--66] [--ssaalltt
+       _s_t_r_i_n_g] [--iinn _f_i_l_e] [--ssttddiinn] [--nnoovveerriiffyy] [--qquuiieett] [--ttaabbllee] [--rraanndd
+       ffiillee......]  [--wwrriitteerraanndd ffiillee] {_p_a_s_s_w_o_r_d}
+
+DDEESSCCRRIIPPTTIIOONN
+       The ppaasssswwdd command computes the hash of a password typed at run-time or
+       the hash of each password in a list.  The password list is taken from
+       the named file for option --iinn ffiillee, from stdin for option --ssttddiinn, or
+       from the command line, or from the terminal otherwise.  The Unix
+       standard algorithm ccrryypptt and the MD5-based BSD password algorithm 11,
+       its Apache variant aapprr11, and its AIX variant are available.
+
+OOPPTTIIOONNSS
+       --hheellpp
+           Print out a usage message.
+
+       --ccrryypptt
+           Use the ccrryypptt algorithm (default).
+
+       --11  Use the MD5 based BSD password algorithm 11.
+
+       --aapprr11
+           Use the aapprr11 algorithm (Apache variant of the BSD algorithm).
+
+       --aaiixxmmdd55
+           Use the AAIIXX MMDD55 algorithm (AIX variant of the BSD algorithm).
+
+       --55
+       --66  Use the SSHHAA225566 / SSHHAA551122 based algorithms defined by Ulrich Drepper.
+           See <https://www.akkadia.org/drepper/SHA-crypt.txt>.
+
+       --ssaalltt _s_t_r_i_n_g
+           Use the specified salt.  When reading a password from the terminal,
+           this implies --nnoovveerriiffyy.
+
+       --iinn _f_i_l_e
+           Read passwords from _f_i_l_e.
+
+       --ssttddiinn
+           Read passwords from ssttddiinn.
+
+       --nnoovveerriiffyy
+           Don't verify when reading a password from the terminal.
+
+       --qquuiieett
+           Don't output warnings when passwords given at the command line are
+           truncated.
+
+       --ttaabbllee
+           In the output list, prepend the cleartext password and a TAB
+           character to each password hash.
+
+       --rraanndd ffiillee......
+           A file or files containing random data used to seed the random
+           number generator.  Multiple files can be specified separated by an
+           OS-dependent character.  The separator is ;; for MS-Windows, ,, for
+           OpenVMS, and :: for all others.
+
+       [--wwrriitteerraanndd ffiillee]
+           Writes random data to the specified _f_i_l_e upon exit.  This can be
+           used with a subsequent --rraanndd flag.
+
+EEXXAAMMPPLLEESS
+         % openssl passwd -crypt -salt xx password
+         xxj31ZMTZzkVA
+
+         % openssl passwd -1 -salt xxxxxxxx password
+         $1$xxxxxxxx$UYCIxa628.9qXjpQCjM4a.
+
+         % openssl passwd -apr1 -salt xxxxxxxx password
+         $apr1$xxxxxxxx$dxHfLAsjHkDRmG83UXe8K0
+
+         % openssl passwd -aixmd5 -salt xxxxxxxx password
+         xxxxxxxx$8Oaipk/GPKhC64w/YVeFD/
+
+CCOOPPYYRRIIGGHHTT
+       Copyright 2000-2018 The OpenSSL Project Authors. All Rights Reserved.
+
+       Licensed under the OpenSSL license (the "License").  You may not use
+       this file except in compliance with the License.  You can obtain a copy
+       in the file LICENSE in the source distribution or at
+       <https://www.openssl.org/source/license.html>.
+
+
+
+1.1.1l                            2021-08-24                         PASSWD(1)

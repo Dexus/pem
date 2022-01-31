@@ -1,0 +1,233 @@
+<!-- Creator     : groff version 1.22.4 -->
+<!-- CreationDate: Mon Jan 31 16:14:42 2022 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>SESS_ID</title>
+
+</head>
+<body>
+
+<h1 align="center">SESS_ID</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#OUTPUT">OUTPUT</a><br>
+<a href="#NOTES">NOTES</a><br>
+<a href="#BUGS">BUGS</a><br>
+<a href="#SEE ALSO">SEE ALSO</a><br>
+
+<hr>
+
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em">openssl-sess_id,
+sess_id - SSL/TLS session handling utility</p>
+
+<h2>SYNOPSIS
+<a name="SYNOPSIS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>openssl
+sess_id</b> [<b>-inform PEM|DER</b>] [<b>-outform
+PEM|DER</b>] [<b>-in filename</b>] [<b>-out filename</b>]
+[<b>-text</b>] [<b>-noout</b>] [<b>-context
+<small>ID</small></b> ]</p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The
+<b>sess_id</b> process the encoded version of the
+<small>SSL</small> session structure and optionally prints
+out <small>SSL</small> session details (for example the
+<small>SSL</small> session master key) in human readable
+format. Since this is a diagnostic tool that needs some
+knowledge of the <small>SSL</small> protocol to use
+properly, most users will not need to use it. <b><br>
+-inform DER|PEM</b></p>
+
+<p style="margin-left:17%;">This specifies the input
+format. The <b><small>DER</small></b> option uses an
+<small>ASN1 DER</small> encoded format containing session
+details. The precise format can vary from one version to the
+next. The <b><small>PEM</small></b> form is the default
+format: it consists of the <b><small>DER</small></b> format
+base64 encoded with additional header and footer lines.</p>
+
+<p style="margin-left:11%;"><b>-outform DER|PEM</b></p>
+
+<p style="margin-left:17%;">This specifies the output
+format, the options have the same meaning as the
+<b>-inform</b> option.</p>
+
+<p style="margin-left:11%;"><b>-in filename</b></p>
+
+<p style="margin-left:17%;">This specifies the input
+filename to read session information from or standard input
+by default.</p>
+
+<p style="margin-left:11%;"><b>-out filename</b></p>
+
+<p style="margin-left:17%;">This specifies the output
+filename to write session information to or standard output
+if this option is not specified.</p>
+
+<p style="margin-left:11%;"><b>-text</b></p>
+
+<p style="margin-left:17%;">prints out the various public
+or private key components in plain text in addition to the
+encoded version.</p>
+
+<p style="margin-left:11%;"><b>-cert</b></p>
+
+<p style="margin-left:17%;">if a certificate is present in
+the session it will be output using this option, if the
+<b>-text</b> option is also present then it will be printed
+out in text form.</p>
+
+<p style="margin-left:11%;"><b>-noout</b></p>
+
+<p style="margin-left:17%;">this option prevents output of
+the encoded version of the session.</p>
+
+<p style="margin-left:11%;"><b>-context
+<small>ID</small></b></p>
+
+<p style="margin-left:17%;">this option can set the session
+id so the output session information uses the supplied
+<small>ID.</small> The <small>ID</small> can be any string
+of characters. This option wont normally be used.</p>
+
+<h2>OUTPUT
+<a name="OUTPUT"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Typical
+output:</p>
+
+<p style="margin-left:11%; margin-top: 1em">SSL-Session:
+<br>
+Protocol : TLSv1 <br>
+Cipher : 0016 <br>
+Session-ID:
+871E62626C554CE95488823752CBD5F3673A3EF3DCE9C67BD916C809914B40ED
+<br>
+Session-ID-ctx: 01000000 <br>
+Master-Key:
+A7CEFC571974BE02CAC305269DC59F76EA9F0B180CB6642697A68251F2D2BB57E51DBBB4C7885573192AE9AEE220FACD
+<br>
+Key-Arg : None <br>
+Start Time: 948459261 <br>
+Timeout : 300 (sec) <br>
+Verify return code 0 (ok)</p>
+
+<p style="margin-left:11%; margin-top: 1em">Theses are
+described below in more detail. <b><br>
+Protocol</b></p>
+
+<p style="margin-left:17%;">this is the protocol in use
+TLSv1, SSLv3 or SSLv2.</p>
+
+<p style="margin-left:11%;"><b>Cipher</b></p>
+
+<p style="margin-left:17%;">the cipher used this is the
+actual raw <small>SSL</small> or <small>TLS</small> cipher
+code, see the <small>SSL</small> or <small>TLS</small>
+specifications for more information.</p>
+
+<p style="margin-left:11%;"><b>Session-ID</b></p>
+
+<p style="margin-left:17%;">the <small>SSL</small> session
+<small>ID</small> in hex format.</p>
+
+<p style="margin-left:11%;"><b>Session-ID-ctx</b></p>
+
+<p style="margin-left:17%;">the session <small>ID</small>
+context in hex format.</p>
+
+<p style="margin-left:11%;"><b>Master-Key</b></p>
+
+<p style="margin-left:17%;">this is the <small>SSL</small>
+session master key.</p>
+
+<p style="margin-left:11%;"><b>Key-Arg</b></p>
+
+<p style="margin-left:17%;">the key argument, this is only
+used in <small>SSL</small> v2.</p>
+
+<p style="margin-left:11%;"><b>Start Time</b></p>
+
+<p style="margin-left:17%;">this is the session start time
+represented as an integer in standard Unix format.</p>
+
+<p style="margin-left:11%;"><b>Timeout</b></p>
+
+<p style="margin-left:17%;">the timeout in seconds.</p>
+
+<p style="margin-left:11%;"><b>Verify return code</b></p>
+
+<p style="margin-left:17%;">this is the return code when an
+<small>SSL</small> client certificate is verified.</p>
+
+<h2>NOTES
+<a name="NOTES"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The
+<small>PEM</small> encoded session format uses the header
+and footer lines:</p>
+
+<p style="margin-left:11%; margin-top: 1em">-----BEGIN SSL
+SESSION PARAMETERS----- <br>
+-----END SSL SESSION PARAMETERS-----</p>
+
+<p style="margin-left:11%; margin-top: 1em">Since the
+<small>SSL</small> session output contains the master key it
+is possible to read the contents of an encrypted session
+using this information. Therefore appropriate security
+precautions should be taken if the information is being
+output by a &quot;real&quot; application. This is however
+strongly discouraged and should only be used for debugging
+purposes.</p>
+
+<h2>BUGS
+<a name="BUGS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The cipher and
+start time should be printed out in human readable form.</p>
+
+<h2>SEE ALSO
+<a name="SEE ALSO"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>ciphers</b>(1),
+<b>s_server</b>(1)</p>
+<hr>
+</body>
+</html>

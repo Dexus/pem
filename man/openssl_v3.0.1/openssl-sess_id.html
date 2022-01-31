@@ -1,0 +1,254 @@
+<!-- Creator     : groff version 1.22.4 -->
+<!-- CreationDate: Mon Jan 31 16:15:30 2022 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>OPENSSL-SESS_ID</title>
+
+</head>
+<body>
+
+<h1 align="center">OPENSSL-SESS_ID</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#OPTIONS">OPTIONS</a><br>
+<a href="#OUTPUT">OUTPUT</a><br>
+<a href="#NOTES">NOTES</a><br>
+<a href="#BUGS">BUGS</a><br>
+<a href="#SEE ALSO">SEE ALSO</a><br>
+<a href="#COPYRIGHT">COPYRIGHT</a><br>
+
+<hr>
+
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em">openssl-sess_id
+- SSL/TLS session handling command</p>
+
+<h2>SYNOPSIS
+<a name="SYNOPSIS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>openssl
+sess_id</b> [<b>-help</b>] [<b>-inform
+<small>DER</small></b> | <b><small>PEM</small></b> ]
+[<b>-outform <small>DER</small></b> |
+<b><small>PEM</small></b> | <b><small>NSS</small></b> ]
+[<b>-in</b> <i>filename</i>] [<b>-out</b> <i>filename</i>]
+[<b>-text</b>] [<b>-cert</b>] [<b>-noout</b>]
+[<b>-context</b> <i><small>ID</small></i> ]</p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">This command
+processes the encoded version of the <small>SSL</small>
+session structure and optionally prints out
+<small>SSL</small> session details (for example the
+<small>SSL</small> session master key) in human readable
+format. Since this is a diagnostic tool that needs some
+knowledge of the <small>SSL</small> protocol to use
+properly, most users will not need to use it.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The precise
+format of the data can vary across OpenSSL versions and is
+not documented.</p>
+
+<h2>OPTIONS
+<a name="OPTIONS"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>-help</b></p>
+
+<p style="margin-left:17%;">Print out a usage message.</p>
+
+<p style="margin-left:11%;"><b>-inform
+<small>DER</small></b> | <b><small>PEM</small></b> ,
+<b>-outform <small>DER</small></b> |
+<b><small>PEM</small></b> | <b><small>NSS</small></b></p>
+
+<p style="margin-left:17%;">The input and output formats;
+the default is <small>PEM.</small> See
+<b>openssl-format-options</b>(1) for details.</p>
+
+<p style="margin-left:17%; margin-top: 1em">For
+<b><small>NSS</small></b> output, the session
+<small>ID</small> and master key are reported in
+<small>NSS</small> &quot;keylog&quot; format.</p>
+
+<p style="margin-left:11%;"><b>-in</b> <i>filename</i></p>
+
+<p style="margin-left:17%;">This specifies the input
+filename to read session information from or standard input
+by default.</p>
+
+<p style="margin-left:11%;"><b>-out</b> <i>filename</i></p>
+
+<p style="margin-left:17%;">This specifies the output
+filename to write session information to or standard output
+if this option is not specified.</p>
+
+<p style="margin-left:11%;"><b>-text</b></p>
+
+<p style="margin-left:17%;">Prints out the various public
+or private key components in plain text in addition to the
+encoded version.</p>
+
+<p style="margin-left:11%;"><b>-cert</b></p>
+
+<p style="margin-left:17%;">If a certificate is present in
+the session it will be output using this option, if the
+<b>-text</b> option is also present then it will be printed
+out in text form.</p>
+
+<p style="margin-left:11%;"><b>-noout</b></p>
+
+<p style="margin-left:17%;">This option prevents output of
+the encoded version of the session.</p>
+
+<p style="margin-left:11%;"><b>-context</b>
+<i><small>ID</small></i></p>
+
+<p style="margin-left:17%;">This option can set the session
+id so the output session information uses the supplied
+<small>ID.</small> The <small>ID</small> can be any string
+of characters. This option won&rsquo;t normally be used.</p>
+
+<h2>OUTPUT
+<a name="OUTPUT"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Typical
+output:</p>
+
+<p style="margin-left:11%; margin-top: 1em">SSL-Session:
+<br>
+Protocol : TLSv1 <br>
+Cipher : 0016 <br>
+Session-ID:
+871E62626C554CE95488823752CBD5F3673A3EF3DCE9C67BD916C809914B40ED
+<br>
+Session-ID-ctx: 01000000 <br>
+Master-Key:
+A7CEFC571974BE02CAC305269DC59F76EA9F0B180CB6642697A68251F2D2BB57E51DBBB4C7885573192AE9AEE220FACD
+<br>
+Key-Arg : None <br>
+Start Time: 948459261 <br>
+Timeout : 300 (sec) <br>
+Verify return code 0 (ok)</p>
+
+<p style="margin-left:11%; margin-top: 1em">These are
+described below in more detail. <b><br>
+Protocol</b></p>
+
+<p style="margin-left:17%;">This is the protocol in use
+TLSv1.3, TLSv1.2, TLSv1.1, TLSv1 or SSLv3.</p>
+
+<p style="margin-left:11%;"><b>Cipher</b></p>
+
+<p style="margin-left:17%;">The cipher used this is the
+actual raw <small>SSL</small> or <small>TLS</small> cipher
+code, see the <small>SSL</small> or <small>TLS</small>
+specifications for more information.</p>
+
+<p style="margin-left:11%;"><b>Session-ID</b></p>
+
+<p style="margin-left:17%;">The <small>SSL</small> session
+<small>ID</small> in hex format.</p>
+
+<p style="margin-left:11%;"><b>Session-ID-ctx</b></p>
+
+<p style="margin-left:17%;">The session <small>ID</small>
+context in hex format.</p>
+
+<p style="margin-left:11%;"><b>Master-Key</b></p>
+
+<p style="margin-left:17%;">This is the <small>SSL</small>
+session master key.</p>
+
+<p style="margin-left:11%;"><b>Start Time</b></p>
+
+<p style="margin-left:17%;">This is the session start time
+represented as an integer in standard Unix format.</p>
+
+<p style="margin-left:11%;"><b>Timeout</b></p>
+
+<p style="margin-left:17%;">The timeout in seconds.</p>
+
+<p style="margin-left:11%;"><b>Verify return code</b></p>
+
+<p style="margin-left:17%;">This is the return code when an
+<small>SSL</small> client certificate is verified.</p>
+
+<h2>NOTES
+<a name="NOTES"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Since the
+<small>SSL</small> session output contains the master key it
+is possible to read the contents of an encrypted session
+using this information. Therefore, appropriate security
+precautions should be taken if the information is being
+output by a &quot;real&quot; application. This is however
+strongly discouraged and should only be used for debugging
+purposes.</p>
+
+<h2>BUGS
+<a name="BUGS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The cipher and
+start time should be printed out in human readable form.</p>
+
+<h2>SEE ALSO
+<a name="SEE ALSO"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>openssl</b>(1),
+<b>openssl-ciphers</b>(1), <b>openssl-s_server</b>(1)</p>
+
+<h2>COPYRIGHT
+<a name="COPYRIGHT"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Copyright
+2000-2020 The OpenSSL Project Authors. All Rights
+Reserved.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Licensed under
+the Apache License 2.0 (the &quot;License&quot;). You may
+not use this file except in compliance with the License. You
+can obtain a copy in the file <small>LICENSE</small> in the
+source distribution or at
+&lt;https://www.openssl.org/source/license.html&gt;.</p>
+<hr>
+</body>
+</html>

@@ -1,0 +1,231 @@
+<!-- Creator     : groff version 1.22.4 -->
+<!-- CreationDate: Mon Jan 31 16:15:22 2022 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>OPENSSL-DHPARAM</title>
+
+</head>
+<body>
+
+<h1 align="center">OPENSSL-DHPARAM</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#OPTIONS">OPTIONS</a><br>
+<a href="#NOTES">NOTES</a><br>
+<a href="#SEE ALSO">SEE ALSO</a><br>
+<a href="#HISTORY">HISTORY</a><br>
+<a href="#COPYRIGHT">COPYRIGHT</a><br>
+
+<hr>
+
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em">openssl-dhparam
+- DH parameter manipulation and generation</p>
+
+<h2>SYNOPSIS
+<a name="SYNOPSIS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>openssl
+dhparam</b> [<b>-help</b>] [<b>-inform
+<small>DER</small></b> | <b><small>PEM</small></b> ]
+[<b>-outform <small>DER</small></b> |
+<b><small>PEM</small></b> ] [<b>-in</b> <i>filename</i>]
+[<b>-out</b> <i>filename</i>] [<b>-dsaparam</b>]
+[<b>-check</b>] [<b>-noout</b>] [<b>-text</b>] [<b>-2</b>]
+[<b>-3</b>] [<b>-5</b>] [<b>-engine</b> <i>id</i>]
+[<b>-rand</b> <i>files</i>] [<b>-writerand</b> <i>file</i>]
+[<b>-provider</b> <i>name</i>] [<b>-provider-path</b>
+<i>path</i>] [<b>-propquery</b> <i>propq</i>]
+[<i>numbits</i>]</p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">This command is
+used to manipulate <small>DH</small> parameter files.</p>
+
+<p style="margin-left:11%; margin-top: 1em">See &quot;
+<small>EXAMPLES&quot;</small> in <b>openssl-genpkey</b>(1)
+for examples on how to generate a key using a named safe
+prime group without generating intermediate parameters.</p>
+
+<h2>OPTIONS
+<a name="OPTIONS"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>-help</b></p>
+
+<p style="margin-left:17%;">Print out a usage message.</p>
+
+<p style="margin-left:11%;"><b>-inform
+<small>DER</small></b> | <b><small>PEM</small></b> ,
+<b>-outform <small>DER</small></b> |
+<b><small>PEM</small></b></p>
+
+<p style="margin-left:17%;">The input format and output
+format; the default is <b><small>PEM</small></b> . The
+object is compatible with the PKCS#3 <b>DHparameter</b>
+structure. See <b>openssl-format-options</b>(1) for
+details.</p>
+
+<p style="margin-left:11%;"><b>-in</b> <i>filename</i></p>
+
+<p style="margin-left:17%;">This specifies the input
+filename to read parameters from or standard input if this
+option is not specified.</p>
+
+<p style="margin-left:11%;"><b>-out</b> <i>filename</i></p>
+
+<p style="margin-left:17%;">This specifies the output
+filename parameters to. Standard output is used if this
+option is not present. The output filename should <b>not</b>
+be the same as the input filename.</p>
+
+<p style="margin-left:11%;"><b>-dsaparam</b></p>
+
+<p style="margin-left:17%;">If this option is used,
+<small>DSA</small> rather than <small>DH</small> parameters
+are read or created; they are converted to <small>DH</small>
+format. Otherwise, &quot;strong&quot; primes (such that
+(p-1)/2 is also prime) will be used for <small>DH</small>
+parameter generation.</p>
+
+
+<p style="margin-left:17%; margin-top: 1em"><small>DH</small>
+parameter generation with the <b>-dsaparam</b> option is
+much faster, and the recommended exponent length is shorter,
+which makes <small>DH</small> key exchange more efficient.
+Beware that with such DSA-style <small>DH</small>
+parameters, a fresh <small>DH</small> key should be created
+for each use to avoid small-subgroup attacks that may be
+possible otherwise.</p>
+
+<p style="margin-left:11%;"><b>-check</b></p>
+
+<p style="margin-left:17%;">Performs numerous checks to see
+if the supplied parameters are valid and displays a warning
+if not.</p>
+
+<p style="margin-left:11%;"><b>-2</b>, <b>-3</b>,
+<b>-5</b></p>
+
+<p style="margin-left:17%;">The generator to use, either 2,
+3 or 5. If present then the input file is ignored and
+parameters are generated instead. If not present but
+<i>numbits</i> is present, parameters are generated with the
+default generator 2.</p>
+
+<p style="margin-left:11%;"><i>numbits</i></p>
+
+<p style="margin-left:17%;">This option specifies that a
+parameter set should be generated of size <i>numbits</i>. It
+must be the last option. If this option is present then the
+input file is ignored and parameters are generated instead.
+If this option is not present but a generator (<b>-2</b>,
+<b>-3</b> or <b>-5</b>) is present, parameters are generated
+with a default length of 2048 bits. The minimim length is
+512 bits. The maximum length is 10000 bits.</p>
+
+<p style="margin-left:11%;"><b>-noout</b></p>
+
+<p style="margin-left:17%;">This option inhibits the output
+of the encoded version of the parameters.</p>
+
+<p style="margin-left:11%;"><b>-text</b></p>
+
+<p style="margin-left:17%;">This option prints out the
+<small>DH</small> parameters in human readable form.</p>
+
+<p style="margin-left:11%;"><b>-engine</b> <i>id</i></p>
+
+<p style="margin-left:17%;">See &quot;Engine Options&quot;
+in <b>openssl</b>(1). This option is deprecated.</p>
+
+<p style="margin-left:11%;"><b>-rand</b> <i>files</i>,
+<b>-writerand</b> <i>file</i></p>
+
+<p style="margin-left:17%;">See &quot;Random State
+Options&quot; in <b>openssl</b>(1) for details.</p>
+
+<p style="margin-left:11%;"><b>-provider</b> <i>name</i>
+<b><br>
+-provider-path</b> <i>path</i> <b><br>
+-propquery</b> <i>propq</i></p>
+
+<p style="margin-left:17%;">See &quot;Provider
+Options&quot; in <b>openssl</b>(1), <b>provider</b>(7), and
+<b>property</b>(7).</p>
+
+<h2>NOTES
+<a name="NOTES"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">This command
+replaces the <b>dh</b> and <b>gendh</b> commands of previous
+releases.</p>
+
+<h2>SEE ALSO
+<a name="SEE ALSO"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>openssl</b>(1),
+<b>openssl-pkeyparam</b>(1), <b>openssl-dsaparam</b>(1),
+<b>openssl-genpkey</b>(1).</p>
+
+<h2>HISTORY
+<a name="HISTORY"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The
+<b>-engine</b> option was deprecated in OpenSSL 3.0.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The <b>-C</b>
+option was removed in OpenSSL 3.0.</p>
+
+<h2>COPYRIGHT
+<a name="COPYRIGHT"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Copyright
+2000-2021 The OpenSSL Project Authors. All Rights
+Reserved.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Licensed under
+the Apache License 2.0 (the &quot;License&quot;). You may
+not use this file except in compliance with the License. You
+can obtain a copy in the file <small>LICENSE</small> in the
+source distribution or at
+&lt;https://www.openssl.org/source/license.html&gt;.</p>
+<hr>
+</body>
+</html>

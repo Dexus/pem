@@ -1,0 +1,183 @@
+OPENSSL-LIST(1ossl)                 OpenSSL                OPENSSL-LIST(1ossl)
+
+
+
+NNAAMMEE
+       openssl-list - list algorithms and features
+
+SSYYNNOOPPSSIISS
+       ooppeennssssll lliisstt [--hheellpp] [--vveerrbboossee] [--sseelleecctt _n_a_m_e] [--11] [--ccoommmmaannddss]
+       [--ssttaannddaarrdd--ccoommmmaannddss] [--ddiiggeesstt--aallggoorriitthhmmss] [--ddiiggeesstt--ccoommmmaannddss]
+       [--kkddff--aallggoorriitthhmmss] [--mmaacc--aallggoorriitthhmmss] [--rraannddoomm--iinnssttaanncceess]
+       [--rraannddoomm--ggeenneerraattoorrss] [--cciipphheerr--aallggoorriitthhmmss] [--cciipphheerr--ccoommmmaannddss]
+       [--eennccooddeerrss] [--ddeeccooddeerrss] [--kkeeyy--mmaannaaggeerrss] [--kkeeyy--eexxcchhaannggee--aallggoorriitthhmmss]
+       [--kkeemm--aallggoorriitthhmmss] [--ssiiggnnaattuurree--aallggoorriitthhmmss] [--aassyymmcciipphheerr--aallggoorriitthhmmss]
+       [--ppuubblliicc--kkeeyy--aallggoorriitthhmmss] [--ppuubblliicc--kkeeyy--mmeetthhooddss] [--ssttoorree--llooaaddeerrss]
+       [--pprroovviiddeerrss] [--eennggiinneess] [--ddiissaabblleedd] [--oobbjjeeccttss] [--ooppttiioonnss _c_o_m_m_a_n_d]
+       [--pprroovviiddeerr _n_a_m_e] [--pprroovviiddeerr--ppaatthh _p_a_t_h] [--pprrooppqquueerryy _p_r_o_p_q]
+
+DDEESSCCRRIIPPTTIIOONN
+       This command is used to generate list of algorithms or disabled
+       features.
+
+OOPPTTIIOONNSS
+       --hheellpp
+           Display a usage message.
+
+       --vveerrbboossee
+           Displays extra information.  The options below where verbosity
+           applies say a bit more about what that means.
+
+       --sseelleecctt _n_a_m_e
+           Only list algorithms that match this name.
+
+       --11  List the commands, digest-commands, or cipher-commands in a single
+           column.  If used, this option must be given first.
+
+       --ccoommmmaannddss
+           Display a list of standard commands.
+
+       --ssttaannddaarrdd--ccoommmmaannddss
+           List of standard commands.
+
+       --ddiiggeesstt--ccoommmmaannddss
+           This option is deprecated. Use ddiiggeesstt--aallggoorriitthhmmss instead.
+
+           Display a list of message digest commands, which are typically used
+           as input to the ooppeennssssll--ddggsstt(1) or ooppeennssssll--ssppeeeedd(1) commands.
+
+       --cciipphheerr--ccoommmmaannddss
+           This option is deprecated. Use cciipphheerr--aallggoorriitthhmmss instead.
+
+           Display a list of cipher commands, which are typically used as
+           input to the ooppeennssssll--eenncc(1) or ooppeennssssll--ssppeeeedd(1) commands.
+
+       --ddiiggeesstt--aallggoorriitthhmmss, --kkddff--aallggoorriitthhmmss, --mmaacc--aallggoorriitthhmmss,
+       --cciipphheerr--aallggoorriitthhmmss
+           Display a list of cipher, digest, kdf and mac algorithms.  See
+           "Display of algorithm names" for a description of how names are
+           displayed.
+
+           In verbose mode, the algorithms provided by a provider will get
+           additional information on what parameters each implementation
+           supports.
+
+       --rraannddoomm--iinnssttaanncceess
+           List the primary, public and private random number generator
+           details.
+
+       --rraannddoomm--ggeenneerraattoorrss
+           Display a list of random number generators.  See "Display of
+           algorithm names" for a description of how names are displayed.
+
+       --eennccooddeerrss
+           Display a list of encoders.  See "Display of algorithm names" for a
+           description of how names are displayed.
+
+           In verbose mode, the algorithms provided by a provider will get
+           additional information on what parameters each implementation
+           supports.
+
+       --ddeeccooddeerrss
+           Display a list of decoders.  See "Display of algorithm names" for a
+           description of how names are displayed.
+
+           In verbose mode, the algorithms provided by a provider will get
+           additional information on what parameters each implementation
+           supports.
+
+       --ppuubblliicc--kkeeyy--aallggoorriitthhmmss
+           Display a list of public key algorithms, with each algorithm as a
+           block of multiple lines, all but the first are indented.  The
+           options kkeeyy--eexxcchhaannggee--aallggoorriitthhmmss, kkeemm--aallggoorriitthhmmss, ssiiggnnaattuurree--
+           aallggoorriitthhmmss, and aassyymmcciipphheerr--aallggoorriitthhmmss will display similar info.
+
+       --ppuubblliicc--kkeeyy--mmeetthhooddss
+           Display a list of public key methods.
+
+       --kkeeyy--mmaannaaggeerrss
+           Display a list of key managers.
+
+       --kkeeyy--eexxcchhaannggee--aallggoorriitthhmmss
+           Display a list of key exchange algorithms.
+
+       --kkeemm--aallggoorriitthhmmss
+           Display a list of key encapsulation algorithms.
+
+       --ssiiggnnaattuurree--aallggoorriitthhmmss
+           Display a list of signature algorithms.
+
+       --aassyymmcciipphheerr--aallggoorriitthhmmss
+           Display a list of asymmetric cipher algorithms.
+
+       --ssttoorree--llooaaddeerrss
+           Display a list of store loaders.
+
+       --pprroovviiddeerrss
+           Display a list of all loaded providers with their names, version
+           and status.
+
+           In verbose mode, the full version and all provider parameters will
+           additionally be displayed.
+
+       --eennggiinneess
+           This option is deprecated.
+
+           Display a list of loaded engines.
+
+       --ddiissaabblleedd
+           Display a list of disabled features, those that were compiled out
+           of the installation.
+
+       --oobbjjeeccttss
+           Display a list of built in objects, i.e. OIDs with names.  They're
+           listed in the format described in "ASN1 Object Configuration
+           Module" in ccoonnffiigg(5).
+
+       --ooppttiioonnss _c_o_m_m_a_n_d
+           Output a two-column list of the options accepted by the specified
+           _c_o_m_m_a_n_d.  The first is the option name, and the second is a one-
+           character indication of what type of parameter it takes, if any.
+           This is an internal option, used for checking that the
+           documentation is complete.
+
+       --pprroovviiddeerr _n_a_m_e
+       --pprroovviiddeerr--ppaatthh _p_a_t_h
+       --pprrooppqquueerryy _p_r_o_p_q
+           See "Provider Options" in ooppeennssssll(1), pprroovviiddeerr(7), and pprrooppeerrttyy(7).
+
+   DDiissppllaayy ooff aallggoorriitthhmm nnaammeess
+       Algorithm names may be displayed in one of two manners:
+
+       Legacy implementations
+           Legacy implementations will simply display the main name of the
+           algorithm on a line of its own, or in the form "<foo " bar>> to
+           show that "foo" is an alias for the main name, "bar"
+
+       Provided implementations
+           Implementations from a provider are displayed like this if the
+           implementation is labeled with a single name:
+
+            foo @ bar
+
+           or like this if it's labeled with multiple names:
+
+            { foo1, foo2 } @bar
+
+           In both cases, "bar" is the name of the provider.
+
+HHIISSTTOORRYY
+       The --eennggiinneess, --ddiiggeesstt--ccoommmmaannddss, and --cciipphheerr--ccoommmmaannddss options were
+       deprecated in OpenSSL 3.0.
+
+CCOOPPYYRRIIGGHHTT
+       Copyright 2016-2021 The OpenSSL Project Authors. All Rights Reserved.
+
+       Licensed under the Apache License 2.0 (the "License").  You may not use
+       this file except in compliance with the License.  You can obtain a copy
+       in the file LICENSE in the source distribution or at
+       <https://www.openssl.org/source/license.html>.
+
+
+
+3.0.1                             2022-01-31               OPENSSL-LIST(1ossl)

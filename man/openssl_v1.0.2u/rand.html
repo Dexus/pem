@@ -1,0 +1,103 @@
+<!-- Creator     : groff version 1.22.4 -->
+<!-- CreationDate: Mon Jan 31 16:14:46 2022 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>RAND</title>
+
+</head>
+<body>
+
+<h1 align="center">RAND</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#OPTIONS">OPTIONS</a><br>
+<a href="#SEE ALSO">SEE ALSO</a><br>
+
+<hr>
+
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">openssl-rand,
+rand - generate pseudo-random bytes</p>
+
+<h2>SYNOPSIS
+<a name="SYNOPSIS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>openssl
+rand</b> [<b>-out</b> <i>file</i>] [<b>-rand</b>
+<i>file(s)</i>] [<b>-base64</b>] [<b>-hex</b>]
+<i>num</i></p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The <b>rand</b>
+command outputs <i>num</i> pseudo-random bytes after seeding
+the random number generator once. As in other <b>openssl</b>
+command line tools, <small>PRNG</small> seeding uses the
+file <i>$HOME/</i><b>.rnd</b> or <b>.rnd</b> in addition to
+the files given in the <b>-rand</b> option. A new
+<i>$HOME</i>/<b>.rnd</b> or <b>.rnd</b> file will be written
+back if enough seeding was obtained from these sources.</p>
+
+<h2>OPTIONS
+<a name="OPTIONS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>-out</b>
+<i>file</i></p>
+
+<p style="margin-left:17%;">Write to <i>file</i> instead of
+standard output.</p>
+
+<p style="margin-left:11%;"><b>-rand</b> <i>file(s)</i></p>
+
+<p style="margin-left:17%;">Use specified file or files or
+<small>EGD</small> socket (see <b>RAND_egd</b>(3)) for
+seeding the random number generator. Multiple files can be
+specified separated by a OS-dependent character. The
+separator is <b>;</b> for MS-Windows, <b>,</b> for OpenVMS,
+and <b>:</b> for all others.</p>
+
+<p style="margin-left:11%;"><b>-base64</b></p>
+
+<p style="margin-left:17%;">Perform base64 encoding on the
+output.</p>
+
+<p style="margin-left:11%;"><b>-hex</b></p>
+
+<p style="margin-left:17%;">Show the output as a hex
+string.</p>
+
+<h2>SEE ALSO
+<a name="SEE ALSO"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>RAND_bytes</b>(3)</p>
+<hr>
+</body>
+</html>

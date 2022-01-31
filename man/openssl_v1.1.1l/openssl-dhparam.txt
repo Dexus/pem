@@ -1,0 +1,128 @@
+DHPARAM(1)                          OpenSSL                         DHPARAM(1)
+
+
+
+NNAAMMEE
+       openssl-dhparam, dhparam - DH parameter manipulation and generation
+
+SSYYNNOOPPSSIISS
+       ooppeennssssll ddhhppaarraamm [--hheellpp] [--iinnffoorrmm DDEERR||PPEEMM] [--oouuttffoorrmm DDEERR||PPEEMM] [--iinn
+       _f_i_l_e_n_a_m_e] [--oouutt _f_i_l_e_n_a_m_e] [--ddssaappaarraamm] [--cchheecckk] [--nnoooouutt] [--tteexxtt] [--CC]
+       [--22] [--55] [--rraanndd ffiillee......]  [--wwrriitteerraanndd ffiillee] [--eennggiinnee iidd] [_n_u_m_b_i_t_s]
+
+DDEESSCCRRIIPPTTIIOONN
+       This command is used to manipulate DH parameter files.
+
+OOPPTTIIOONNSS
+       --hheellpp
+           Print out a usage message.
+
+       --iinnffoorrmm DDEERR||PPEEMM
+           This specifies the input format. The DDEERR option uses an ASN1 DER
+           encoded form compatible with the PKCS#3 DHparameter structure. The
+           PEM form is the default format: it consists of the DDEERR format
+           base64 encoded with additional header and footer lines.
+
+       --oouuttffoorrmm DDEERR||PPEEMM
+           This specifies the output format, the options have the same meaning
+           and default as the --iinnffoorrmm option.
+
+       --iinn _f_i_l_e_n_a_m_e
+           This specifies the input filename to read parameters from or
+           standard input if this option is not specified.
+
+       --oouutt _f_i_l_e_n_a_m_e
+           This specifies the output filename parameters to. Standard output
+           is used if this option is not present. The output filename should
+           nnoott be the same as the input filename.
+
+       --ddssaappaarraamm
+           If this option is used, DSA rather than DH parameters are read or
+           created; they are converted to DH format.  Otherwise, "strong"
+           primes (such that (p-1)/2 is also prime) will be used for DH
+           parameter generation.
+
+           DH parameter generation with the --ddssaappaarraamm option is much faster,
+           and the recommended exponent length is shorter, which makes DH key
+           exchange more efficient.  Beware that with such DSA-style DH
+           parameters, a fresh DH key should be created for each use to avoid
+           small-subgroup attacks that may be possible otherwise.
+
+       --cchheecckk
+           Performs numerous checks to see if the supplied parameters are
+           valid and displays a warning if not.
+
+       --22, --55
+           The generator to use, either 2 or 5. If present then the input file
+           is ignored and parameters are generated instead. If not present but
+           nnuummbbiittss is present, parameters are generated with the default
+           generator 2.
+
+       --rraanndd ffiillee......
+           A file or files containing random data used to seed the random
+           number generator.  Multiple files can be specified separated by an
+           OS-dependent character.  The separator is ;; for MS-Windows, ,, for
+           OpenVMS, and :: for all others.
+
+       [--wwrriitteerraanndd ffiillee]
+           Writes random data to the specified _f_i_l_e upon exit.  This can be
+           used with a subsequent --rraanndd flag.
+
+       _n_u_m_b_i_t_s
+           This option specifies that a parameter set should be generated of
+           size _n_u_m_b_i_t_s. It must be the last option. If this option is present
+           then the input file is ignored and parameters are generated
+           instead. If this option is not present but a generator (--22 or --55)
+           is present, parameters are generated with a default length of 2048
+           bits.
+
+       --nnoooouutt
+           This option inhibits the output of the encoded version of the
+           parameters.
+
+       --tteexxtt
+           This option prints out the DH parameters in human readable form.
+
+       --CC  This option converts the parameters into C code. The parameters can
+           then be loaded by calling the ggeett__ddhhNNNNNNNN(()) function.
+
+       --eennggiinnee iidd
+           Specifying an engine (by its unique iidd string) will cause ddhhppaarraamm
+           to attempt to obtain a functional reference to the specified
+           engine, thus initialising it if needed. The engine will then be set
+           as the default for all available algorithms.
+
+WWAARRNNIINNGGSS
+       The program ddhhppaarraamm combines the functionality of the programs ddhh and
+       ggeennddhh in previous versions of OpenSSL. The ddhh and ggeennddhh programs are
+       retained for now but may have different purposes in future versions of
+       OpenSSL.
+
+NNOOTTEESS
+       PEM format DH parameters use the header and footer lines:
+
+        -----BEGIN DH PARAMETERS-----
+        -----END DH PARAMETERS-----
+
+       OpenSSL currently only supports the older PKCS#3 DH, not the newer
+       X9.42 DH.
+
+       This program manipulates DH parameters not keys.
+
+BBUUGGSS
+       There should be a way to generate and manipulate DH keys.
+
+SSEEEE AALLSSOO
+       ddssaappaarraamm(1)
+
+CCOOPPYYRRIIGGHHTT
+       Copyright 2000-2017 The OpenSSL Project Authors. All Rights Reserved.
+
+       Licensed under the OpenSSL license (the "License").  You may not use
+       this file except in compliance with the License.  You can obtain a copy
+       in the file LICENSE in the source distribution or at
+       <https://www.openssl.org/source/license.html>.
+
+
+
+1.1.1l                            2021-08-24                        DHPARAM(1)

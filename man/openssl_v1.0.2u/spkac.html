@@ -1,0 +1,216 @@
+<!-- Creator     : groff version 1.22.4 -->
+<!-- CreationDate: Mon Jan 31 16:14:42 2022 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>SPKAC</title>
+
+</head>
+<body>
+
+<h1 align="center">SPKAC</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#COMMAND OPTIONS">COMMAND OPTIONS</a><br>
+<a href="#EXAMPLES">EXAMPLES</a><br>
+<a href="#NOTES">NOTES</a><br>
+<a href="#SEE ALSO">SEE ALSO</a><br>
+
+<hr>
+
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">openssl-spkac,
+spkac - SPKAC printing and generating utility</p>
+
+<h2>SYNOPSIS
+<a name="SYNOPSIS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>openssl
+spkac</b> [<b>-in filename</b>] [<b>-out filename</b>]
+[<b>-key keyfile</b>] [<b>-passin arg</b>] [<b>-challenge
+string</b>] [<b>-pubkey</b>] [<b>-spkac spkacname</b>]
+[<b>-spksect section</b>] [<b>-noout</b>] [<b>-verify</b>]
+[<b>-engine id</b>]</p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The
+<b>spkac</b> command processes Netscape signed public key
+and challenge ( <small>SPKAC</small> ) files. It can print
+out their contents, verify the signature and produce its own
+SPKACs from a supplied private key.</p>
+
+<h2>COMMAND OPTIONS
+<a name="COMMAND OPTIONS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>-in
+filename</b></p>
+
+<p style="margin-left:17%;">This specifies the input
+filename to read from or standard input if this option is
+not specified. Ignored if the <b>-key</b> option is
+used.</p>
+
+<p style="margin-left:11%;"><b>-out filename</b></p>
+
+<p style="margin-left:17%;">specifies the output filename
+to write to or standard output by default.</p>
+
+<p style="margin-left:11%;"><b>-key keyfile</b></p>
+
+<p style="margin-left:17%;">create an <small>SPKAC</small>
+file using the private key in <b>keyfile</b>. The
+<b>-in</b>, <b>-noout</b>, <b>-spksect</b> and
+<b>-verify</b> options are ignored if present.</p>
+
+<p style="margin-left:11%;"><b>-passin password</b></p>
+
+<p style="margin-left:17%;">the input file password source.
+For more information about the format of <b>arg</b> see the
+<b><small>PASS PHRASE ARGUMENTS</small></b> section in
+<b>openssl</b>(1).</p>
+
+<p style="margin-left:11%;"><b>-challenge string</b></p>
+
+<p style="margin-left:17%;">specifies the challenge string
+if an <small>SPKAC</small> is being created.</p>
+
+<p style="margin-left:11%;"><b>-spkac spkacname</b></p>
+
+<p style="margin-left:17%;">allows an alternative name form
+the variable containing the <small>SPKAC.</small> The
+default is &quot; <small>SPKAC&quot;.</small> This option
+affects both generated and input <small>SPKAC</small>
+files.</p>
+
+<p style="margin-left:11%;"><b>-spksect section</b></p>
+
+<p style="margin-left:17%;">allows an alternative name form
+the section containing the <small>SPKAC.</small> The default
+is the default section.</p>
+
+<p style="margin-left:11%;"><b>-noout</b></p>
+
+<p style="margin-left:17%;">don&rsquo;t output the text
+version of the <small>SPKAC</small> (not used if an
+<small>SPKAC</small> is being created).</p>
+
+<p style="margin-left:11%;"><b>-pubkey</b></p>
+
+<p style="margin-left:17%;">output the public key of an
+<small>SPKAC</small> (not used if an <small>SPKAC</small> is
+being created).</p>
+
+<p style="margin-left:11%;"><b>-verify</b></p>
+
+<p style="margin-left:17%;">verifies the digital signature
+on the supplied <small>SPKAC.</small></p>
+
+<p style="margin-left:11%;"><b>-engine id</b></p>
+
+<p style="margin-left:17%;">specifying an engine (by its
+unique <b>id</b> string) will cause <b>spkac</b> to attempt
+to obtain a functional reference to the specified engine,
+thus initialising it if needed. The engine will then be set
+as the default for all available algorithms.</p>
+
+<h2>EXAMPLES
+<a name="EXAMPLES"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Print out the
+contents of an <small>SPKAC:</small></p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl spkac
+-in spkac.cnf</p>
+
+<p style="margin-left:11%; margin-top: 1em">Verify the
+signature of an <small>SPKAC:</small></p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl spkac
+-in spkac.cnf -noout -verify</p>
+
+<p style="margin-left:11%; margin-top: 1em">Create an
+<small>SPKAC</small> using the challenge string
+&quot;hello&quot;:</p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl spkac
+-key key.pem -challenge hello -out spkac.cnf</p>
+
+<p style="margin-left:11%; margin-top: 1em">Example of an
+<small>SPKAC,</small> (long lines split up for clarity):</p>
+
+
+<p style="margin-left:11%; margin-top: 1em">SPKAC=MIG5MGUwXDANBgkqhkiG9w0BAQEFAANLADBIAkEA1cCoq2Wa3Ixs47uI7F\
+<br>
+
+PVwHVIPDx5yso105Y6zpozam135a8R0CpoRvkkigIyXfcCjiVi5oWk+6FfPaD03u\
+<br>
+
+PFoQIDAQABFgVoZWxsbzANBgkqhkiG9w0BAQQFAANBAFpQtY/FojdwkJh1bEIYuc\
+<br>
+
+2EeM2KHTWPEepWYeawvHD0gQ3DngSC75YCWnnDdq+NQ3F+X4deMx9AaEglZtULwV\
+<br>
+4=</p>
+
+<h2>NOTES
+<a name="NOTES"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">A created
+<small>SPKAC</small> with suitable <small>DN</small>
+components appended can be fed into the <b>ca</b>
+utility.</p>
+
+<p style="margin-left:11%; margin-top: 1em">SPKACs are
+typically generated by Netscape when a form is submitted
+containing the <b><small>KEYGEN</small></b> tag as part of
+the certificate enrollment process.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The challenge
+string permits a primitive form of proof of possession of
+private key. By checking the <small>SPKAC</small> signature
+and a random challenge string some guarantee is given that
+the user knows the private key corresponding to the public
+key being certified. This is important in some applications.
+Without this it is possible for a previous
+<small>SPKAC</small> to be used in a &quot;replay
+attack&quot;.</p>
+
+<h2>SEE ALSO
+<a name="SEE ALSO"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>ca</b>(1)</p>
+<hr>
+</body>
+</html>

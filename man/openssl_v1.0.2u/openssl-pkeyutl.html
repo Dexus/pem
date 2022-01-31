@@ -1,0 +1,351 @@
+<!-- Creator     : groff version 1.22.4 -->
+<!-- CreationDate: Mon Jan 31 16:14:47 2022 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>PKEYUTL</title>
+
+</head>
+<body>
+
+<h1 align="center">PKEYUTL</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#COMMAND OPTIONS">COMMAND OPTIONS</a><br>
+<a href="#NOTES">NOTES</a><br>
+<a href="#RSA ALGORITHM">RSA ALGORITHM</a><br>
+<a href="#DSA ALGORITHM">DSA ALGORITHM</a><br>
+<a href="#DH ALGORITHM">DH ALGORITHM</a><br>
+<a href="#EC ALGORITHM">EC ALGORITHM</a><br>
+<a href="#EXAMPLES">EXAMPLES</a><br>
+<a href="#SEE ALSO">SEE ALSO</a><br>
+
+<hr>
+
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em">openssl-pkeyutl,
+pkeyutl - public key algorithm utility</p>
+
+<h2>SYNOPSIS
+<a name="SYNOPSIS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>openssl
+pkeyutl</b> [<b>-in file</b>] [<b>-out file</b>]
+[<b>-sigfile file</b>] [<b>-inkey file</b>] [<b>-keyform
+PEM|DER</b>] [<b>-passin arg</b>] [<b>-peerkey file</b>]
+[<b>-peerform PEM|DER</b>] [<b>-pubin</b>] [<b>-certin</b>]
+[<b>-rev</b>] [<b>-sign</b>] [<b>-verify</b>]
+[<b>-verifyrecover</b>] [<b>-encrypt</b>] [<b>-decrypt</b>]
+[<b>-derive</b>] [<b>-pkeyopt opt:value</b>]
+[<b>-hexdump</b>] [<b>-asn1parse</b>] [<b>-engine
+id</b>]</p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The
+<b>pkeyutl</b> command can be used to perform public key
+operations using any supported algorithm.</p>
+
+<h2>COMMAND OPTIONS
+<a name="COMMAND OPTIONS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>-in
+filename</b></p>
+
+<p style="margin-left:17%;">This specifies the input
+filename to read data from or standard input if this option
+is not specified.</p>
+
+<p style="margin-left:11%;"><b>-out filename</b></p>
+
+<p style="margin-left:17%;">specifies the output filename
+to write to or standard output by default.</p>
+
+<p style="margin-left:11%;"><b>-inkey file</b></p>
+
+<p style="margin-left:17%;">the input key file, by default
+it should be a private key.</p>
+
+<p style="margin-left:11%;"><b>-keyform PEM|DER</b></p>
+
+<p style="margin-left:17%;">the key format <small>PEM,
+DER</small> or <small>ENGINE.</small></p>
+
+<p style="margin-left:11%;"><b>-passin arg</b></p>
+
+<p style="margin-left:17%;">the input key password source.
+For more information about the format of <b>arg</b> see the
+<b><small>PASS PHRASE ARGUMENTS</small></b> section in
+<b>openssl</b>(1).</p>
+
+<p style="margin-left:11%;"><b>-peerkey file</b></p>
+
+<p style="margin-left:17%;">the peer key file, used by key
+derivation (agreement) operations.</p>
+
+<p style="margin-left:11%;"><b>-peerform PEM|DER</b></p>
+
+<p style="margin-left:17%;">the peer key format <small>PEM,
+DER</small> or <small>ENGINE.</small></p>
+
+<p style="margin-left:11%;"><b>-engine id</b></p>
+
+<p style="margin-left:17%;">specifying an engine (by its
+unique <b>id</b> string) will cause <b>pkeyutl</b> to
+attempt to obtain a functional reference to the specified
+engine, thus initialising it if needed. The engine will then
+be set as the default for all available algorithms.</p>
+
+<p style="margin-left:11%;"><b>-pubin</b></p>
+
+<p style="margin-left:17%;">the input file is a public
+key.</p>
+
+<p style="margin-left:11%;"><b>-certin</b></p>
+
+<p style="margin-left:17%;">the input is a certificate
+containing a public key.</p>
+
+<p style="margin-left:11%;"><b>-rev</b></p>
+
+<p style="margin-left:17%;">reverse the order of the input
+buffer. This is useful for some libraries (such as
+CryptoAPI) which represent the buffer in little endian
+format.</p>
+
+<p style="margin-left:11%;"><b>-sign</b></p>
+
+<p style="margin-left:17%;">sign the input data and output
+the signed result. This requires a private key.</p>
+
+<p style="margin-left:11%;"><b>-verify</b></p>
+
+<p style="margin-left:17%;">verify the input data against
+the signature file and indicate if the verification
+succeeded or failed.</p>
+
+<p style="margin-left:11%;"><b>-verifyrecover</b></p>
+
+<p style="margin-left:17%;">verify the input data and
+output the recovered data.</p>
+
+<p style="margin-left:11%;"><b>-encrypt</b></p>
+
+<p style="margin-left:17%;">encrypt the input data using a
+public key.</p>
+
+<p style="margin-left:11%;"><b>-decrypt</b></p>
+
+<p style="margin-left:17%;">decrypt the input data using a
+private key.</p>
+
+<p style="margin-left:11%;"><b>-derive</b></p>
+
+<p style="margin-left:17%;">derive a shared secret using
+the peer key.</p>
+
+<p style="margin-left:11%;"><b>-hexdump</b></p>
+
+<p style="margin-left:17%;">hex dump the output data.</p>
+
+<p style="margin-left:11%;"><b>-asn1parse</b></p>
+
+<p style="margin-left:17%;">asn1parse the output data, this
+is useful when combined with the <b>-verifyrecover</b>
+option when an <small>ASN1</small> structure is signed.</p>
+
+<h2>NOTES
+<a name="NOTES"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The operations
+and options supported vary according to the key algorithm
+and its implementation. The OpenSSL operations and options
+are indicated below.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Unless
+otherwise mentioned all algorithms support the
+<b>digest:alg</b> option which specifies the digest in use
+for sign, verify and verifyrecover operations. The value
+<b>alg</b> should represent a digest name as used in the
+<b>EVP_get_digestbyname()</b> function for example
+<b>sha1</b>. This value is used only for sanity-checking the
+lengths of data passed in to the <b>pkeyutl</b> and for
+creating the structures that make up the signature (e.g.
+<b>DigestInfo</b> in <small>RSASSA</small> PKCS#1 v1.5
+signatures). In case of <small>RSA, ECDSA</small> and
+<small>DSA</small> signatures, this utility will not perform
+hashing on input data but rather use the data directly as
+input of signature algorithm. Depending on key type,
+signature type and mode of padding, the maximum acceptable
+lengths of input data differ. In general, with
+<small>RSA</small> the signed data can&rsquo;t be longer
+than the key modulus, in case of <small>ECDSA</small> and
+<small>DSA</small> the data shouldn&rsquo;t be longer than
+field size, otherwise it will be silently truncated to field
+size.</p>
+
+<p style="margin-left:11%; margin-top: 1em">In other words,
+if the value of digest is <b>sha1</b> the input should be 20
+bytes long binary encoding of <small>SHA-1</small> hash
+function output.</p>
+
+<h2>RSA ALGORITHM
+<a name="RSA ALGORITHM"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The
+<small>RSA</small> algorithm supports encrypt, decrypt,
+sign, verify and verifyrecover operations in general. Some
+padding modes only support some of these operations however.
+<br>
+-<b>rsa_padding_mode:mode</b></p>
+
+<p style="margin-left:17%;">This sets the
+<small>RSA</small> padding mode. Acceptable values for
+<b>mode</b> are <b>pkcs1</b> for PKCS#1 padding,
+<b>sslv23</b> for SSLv23 padding, <b>none</b> for no
+padding, <b>oaep</b> for <b><small>OAEP</small></b> mode,
+<b>x931</b> for X9.31 mode and <b>pss</b> for
+<small>PSS.</small></p>
+
+<p style="margin-left:17%; margin-top: 1em">In PKCS#1
+padding if the message digest is not set then the supplied
+data is signed or verified directly instead of using a
+<b>DigestInfo</b> structure. If a digest is set then the a
+<b>DigestInfo</b> structure is used and its the length must
+correspond to the digest type.</p>
+
+<p style="margin-left:17%; margin-top: 1em">For <b>oeap</b>
+mode only encryption and decryption is supported.</p>
+
+<p style="margin-left:17%; margin-top: 1em">For <b>x931</b>
+if the digest type is set it is used to format the block
+data otherwise the first byte is used to specify the X9.31
+digest <small>ID.</small> Sign, verify and verifyrecover are
+can be performed in this mode.</p>
+
+<p style="margin-left:17%; margin-top: 1em">For <b>pss</b>
+mode only sign and verify are supported and the digest type
+must be specified.</p>
+
+<p style="margin-left:11%;"><b>rsa_pss_saltlen:len</b></p>
+
+<p style="margin-left:17%;">For <b>pss</b> mode only this
+option specifies the salt length. Two special values are
+supported: -1 sets the salt length to the digest length.
+When signing -2 sets the salt length to the maximum
+permissible value. When verifying -2 causes the salt length
+to be automatically determined based on the
+<b><small>PSS</small></b> block structure.</p>
+
+<h2>DSA ALGORITHM
+<a name="DSA ALGORITHM"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The
+<small>DSA</small> algorithm supports signing and
+verification operations only. Currently there are no
+additional options other than <b>digest</b>. Only the
+<small>SHA1</small> digest can be used and this digest is
+assumed by default.</p>
+
+<h2>DH ALGORITHM
+<a name="DH ALGORITHM"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The
+<small>DH</small> algorithm only supports the derivation
+operation and no additional options.</p>
+
+<h2>EC ALGORITHM
+<a name="EC ALGORITHM"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The
+<small>EC</small> algorithm supports sign, verify and derive
+operations. The sign and verify operations use
+<small>ECDSA</small> and derive uses <small>ECDH.</small>
+Currently there are no additional options other than
+<b>digest</b>. Only the <small>SHA1</small> digest can be
+used and this digest is assumed by default.</p>
+
+<h2>EXAMPLES
+<a name="EXAMPLES"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Sign some data
+using a private key:</p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl pkeyutl
+-sign -in file -inkey key.pem -out sig</p>
+
+<p style="margin-left:11%; margin-top: 1em">Recover the
+signed data (e.g. if an <small>RSA</small> key is used):</p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl pkeyutl
+-verifyrecover -in sig -inkey key.pem</p>
+
+<p style="margin-left:11%; margin-top: 1em">Verify the
+signature (e.g. a <small>DSA</small> key):</p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl pkeyutl
+-verify -in file -sigfile sig -inkey key.pem</p>
+
+<p style="margin-left:11%; margin-top: 1em">Sign data using
+a message digest value (this is currently only valid for
+<small>RSA</small> ):</p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl pkeyutl
+-sign -in file -inkey key.pem -out sig -pkeyopt
+digest:sha256</p>
+
+<p style="margin-left:11%; margin-top: 1em">Derive a shared
+secret value:</p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl pkeyutl
+-derive -inkey key.pem -peerkey pubkey.pem -out secret</p>
+
+<h2>SEE ALSO
+<a name="SEE ALSO"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>genpkey</b>(1),
+<b>pkey</b>(1), <b>rsautl</b>(1) <b>dgst</b>(1),
+<b>rsa</b>(1), <b>genrsa</b>(1)</p>
+<hr>
+</body>
+</html>

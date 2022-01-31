@@ -1,0 +1,141 @@
+OPENSSL-MAC(1ossl)                  OpenSSL                 OPENSSL-MAC(1ossl)
+
+
+
+NNAAMMEE
+       openssl-mac - perform Message Authentication Code operations
+
+SSYYNNOOPPSSIISS
+       ooppeennssssll mmaacc [--hheellpp] [--cciipphheerr] [--ddiiggeesstt] [--mmaaccoopptt] [--iinn _f_i_l_e_n_a_m_e] [--oouutt
+       _f_i_l_e_n_a_m_e] [--bbiinnaarryy] [--pprroovviiddeerr _n_a_m_e] [--pprroovviiddeerr--ppaatthh _p_a_t_h] [--pprrooppqquueerryy
+       _p_r_o_p_q] _m_a_c___n_a_m_e
+
+DDEESSCCRRIIPPTTIIOONN
+       The message authentication code functions output the MAC of a supplied
+       input file.
+
+OOPPTTIIOONNSS
+       --hheellpp
+           Print a usage message.
+
+       --iinn _f_i_l_e_n_a_m_e
+           Input filename to calculate a MAC for, or standard input by
+           default.  Standard input is used if the filename is '-'.  Files are
+           expected to be in binary format, standard input uses hexadecimal
+           text format.
+
+       --oouutt _f_i_l_e_n_a_m_e
+           Filename to output to, or standard output by default.
+
+       --bbiinnaarryy
+           Output the MAC in binary form. Uses hexadecimal text format if not
+           specified.
+
+       --cciipphheerr _n_a_m_e
+           Used by CMAC and GMAC to specify the cipher algorithm.  For CMAC it
+           must be one of AES-128-CBC, AES-192-CBC, AES-256-CBC or
+           DES-EDE3-CBC.  For GMAC it should be a GCM mode cipher e.g.
+           AES-128-GCM.
+
+       --ddiiggeesstt _n_a_m_e
+           Used by HMAC as an alphanumeric string (use if the key contains
+           printable characters only).  The string length must conform to any
+           restrictions of the MAC algorithm.  To see the list of supported
+           digests, use "openssl list -digest-commands".
+
+       --mmaaccoopptt _n_m:_v
+           Passes options to the MAC algorithm.  A comprehensive list of
+           controls can be found in the EVP_MAC implementation documentation.
+           Common parameter names used by EEVVPP__MMAACC__CCTTXX__ggeett__ppaarraammss(()) are:
+
+           kkeeyy::_s_t_r_i_n_g
+               Specifies the MAC key as an alphanumeric string (use if the key
+               contains printable characters only).  The string length must
+               conform to any restrictions of the MAC algorithm.  A key must
+               be specified for every MAC algorithm.
+
+           hheexxkkeeyy::_s_t_r_i_n_g
+               Specifies the MAC key in hexadecimal form (two hex digits per
+               byte).  The key length must conform to any restrictions of the
+               MAC algorithm.  A key must be specified for every MAC
+               algorithm.
+
+           iivv::_s_t_r_i_n_g
+               Used by GMAC to specify an IV as an alphanumeric string (use if
+               the IV contains printable characters only).
+
+           hheexxiivv::_s_t_r_i_n_g
+               Used by GMAC to specify an IV in hexadecimal form (two hex
+               digits per byte).
+
+           ssiizzee::_i_n_t
+               Used by KMAC128 or KMAC256 to specify an output length.  The
+               default sizes are 32 or 64 bytes respectively.
+
+           ccuussttoomm::_s_t_r_i_n_g
+               Used by KMAC128 or KMAC256 to specify a customization string.
+               The default is the empty string "".
+
+           ddiiggeesstt::_s_t_r_i_n_g
+               This option is identical to the --ddiiggeesstt option.
+
+           cciipphheerr::_s_t_r_i_n_g
+               This option is identical to the --cciipphheerr option.
+
+       --pprroovviiddeerr _n_a_m_e
+       --pprroovviiddeerr--ppaatthh _p_a_t_h
+       --pprrooppqquueerryy _p_r_o_p_q
+           See "Provider Options" in ooppeennssssll(1), pprroovviiddeerr(7), and pprrooppeerrttyy(7).
+
+       _m_a_c___n_a_m_e
+           Specifies the name of a supported MAC algorithm which will be used.
+           To see the list of supported MAC's use the command "openssl list
+           -mac-algorithms".
+
+EEXXAAMMPPLLEESS
+       To create a hex-encoded HMAC-SHA1 MAC of a file and write to stdout: \
+        openssl mac -digest SHA1 \
+                -macopt hexkey:000102030405060708090A0B0C0D0E0F10111213 \
+                -in msg.bin HMAC
+
+       To create a SipHash MAC from a file with a binary file output: \
+        openssl mac -macopt hexkey:000102030405060708090A0B0C0D0E0F \
+                -in msg.bin -out out.bin -binary SipHash
+
+       To create a hex-encoded CMAC-AES-128-CBC MAC from a file:\
+        openssl mac -cipher AES-128-CBC \
+                -macopt hexkey:77A77FAF290C1FA30C683DF16BA7A77B \
+                -in msg.bin CMAC
+
+       To create a hex-encoded KMAC128 MAC from a file with a Customisation
+       String 'Tag' and output length of 16: \
+        openssl mac -macopt custom:Tag -macopt hexkey:40414243444546 \
+                -macopt size:16 -in msg.bin KMAC128
+
+       To create a hex-encoded GMAC-AES-128-GCM with a IV from a file: \
+        openssl mac -cipher AES-128-GCM -macopt hexiv:E0E00F19FED7BA0136A797F3
+       \
+                -macopt hexkey:77A77FAF290C1FA30C683DF16BA7A77B -in msg.bin
+       GMAC
+
+NNOOTTEESS
+       The MAC mechanisms that are available will depend on the options used
+       when building OpenSSL.  Use "openssl list -mac-algorithms" to list
+       them.
+
+SSEEEE AALLSSOO
+       ooppeennssssll(1), EEVVPP__MMAACC(3), EEVVPP__MMAACC--CCMMAACC(7), EEVVPP__MMAACC--GGMMAACC(7),
+       EEVVPP__MMAACC--HHMMAACC(7), EEVVPP__MMAACC--KKMMAACC(7), EEVVPP__MMAACC--SSiipphhaasshh(7),
+       EEVVPP__MMAACC--PPoollyy11330055(7)
+
+CCOOPPYYRRIIGGHHTT
+       Copyright 2018-2021 The OpenSSL Project Authors. All Rights Reserved.
+
+       Licensed under the Apache License 2.0 (the "License").  You may not use
+       this file except in compliance with the License.  You can obtain a copy
+       in the file LICENSE in the source distribution or at
+       <https://www.openssl.org/source/license.html>.
+
+
+
+3.0.1                             2022-01-31                OPENSSL-MAC(1ossl)

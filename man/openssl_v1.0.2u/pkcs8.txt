@@ -1,0 +1,217 @@
+PKCS8(1)                            OpenSSL                           PKCS8(1)
+
+
+
+NNAAMMEE
+       openssl-pkcs8, pkcs8 - PKCS#8 format private key conversion tool
+
+SSYYNNOOPPSSIISS
+       ooppeennssssll ppkkccss88 [--ttooppkk88] [--iinnffoorrmm PPEEMM||DDEERR] [--oouuttffoorrmm PPEEMM||DDEERR] [--iinn
+       ffiilleennaammee] [--ppaassssiinn aarrgg] [--oouutt ffiilleennaammee] [--ppaassssoouutt aarrgg] [--nnooiitteerr]
+       [--nnooccrryypptt] [--nnoooocctt] [--eemmbbeedd] [--nnssddbb] [--vv22 aallgg] [--vv22pprrff aallgg] [--vv11 aallgg]
+       [--eennggiinnee iidd]
+
+DDEESSCCRRIIPPTTIIOONN
+       The ppkkccss88 command processes private keys in PKCS#8 format. It can
+       handle both unencrypted PKCS#8 PrivateKeyInfo format and
+       EncryptedPrivateKeyInfo format with a variety of PKCS#5 (v1.5 and v2.0)
+       and PKCS#12 algorithms.
+
+CCOOMMMMAANNDD OOPPTTIIOONNSS
+       --ttooppkk88
+           Normally a PKCS#8 private key is expected on input and a
+           traditional format private key will be written. With the --ttooppkk88
+           option the situation is reversed: it reads a traditional format
+           private key and writes a PKCS#8 format key.
+
+       --iinnffoorrmm DDEERR||PPEEMM
+           This specifies the input format. If a PKCS#8 format key is expected
+           on input then either a DDEERR or PPEEMM encoded version of a PKCS#8 key
+           will be expected. Otherwise the DDEERR or PPEEMM format of the
+           traditional format private key is used.
+
+       --oouuttffoorrmm DDEERR||PPEEMM
+           This specifies the output format, the options have the same meaning
+           as the --iinnffoorrmm option.
+
+       --iinn ffiilleennaammee
+           This specifies the input filename to read a key from or standard
+           input if this option is not specified. If the key is encrypted a
+           pass phrase will be prompted for.
+
+       --ppaassssiinn aarrgg
+           the input file password source. For more information about the
+           format of aarrgg see the PPAASSSS PPHHRRAASSEE AARRGGUUMMEENNTTSS section in ooppeennssssll(1).
+
+       --oouutt ffiilleennaammee
+           This specifies the output filename to write a key to or standard
+           output by default. If any encryption options are set then a pass
+           phrase will be prompted for. The output filename should nnoott be the
+           same as the input filename.
+
+       --ppaassssoouutt aarrgg
+           the output file password source. For more information about the
+           format of aarrgg see the PPAASSSS PPHHRRAASSEE AARRGGUUMMEENNTTSS section in ooppeennssssll(1).
+
+       --nnooccrryypptt
+           PKCS#8 keys generated or input are normally PKCS#8
+           EncryptedPrivateKeyInfo structures using an appropriate password
+           based encryption algorithm. With this option an unencrypted
+           PrivateKeyInfo structure is expected or output.  This option does
+           not encrypt private keys at all and should only be used when
+           absolutely necessary. Certain software such as some versions of
+           Java code signing software used unencrypted private keys.
+
+       --nnoooocctt
+           This option generates RSA private keys in a broken format that some
+           software uses. Specifically the private key should be enclosed in a
+           OCTET STRING but some software just includes the structure itself
+           without the surrounding OCTET STRING.
+
+       --eemmbbeedd
+           This option generates DSA keys in a broken format. The DSA
+           parameters are embedded inside the PrivateKey structure. In this
+           form the OCTET STRING contains an ASN1 SEQUENCE consisting of two
+           structures: a SEQUENCE containing the parameters and an ASN1
+           INTEGER containing the private key.
+
+       --nnssddbb
+           This option generates DSA keys in a broken format compatible with
+           Netscape private key databases. The PrivateKey contains a SEQUENCE
+           consisting of the public and private keys respectively.
+
+       --vv22 aallgg
+           This option enables the use of PKCS#5 v2.0 algorithms. Normally
+           PKCS#8 private keys are encrypted with the password based
+           encryption algorithm called ppbbeeWWiitthhMMDD55AAnnddDDEESS--CCBBCC this uses 56 bit
+           DES encryption but it was the strongest encryption algorithm
+           supported in PKCS#5 v1.5. Using the --vv22 option PKCS#5 v2.0
+           algorithms are used which can use any encryption algorithm such as
+           168 bit triple DES or 128 bit RC2 however not many implementations
+           support PKCS#5 v2.0 yet. If you are just using private keys with
+           OpenSSL then this doesn't matter.
+
+           The aallgg argument is the encryption algorithm to use, valid values
+           include ddeess, ddeess33 and rrcc22. It is recommended that ddeess33 is used.
+
+       --vv22pprrff aallgg
+           This option sets the PRF algorithm to use with PKCS#5 v2.0. A
+           typical value values would be hhmmaaccWWiitthhSSHHAA225566. If this option isn't
+           set then the default for the cipher is used or hhmmaaccWWiitthhSSHHAA11 if
+           there is no default.
+
+       --vv11 aallgg
+           This option specifies a PKCS#5 v1.5 or PKCS#12 algorithm to use. A
+           complete list of possible algorithms is included below.
+
+       --eennggiinnee iidd
+           specifying an engine (by its unique iidd string) will cause ppkkccss88 to
+           attempt to obtain a functional reference to the specified engine,
+           thus initialising it if needed. The engine will then be set as the
+           default for all available algorithms.
+
+NNOOTTEESS
+       The encrypted form of a PEM encode PKCS#8 files uses the following
+       headers and footers:
+
+        -----BEGIN ENCRYPTED PRIVATE KEY-----
+        -----END ENCRYPTED PRIVATE KEY-----
+
+       The unencrypted form uses:
+
+        -----BEGIN PRIVATE KEY-----
+        -----END PRIVATE KEY-----
+
+       Private keys encrypted using PKCS#5 v2.0 algorithms and high iteration
+       counts are more secure that those encrypted using the traditional
+       SSLeay compatible formats. So if additional security is considered
+       important the keys should be converted.
+
+       The default encryption is only 56 bits because this is the encryption
+       that most current implementations of PKCS#8 will support.
+
+       Some software may use PKCS#12 password based encryption algorithms with
+       PKCS#8 format private keys: these are handled automatically but there
+       is no option to produce them.
+
+       It is possible to write out DER encoded encrypted private keys in
+       PKCS#8 format because the encryption details are included at an ASN1
+       level whereas the traditional format includes them at a PEM level.
+
+PPKKCCSS##55 vv11..55 aanndd PPKKCCSS##1122 aallggoorriitthhmmss..
+       Various algorithms can be used with the --vv11 command line option,
+       including PKCS#5 v1.5 and PKCS#12. These are described in more detail
+       below.
+
+       PPBBEE--MMDD22--DDEESS PPBBEE--MMDD55--DDEESS
+           These algorithms were included in the original PKCS#5 v1.5
+           specification.  They only offer 56 bits of protection since they
+           both use DES.
+
+       PPBBEE--SSHHAA11--RRCC22--6644 PPBBEE--MMDD22--RRCC22--6644 PPBBEE--MMDD55--RRCC22--6644 PPBBEE--SSHHAA11--DDEESS
+           These algorithms are not mentioned in the original PKCS#5 v1.5
+           specification but they use the same key derivation algorithm and
+           are supported by some software. They are mentioned in PKCS#5 v2.0.
+           They use either 64 bit RC2 or 56 bit DES.
+
+       PPBBEE--SSHHAA11--RRCC44--112288 PPBBEE--SSHHAA11--RRCC44--4400 PPBBEE--SSHHAA11--33DDEESS PPBBEE--SSHHAA11--22DDEESS
+       PPBBEE--SSHHAA11--RRCC22--112288 PPBBEE--SSHHAA11--RRCC22--4400
+           These algorithms use the PKCS#12 password based encryption
+           algorithm and allow strong encryption algorithms like triple DES or
+           128 bit RC2 to be used.
+
+EEXXAAMMPPLLEESS
+       Convert a private from traditional to PKCS#5 v2.0 format using triple
+       DES:
+
+        openssl pkcs8 -in key.pem -topk8 -v2 des3 -out enckey.pem
+
+       Convert a private from traditional to PKCS#5 v2.0 format using AES with
+       256 bits in CBC mode and hhmmaaccWWiitthhSSHHAA225566 PRF:
+
+        openssl pkcs8 -in key.pem -topk8 -v2 aes-256-cbc -v2prf hmacWithSHA256 -out enckey.pem
+
+       Convert a private key to PKCS#8 using a PKCS#5 1.5 compatible algorithm
+       (DES):
+
+        openssl pkcs8 -in key.pem -topk8 -out enckey.pem
+
+       Convert a private key to PKCS#8 using a PKCS#12 compatible algorithm
+       (3DES):
+
+        openssl pkcs8 -in key.pem -topk8 -out enckey.pem -v1 PBE-SHA1-3DES
+
+       Read a DER unencrypted PKCS#8 format private key:
+
+        openssl pkcs8 -inform DER -nocrypt -in key.der -out key.pem
+
+       Convert a private key from any PKCS#8 format to traditional format:
+
+        openssl pkcs8 -in pk8.pem -out key.pem
+
+SSTTAANNDDAARRDDSS
+       Test vectors from this PKCS#5 v2.0 implementation were posted to the
+       pkcs-tng mailing list using triple DES, DES and RC2 with high iteration
+       counts, several people confirmed that they could decrypt the private
+       keys produced and Therefore it can be assumed that the PKCS#5 v2.0
+       implementation is reasonably accurate at least as far as these
+       algorithms are concerned.
+
+       The format of PKCS#8 DSA (and other) private keys is not well
+       documented: it is hidden away in PKCS#11 v2.01, section 11.9. OpenSSL's
+       default DSA PKCS#8 private key format complies with this standard.
+
+BBUUGGSS
+       There should be an option that prints out the encryption algorithm in
+       use and other details such as the iteration count.
+
+       PKCS#8 using triple DES and PKCS#5 v2.0 should be the default private
+       key format for OpenSSL: for compatibility several of the utilities use
+       the old format at present.
+
+SSEEEE AALLSSOO
+       ddssaa(1), rrssaa(1), ggeennrrssaa(1), ggeennddssaa(1)
+
+
+
+1.0.2u                            2019-12-20                          PKCS8(1)

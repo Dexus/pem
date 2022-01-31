@@ -1,0 +1,1112 @@
+<!-- Creator     : groff version 1.22.4 -->
+<!-- CreationDate: Mon Jan 31 16:14:33 2022 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>X509</title>
+
+</head>
+<body>
+
+<h1 align="center">X509</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#OPTIONS">OPTIONS</a><br>
+<a href="#EXAMPLES">EXAMPLES</a><br>
+<a href="#NOTES">NOTES</a><br>
+<a href="#CERTIFICATE EXTENSIONS">CERTIFICATE EXTENSIONS</a><br>
+<a href="#BUGS">BUGS</a><br>
+<a href="#SEE ALSO">SEE ALSO</a><br>
+<a href="#HISTORY">HISTORY</a><br>
+
+<hr>
+
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">x509 -
+Certificate display and signing utility</p>
+
+<h2>SYNOPSIS
+<a name="SYNOPSIS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>openssl
+x509</b> [<b>-inform DER|PEM|NET</b>] [<b>-outform
+DER|PEM|NET</b>] [<b>-keyform DER|PEM</b>] [<b>-CAform
+DER|PEM</b>] [<b>-CAkeyform DER|PEM</b>] [<b>-in
+filename</b>] [<b>-out filename</b>] [<b>-serial</b>]
+[<b>-hash</b>] [<b>-subject_hash</b>] [<b>-issuer_hash</b>]
+[<b>-ocspid</b>] [<b>-subject</b>] [<b>-issuer</b>]
+[<b>-nameopt option</b>] [<b>-email</b>] [<b>-startdate</b>]
+[<b>-enddate</b>] [<b>-purpose</b>] [<b>-dates</b>]
+[<b>-checkend num</b>] [<b>-modulus</b>]
+[<b>-fingerprint</b>] [<b>-alias</b>] [<b>-noout</b>]
+[<b>-trustout</b>] [<b>-clrtrust</b>] [<b>-clrreject</b>]
+[<b>-addtrust arg</b>] [<b>-addreject arg</b>] [<b>-setalias
+arg</b>] [<b>-days arg</b>] [<b>-set_serial n</b>]
+[<b>-signkey filename</b>] [<b>-passin arg</b>]
+[<b>-x509toreq</b>] [<b>-req</b>] [<b>-CA filename</b>]
+[<b>-CAkey filename</b>] [<b>-CAcreateserial</b>]
+[<b>-CAserial filename</b>] [<b>-text</b>] [<b>-certopt
+option</b>] [<b>-C</b>] [<b>-md2|-md5|-sha1|-mdc2</b>]
+[<b>-clrext</b>] [<b>-extfile filename</b>] [<b>-extensions
+section</b>] [<b>-engine id</b>]</p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The <b>x509</b>
+command is a multi purpose certificate utility. It can be
+used to display certificate information, convert
+certificates to various forms, sign certificate requests
+like a &quot;mini <small>CA&quot;</small> or edit
+certificate trust settings.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Since there are
+a large number of options they will split up into various
+sections.</p>
+
+<h2>OPTIONS
+<a name="OPTIONS"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b><small>INPUT,
+OUTPUT AND GENERAL PURPOSE OPTIONS</small> <br>
+-inform DER|PEM|NET</b></p>
+
+<p style="margin-left:17%;">This specifies the input format
+normally the command will expect an X509 certificate but
+this can change if other options such as <b>-req</b> are
+present. The <small>DER</small> format is the
+<small>DER</small> encoding of the certificate and
+<small>PEM</small> is the base64 encoding of the
+<small>DER</small> encoding with header and footer lines
+added. The <small>NET</small> option is an obscure Netscape
+server format that is now obsolete.</p>
+
+<p style="margin-left:11%;"><b>-outform DER|PEM|NET</b></p>
+
+<p style="margin-left:17%;">This specifies the output
+format, the options have the same meaning as the
+<b>-inform</b> option.</p>
+
+<p style="margin-left:11%;"><b>-in filename</b></p>
+
+<p style="margin-left:17%;">This specifies the input
+filename to read a certificate from or standard input if
+this option is not specified.</p>
+
+<p style="margin-left:11%;"><b>-out filename</b></p>
+
+<p style="margin-left:17%;">This specifies the output
+filename to write to or standard output by default.</p>
+
+
+<p style="margin-left:11%;"><b>-md2|-md5|-sha1|-mdc2</b></p>
+
+<p style="margin-left:17%;">the digest to use. This affects
+any signing or display option that uses a message digest,
+such as the <b>-fingerprint</b>, <b>-signkey</b> and
+<b>-CA</b> options. If not specified then
+<small>SHA1</small> is used. If the key being used to sign
+with is a <small>DSA</small> key then this option has no
+effect: <small>SHA1</small> is always used with
+<small>DSA</small> keys.</p>
+
+<p style="margin-left:11%;"><b>-engine id</b></p>
+
+<p style="margin-left:17%;">specifying an engine (by
+it&rsquo;s unique <b>id</b> string) will cause <b>req</b> to
+attempt to obtain a functional reference to the specified
+engine, thus initialising it if needed. The engine will then
+be set as the default for all available algorithms.</p>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b><small>DISPLAY
+OPTIONS</small></b> <br>
+Note: the <b>-alias</b> and <b>-purpose</b> options are also
+display options but are described in the <b><small>TRUST
+SETTINGS</small></b> section. <b><br>
+-text</b></p>
+
+<p style="margin-left:17%;">prints out the certificate in
+text form. Full details are output including the public key,
+signature algorithms, issuer and subject names, serial
+number any extensions present and any trust settings.</p>
+
+<p style="margin-left:11%;"><b>-certopt option</b></p>
+
+<p style="margin-left:17%;">customise the output format
+used with <b>-text</b>. The <b>option</b> argument can be a
+single option or multiple options separated by commas. The
+<b>-certopt</b> switch may be also be used more than once to
+set multiple options. See the <b><small>TEXT
+OPTIONS</small></b> section for more information.</p>
+
+<p style="margin-left:11%;"><b>-noout</b></p>
+
+<p style="margin-left:17%;">this option prevents output of
+the encoded version of the request.</p>
+
+<p style="margin-left:11%;"><b>-modulus</b></p>
+
+<p style="margin-left:17%;">this option prints out the
+value of the modulus of the public key contained in the
+certificate.</p>
+
+<p style="margin-left:11%;"><b>-serial</b></p>
+
+<p style="margin-left:17%;">outputs the certificate serial
+number.</p>
+
+<p style="margin-left:11%;"><b>-subject_hash</b></p>
+
+<p style="margin-left:17%;">outputs the &quot;hash&quot; of
+the certificate subject name. This is used in OpenSSL to
+form an index to allow certificates in a directory to be
+looked up by subject name.</p>
+
+<p style="margin-left:11%;"><b>-issuer_hash</b></p>
+
+<p style="margin-left:17%;">outputs the &quot;hash&quot; of
+the certificate issuer name.</p>
+
+<p style="margin-left:11%;"><b>-ocspid</b></p>
+
+<p style="margin-left:17%;">outputs the <small>OCSP</small>
+hash values for the subject name and public key.</p>
+
+<p style="margin-left:11%;"><b>-hash</b></p>
+
+<p style="margin-left:17%;">synonym for
+&quot;-subject_hash&quot; for backward compatibility
+reasons.</p>
+
+<p style="margin-left:11%;"><b>-subject</b></p>
+
+<p style="margin-left:17%;">outputs the subject name.</p>
+
+<p style="margin-left:11%;"><b>-issuer</b></p>
+
+<p style="margin-left:17%;">outputs the issuer name.</p>
+
+<p style="margin-left:11%;"><b>-nameopt option</b></p>
+
+<p style="margin-left:17%;">option which determines how the
+subject or issuer names are displayed. The <b>option</b>
+argument can be a single option or multiple options
+separated by commas. Alternatively the <b>-nameopt</b>
+switch may be used more than once to set multiple options.
+See the <b><small>NAME OPTIONS</small></b> section for more
+information.</p>
+
+<p style="margin-left:11%;"><b>-email</b></p>
+
+<p style="margin-left:17%;">outputs the email address(es)
+if any.</p>
+
+<p style="margin-left:11%;"><b>-startdate</b></p>
+
+<p style="margin-left:17%;">prints out the start date of
+the certificate, that is the notBefore date.</p>
+
+<p style="margin-left:11%;"><b>-enddate</b></p>
+
+<p style="margin-left:17%;">prints out the expiry date of
+the certificate, that is the notAfter date.</p>
+
+<p style="margin-left:11%;"><b>-dates</b></p>
+
+<p style="margin-left:17%;">prints out the start and expiry
+dates of a certificate.</p>
+
+<p style="margin-left:11%;"><b>-checkend arg</b></p>
+
+<p style="margin-left:17%;">checks if the certificate
+expires within the next <b>arg</b> seconds and exits
+non-zero if yes it will expire or zero if not.</p>
+
+<p style="margin-left:11%;"><b>-fingerprint</b></p>
+
+<p style="margin-left:17%;">prints out the digest of the
+<small>DER</small> encoded version of the whole certificate
+(see digest options).</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+<p><b>-C</b></p></td>
+<td width="3%"></td>
+<td width="83%">
+
+
+<p>this outputs the certificate in the form of a C source
+file.</p> </td></tr>
+</table>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b><small>TRUST
+SETTINGS</small></b> <br>
+Please note these options are currently experimental and may
+well change.</p>
+
+<p style="margin-left:11%; margin-top: 1em">A <b>trusted
+certificate</b> is an ordinary certificate which has several
+additional pieces of information attached to it such as the
+permitted and prohibited uses of the certificate and an
+&quot;alias&quot;.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Normally when a
+certificate is being verified at least one certificate must
+be &quot;trusted&quot;. By default a trusted certificate
+must be stored locally and must be a root <small>CA:</small>
+any certificate chain ending in this <small>CA</small> is
+then usable for any purpose.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Trust settings
+currently are only used with a root <small>CA.</small> They
+allow a finer control over the purposes the root
+<small>CA</small> can be used for. For example a
+<small>CA</small> may be trusted for <small>SSL</small>
+client but not <small>SSL</small> server use.</p>
+
+<p style="margin-left:11%; margin-top: 1em">See the
+description of the <b>verify</b> utility for more
+information on the meaning of trust settings.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Future versions
+of OpenSSL will recognize trust settings on any certificate:
+not just root CAs. <b><br>
+-trustout</b></p>
+
+<p style="margin-left:17%;">this causes <b>x509</b> to
+output a <b>trusted</b> certificate. An ordinary or trusted
+certificate can be input but by default an ordinary
+certificate is output and any trust settings are discarded.
+With the <b>-trustout</b> option a trusted certificate is
+output. A trusted certificate is automatically output if any
+trust settings are modified.</p>
+
+<p style="margin-left:11%;"><b>-setalias arg</b></p>
+
+<p style="margin-left:17%;">sets the alias of the
+certificate. This will allow the certificate to be referred
+to using a nickname for example &quot;Steve&rsquo;s
+Certificate&quot;.</p>
+
+<p style="margin-left:11%;"><b>-alias</b></p>
+
+<p style="margin-left:17%;">outputs the certificate alias,
+if any.</p>
+
+<p style="margin-left:11%;"><b>-clrtrust</b></p>
+
+<p style="margin-left:17%;">clears all the permitted or
+trusted uses of the certificate.</p>
+
+<p style="margin-left:11%;"><b>-clrreject</b></p>
+
+<p style="margin-left:17%;">clears all the prohibited or
+rejected uses of the certificate.</p>
+
+<p style="margin-left:11%;"><b>-addtrust arg</b></p>
+
+<p style="margin-left:17%;">adds a trusted certificate use.
+Any object name can be used here but currently only
+<b>clientAuth</b> ( <small>SSL</small> client use),
+<b>serverAuth</b> ( <small>SSL</small> server use) and
+<b>emailProtection</b> (S/MIME email) are used. Other
+OpenSSL applications may define additional uses.</p>
+
+<p style="margin-left:11%;"><b>-addreject arg</b></p>
+
+<p style="margin-left:17%;">adds a prohibited use. It
+accepts the same values as the <b>-addtrust</b> option.</p>
+
+<p style="margin-left:11%;"><b>-purpose</b></p>
+
+<p style="margin-left:17%;">this option performs tests on
+the certificate extensions and outputs the results. For a
+more complete description see the <b><small>CERTIFICATE
+EXTENSIONS</small></b> section.</p>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b><small>SIGNING
+OPTIONS</small></b> <br>
+The <b>x509</b> utility can be used to sign certificates and
+requests: it can thus behave like a &quot;mini
+<small>CA&quot;.</small> <b><br>
+-signkey filename</b></p>
+
+<p style="margin-left:17%;">this option causes the input
+file to be self signed using the supplied private key.</p>
+
+<p style="margin-left:17%; margin-top: 1em">If the input
+file is a certificate it sets the issuer name to the subject
+name (i.e. makes it self signed) changes the public key to
+the supplied value and changes the start and end dates. The
+start date is set to the current time and the end date is
+set to a value determined by the <b>-days</b> option. Any
+certificate extensions are retained unless the
+<b>-clrext</b> option is supplied.</p>
+
+<p style="margin-left:17%; margin-top: 1em">If the input is
+a certificate request then a self signed certificate is
+created using the supplied private key using the subject
+name in the request.</p>
+
+<p style="margin-left:11%;"><b>-passin arg</b></p>
+
+<p style="margin-left:17%;">the key password source. For
+more information about the format of <b>arg</b> see the
+<b><small>PASS PHRASE ARGUMENTS</small></b> section in
+<b>openssl</b>(1).</p>
+
+<p style="margin-left:11%;"><b>-clrext</b></p>
+
+<p style="margin-left:17%;">delete any extensions from a
+certificate. This option is used when a certificate is being
+created from another certificate (for example with the
+<b>-signkey</b> or the <b>-CA</b> options). Normally all
+extensions are retained.</p>
+
+<p style="margin-left:11%;"><b>-keyform PEM|DER</b></p>
+
+<p style="margin-left:17%;">specifies the format (
+<small>DER</small> or <small>PEM</small> ) of the private
+key file used in the <b>-signkey</b> option.</p>
+
+<p style="margin-left:11%;"><b>-days arg</b></p>
+
+<p style="margin-left:17%;">specifies the number of days to
+make a certificate valid for. The default is 30 days.</p>
+
+<p style="margin-left:11%;"><b>-x509toreq</b></p>
+
+<p style="margin-left:17%;">converts a certificate into a
+certificate request. The <b>-signkey</b> option is used to
+pass the required private key.</p>
+
+<p style="margin-left:11%;"><b>-req</b></p>
+
+<p style="margin-left:17%;">by default a certificate is
+expected on input. With this option a certificate request is
+expected instead.</p>
+
+<p style="margin-left:11%;"><b>-set_serial n</b></p>
+
+<p style="margin-left:17%;">specifies the serial number to
+use. This option can be used with either the <b>-signkey</b>
+or <b>-CA</b> options. If used in conjunction with the
+<b>-CA</b> option the serial number file (as specified by
+the <b>-CAserial</b> or <b>-CAcreateserial</b> options) is
+not used.</p>
+
+<p style="margin-left:17%; margin-top: 1em">The serial
+number can be decimal or hex (if preceded by <b>0x</b>).
+Negative serial numbers can also be specified but their use
+is not recommended.</p>
+
+<p style="margin-left:11%;"><b>-CA filename</b></p>
+
+<p style="margin-left:17%;">specifies the <small>CA</small>
+certificate to be used for signing. When this option is
+present <b>x509</b> behaves like a &quot;mini
+<small>CA&quot;.</small> The input file is signed by this
+<small>CA</small> using this option: that is its issuer name
+is set to the subject name of the <small>CA</small> and it
+is digitally signed using the CAs private key.</p>
+
+<p style="margin-left:17%; margin-top: 1em">This option is
+normally combined with the <b>-req</b> option. Without the
+<b>-req</b> option the input is a certificate which must be
+self signed.</p>
+
+<p style="margin-left:11%;"><b>-CAkey filename</b></p>
+
+<p style="margin-left:17%;">sets the <small>CA</small>
+private key to sign a certificate with. If this option is
+not specified then it is assumed that the <small>CA</small>
+private key is present in the <small>CA</small> certificate
+file.</p>
+
+<p style="margin-left:11%;"><b>-CAserial filename</b></p>
+
+<p style="margin-left:17%;">sets the <small>CA</small>
+serial number file to use.</p>
+
+<p style="margin-left:17%; margin-top: 1em">When the
+<b>-CA</b> option is used to sign a certificate it uses a
+serial number specified in a file. This file consist of one
+line containing an even number of hex digits with the serial
+number to use. After each use the serial number is
+incremented and written out to the file again.</p>
+
+<p style="margin-left:17%; margin-top: 1em">The default
+filename consists of the <small>CA</small> certificate file
+base name with &quot;.srl&quot; appended. For example if the
+<small>CA</small> certificate file is called
+&quot;mycacert.pem&quot; it expects to find a serial number
+file called &quot;mycacert.srl&quot;.</p>
+
+<p style="margin-left:11%;"><b>-CAcreateserial</b></p>
+
+<p style="margin-left:17%;">with this option the
+<small>CA</small> serial number file is created if it does
+not exist: it will contain the serial number &quot;02&quot;
+and the certificate being signed will have the 1 as its
+serial number. Normally if the <b>-CA</b> option is
+specified and the serial number file does not exist it is an
+error.</p>
+
+<p style="margin-left:11%;"><b>-extfile filename</b></p>
+
+<p style="margin-left:17%;">file containing certificate
+extensions to use. If not specified then no extensions are
+added to the certificate.</p>
+
+<p style="margin-left:11%;"><b>-extensions section</b></p>
+
+<p style="margin-left:17%;">the section to add certificate
+extensions from. If this option is not specified then the
+extensions should either be contained in the unnamed
+(default) section or the default section should contain a
+variable called &quot;extensions&quot; which contains the
+section to use.</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b><small>NAME
+OPTIONS</small></b> <br>
+The <b>nameopt</b> command line switch determines how the
+subject and issuer names are displayed. If no <b>nameopt</b>
+switch is present the default &quot;oneline&quot; format is
+used which is compatible with previous versions of OpenSSL.
+Each option is described in detail below, all options can be
+preceded by a <b>-</b> to turn the option off. Only the
+first four will normally be used. <b><br>
+compat</b></p>
+
+<p style="margin-left:17%;">use the old format. This is
+equivalent to specifying no name options at all.</p>
+
+
+<p style="margin-left:11%;"><b><small>RFC2253</small></b></p>
+
+<p style="margin-left:17%;">displays names compatible with
+<small>RFC2253</small> equivalent to <b>esc_2253</b>,
+<b>esc_ctrl</b>, <b>esc_msb</b>, <b>utf8</b>,
+<b>dump_nostr</b>, <b>dump_unknown</b>, <b>dump_der</b>,
+<b>sep_comma_plus</b>, <b>dn_rev</b> and <b>sname</b>.</p>
+
+<p style="margin-left:11%;"><b>oneline</b></p>
+
+<p style="margin-left:17%;">a oneline format which is more
+readable than <small>RFC2253.</small> It is equivalent to
+specifying the <b>esc_2253</b>, <b>esc_ctrl</b>,
+<b>esc_msb</b>, <b>utf8</b>, <b>dump_nostr</b>,
+<b>dump_der</b>, <b>use_quote</b>,
+<b>sep_comma_plus_space</b>, <b>space_eq</b> and
+<b>sname</b> options.</p>
+
+<p style="margin-left:11%;"><b>multiline</b></p>
+
+<p style="margin-left:17%;">a multiline format. It is
+equivalent <b>esc_ctrl</b>, <b>esc_msb</b>,
+<b>sep_multiline</b>, <b>space_eq</b>, <b>lname</b> and
+<b>align</b>.</p>
+
+<p style="margin-left:11%;"><b>esc_2253</b></p>
+
+<p style="margin-left:17%;">escape the &quot;special&quot;
+characters required by <small>RFC2253</small> in a field
+That is <b>,+&quot;&lt;&gt;;</b>. Additionally <b>#</b> is
+escaped at the beginning of a string and a space character
+at the beginning or end of a string.</p>
+
+<p style="margin-left:11%;"><b>esc_ctrl</b></p>
+
+<p style="margin-left:17%;">escape control characters. That
+is those with <small>ASCII</small> values less than 0x20
+(space) and the delete (0x7f) character. They are escaped
+using the <small>RFC2253</small> \XX notation (where
+<small>XX</small> are two hex digits representing the
+character value).</p>
+
+<p style="margin-left:11%;"><b>esc_msb</b></p>
+
+<p style="margin-left:17%;">escape characters with the
+<small>MSB</small> set, that is with <small>ASCII</small>
+values larger than 127.</p>
+
+<p style="margin-left:11%;"><b>use_quote</b></p>
+
+<p style="margin-left:17%;">escapes some characters by
+surrounding the whole string with <b>&quot;</b> characters,
+without the option all escaping is done with the <b>\</b>
+character.</p>
+
+<p style="margin-left:11%;"><b>utf8</b></p>
+
+<p style="margin-left:17%;">convert all strings to
+<small>UTF8</small> format first. This is required by
+<small>RFC2253.</small> If you are lucky enough to have a
+<small>UTF8</small> compatible terminal then the use of this
+option (and <b>not</b> setting <b>esc_msb</b>) may result in
+the correct display of multibyte (international) characters.
+Is this option is not present then multibyte characters
+larger than 0xff will be represented using the format \UXXXX
+for 16 bits and \WXXXXXXXX for 32 bits. Also if this option
+is off any UTF8Strings will be converted to their character
+form first.</p>
+
+<p style="margin-left:11%;"><b>ignore_type</b></p>
+
+<p style="margin-left:17%;">this option does not attempt to
+interpret multibyte characters in any way. That is their
+content octets are merely dumped as though one octet
+represents each character. This is useful for diagnostic
+purposes but will result in rather odd looking output.</p>
+
+<p style="margin-left:11%;"><b>show_type</b></p>
+
+<p style="margin-left:17%;">show the type of the
+<small>ASN1</small> character string. The type precedes the
+field contents. For example &quot; <small>BMPSTRING:</small>
+Hello World&quot;.</p>
+
+<p style="margin-left:11%;"><b>dump_der</b></p>
+
+<p style="margin-left:17%;">when this option is set any
+fields that need to be hexdumped will be dumped using the
+<small>DER</small> encoding of the field. Otherwise just the
+content octets will be displayed. Both options use the
+<small>RFC2253</small> <b>#XXXX...</b> format.</p>
+
+<p style="margin-left:11%;"><b>dump_nostr</b></p>
+
+<p style="margin-left:17%;">dump non character string types
+(for example <small>OCTET STRING</small> ) if this option is
+not set then non character string types will be displayed as
+though each content octet represents a single character.</p>
+
+<p style="margin-left:11%;"><b>dump_all</b></p>
+
+<p style="margin-left:17%;">dump all fields. This option
+when used with <b>dump_der</b> allows the <small>DER</small>
+encoding of the structure to be unambiguously
+determined.</p>
+
+<p style="margin-left:11%;"><b>dump_unknown</b></p>
+
+<p style="margin-left:17%;">dump any field whose
+<small>OID</small> is not recognised by OpenSSL.</p>
+
+<p style="margin-left:11%;"><b>sep_comma_plus</b>,
+<b>sep_comma_plus_space</b>, <b>sep_semi_plus_space</b>,
+<b><br>
+sep_multiline</b></p>
+
+<p style="margin-left:17%;">these options determine the
+field separators. The first character is between RDNs and
+the second between multiple AVAs (multiple AVAs are very
+rare and their use is discouraged). The options ending in
+&quot;space&quot; additionally place a space after the
+separator to make it more readable. The <b>sep_multiline</b>
+uses a linefeed character for the <small>RDN</small>
+separator and a spaced <b>+</b> for the <small>AVA</small>
+separator. It also indents the fields by four
+characters.</p>
+
+<p style="margin-left:11%;"><b>dn_rev</b></p>
+
+<p style="margin-left:17%;">reverse the fields of the
+<small>DN.</small> This is required by
+<small>RFC2253.</small> As a side effect this also reverses
+the order of multiple AVAs but this is permissible.</p>
+
+<p style="margin-left:11%;"><b>nofname</b>, <b>sname</b>,
+<b>lname</b>, <b>oid</b></p>
+
+<p style="margin-left:17%;">these options alter how the
+field name is displayed. <b>nofname</b> does not display the
+field at all. <b>sname</b> uses the &quot;short name&quot;
+form ( <small>CN</small> for commonName for example).
+<b>lname</b> uses the long form. <b>oid</b> represents the
+<small>OID</small> in numerical form and is useful for
+diagnostic purpose.</p>
+
+<p style="margin-left:11%;"><b>align</b></p>
+
+<p style="margin-left:17%;">align field values for a more
+readable output. Only usable with <b>sep_multiline</b>.</p>
+
+<p style="margin-left:11%;"><b>space_eq</b></p>
+
+<p style="margin-left:17%;">places spaces round the
+<b>=</b> character which follows the field name.</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b><small>TEXT
+OPTIONS</small></b> <br>
+As well as customising the name output format, it is also
+possible to customise the actual fields printed using the
+<b>certopt</b> options when the <b>text</b> option is
+present. The default behaviour is to print all fields.
+<b><br>
+compatible</b></p>
+
+<p style="margin-left:17%;">use the old format. This is
+equivalent to specifying no output options at all.</p>
+
+<p style="margin-left:11%;"><b>no_header</b></p>
+
+<p style="margin-left:17%;">don&rsquo;t print header
+information: that is the lines saying
+&quot;Certificate&quot; and &quot;Data&quot;.</p>
+
+<p style="margin-left:11%;"><b>no_version</b></p>
+
+<p style="margin-left:17%;">don&rsquo;t print out the
+version number.</p>
+
+<p style="margin-left:11%;"><b>no_serial</b></p>
+
+<p style="margin-left:17%;">don&rsquo;t print out the
+serial number.</p>
+
+<p style="margin-left:11%;"><b>no_signame</b></p>
+
+<p style="margin-left:17%;">don&rsquo;t print out the
+signature algorithm used.</p>
+
+<p style="margin-left:11%;"><b>no_validity</b></p>
+
+<p style="margin-left:17%;">don&rsquo;t print the validity,
+that is the <b>notBefore</b> and <b>notAfter</b> fields.</p>
+
+<p style="margin-left:11%;"><b>no_subject</b></p>
+
+<p style="margin-left:17%;">don&rsquo;t print out the
+subject name.</p>
+
+<p style="margin-left:11%;"><b>no_issuer</b></p>
+
+<p style="margin-left:17%;">don&rsquo;t print out the
+issuer name.</p>
+
+<p style="margin-left:11%;"><b>no_pubkey</b></p>
+
+<p style="margin-left:17%;">don&rsquo;t print out the
+public key.</p>
+
+<p style="margin-left:11%;"><b>no_sigdump</b></p>
+
+<p style="margin-left:17%;">don&rsquo;t give a hexadecimal
+dump of the certificate signature.</p>
+
+<p style="margin-left:11%;"><b>no_aux</b></p>
+
+<p style="margin-left:17%;">don&rsquo;t print out
+certificate trust information.</p>
+
+<p style="margin-left:11%;"><b>no_extensions</b></p>
+
+<p style="margin-left:17%;">don&rsquo;t print out any
+X509V3 extensions.</p>
+
+<p style="margin-left:11%;"><b>ext_default</b></p>
+
+<p style="margin-left:17%;">retain default extension
+behaviour: attempt to print out unsupported certificate
+extensions.</p>
+
+<p style="margin-left:11%;"><b>ext_error</b></p>
+
+<p style="margin-left:17%;">print an error message for
+unsupported certificate extensions.</p>
+
+<p style="margin-left:11%;"><b>ext_parse</b></p>
+
+<p style="margin-left:17%;"><small>ASN1</small> parse
+unsupported extensions.</p>
+
+<p style="margin-left:11%;"><b>ext_dump</b></p>
+
+<p style="margin-left:17%;">hex dump unsupported
+extensions.</p>
+
+<p style="margin-left:11%;"><b>ca_default</b></p>
+
+<p style="margin-left:17%;">the value used by the <b>ca</b>
+utility, equivalent to <b>no_issuer</b>, <b>no_pubkey</b>,
+<b>no_header</b>, <b>no_version</b>, <b>no_sigdump</b> and
+<b>no_signame</b>.</p>
+
+<h2>EXAMPLES
+<a name="EXAMPLES"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Note: in these
+examples the &rsquo;\&rsquo; means the example should be all
+on one line.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Display the
+contents of a certificate:</p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl x509
+-in cert.pem -noout -text</p>
+
+<p style="margin-left:11%; margin-top: 1em">Display the
+certificate serial number:</p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl x509
+-in cert.pem -noout -serial</p>
+
+<p style="margin-left:11%; margin-top: 1em">Display the
+certificate subject name:</p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl x509
+-in cert.pem -noout -subject</p>
+
+<p style="margin-left:11%; margin-top: 1em">Display the
+certificate subject name in <small>RFC2253</small> form:</p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl x509
+-in cert.pem -noout -subject -nameopt RFC2253</p>
+
+<p style="margin-left:11%; margin-top: 1em">Display the
+certificate subject name in oneline form on a terminal
+supporting <small>UTF8:</small></p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl x509
+-in cert.pem -noout -subject -nameopt oneline,-esc_msb</p>
+
+<p style="margin-left:11%; margin-top: 1em">Display the
+certificate <small>MD5</small> fingerprint:</p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl x509
+-in cert.pem -noout -fingerprint</p>
+
+<p style="margin-left:11%; margin-top: 1em">Display the
+certificate <small>SHA1</small> fingerprint:</p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl x509
+-sha1 -in cert.pem -noout -fingerprint</p>
+
+<p style="margin-left:11%; margin-top: 1em">Convert a
+certificate from <small>PEM</small> to <small>DER</small>
+format:</p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl x509
+-in cert.pem -inform PEM -out cert.der -outform DER</p>
+
+<p style="margin-left:11%; margin-top: 1em">Convert a
+certificate to a certificate request:</p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl x509
+-x509toreq -in cert.pem -out req.pem -signkey key.pem</p>
+
+<p style="margin-left:11%; margin-top: 1em">Convert a
+certificate request into a self signed certificate using
+extensions for a <small>CA:</small></p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl x509
+-req -in careq.pem -extfile openssl.cnf -extensions v3_ca \
+<br>
+-signkey key.pem -out cacert.pem</p>
+
+<p style="margin-left:11%; margin-top: 1em">Sign a
+certificate request using the <small>CA</small> certificate
+above and add user certificate extensions:</p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl x509
+-req -in req.pem -extfile openssl.cnf -extensions v3_usr \
+<br>
+-CA cacert.pem -CAkey key.pem -CAcreateserial</p>
+
+<p style="margin-left:11%; margin-top: 1em">Set a
+certificate to be trusted for <small>SSL</small> client use
+and change set its alias to &quot;Steve&rsquo;s Class 1
+<small>CA&quot;</small></p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl x509
+-in cert.pem -addtrust clientAuth \ <br>
+-setalias &quot;Steve's Class 1 CA&quot; -out trust.pem</p>
+
+<h2>NOTES
+<a name="NOTES"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The
+<small>PEM</small> format uses the header and footer
+lines:</p>
+
+<p style="margin-left:11%; margin-top: 1em">-----BEGIN
+CERTIFICATE----- <br>
+-----END CERTIFICATE-----</p>
+
+<p style="margin-left:11%; margin-top: 1em">it will also
+handle files containing:</p>
+
+<p style="margin-left:11%; margin-top: 1em">-----BEGIN X509
+CERTIFICATE----- <br>
+-----END X509 CERTIFICATE-----</p>
+
+<p style="margin-left:11%; margin-top: 1em">Trusted
+certificates have the lines</p>
+
+<p style="margin-left:11%; margin-top: 1em">-----BEGIN
+TRUSTED CERTIFICATE----- <br>
+-----END TRUSTED CERTIFICATE-----</p>
+
+<p style="margin-left:11%; margin-top: 1em">The conversion
+to <small>UTF8</small> format used with the name options
+assumes that T61Strings use the <small>ISO8859-1</small>
+character set. This is wrong but Netscape and
+<small>MSIE</small> do this as do many certificates. So
+although this is incorrect it is more likely to display the
+majority of certificates correctly.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The
+<b>-fingerprint</b> option takes the digest of the
+<small>DER</small> encoded certificate. This is commonly
+called a &quot;fingerprint&quot;. Because of the nature of
+message digests the fingerprint of a certificate is unique
+to that certificate and two certificates with the same
+fingerprint can be considered to be the same.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The Netscape
+fingerprint uses <small>MD5</small> whereas
+<small>MSIE</small> uses <small>SHA1.</small></p>
+
+<p style="margin-left:11%; margin-top: 1em">The
+<b>-email</b> option searches the subject name and the
+subject alternative name extension. Only unique email
+addresses will be printed out: it will not print the same
+address more than once.</p>
+
+<h2>CERTIFICATE EXTENSIONS
+<a name="CERTIFICATE EXTENSIONS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The
+<b>-purpose</b> option checks the certificate extensions and
+determines what the certificate can be used for. The actual
+checks done are rather complex and include various hacks and
+workarounds to handle broken certificates and software.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The same code
+is used when verifying untrusted certificates in chains so
+this section is useful if a chain is rejected by the verify
+code.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The
+basicConstraints extension <small>CA</small> flag is used to
+determine whether the certificate can be used as a
+<small>CA.</small> If the <small>CA</small> flag is true
+then it is a <small>CA,</small> if the <small>CA</small>
+flag is false then it is not a <small>CA.</small> <b>All</b>
+CAs should have the <small>CA</small> flag set to true.</p>
+
+<p style="margin-left:11%; margin-top: 1em">If the
+basicConstraints extension is absent then the certificate is
+considered to be a &quot;possible <small>CA&quot;</small>
+other extensions are checked according to the intended use
+of the certificate. A warning is given in this case because
+the certificate should really not be regarded as a
+<small>CA:</small> however it is allowed to be a
+<small>CA</small> to work around some broken software.</p>
+
+<p style="margin-left:11%; margin-top: 1em">If the
+certificate is a V1 certificate (and thus has no extensions)
+and it is self signed it is also assumed to be a
+<small>CA</small> but a warning is again given: this is to
+work around the problem of Verisign roots which are V1 self
+signed certificates.</p>
+
+<p style="margin-left:11%; margin-top: 1em">If the keyUsage
+extension is present then additional restraints are made on
+the uses of the certificate. A <small>CA</small> certificate
+<b>must</b> have the keyCertSign bit set if the keyUsage
+extension is present.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The extended
+key usage extension places additional restrictions on the
+certificate uses. If this extension is present (whether
+critical or not) the key can only be used for the purposes
+specified.</p>
+
+<p style="margin-left:11%; margin-top: 1em">A complete
+description of each test is given below. The comments about
+basicConstraints and keyUsage and V1 certificates above
+apply to <b>all</b> <small>CA</small> certificates.
+<b><small><br>
+SSL</small> Client</b></p>
+
+<p style="margin-left:17%;">The extended key usage
+extension must be absent or include the &quot;web client
+authentication&quot; <small>OID.</small> keyUsage must be
+absent or it must have the digitalSignature bit set.
+Netscape certificate type must be absent or it must have the
+<small>SSL</small> client bit set.</p>
+
+<p style="margin-left:11%;"><b><small>SSL</small> Client
+<small>CA</small></b></p>
+
+<p style="margin-left:17%;">The extended key usage
+extension must be absent or include the &quot;web client
+authentication&quot; <small>OID.</small> Netscape
+certificate type must be absent or it must have the
+<small>SSL CA</small> bit set: this is used as a work around
+if the basicConstraints extension is absent.</p>
+
+<p style="margin-left:11%;"><b><small>SSL</small>
+Server</b></p>
+
+<p style="margin-left:17%;">The extended key usage
+extension must be absent or include the &quot;web server
+authentication&quot; and/or one of the <small>SGC</small>
+OIDs. keyUsage must be absent or it must have the
+digitalSignature, the keyEncipherment set or both bits set.
+Netscape certificate type must be absent or have the
+<small>SSL</small> server bit set.</p>
+
+<p style="margin-left:11%;"><b><small>SSL</small> Server
+<small>CA</small></b></p>
+
+<p style="margin-left:17%;">The extended key usage
+extension must be absent or include the &quot;web server
+authentication&quot; and/or one of the <small>SGC</small>
+OIDs. Netscape certificate type must be absent or the
+<small>SSL CA</small> bit must be set: this is used as a
+work around if the basicConstraints extension is absent.</p>
+
+<p style="margin-left:11%;"><b>Netscape <small>SSL</small>
+Server</b></p>
+
+<p style="margin-left:17%;">For Netscape <small>SSL</small>
+clients to connect to an <small>SSL</small> server it must
+have the keyEncipherment bit set if the keyUsage extension
+is present. This isn&rsquo;t always valid because some
+cipher suites use the key for digital signing. Otherwise it
+is the same as a normal <small>SSL</small> server.</p>
+
+<p style="margin-left:11%;"><b>Common S/MIME Client
+Tests</b></p>
+
+<p style="margin-left:17%;">The extended key usage
+extension must be absent or include the &quot;email
+protection&quot; <small>OID.</small> Netscape certificate
+type must be absent or should have the S/MIME bit set. If
+the S/MIME bit is not set in netscape certificate type then
+the <small>SSL</small> client bit is tolerated as an
+alternative but a warning is shown: this is because some
+Verisign certificates don&rsquo;t set the S/MIME bit.</p>
+
+<p style="margin-left:11%;"><b>S/MIME Signing</b></p>
+
+<p style="margin-left:17%;">In addition to the common
+S/MIME client tests the digitalSignature bit must be set if
+the keyUsage extension is present.</p>
+
+<p style="margin-left:11%;"><b>S/MIME Encryption</b></p>
+
+<p style="margin-left:17%;">In addition to the common
+S/MIME tests the keyEncipherment bit must be set if the
+keyUsage extension is present.</p>
+
+<p style="margin-left:11%;"><b>S/MIME
+<small>CA</small></b></p>
+
+<p style="margin-left:17%;">The extended key usage
+extension must be absent or include the &quot;email
+protection&quot; <small>OID.</small> Netscape certificate
+type must be absent or must have the S/MIME
+<small>CA</small> bit set: this is used as a work around if
+the basicConstraints extension is absent.</p>
+
+<p style="margin-left:11%;"><b><small>CRL</small>
+Signing</b></p>
+
+<p style="margin-left:17%;">The keyUsage extension must be
+absent or it must have the <small>CRL</small> signing bit
+set.</p>
+
+<p style="margin-left:11%;"><b><small>CRL</small> Signing
+<small>CA</small></b></p>
+
+<p style="margin-left:17%;">The normal <small>CA</small>
+tests apply. Except in this case the basicConstraints
+extension must be present.</p>
+
+<h2>BUGS
+<a name="BUGS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Extensions in
+certificates are not transferred to certificate requests and
+vice versa.</p>
+
+<p style="margin-left:11%; margin-top: 1em">It is possible
+to produce invalid certificates or requests by specifying
+the wrong private key or using inconsistent options in some
+cases: these should be checked.</p>
+
+<p style="margin-left:11%; margin-top: 1em">There should be
+options to explicitly set such things as start and end dates
+rather than an offset from the current time.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The code to
+implement the verify behaviour described in the
+<b><small>TRUST SETTINGS</small></b> is currently being
+developed. It thus describes the intended behaviour rather
+than the current behaviour. It is hoped that it will
+represent reality in OpenSSL 0.9.5 and later.</p>
+
+<h2>SEE ALSO
+<a name="SEE ALSO"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>req</b>(1),
+<b>ca</b>(1), <b>genrsa</b>(1), <b>gendsa</b>(1),
+<b>verify</b>(1)</p>
+
+<h2>HISTORY
+<a name="HISTORY"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Before OpenSSL
+0.9.8, the default digest for <small>RSA</small> keys was
+<small>MD5.</small></p>
+<hr>
+</body>
+</html>

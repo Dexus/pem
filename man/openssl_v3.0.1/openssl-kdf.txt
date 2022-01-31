@@ -1,0 +1,169 @@
+OPENSSL-KDF(1ossl)                  OpenSSL                 OPENSSL-KDF(1ossl)
+
+
+
+NNAAMMEE
+       openssl-kdf - perform Key Derivation Function operations
+
+SSYYNNOOPPSSIISS
+       ooppeennssssll kkddff [--hheellpp] [--cciipphheerr] [--ddiiggeesstt] [--mmaacc] [--kkddffoopptt _n_m:_v] [--kkeeyylleenn
+       _n_u_m] [--oouutt _f_i_l_e_n_a_m_e] [--bbiinnaarryy] [--pprroovviiddeerr _n_a_m_e] [--pprroovviiddeerr--ppaatthh _p_a_t_h]
+       [--pprrooppqquueerryy _p_r_o_p_q] _k_d_f___n_a_m_e
+
+DDEESSCCRRIIPPTTIIOONN
+       The key derivation functions generate a derived key from either a
+       secret or password.
+
+OOPPTTIIOONNSS
+       --hheellpp
+           Print a usage message.
+
+       --kkeeyylleenn _n_u_m
+           The output size of the derived key. This field is required.
+
+       --oouutt _f_i_l_e_n_a_m_e
+           Filename to output to, or standard output by default.
+
+       --bbiinnaarryy
+           Output the derived key in binary form. Uses hexadecimal text format
+           if not specified.
+
+       --cciipphheerr _n_a_m_e
+           Specify the cipher to be used by the KDF.  Not all KDFs require a
+           cipher and it is an error to use this option in such cases.
+
+       --ddiiggeesstt _n_a_m_e
+           Specify the digest to be used by the KDF.  Not all KDFs require a
+           digest and it is an error to use this option in such cases.  To see
+           the list of supported digests, use "openssl list -digest-commands".
+
+       --mmaacc _n_a_m_e
+           Specify the MAC to be used by the KDF.  Not all KDFs require a MAC
+           and it is an error to use this option in such cases.
+
+       --kkddffoopptt _n_m:_v
+           Passes options to the KDF algorithm.  A comprehensive list of
+           parameters can be found in the EVP_KDF_CTX implementation
+           documentation.  Common parameter names used by
+           EEVVPP__KKDDFF__CCTTXX__sseett__ppaarraammss(()) are:
+
+           kkeeyy::_s_t_r_i_n_g
+               Specifies the secret key as an alphanumeric string (use if the
+               key contains printable characters only).  The string length
+               must conform to any restrictions of the KDF algorithm.  A key
+               must be specified for most KDF algorithms.
+
+           hheexxkkeeyy::_s_t_r_i_n_g
+               Specifies the secret key in hexadecimal form (two hex digits
+               per byte).  The key length must conform to any restrictions of
+               the KDF algorithm.  A key must be specified for most KDF
+               algorithms.
+
+           ppaassss::_s_t_r_i_n_g
+               Specifies the password as an alphanumeric string (use if the
+               password contains printable characters only).  The password
+               must be specified for PBKDF2 and scrypt.
+
+           hheexxppaassss::_s_t_r_i_n_g
+               Specifies the password in hexadecimal form (two hex digits per
+               byte).  The password must be specified for PBKDF2 and scrypt.
+
+           ddiiggeesstt::_s_t_r_i_n_g
+               This option is identical to the --ddiiggeesstt option.
+
+           cciipphheerr::_s_t_r_i_n_g
+               This option is identical to the --cciipphheerr option.
+
+           mmaacc::_s_t_r_i_n_g
+               This option is identical to the --mmaacc option.
+
+       --pprroovviiddeerr _n_a_m_e
+       --pprroovviiddeerr--ppaatthh _p_a_t_h
+       --pprrooppqquueerryy _p_r_o_p_q
+           See "Provider Options" in ooppeennssssll(1), pprroovviiddeerr(7), and pprrooppeerrttyy(7).
+
+       _k_d_f___n_a_m_e
+           Specifies the name of a supported KDF algorithm which will be used.
+           The supported algorithms names include TLS1-PRF, HKDF, SSKDF,
+           PBKDF2, SSHKDF, X942KDF-ASN1, X942KDF-CONCAT, X963KDF and SCRYPT.
+
+EEXXAAMMPPLLEESS
+       Use TLS1-PRF to create a hex-encoded derived key from a secret key and
+       seed:
+
+           openssl kdf -keylen 16 -kdfopt digest:SHA2-256 -kdfopt key:secret \
+                       -kdfopt seed:seed TLS1-PRF
+
+       Use HKDF to create a hex-encoded derived key from a secret key, salt
+       and info:
+
+           openssl kdf -keylen 10 -kdfopt digest:SHA2-256 -kdfopt key:secret \
+                       -kdfopt salt:salt -kdfopt info:label HKDF
+
+       Use SSKDF with KMAC to create a hex-encoded derived key from a secret
+       key, salt and info:
+
+           openssl kdf -keylen 64 -kdfopt mac:KMAC-128 -kdfopt maclen:20 \
+                       -kdfopt hexkey:b74a149a161545 -kdfopt hexinfo:348a37a2 \
+                       -kdfopt hexsalt:3638271ccd68a2 SSKDF
+
+       Use SSKDF with HMAC to create a hex-encoded derived key from a secret
+       key, salt and info:
+
+           openssl kdf -keylen 16 -kdfopt mac:HMAC -kdfopt digest:SHA2-256 \
+                       -kdfopt hexkey:b74a149a -kdfopt hexinfo:348a37a2 \
+                       -kdfopt hexsalt:3638271c SSKDF
+
+       Use SSKDF with Hash to create a hex-encoded derived key from a secret
+       key, salt and info:
+
+           openssl kdf -keylen 14 -kdfopt digest:SHA2-256 \
+                       -kdfopt hexkey:6dbdc23f045488 \
+                       -kdfopt hexinfo:a1b2c3d4 SSKDF
+
+       Use SSHKDF to create a hex-encoded derived key from a secret key, hash
+       and session_id:
+
+           openssl kdf -keylen 16 -kdfopt digest:SHA2-256 \
+                       -kdfopt hexkey:0102030405 \
+                       -kdfopt hexxcghash:06090A \
+                       -kdfopt hexsession_id:01020304 \
+                       -kdfopt type:A SSHKDF
+
+       Use PBKDF2 to create a hex-encoded derived key from a password and
+       salt:
+
+           openssl kdf -keylen 32 -kdfopt digest:SHA256 -kdfopt pass:password \
+                       -kdfopt salt:salt -kdfopt iter:2 PBKDF2
+
+       Use scrypt to create a hex-encoded derived key from a password and
+       salt:
+
+           openssl kdf -keylen 64 -kdfopt pass:password -kdfopt salt:NaCl \
+                       -kdfopt N:1024 -kdfopt r:8 -kdfopt p:16 \
+                       -kdfopt maxmem_bytes:10485760 SCRYPT
+
+NNOOTTEESS
+       The KDF mechanisms that are available will depend on the options used
+       when building OpenSSL.
+
+SSEEEE AALLSSOO
+       ooppeennssssll(1), ooppeennssssll--ppkkeeyyuuttll(1), EEVVPP__KKDDFF(3), EEVVPP__KKDDFF--SSCCRRYYPPTT(7),
+       EEVVPP__KKDDFF--TTLLSS11__PPRRFF(7), EEVVPP__KKDDFF--PPBBKKDDFF22(7), EEVVPP__KKDDFF--HHKKDDFF(7), EEVVPP__KKDDFF--SSSS(7),
+       EEVVPP__KKDDFF--SSSSHHKKDDFF(7), EEVVPP__KKDDFF--XX994422--AASSNN11(7), EEVVPP__KKDDFF--XX994422--CCOONNCCAATT(7),
+       EEVVPP__KKDDFF--XX996633(7)
+
+HHIISSTTOORRYY
+       Added in OpenSSL 3.0
+
+CCOOPPYYRRIIGGHHTT
+       Copyright 2019-2021 The OpenSSL Project Authors. All Rights Reserved.
+
+       Licensed under the Apache License 2.0 (the "License").  You may not use
+       this file except in compliance with the License.  You can obtain a copy
+       in the file LICENSE in the source distribution or at
+       <https://www.openssl.org/source/license.html>.
+
+
+
+3.0.1                             2022-01-31                OPENSSL-KDF(1ossl)

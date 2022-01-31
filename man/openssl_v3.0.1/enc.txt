@@ -1,0 +1,65 @@
+OPENSSL-CMDS(1ossl)                 OpenSSL                OPENSSL-CMDS(1ossl)
+
+
+
+NNAAMMEE
+       asn1parse, ca, ciphers, cms, crl, crl2pkcs7, dgst, dhparam, dsa,
+       dsaparam, ec, ecparam, enc, engine, errstr, gendsa, genpkey, genrsa,
+       info, kdf, mac, nseq, ocsp, passwd, pkcs12, pkcs7, pkcs8, pkey,
+       pkeyparam, pkeyutl, prime, rand, rehash, req, rsa, rsautl, s_client,
+       s_server, s_time, sess_id, smime, speed, spkac, srp, storeutl, ts,
+       verify, version, x509 - OpenSSL application commands
+
+SSYYNNOOPPSSIISS
+       ooppeennssssll _c_m_d --hheellpp | [_-_o_p_t_i_o_n | _-_o_p_t_i_o_n _a_r_g] ... [_a_r_g] ...
+
+DDEESSCCRRIIPPTTIIOONN
+       Every _c_m_d listed above is a (sub-)command of the ooppeennssssll(1)
+       application.  It has its own detailed manual page at ooppeennssssll--_cc_mm_dd(1).
+       For example, to view the manual page for the ooppeennssssll ddggsstt command, type
+       "man openssl-dgst".
+
+OOPPTTIIOONNSS
+       Among others, every subcommand has a help option.
+
+       --hheellpp
+           Print out a usage message for the subcommand.
+
+SSEEEE AALLSSOO
+       ooppeennssssll(1), ooppeennssssll--aassnn11ppaarrssee(1), ooppeennssssll--ccaa(1), ooppeennssssll--cciipphheerrss(1),
+       ooppeennssssll--ccmmss(1), ooppeennssssll--ccrrll(1), ooppeennssssll--ccrrll22ppkkccss77(1), ooppeennssssll--ddggsstt(1),
+       ooppeennssssll--ddhhppaarraamm(1), ooppeennssssll--ddssaa(1), ooppeennssssll--ddssaappaarraamm(1), ooppeennssssll--eecc(1),
+       ooppeennssssll--eeccppaarraamm(1), ooppeennssssll--eenncc(1), ooppeennssssll--eennggiinnee(1),
+       ooppeennssssll--eerrrrssttrr(1), ooppeennssssll--ggeennddssaa(1), ooppeennssssll--ggeennppkkeeyy(1),
+       ooppeennssssll--ggeennrrssaa(1), ooppeennssssll--iinnffoo(1), ooppeennssssll--kkddff(1), ooppeennssssll--mmaacc(1),
+       ooppeennssssll--nnsseeqq(1), ooppeennssssll--ooccsspp(1), ooppeennssssll--ppaasssswwdd(1), ooppeennssssll--ppkkccss1122(1),
+       ooppeennssssll--ppkkccss77(1), ooppeennssssll--ppkkccss88(1), ooppeennssssll--ppkkeeyy(1),
+       ooppeennssssll--ppkkeeyyppaarraamm(1), ooppeennssssll--ppkkeeyyuuttll(1), ooppeennssssll--pprriimmee(1),
+       ooppeennssssll--rraanndd(1), ooppeennssssll--rreehhaasshh(1), ooppeennssssll--rreeqq(1), ooppeennssssll--rrssaa(1),
+       ooppeennssssll--rrssaauuttll(1), ooppeennssssll--ss__cclliieenntt(1), ooppeennssssll--ss__sseerrvveerr(1),
+       ooppeennssssll--ss__ttiimmee(1), ooppeennssssll--sseessss__iidd(1), ooppeennssssll--ssmmiimmee(1),
+       ooppeennssssll--ssppeeeedd(1), ooppeennssssll--ssppkkaacc(1), ooppeennssssll--ssrrpp(1),
+       ooppeennssssll--ssttoorreeuuttll(1), ooppeennssssll--ttss(1), ooppeennssssll--vveerriiffyy(1),
+       ooppeennssssll--vveerrssiioonn(1), ooppeennssssll--xx550099(1),
+
+HHIISSTTOORRYY
+       Initially, the manual page entry for the "openssl _c_m_d_" command used to
+       be available at _c_m_d(1). Later, the alias ooppeennssssll--_cc_mm_dd(1) was introduced,
+       which made it easier to group the openssl commands using the aapprrooppooss(1)
+       command or the shell's tab completion.
+
+       In order to reduce cluttering of the global manual page namespace, the
+       manual page entries without the 'openssl-' prefix have been deprecated
+       in OpenSSL 3.0 and will be removed in OpenSSL 4.0.
+
+CCOOPPYYRRIIGGHHTT
+       Copyright 2019-2020 The OpenSSL Project Authors. All Rights Reserved.
+
+       Licensed under the Apache License 2.0 (the "License").  You may not use
+       this file except in compliance with the License.  You can obtain a copy
+       in the file LICENSE in the source distribution or at
+       <https://www.openssl.org/source/license.html>.
+
+
+
+3.0.1                             2022-01-31               OPENSSL-CMDS(1ossl)

@@ -1,0 +1,363 @@
+<!-- Creator     : groff version 1.22.4 -->
+<!-- CreationDate: Mon Jan 31 16:14:33 2022 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>PKCS8</title>
+
+</head>
+<body>
+
+<h1 align="center">PKCS8</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#COMMAND OPTIONS">COMMAND OPTIONS</a><br>
+<a href="#NOTES">NOTES</a><br>
+<a href="#PKCS#5 v1.5 and PKCS#12 algorithms.">PKCS#5 v1.5 and PKCS#12 algorithms.</a><br>
+<a href="#EXAMPLES">EXAMPLES</a><br>
+<a href="#STANDARDS">STANDARDS</a><br>
+<a href="#BUGS">BUGS</a><br>
+<a href="#SEE ALSO">SEE ALSO</a><br>
+
+<hr>
+
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">pkcs8 - PKCS#8
+format private key conversion tool</p>
+
+<h2>SYNOPSIS
+<a name="SYNOPSIS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>openssl
+pkcs8</b> [<b>-topk8</b>] [<b>-inform PEM|DER</b>]
+[<b>-outform PEM|DER</b>] [<b>-in filename</b>] [<b>-passin
+arg</b>] [<b>-out filename</b>] [<b>-passout arg</b>]
+[<b>-noiter</b>] [<b>-nocrypt</b>] [<b>-nooct</b>]
+[<b>-embed</b>] [<b>-nsdb</b>] [<b>-v2 alg</b>] [<b>-v1
+alg</b>] [<b>-engine id</b>]</p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The
+<b>pkcs8</b> command processes private keys in PKCS#8
+format. It can handle both unencrypted PKCS#8 PrivateKeyInfo
+format and EncryptedPrivateKeyInfo format with a variety of
+PKCS#5 (v1.5 and v2.0) and PKCS#12 algorithms.</p>
+
+<h2>COMMAND OPTIONS
+<a name="COMMAND OPTIONS"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>-topk8</b></p>
+
+<p style="margin-left:17%;">Normally a PKCS#8 private key
+is expected on input and a traditional format private key
+will be written. With the <b>-topk8</b> option the situation
+is reversed: it reads a traditional format private key and
+writes a PKCS#8 format key.</p>
+
+<p style="margin-left:11%;"><b>-inform DER|PEM</b></p>
+
+<p style="margin-left:17%;">This specifies the input
+format. If a PKCS#8 format key is expected on input then
+either a <b><small>DER</small></b> or
+<b><small>PEM</small></b> encoded version of a PKCS#8 key
+will be expected. Otherwise the <b><small>DER</small></b> or
+<b><small>PEM</small></b> format of the traditional format
+private key is used.</p>
+
+<p style="margin-left:11%;"><b>-outform DER|PEM</b></p>
+
+<p style="margin-left:17%;">This specifies the output
+format, the options have the same meaning as the
+<b>-inform</b> option.</p>
+
+<p style="margin-left:11%;"><b>-in filename</b></p>
+
+<p style="margin-left:17%;">This specifies the input
+filename to read a key from or standard input if this option
+is not specified. If the key is encrypted a pass phrase will
+be prompted for.</p>
+
+<p style="margin-left:11%;"><b>-passin arg</b></p>
+
+<p style="margin-left:17%;">the input file password source.
+For more information about the format of <b>arg</b> see the
+<b><small>PASS PHRASE ARGUMENTS</small></b> section in
+<b>openssl</b>(1).</p>
+
+<p style="margin-left:11%;"><b>-out filename</b></p>
+
+<p style="margin-left:17%;">This specifies the output
+filename to write a key to or standard output by default. If
+any encryption options are set then a pass phrase will be
+prompted for. The output filename should <b>not</b> be the
+same as the input filename.</p>
+
+<p style="margin-left:11%;"><b>-passout arg</b></p>
+
+<p style="margin-left:17%;">the output file password
+source. For more information about the format of <b>arg</b>
+see the <b><small>PASS PHRASE ARGUMENTS</small></b> section
+in <b>openssl</b>(1).</p>
+
+<p style="margin-left:11%;"><b>-nocrypt</b></p>
+
+<p style="margin-left:17%;">PKCS#8 keys generated or input
+are normally PKCS#8 EncryptedPrivateKeyInfo structures using
+an appropriate password based encryption algorithm. With
+this option an unencrypted PrivateKeyInfo structure is
+expected or output. This option does not encrypt private
+keys at all and should only be used when absolutely
+necessary. Certain software such as some versions of Java
+code signing software used unencrypted private keys.</p>
+
+<p style="margin-left:11%;"><b>-nooct</b></p>
+
+<p style="margin-left:17%;">This option generates
+<small>RSA</small> private keys in a broken format that some
+software uses. Specifically the private key should be
+enclosed in a <small>OCTET STRING</small> but some software
+just includes the structure itself without the surrounding
+<small>OCTET STRING.</small></p>
+
+<p style="margin-left:11%;"><b>-embed</b></p>
+
+<p style="margin-left:17%;">This option generates
+<small>DSA</small> keys in a broken format. The
+<small>DSA</small> parameters are embedded inside the
+PrivateKey structure. In this form the <small>OCTET
+STRING</small> contains an <small>ASN1 SEQUENCE</small>
+consisting of two structures: a <small>SEQUENCE</small>
+containing the parameters and an <small>ASN1 INTEGER</small>
+containing the private key.</p>
+
+<p style="margin-left:11%;"><b>-nsdb</b></p>
+
+<p style="margin-left:17%;">This option generates
+<small>DSA</small> keys in a broken format compatible with
+Netscape private key databases. The PrivateKey contains a
+<small>SEQUENCE</small> consisting of the public and private
+keys respectively.</p>
+
+<p style="margin-left:11%;"><b>-v2 alg</b></p>
+
+<p style="margin-left:17%;">This option enables the use of
+PKCS#5 v2.0 algorithms. Normally PKCS#8 private keys are
+encrypted with the password based encryption algorithm
+called <b>pbeWithMD5AndDES-CBC</b> this uses 56 bit
+<small>DES</small> encryption but it was the strongest
+encryption algorithm supported in PKCS#5 v1.5. Using the
+<b>-v2</b> option PKCS#5 v2.0 algorithms are used which can
+use any encryption algorithm such as 168 bit triple
+<small>DES</small> or 128 bit <small>RC2</small> however not
+many implementations support PKCS#5 v2.0 yet. If you are
+just using private keys with OpenSSL then this doesn&rsquo;t
+matter.</p>
+
+<p style="margin-left:17%; margin-top: 1em">The <b>alg</b>
+argument is the encryption algorithm to use, valid values
+include <b>des</b>, <b>des3</b> and <b>rc2</b>. It is
+recommended that <b>des3</b> is used.</p>
+
+<p style="margin-left:11%;"><b>-v1 alg</b></p>
+
+<p style="margin-left:17%;">This option specifies a PKCS#5
+v1.5 or PKCS#12 algorithm to use. A complete list of
+possible algorithms is included below.</p>
+
+<p style="margin-left:11%;"><b>-engine id</b></p>
+
+<p style="margin-left:17%;">specifying an engine (by
+it&rsquo;s unique <b>id</b> string) will cause <b>req</b> to
+attempt to obtain a functional reference to the specified
+engine, thus initialising it if needed. The engine will then
+be set as the default for all available algorithms.</p>
+
+<h2>NOTES
+<a name="NOTES"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The encrypted
+form of a <small>PEM</small> encode PKCS#8 files uses the
+following headers and footers:</p>
+
+<p style="margin-left:11%; margin-top: 1em">-----BEGIN
+ENCRYPTED PRIVATE KEY----- <br>
+-----END ENCRYPTED PRIVATE KEY-----</p>
+
+<p style="margin-left:11%; margin-top: 1em">The unencrypted
+form uses:</p>
+
+<p style="margin-left:11%; margin-top: 1em">-----BEGIN
+PRIVATE KEY----- <br>
+-----END PRIVATE KEY-----</p>
+
+<p style="margin-left:11%; margin-top: 1em">Private keys
+encrypted using PKCS#5 v2.0 algorithms and high iteration
+counts are more secure that those encrypted using the
+traditional SSLeay compatible formats. So if additional
+security is considered important the keys should be
+converted.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The default
+encryption is only 56 bits because this is the encryption
+that most current implementations of PKCS#8 will
+support.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Some software
+may use PKCS#12 password based encryption algorithms with
+PKCS#8 format private keys: these are handled automatically
+but there is no option to produce them.</p>
+
+<p style="margin-left:11%; margin-top: 1em">It is possible
+to write out <small>DER</small> encoded encrypted private
+keys in PKCS#8 format because the encryption details are
+included at an <small>ASN1</small> level whereas the
+traditional format includes them at a <small>PEM</small>
+level.</p>
+
+<h2>PKCS#5 v1.5 and PKCS#12 algorithms.
+<a name="PKCS#5 v1.5 and PKCS#12 algorithms."></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Various
+algorithms can be used with the <b>-v1</b> command line
+option, including PKCS#5 v1.5 and PKCS#12. These are
+described in more detail below. <b><small><br>
+PBE-MD2-DES PBE-MD5-DES</small></b></p>
+
+<p style="margin-left:17%;">These algorithms were included
+in the original PKCS#5 v1.5 specification. They only offer
+56 bits of protection since they both use
+<small>DES.</small></p>
+
+<p style="margin-left:11%;"><small><b>PBE-SHA1-RC2-64
+PBE-MD2-RC2-64 PBE-MD5-RC2-64 PBE-SHA1-DES</b></small></p>
+
+<p style="margin-left:17%;">These algorithms are not
+mentioned in the original PKCS#5 v1.5 specification but they
+use the same key derivation algorithm and are supported by
+some software. They are mentioned in PKCS#5 v2.0. They use
+either 64 bit <small>RC2</small> or 56 bit
+<small>DES.</small></p>
+
+<p style="margin-left:11%;"><small><b>PBE-SHA1-RC4-128
+PBE-SHA1-RC4-40 PBE-SHA1-3DES PBE-SHA1-2DES <br>
+PBE-SHA1-RC2-128 PBE-SHA1-RC2-40</b></small></p>
+
+<p style="margin-left:17%;">These algorithms use the
+PKCS#12 password based encryption algorithm and allow strong
+encryption algorithms like triple <small>DES</small> or 128
+bit <small>RC2</small> to be used.</p>
+
+<h2>EXAMPLES
+<a name="EXAMPLES"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Convert a
+private from traditional to PKCS#5 v2.0 format using triple
+<small>DES:</small></p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl pkcs8
+-in key.pem -topk8 -v2 des3 -out enckey.pem</p>
+
+<p style="margin-left:11%; margin-top: 1em">Convert a
+private key to PKCS#8 using a PKCS#5 1.5 compatible
+algorithm ( <small>DES</small> ):</p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl pkcs8
+-in key.pem -topk8 -out enckey.pem</p>
+
+<p style="margin-left:11%; margin-top: 1em">Convert a
+private key to PKCS#8 using a PKCS#12 compatible algorithm
+(3DES):</p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl pkcs8
+-in key.pem -topk8 -out enckey.pem -v1 PBE-SHA1-3DES</p>
+
+<p style="margin-left:11%; margin-top: 1em">Read a
+<small>DER</small> unencrypted PKCS#8 format private
+key:</p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl pkcs8
+-inform DER -nocrypt -in key.der -out key.pem</p>
+
+<p style="margin-left:11%; margin-top: 1em">Convert a
+private key from any PKCS#8 format to traditional
+format:</p>
+
+<p style="margin-left:11%; margin-top: 1em">openssl pkcs8
+-in pk8.pem -out key.pem</p>
+
+<h2>STANDARDS
+<a name="STANDARDS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Test vectors
+from this PKCS#5 v2.0 implementation were posted to the
+pkcs-tng mailing list using triple <small>DES, DES</small>
+and <small>RC2</small> with high iteration counts, several
+people confirmed that they could decrypt the private keys
+produced and Therefore it can be assumed that the PKCS#5
+v2.0 implementation is reasonably accurate at least as far
+as these algorithms are concerned.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The format of
+PKCS#8 <small>DSA</small> (and other) private keys is not
+well documented: it is hidden away in PKCS#11 v2.01, section
+11.9. OpenSSL&rsquo;s default <small>DSA</small> PKCS#8
+private key format complies with this standard.</p>
+
+<h2>BUGS
+<a name="BUGS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">There should be
+an option that prints out the encryption algorithm in use
+and other details such as the iteration count.</p>
+
+<p style="margin-left:11%; margin-top: 1em">PKCS#8 using
+triple <small>DES</small> and PKCS#5 v2.0 should be the
+default private key format for OpenSSL: for compatibility
+several of the utilities use the old format at present.</p>
+
+<h2>SEE ALSO
+<a name="SEE ALSO"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>dsa</b>(1),
+<b>rsa</b>(1), <b>genrsa</b>(1), <b>gendsa</b>(1)</p>
+<hr>
+</body>
+</html>

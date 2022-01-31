@@ -1,0 +1,302 @@
+<!-- Creator     : groff version 1.22.4 -->
+<!-- CreationDate: Mon Jan 31 16:15:20 2022 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>OPENSSL-VERIFY</title>
+
+</head>
+<body>
+
+<h1 align="center">OPENSSL-VERIFY</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#OPTIONS">OPTIONS</a><br>
+<a href="#DIAGNOSTICS">DIAGNOSTICS</a><br>
+<a href="#SEE ALSO">SEE ALSO</a><br>
+<a href="#HISTORY">HISTORY</a><br>
+<a href="#COPYRIGHT">COPYRIGHT</a><br>
+
+<hr>
+
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">openssl-verify
+- certificate verification command</p>
+
+<h2>SYNOPSIS
+<a name="SYNOPSIS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>openssl
+verify</b> [<b>-help</b>] [<b>-CRLfile</b>
+<i>filename</i>|<i>uri</i>] [<b>-crl_download</b>]
+[<b>-show_chain</b>] [<b>-verbose</b>] [<b>-trusted</b>
+<i>filename</i>|<i>uri</i>] [<b>-untrusted</b>
+<i>filename</i>|<i>uri</i>] [<b>-vfyopt</b>
+<i>nm</i>:<i>v</i>] [<b>-nameopt</b> <i>option</i>]
+[<b>-CAfile</b> <i>file</i>] [<b>-no-CAfile</b>]
+[<b>-CApath</b> <i>dir</i>] [<b>-no-CApath</b>]
+[<b>-CAstore</b> <i>uri</i>] [<b>-no-CAstore</b>]
+[<b>-engine</b> <i>id</i>] [<b>-allow_proxy_certs</b>]
+[<b>-attime</b> <i>timestamp</i>] [<b>-no_check_time</b>]
+[<b>-check_ss_sig</b>] [<b>-crl_check</b>]
+[<b>-crl_check_all</b>] [<b>-explicit_policy</b>]
+[<b>-extended_crl</b>] [<b>-ignore_critical</b>]
+[<b>-inhibit_any</b>] [<b>-inhibit_map</b>]
+[<b>-partial_chain</b>] [<b>-policy</b> <i>arg</i>]
+[<b>-policy_check</b>] [<b>-policy_print</b>]
+[<b>-purpose</b> <i>purpose</i>] [<b>-suiteB_128</b>]
+[<b>-suiteB_128_only</b>] [<b>-suiteB_192</b>]
+[<b>-trusted_first</b>] [<b>-no_alt_chains</b>]
+[<b>-use_deltas</b>] [<b>-auth_level</b> <i>num</i>]
+[<b>-verify_depth</b> <i>num</i>] [<b>-verify_email</b>
+<i>email</i>] [<b>-verify_hostname</b> <i>hostname</i>]
+[<b>-verify_ip</b> <i>ip</i>] [<b>-verify_name</b>
+<i>name</i>] [<b>-x509_strict</b>] [<b>-issuer_checks</b>]
+[<b>-provider</b> <i>name</i>] [<b>-provider-path</b>
+<i>path</i>] [<b>-propquery</b> <i>propq</i>] [<b>--</b>]
+[<i>certificate</i> ...]</p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">This command
+verifies certificate chains. If a certificate chain has
+multiple problems, this program attempts to display all of
+them.</p>
+
+<h2>OPTIONS
+<a name="OPTIONS"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>-help</b></p>
+
+<p style="margin-left:17%;">Print out a usage message.</p>
+
+<p style="margin-left:11%;"><b>-CRLfile</b>
+<i>filename</i>|<i>uri</i></p>
+
+<p style="margin-left:17%;">The file or <small>URI</small>
+should contain one or more CRLs in <small>PEM</small> or
+<small>DER</small> format. This option can be specified more
+than once to include CRLs from multiple sources.</p>
+
+<p style="margin-left:11%;"><b>-crl_download</b></p>
+
+<p style="margin-left:17%;">Attempt to download
+<small>CRL</small> information for certificates via their
+<small>CDP</small> entries.</p>
+
+<p style="margin-left:11%;"><b>-show_chain</b></p>
+
+<p style="margin-left:17%;">Display information about the
+certificate chain that has been built (if successful).
+Certificates in the chain that came from the untrusted list
+will be flagged as &quot;untrusted&quot;.</p>
+
+<p style="margin-left:11%;"><b>-verbose</b></p>
+
+<p style="margin-left:17%;">Print extra information about
+the operations being performed.</p>
+
+<p style="margin-left:11%;"><b>-trusted</b>
+<i>filename</i>|<i>uri</i></p>
+
+<p style="margin-left:17%;">A file or <small>URI</small> of
+(more or less) trusted certificates. See
+<b>openssl-verification-options</b>(1) for more information
+on trust settings.</p>
+
+<p style="margin-left:17%; margin-top: 1em">This option can
+be specified more than once to load certificates from
+multiple sources.</p>
+
+<p style="margin-left:11%;"><b>-untrusted</b>
+<i>filename</i>|<i>uri</i></p>
+
+<p style="margin-left:17%;">A file or <small>URI</small> of
+untrusted certificates to use for chain building. This
+option can be specified more than once to load certificates
+from multiple sources.</p>
+
+<p style="margin-left:11%;"><b>-vfyopt</b>
+<i>nm</i>:<i>v</i></p>
+
+<p style="margin-left:17%;">Pass options to the signature
+algorithm during verify operations. Names and values of
+these options are algorithm-specific.</p>
+
+<p style="margin-left:11%;"><b>-nameopt</b>
+<i>option</i></p>
+
+<p style="margin-left:17%;">This specifies how the subject
+or issuer names are displayed. See
+<b>openssl-namedisplay-options</b>(1) for details.</p>
+
+<p style="margin-left:11%;"><b>-engine</b> <i>id</i></p>
+
+<p style="margin-left:17%;">See &quot;Engine Options&quot;
+in <b>openssl</b>(1). This option is deprecated.</p>
+
+<p style="margin-left:17%; margin-top: 1em">To load
+certificates or CRLs that require engine support, specify
+the <b>-engine</b> option before any of the <b>-trusted</b>,
+<b>-untrusted</b> or <b>-CRLfile</b> options.</p>
+
+<p style="margin-left:11%;"><b>-CAfile</b> <i>file</i>,
+<b>-no-CAfile</b>, <b>-CApath</b> <i>dir</i>,
+<b>-no-CApath</b>, <b>-CAstore</b> <i>uri</i>, <b><br>
+-no-CAstore</b></p>
+
+<p style="margin-left:17%;">See &quot;Trusted Certificate
+Options&quot; in <b>openssl-verification-options</b>(1) for
+details.</p>
+
+<p style="margin-left:11%;"><b>-allow_proxy_certs</b>,
+<b>-attime</b>, <b>-no_check_time</b>, <b>-check_ss_sig</b>,
+<b>-crl_check</b>, <b><br>
+-crl_check_all</b>, <b>-explicit_policy</b>,
+<b>-extended_crl</b>, <b>-ignore_critical</b>, <b><br>
+-inhibit_any</b>, <b>-inhibit_map</b>,
+<b>-no_alt_chains</b>, <b>-partial_chain</b>,
+<b>-policy</b>, <b><br>
+-policy_check</b>, <b>-policy_print</b>, <b>-purpose</b>,
+<b>-suiteB_128</b>, <b>-suiteB_128_only</b>, <b><br>
+-suiteB_192</b>, <b>-trusted_first</b>, <b>-use_deltas</b>,
+<b>-auth_level</b>, <b>-verify_depth</b>, <b><br>
+-verify_email</b>, <b>-verify_hostname</b>,
+<b>-verify_ip</b>, <b>-verify_name</b>, <b>-x509_strict <br>
+-issuer_checks</b></p>
+
+<p style="margin-left:17%;">Set various options of
+certificate chain verification. See &quot;Verification
+Options&quot; in <b>openssl-verification-options</b>(1) for
+details.</p>
+
+<p style="margin-left:11%;"><b>-provider</b> <i>name</i>
+<b><br>
+-provider-path</b> <i>path</i> <b><br>
+-propquery</b> <i>propq</i></p>
+
+<p style="margin-left:17%;">See &quot;Provider
+Options&quot; in <b>openssl</b>(1), <b>provider</b>(7), and
+<b>property</b>(7).</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+<p><b>--</b></p></td>
+<td width="3%"></td>
+<td width="83%">
+
+
+<p>Indicates the last option. All arguments following this
+are assumed to be certificate files. This is useful if the
+first certificate filename begins with a <b>-</b>.</p></td></tr>
+</table>
+
+<p style="margin-left:11%;"><i>certificate</i> ...</p>
+
+<p style="margin-left:17%;">One or more target certificates
+to verify, one per file. If no certificates are given, this
+command will attempt to read a single certificate from
+standard input.</p>
+
+<h2>DIAGNOSTICS
+<a name="DIAGNOSTICS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">When a verify
+operation fails the output messages can be somewhat cryptic.
+The general form of the error message is:</p>
+
+<p style="margin-left:11%; margin-top: 1em">server.pem:
+/C=AU/ST=Queensland/O=CryptSoft Pty Ltd/CN=Test CA (1024
+bit) <br>
+error 24 at 1 depth lookup:invalid CA certificate</p>
+
+<p style="margin-left:11%; margin-top: 1em">The first line
+contains the name of the certificate being verified followed
+by the subject name of the certificate. The second line
+contains the error number and the depth. The depth is number
+of the certificate being verified when a problem was
+detected starting with zero for the target
+(&quot;leaf&quot;) certificate itself then 1 for the
+<small>CA</small> that signed the target certificate and so
+on. Finally a textual version of the error number is
+presented.</p>
+
+<p style="margin-left:11%; margin-top: 1em">A list of the
+error codes and messages can be found in
+<b>X509_STORE_CTX_get_error</b>(3); the full list is defined
+in the header file <i>&lt;openssl/x509_vfy.h&gt;</i>.</p>
+
+<p style="margin-left:11%; margin-top: 1em">This command
+ignores many errors, in order to allow all the problems with
+a certificate chain to be determined.</p>
+
+<h2>SEE ALSO
+<a name="SEE ALSO"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>openssl-verification-options</b>(1),
+<b>openssl-x509</b>(1), <b>ossl_store-file</b>(7)</p>
+
+<h2>HISTORY
+<a name="HISTORY"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The
+<b>-show_chain</b> option was added in OpenSSL 1.1.0.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The <b>-engine
+option</b> was deprecated in OpenSSL 3.0.</p>
+
+<h2>COPYRIGHT
+<a name="COPYRIGHT"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Copyright
+2000-2021 The OpenSSL Project Authors. All Rights
+Reserved.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Licensed under
+the Apache License 2.0 (the &quot;License&quot;). You may
+not use this file except in compliance with the License. You
+can obtain a copy in the file <small>LICENSE</small> in the
+source distribution or at
+&lt;https://www.openssl.org/source/license.html&gt;.</p>
+<hr>
+</body>
+</html>
