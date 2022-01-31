@@ -1,10 +1,13 @@
-import {name as ca_name} from "./ca"
-import {debug} from './debug'
+import {name as ca_name} from "./commands/ca"
 import {name as convert_name} from "./convert"
+import {debug} from "./debug"
 import {name as helper_name} from "./helper"
-import {name as openssl_name, get as getConfig} from "./openssl"
+import {getConfig as getConfig, name as openssl_name} from "./openssl"
 
 
+/**
+ *
+ */
 async function run(): Promise<void> {
   console.log("Versions", getConfig())
   console.log(convert_name)
@@ -14,9 +17,9 @@ async function run(): Promise<void> {
   debug("Versions", getConfig())
   await new Promise((resolve) => {
     setTimeout(() => {
-      resolve(true);
-    }, 1500);
-  });
+      resolve(true)
+    }, 1500)
+  })
   console.log("Versions", getConfig())
 }
 

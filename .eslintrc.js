@@ -1,15 +1,20 @@
 module.exports = {
   'env': {
-    'mocha': true,
     'node': true,
     'es6': true,
+    'jest': true
   },
   "globals": {
     "NodeJS": true
   },
+  settings: {
+    jest: {
+      version: require('jest/package.json').version,
+    },
+  },
   root: true,
   parser: '@typescript-eslint/parser',
-  "parserOptions": {"ecmaVersion": 2018},
+  parserOptions: {"ecmaVersion": 2018},
   plugins: [
     '@typescript-eslint',
   ],
@@ -17,13 +22,13 @@ module.exports = {
     "eslint:recommended",
     "plugin:promise/recommended",
     "plugin:eslint-plugin/recommended",
-    "plugin:mocha/recommended",
     "plugin:import/recommended",
-    "plugin:import/typescript",
     "plugin:markdown/recommended",
     "plugin:json/recommended",
-    "plugin:chai-friendly/recommended",
-    "plugin:eslint-plugin/recommended"
+    "plugin:eslint-plugin/recommended",
+    "plugin:jsdoc/recommended",
+    "plugin:jest/recommended",
+    "plugin:import/typescript"
   ],
   "overrides": [
     {
@@ -31,7 +36,23 @@ module.exports = {
       "rules": {
         "n/no-unpublished-require": "off",
         "no-redeclare": "off",
-        "@typescript-eslint/no-redeclare": ["error"]
+        "@typescript-eslint/no-redeclare": ["error"],
+        "jest/no-disabled-test": "off",
+        "jest/expect-expect": ["error", {"assertFunctionNames": ["expect", "checkError"]}]
+      }
+    }, {
+      "files": ["test/*.ts"],
+      "rules": {
+        "no-redeclare": "off",
+        "@typescript-eslint/no-redeclare": ["error"],
+        "jest/no-disabled-tests": "off",
+        "jest/expect-expect": ["error", {"assertFunctionNames": ["expect", "hlp.checkError"]}],
+        "jest/no-done-callback": "off",
+        "jest/no-conditional-expect": 1,
+        "prefer-const": ["error", {
+          "destructuring": "any",
+          "ignoreReadBeforeAssign": false
+        }]
       }
     },
     {
@@ -41,7 +62,7 @@ module.exports = {
         "no-redeclare": "off",
         "no-unused-vars": "off",
         "@typescript-eslint/no-unused-vars": ["error"],
-        "@typescript-eslint/no-redeclare": ["error"]
+        "@typescript-eslint/no-redeclare": ["error"],
       }
     }
   ]

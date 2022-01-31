@@ -1,7 +1,4 @@
 {
-  "include": [
-    "src/**/*"
-  ],
   "compilerOptions": {
     "baseUrl": ".",
     "module": "commonjs",
@@ -14,27 +11,49 @@
       "ES2021.String",
       "ES2021.WeakRef"
     ],
-    "strict": true,
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "declaration": true,
+    "declarationMap": true,
     "esModuleInterop": true,
-    "importHelpers": true,
-    "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
+    "importHelpers": true,
+    "incremental": true,
+    "inlineSources": true,
+    "moduleResolution": "node",
+    "newLine": "lf",
     "noImplicitAny": true,
     "noImplicitReturns": true,
     "noUnusedLocals": true,
-    "allowSyntheticDefaultImports": true,
     "noUnusedParameters": true,
-    "moduleResolution": "node",
-    "sourceMap": true,
-    "inlineSources": true,
-    "declaration": true,
     "outDir": "dist",
-    "declarationMap": true,
-    "resolveJsonModule": true
+    "preserveConstEnums": true,
+    "removeComments": true,
+    "noResolve": false,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "strict": true,
+    "typeRoots": [
+      "./node_modules/@types",
+      "./types"
+    ],
+    "types": [
+      "jest",
+      "node",
+      "jest-extended"
+    ]
   },
+  "files": [
+    "node_modules/jest-extended/types/index.d.ts",
+    "types/globals.d.ts"
+  ],
+  "include": [
+    "./**/*"
+  ],
   "exclude": [
-    "./tests/",
     "./node_modules/",
+    "test/**/*",
     "./dist/"
   ]
 }

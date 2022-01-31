@@ -1,46 +1,45 @@
-'use strict'
+"use strict"
 
-var pem = require('../lib/pem')
-var fs = require('fs')
-var hlp = require('./pem.helper.js')
-const {debug} = require('../lib/debug.js')
-var chai = require('chai')
-var dirtyChai = require('dirty-chai')
-var expect = chai.expect
-chai.use(dirtyChai)
+import fs from "fs"
+import {env} from "process"
+import {debug} from "../lib/debug"
+import pem from "../lib/pem"
+import * as  hlp from "./pem.helper"
 
-describe('General Tests', function () {
-  this.timeout(300000)// 5 minutes
-  this.slow(2000)// 2 seconds
+describe("General Tests", function () {
 
-  describe('Requirements', function () {
-    it('Create tmp folder', function () {
+  describe("Requirements", function () {
+    it("Create tmp folder", function () {
       expect(function () {
-        if (!fs.existsSync(process.env.PEMJS_TMPDIR)) {
-          fs.mkdirSync(process.env.PEMJS_TMPDIR)
+        if (!fs.existsSync(env.PEMJS_TMPDIR)) {
+          fs.mkdirSync(env.PEMJS_TMPDIR)
         }
-      }).to.not.throw()
+      }).not.toThrow()
     })
 
-    it('Return an error if openssl was not found', function (done) {
+    it("Return an error if openssl was not found", function (done) {
       pem.config({
-        pathOpenSSL: 'zzzzzzzzzzz'
+        pathOpenSSL: "zzzzzzzzzzz"
       })
-      pem.createPrivateKey(function (error) {
-        hlp.checkError(error, true)
-        pem.config({
-          pathOpenSSL: process.env.OPENSSL_BIN || 'openssl'
-        })
+      try {
         pem.createPrivateKey(function (error) {
-          hlp.checkError(error)
-          done()
+          hlp.checkError(error, true)
+          pem.config({
+            pathOpenSSL: env.OPENSSL_BIN || "openssl"
+          })
+          pem.createPrivateKey(function (error) {
+            hlp.checkError(error)
+            done()
+          })
         })
-      })
+      } catch (e) {
+        done(e)
+      }
     })
   })
 
-  describe('#.createDhparam tests', function () {
-    it('Create default sized dhparam key', function (done) {
+  describe("#.createDhparam tests", function () {
+    it("Create default sized dhparam key", function (done) {
       pem.createDhparam(function (error, data) {
         hlp.checkError(error)
         hlp.checkDhparam(data, 150, 160)
@@ -48,7 +47,7 @@ describe('General Tests', function () {
         done()
       })
     })
-    it('Create 1024bit dhparam key', function (done) {
+    it("Create 1024bit dhparam key", function (done) {
       this.timeout(600000)// 10 minutes
       pem.createDhparam(1024, function (error, data) {
         hlp.checkError(error)
@@ -59,8 +58,8 @@ describe('General Tests', function () {
     })
   })
 
-  describe('#.createEcparam tests', function () {
-    it('Create default ecparam key', function (done) {
+  describe("#.createEcparam tests", function () {
+    it("Create default ecparam key", function (done) {
       pem.createEcparam(function (error, data) {
         hlp.checkError(error)
         hlp.checkEcparam(data, 430, 530)
@@ -68,40 +67,40 @@ describe('General Tests', function () {
         done()
       })
     })
-    it('Create secp521k1 ecparam key', function (done) {
-      pem.createEcparam('secp521r1', function (error, data) {
+    it("Create secp521k1 ecparam key", function (done) {
+      pem.createEcparam("secp521r1", function (error, data) {
         hlp.checkError(error)
         hlp.checkEcparam(data, 960, 1000)
         hlp.checkTmpEmpty()
         done()
       })
     })
-    it('Create prime256v1 ecparam key', function (done) {
-      pem.createEcparam('prime256v1', function (error, data) {
+    it("Create prime256v1 ecparam key", function (done) {
+      pem.createEcparam("prime256v1", function (error, data) {
         hlp.checkError(error)
         hlp.checkEcparam(data, 430, 570)
         hlp.checkTmpEmpty()
         done()
       })
     })
-    it('Create prime256v1 ecparam key with named_curve param encoding', function (done) {
-      pem.createEcparam('prime256v1', 'named_curve', function (error, data) {
+    it("Create prime256v1 ecparam key with named_curve param encoding", function (done) {
+      pem.createEcparam("prime256v1", "named_curve", function (error, data) {
         hlp.checkError(error)
         hlp.checkEcparam(data, 200, 430)
         hlp.checkTmpEmpty()
         done()
       })
     })
-    it('Create prime256v1 ecparam key with noOut set to true', function (done) {
-      pem.createEcparam('prime256v1', 'named_curve', true, function (error, data) {
+    it("Create prime256v1 ecparam key with noOut set to true", function (done) {
+      pem.createEcparam("prime256v1", "named_curve", true, function (error, data) {
         hlp.checkError(error)
         hlp.checkEcparamNoOut(data, 200, 430)
         hlp.checkTmpEmpty()
         done()
       })
     })
-    it('Create prime256v1 ecparam key with noOut set to false', function (done) {
-      pem.createEcparam('prime256v1', 'named_curve', false, function (error, data) {
+    it("Create prime256v1 ecparam key with noOut set to false", function (done) {
+      pem.createEcparam("prime256v1", "named_curve", false, function (error, data) {
         hlp.checkError(error)
         hlp.checkEcparam(data, 200, 430)
         hlp.checkTmpEmpty()
@@ -110,10 +109,10 @@ describe('General Tests', function () {
     })
   })
 
-  describe('#.createPrivateKey tests', function () {
-    describe('default sized private key', function () {
+  describe("#.createPrivateKey tests", function () {
+    describe("default sized private key", function () {
       var pkey
-      it('create private key', function (done) {
+      it("create private key", function (done) {
         pem.createPrivateKey(function (error, data) {
           hlp.checkError(error)
           hlp.checkPrivateKey(data, 850, 1900)
@@ -123,7 +122,7 @@ describe('General Tests', function () {
         })
       })
 
-      it('get its public key', function (done) {
+      it("get its public key", function (done) {
         pem.getPublicKey(pkey.key, function (error, data) {
           hlp.checkError(error)
           hlp.checkPublicKey(data)
@@ -132,7 +131,7 @@ describe('General Tests', function () {
         })
       })
 
-      it('create csr and check key', function (done) {
+      it("create csr and check key", function (done) {
         pem.createCSR({
           clientKey: pkey.key
         }, function (error, data) {
@@ -143,16 +142,16 @@ describe('General Tests', function () {
         })
       })
 
-      it('create pkcs12 w/o password', function (done) {
+      it("create pkcs12 w/o password", function (done) {
         pem.createCertificate({
           clientKey: pkey.key,
           selfSigned: true
         }, function (error, data) {
           hlp.checkError(error)
 
-          pem.createPkcs12(data.clientKey, data.certificate, 'mypassword', function (error, pkcs12) {
+          pem.createPkcs12(data.clientKey, data.certificate, "mypassword", function (error, pkcs12) {
             hlp.checkError(error)
-            expect(pkcs12).to.be.ok()
+            expect(pkcs12).toBeTruthy()
             hlp.checkTmpEmpty()
             done()
           })
@@ -160,9 +159,9 @@ describe('General Tests', function () {
       })
     })
 
-    describe('2048bit Private key', function () {
+    describe("2048bit Private key", function () {
       var pwkey
-      it('create private key', function (done) {
+      it("create private key", function (done) {
         pem.createPrivateKey(2048, function (error, data) {
           hlp.checkError(error)
           hlp.checkPrivateKey(data, 1650, 1710)
@@ -171,10 +170,10 @@ describe('General Tests', function () {
         })
       })
 
-      it('create private key with password', function (done) {
+      it("create private key with password", function (done) {
         pem.createPrivateKey(2048, {
-          cipher: 'aes128',
-          password: 'min4chars'
+          cipher: "aes128",
+          password: "min4chars"
         }, function (error, data) {
           hlp.checkError(error)
           hlp.checkPrivateKey(data, 1700, 1900, true)
@@ -184,10 +183,10 @@ describe('General Tests', function () {
         })
       })
 
-      it('create csr using private key with password', function (done) {
+      it("create csr using private key with password", function (done) {
         pem.createCSR({
           clientKey: pwkey.key,
-          clientKeyPassword: 'min4chars'
+          clientKeyPassword: "min4chars"
         }, function (error, data) {
           hlp.checkError(error)
           hlp.checkCSR(data, pwkey.key)
@@ -196,9 +195,9 @@ describe('General Tests', function () {
         })
       })
 
-      it('create cert using serviceKeyPassword', function (done) {
+      it("create cert using serviceKeyPassword", function (done) {
         pem.createCertificate({
-          serviceKeyPassword: 'min4chars',
+          serviceKeyPassword: "min4chars",
           selfSigned: true
         }, function (error, data) {
           hlp.checkError(error)
@@ -208,22 +207,22 @@ describe('General Tests', function () {
         })
       })
 
-      it('create cert using pkey w/ password; create pkcs12', function (done) {
+      it("create cert using pkey w/ password; create pkcs12", function (done) {
         pem.createCertificate({
           clientKey: pwkey.key,
-          clientKeyPassword: 'min4chars',
+          clientKeyPassword: "min4chars",
           selfSigned: true
         }, function (error, data) {
           hlp.checkError(error)
           hlp.checkCertificate(data, true)
           hlp.checkTmpEmpty()
 
-          pem.createPkcs12(data.clientKey, data.certificate, 'mypassword', {
-            cipher: 'aes256',
-            clientKeyPassword: 'min4chars'
+          pem.createPkcs12(data.clientKey, data.certificate, "mypassword", {
+            cipher: "aes256",
+            clientKeyPassword: "min4chars"
           }, function (error, pkcs12) {
             hlp.checkError(error)
-            expect(pkcs12).to.be.ok()
+            expect(pkcs12).toBeTruthy()
             hlp.checkTmpEmpty()
             done()
           })
@@ -232,8 +231,8 @@ describe('General Tests', function () {
     })
   })
 
-  describe('#.createCSR tests', function () {
-    it('Create default CSR; get its public key; read its data', function (done) {
+  describe("#.createCSR tests", function () {
+    it("Create default CSR; get its public key; read its data", function (done) {
       pem.createCSR(function (error, data1) {
         hlp.checkError(error)
         hlp.checkCSR(data1)
@@ -248,17 +247,17 @@ describe('General Tests', function () {
             hlp.checkError(error)
             hlp.checkCertificateData(data3, {
               issuer: {},
-              country: '',
-              state: '',
-              locality: '',
-              organization: '',
-              organizationUnit: '',
-              commonName: 'localhost',
-              emailAddress: '',
-              dc: '',
-              signatureAlgorithm: 'sha256WithRSAEncryption',
-              publicKeyAlgorithm: 'rsaEncryption',
-              publicKeySize: '2048 bit'
+              country: "",
+              state: "",
+              locality: "",
+              organization: "",
+              organizationUnit: "",
+              commonName: "localhost",
+              emailAddress: "",
+              dc: "",
+              signatureAlgorithm: "sha256WithRSAEncryption",
+              publicKeyAlgorithm: "rsaEncryption",
+              publicKeySize: "2048 bit"
             })
             hlp.checkTmpEmpty()
             done()
@@ -267,9 +266,9 @@ describe('General Tests', function () {
       })
     })
 
-    it('Create CSR using config file', function (done) {
+    it("Create CSR using config file", function (done) {
       pem.createCSR({
-        csrConfigFile: './test/fixtures/test.cnf'
+        csrConfigFile: "./test/fixtures/test.cnf"
       }, function (error, data) {
         hlp.checkError(error)
         hlp.checkCSR(data)
@@ -279,17 +278,17 @@ describe('General Tests', function () {
           hlp.checkError(error)
           hlp.checkCertificateData(data, {
             issuer: {},
-            country: 'EE',
-            state: 'Harjumaa',
-            locality: 'Tallinn',
-            organization: 'Node.ee',
-            organizationUnit: 'test',
-            commonName: 'www.node.ee',
-            emailAddress: 'andris@node.ee',
-            dc: '',
-            signatureAlgorithm: 'sha256WithRSAEncryption',
-            publicKeyAlgorithm: 'rsaEncryption',
-            publicKeySize: '2048 bit'
+            country: "EE",
+            state: "Harjumaa",
+            locality: "Tallinn",
+            organization: "Node.ee",
+            organizationUnit: "test",
+            commonName: "www.node.ee",
+            emailAddress: "andris@node.ee",
+            dc: "",
+            signatureAlgorithm: "sha256WithRSAEncryption",
+            publicKeyAlgorithm: "rsaEncryption",
+            publicKeySize: "2048 bit"
           })
           hlp.checkTmpEmpty()
           done()
@@ -297,83 +296,40 @@ describe('General Tests', function () {
       })
     })
 
-    it('Create CSR with multiple organizations using config file', function (done) {
-      pem.createCSR({
-        issuer: {},
-        country: 'EE',
-        state: 'Harjumaa',
-        locality: 'Tallinn',
-        organization: ['Node2.ee', 'Node.ee'],
-        organizationUnit: 'test',
-        commonName: 'www.node.ee',
-        emailAddress: 'andris@node.ee',
-        dc: '',
-        signatureAlgorithm: 'sha256WithRSAEncryption',
-        publicKeyAlgorithm: 'rsaEncryption',
-        publicKeySize: '2048 bit'
-      }, function (error, data) {
-        hlp.checkError(error)
-        hlp.checkCSR(data)
-        hlp.checkTmpEmpty()
-
-        pem.readCertificateInfo(data.csr, function (error, data) {
-          hlp.checkError(error)
-          hlp.checkCertificateData(data, {
-            issuer: {},
-            country: 'EE',
-            state: 'Harjumaa',
-            locality: 'Tallinn',
-            organization: ['Node.ee', 'Node2.ee'],
-            organizationUnit: 'test',
-            commonName: 'www.node.ee',
-            emailAddress: 'andris@node.ee',
-            dc: '',
-            signatureAlgorithm: 'sha256WithRSAEncryption',
-            publicKeyAlgorithm: 'rsaEncryption',
-            publicKeySize: '2048 bit'
-          })
-          hlp.checkTmpEmpty()
-          done()
-        })
-      })
-    })
-
-    it('Create CSR with specialchars config file', function (done) {
+    it("Create CSR with multiple organizations using config file", function (done) {
       pem.createCSR({
         issuer: {},
-        country: 'EE',
-        state: 'Harjumaa',
-        locality: 'Tallinn',
-        organization: ['Node2.ee', 'Node/ee'],
-        organizationUnit: ['test:test2', 'test test2', 'test-!$%^&*()_+|~=`{}[]:/;<>?,.@#'],
-        commonName: 'www.node.ee',
-        emailAddress: 'andris@node.ee',
-        dc: '',
-        signatureAlgorithm: 'sha256WithRSAEncryption',
-        publicKeyAlgorithm: 'rsaEncryption',
-        publicKeySize: '2048 bit'
+        country: "EE",
+        state: "Harjumaa",
+        locality: "Tallinn",
+        organization: ["Node2.ee", "Node.ee"],
+        organizationUnit: "test",
+        commonName: "www.node.ee",
+        emailAddress: "andris@node.ee",
+        dc: "",
+        signatureAlgorithm: "sha256WithRSAEncryption",
+        publicKeyAlgorithm: "rsaEncryption",
+        publicKeySize: "2048 bit"
       }, function (error, data) {
-        debug('createCSR', {error: error, data: data})
         hlp.checkError(error)
         hlp.checkCSR(data)
         hlp.checkTmpEmpty()
 
         pem.readCertificateInfo(data.csr, function (error, data) {
-          debug('readCertificateInfo', {error: error, data: data})
           hlp.checkError(error)
           hlp.checkCertificateData(data, {
             issuer: {},
-            country: 'EE',
-            state: 'Harjumaa',
-            locality: 'Tallinn',
-            organization: ['Node/ee', 'Node2.ee'],
-            organizationUnit: ['test test2', 'test:test2', "test-!$%^&*()_\\+|~=`{}[]:/\\;\\<\\>?\\,.@#"],
-            commonName: 'www.node.ee',
-            emailAddress: 'andris@node.ee',
-            dc: '',
-            signatureAlgorithm: 'sha256WithRSAEncryption',
-            publicKeyAlgorithm: 'rsaEncryption',
-            publicKeySize: '2048 bit'
+            country: "EE",
+            state: "Harjumaa",
+            locality: "Tallinn",
+            organization: ["Node.ee", "Node2.ee"],
+            organizationUnit: "test",
+            commonName: "www.node.ee",
+            emailAddress: "andris@node.ee",
+            dc: "",
+            signatureAlgorithm: "sha256WithRSAEncryption",
+            publicKeyAlgorithm: "rsaEncryption",
+            publicKeySize: "2048 bit"
           })
           hlp.checkTmpEmpty()
           done()
@@ -381,20 +337,63 @@ describe('General Tests', function () {
       })
     })
 
-    it('Read edited cert data from CSR', function (done) {
+    it("Create CSR with specialchars config file", function (done) {
+      pem.createCSR({
+        issuer: {},
+        country: "EE",
+        state: "Harjumaa",
+        locality: "Tallinn",
+        organization: ["Node2.ee", "Node/ee"],
+        organizationUnit: ["test:test2", "test test2", "test-!$%^&*()_+|~=`{}[]:/;<>?,.@#"],
+        commonName: "www.node.ee",
+        emailAddress: "andris@node.ee",
+        dc: "",
+        signatureAlgorithm: "sha256WithRSAEncryption",
+        publicKeyAlgorithm: "rsaEncryption",
+        publicKeySize: "2048 bit"
+      }, function (error, data) {
+        debug("createCSR", {error: error, data: data})
+        hlp.checkError(error)
+        hlp.checkCSR(data)
+        hlp.checkTmpEmpty()
+
+        pem.readCertificateInfo(data.csr, function (error, data) {
+          debug("readCertificateInfo", {error: error, data: data})
+          hlp.checkError(error)
+          hlp.checkCertificateData(data, {
+            issuer: {},
+            country: "EE",
+            state: "Harjumaa",
+            locality: "Tallinn",
+            organization: ["Node/ee", "Node2.ee"],
+            organizationUnit: ["test test2", "test:test2", "test-!$%^&*()_\\+|~=`{}[]:/\\;\\<\\>?\\,.@#"],
+            commonName: "www.node.ee",
+            emailAddress: "andris@node.ee",
+            dc: "",
+            signatureAlgorithm: "sha256WithRSAEncryption",
+            publicKeyAlgorithm: "rsaEncryption",
+            publicKeySize: "2048 bit"
+          })
+          hlp.checkTmpEmpty()
+          done()
+        })
+      })
+    })
+
+    it("Read edited cert data from CSR", function (done) {
       var certInfo = {
         issuer: {},
-        country: 'EE',
-        state: 'Harjumaa',
-        locality: 'Tallinn',
-        organization: 'Node.ee',
-        organizationUnit: 'test',
-        commonName: 'www.node.ee',
-        emailAddress: 'andris@node.ee',
-        dc: '',
-        signatureAlgorithm: 'sha256WithRSAEncryption',
-        publicKeyAlgorithm: 'rsaEncryption',
-        publicKeySize: '2048 bit'
+        country: "EE",
+        state: "Harjumaa",
+        locality: "Tallinn",
+        organization: "Node.ee",
+        organizationUnit: "test",
+        commonName: "www.node.ee",
+        emailAddress: "andris@node.ee",
+        dc: "",
+        signatureAlgorithm: "sha256WithRSAEncryption",
+        publicKeyAlgorithm: "rsaEncryption",
+        publicKeySize: "2048 bit"
       }
       pem.createCSR(Object.create(certInfo), function (error, data) {
         hlp.checkError(error)
@@ -411,10 +410,10 @@ describe('General Tests', function () {
     })
   })
 
-  describe('#.createCertificate tests', function () {
-    describe('Default certificate', function () {
+  describe("#.createCertificate tests", function () {
+    describe("Default certificate", function () {
       var cert
-      it('Create default certificate', function (done) {
+      it("Create default certificate", function (done) {
         pem.createCertificate(function (error, data) {
           hlp.checkError(error)
           hlp.checkCertificate(data)
@@ -424,7 +423,7 @@ describe('General Tests', function () {
         })
       })
 
-      it('get its public key', function (done) {
+      it("get its public key", function (done) {
         pem.getPublicKey(cert.clientKey, function (error, data) {
           hlp.checkError(error)
           hlp.checkPublicKey(data)
@@ -433,7 +432,7 @@ describe('General Tests', function () {
         })
       })
 
-      it('get its fingerprint', function (done) {
+      it("get its fingerprint", function (done) {
         pem.getFingerprint(cert.certificate, function (error, data) {
           hlp.checkError(error)
           hlp.checkFingerprint(data)
@@ -442,7 +441,7 @@ describe('General Tests', function () {
         })
       })
 
-      it('get its modulus [not hashed]', function (done) {
+      it("get its modulus [not hashed]", function (done) {
         pem.getModulus(cert.certificate, function (error,
                                                    data) {
           hlp.checkError(error)
@@ -452,22 +451,22 @@ describe('General Tests', function () {
         })
       })
 
-      it('get its modulus [md5 hashed]', function (done) {
-        pem.getModulus(cert.certificate, null, 'md5',
+      it("get its modulus [md5 hashed]", function (done) {
+        pem.getModulus(cert.certificate, null, "md5",
           function (error, data) {
             hlp.checkError(error)
-            hlp.checkModulus(data, 'md5')
+            hlp.checkModulus(data, "md5")
             hlp.checkTmpEmpty()
             done()
           })
       })
 
-      it('read its data', function (done) {
+      it("read its data", function (done) {
         pem.readCertificateInfo(cert.certificate, function (
           error, data) {
           hlp.checkError(error);
-          ['validity', 'serial', 'signatureAlgorithm',
-            'publicKeySize', 'publicKeyAlgorithm'
+          ["validity", "serial", "signatureAlgorithm",
+            "publicKeySize", "publicKeyAlgorithm"
           ].forEach(function (k) {
             if (data[k]) {
               delete data[k]
@@ -475,22 +474,22 @@ describe('General Tests', function () {
           })
           hlp.checkCertificateData(data, {
             issuer: {
-              country: '',
-              state: '',
-              locality: '',
-              organization: '',
-              organizationUnit: '',
-              commonName: 'localhost',
-              dc: ''
+              country: "",
+              state: "",
+              locality: "",
+              organization: "",
+              organizationUnit: "",
+              commonName: "localhost",
+              dc: ""
             },
-            country: '',
-            state: '',
-            locality: '',
-            organization: '',
-            organizationUnit: '',
-            commonName: 'localhost',
-            emailAddress: '',
-            dc: ''
+            country: "",
+            state: "",
+            locality: "",
+            organization: "",
+            organizationUnit: "",
+            commonName: "localhost",
+            emailAddress: "",
+            dc: ""
           })
           hlp.checkTmpEmpty()
           done()
@@ -498,10 +497,10 @@ describe('General Tests', function () {
       })
     })
 
-    describe('SAN certificate', function () {
+    describe("SAN certificate", function () {
       var cert
-      it('Create default certificate', function (done) {
-        var d = fs.readFileSync('./test/fixtures/ru_openssl.csr').toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
+      it("Create default certificate", function (done) {
+        var d = fs.readFileSync("./test/fixtures/ru_openssl.csr").toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
         pem.createCertificate({csr: d}, function (error, data) {
           hlp.checkError(error)
           hlp.checkCertificate(data)
@@ -511,7 +510,7 @@ describe('General Tests', function () {
         })
       })
 
-      it('get its fingerprint', function (done) {
+      it("get its fingerprint", function (done) {
         pem.getFingerprint(cert.certificate, function (error, data) {
           hlp.checkError(error)
           hlp.checkFingerprint(data)
@@ -520,7 +519,7 @@ describe('General Tests', function () {
         })
       })
 
-      it('get its modulus [not hashed]', function (done) {
+      it("get its modulus [not hashed]", function (done) {
         pem.getModulus(cert.certificate, function (error,
                                                    data) {
           hlp.checkError(error)
@@ -530,53 +529,53 @@ describe('General Tests', function () {
         })
       })
 
-      it('get its modulus [md5 hashed]', function (done) {
-        pem.getModulus(cert.certificate, null, 'md5',
+      it("get its modulus [md5 hashed]", function (done) {
+        pem.getModulus(cert.certificate, null, "md5",
           function (error, data) {
             hlp.checkError(error)
-            hlp.checkModulus(data, 'md5')
+            hlp.checkModulus(data, "md5")
             hlp.checkTmpEmpty()
             done()
           })
       })
 
-      it('read its data', function (done) {
+      it("read its data", function (done) {
         pem.readCertificateInfo(cert.certificate, function (
           error, data) {
           hlp.checkError(error);
-          ['validity', 'serial', 'signatureAlgorithm',
-            'publicKeySize', 'publicKeyAlgorithm'
+          ["validity", "serial", "signatureAlgorithm",
+            "publicKeySize", "publicKeyAlgorithm"
           ].forEach(function (k) {
             if (data[k]) {
               delete data[k]
             }
           })
           hlp.checkCertificateData(data, {
-            commonName: 'Описание сайта',
-            country: 'RU',
-            dc: '',
-            emailAddress: 'envek@envek.name',
+            commonName: "Описание сайта",
+            country: "RU",
+            dc: "",
+            emailAddress: "envek@envek.name",
             issuer: {
-              commonName: 'Описание сайта',
-              country: 'RU',
-              dc: '',
-              locality: 'Москва',
-              organization: 'Моя компания',
-              organizationUnit: 'Моё подразделение',
-              state: ''
+              commonName: "Описание сайта",
+              country: "RU",
+              dc: "",
+              locality: "Москва",
+              organization: "Моя компания",
+              organizationUnit: "Моё подразделение",
+              state: ""
             },
-            locality: 'Москва',
-            organization: 'Моя компания',
-            organizationUnit: 'Моё подразделение',
+            locality: "Москва",
+            organization: "Моя компания",
+            organizationUnit: "Моё подразделение",
             san: {
               dns: [
-                'example.com',
-                '*.example.com'
+                "example.com",
+                "*.example.com"
               ],
               email: [],
               ip: []
             },
-            state: ''
+            state: ""
           })
           hlp.checkTmpEmpty()
           done()
@@ -584,11 +583,11 @@ describe('General Tests', function () {
       })
     })
 
-    describe('CA certificate', function () {
+    describe("CA certificate", function () {
       var ca
-      it('create ca certificate', function (done) {
+      it("create ca certificate", function (done) {
         pem.createCertificate({
-            commonName: 'CA Certificate'
+            commonName: "CA Certificate"
           },
           function (error, data) {
             hlp.checkError(error)
@@ -598,11 +597,11 @@ describe('General Tests', function () {
             done()
           })
       })
-      it('create certificate with text serial "demo-serial"', function (done) {
+      it("create certificate with text serial \"demo-serial\"", function (done) {
         pem.createCertificate({
             serviceKey: ca.serviceKey,
             serviceCertificate: ca.certificate,
-            serial: 'demo-serial'
+            serial: "demo-serial"
           },
           function (error, data) {
             hlp.checkError(error)
@@ -610,7 +609,7 @@ describe('General Tests', function () {
             hlp.checkTmpEmpty()
             pem.readCertificateInfo(data.certificate, function (error, data) {
               hlp.checkError(error);
-              ['validity', 'serial'].forEach(function (k) {
+              ["validity", "serial"].forEach(function (k) {
                 if (data[k]) {
                   delete data[k]
                 }
@@ -620,11 +619,11 @@ describe('General Tests', function () {
             })
           })
       })
-      it('create certificate with hex serial "0x1234567890abcdef"', function (done) {
+      it("create certificate with hex serial \"0x1234567890abcdef\"", function (done) {
         pem.createCertificate({
             serviceKey: ca.serviceKey,
             serviceCertificate: ca.certificate,
-            serial: '0x1234567890abcdef'
+            serial: "0x1234567890abcdef"
           },
           function (error, data) {
             hlp.checkError(error)
@@ -632,7 +631,7 @@ describe('General Tests', function () {
             hlp.checkTmpEmpty()
             pem.readCertificateInfo(data.certificate, function (error, data) {
               hlp.checkError(error);
-              ['validity', 'serial'].forEach(function (k) {
+              ["validity", "serial"].forEach(function (k) {
                 if (data[k]) {
                   delete data[k]
                 }
@@ -642,11 +641,11 @@ describe('General Tests', function () {
             })
           })
       })
-      it('create certificate with hex serial "1234567890abcdef"', function (done) {
+      it("create certificate with hex serial \"1234567890abcdef\"", function (done) {
         pem.createCertificate({
             serviceKey: ca.serviceKey,
             serviceCertificate: ca.certificate,
-            serial: '1234567890abcdef'
+            serial: "1234567890abcdef"
           },
           function (error, data) {
             hlp.checkError(error)
@@ -654,7 +653,7 @@ describe('General Tests', function () {
             hlp.checkTmpEmpty()
             pem.readCertificateInfo(data.certificate, function (error, data) {
               hlp.checkError(error);
-              ['validity', 'serial'].forEach(function (k) {
+              ["validity", "serial"].forEach(function (k) {
                 if (data[k]) {
                   delete data[k]
                 }
@@ -664,7 +663,7 @@ describe('General Tests', function () {
             })
           })
       })
-      it('create certificate with number serial "1234567890"', function (done) {
+      it("create certificate with number serial \"1234567890\"", function (done) {
         pem.createCertificate({
             serviceKey: ca.serviceKey,
             serviceCertificate: ca.certificate,
@@ -676,7 +675,7 @@ describe('General Tests', function () {
             hlp.checkTmpEmpty()
             pem.readCertificateInfo(data.certificate, function (error, data) {
               hlp.checkError(error);
-              ['validity', 'serial'].forEach(function (k) {
+              ["validity", "serial"].forEach(function (k) {
                 if (data[k]) {
                   delete data[k]
                 }
@@ -686,7 +685,7 @@ describe('General Tests', function () {
             })
           })
       })
-      it('verify signing chain; create and read PKCS12', function (done) {
+      it("verify signing chain; create and read PKCS12", function (done) {
         pem.createCertificate({
           serviceKey: ca.serviceKey,
           serviceCertificate: ca.certificate,
@@ -700,15 +699,15 @@ describe('General Tests', function () {
             ca.certificate,
             function (error, valid) {
               hlp.checkError(error)
-              expect(valid).to.be.true()
+              expect(valid).toBeTrue()
 
               pem.createPkcs12(data.clientKey,
-                data.certificate, '', {
+                data.certificate, "", {
                   certFiles: [ca.certificate]
                 },
                 function (error, d) {
                   hlp.checkError(error)
-                  expect(d).to.be.ok()
+                  expect(d).toBeTruthy()
                   hlp.checkTmpEmpty()
 
                   pem.readPkcs12(d.pkcs12,
@@ -718,30 +717,30 @@ describe('General Tests', function () {
                         keystore: keystore
                       })
                       hlp.checkError(error)
-                      expect(keystore).to.be.an('object')
-                      expect(keystore).to.have.property('ca')
-                      expect(keystore).to.have.property('cert')
-                      expect(keystore).to.have.property('key')
-                      expect(keystore.ca).to.be.an('array')
-                      expect(keystore.cert).to.be.an('string')
-                      expect(keystore.key).to.be.an('string')
-                      expect(keystore.ca[0]).to.equal(ca.certificate)
-                      expect(keystore.cert).to.equal(data.certificate)
-                      expect(keystore.key).to.equal(data.clientKey)
+                      expect(keystore).toBeType("object")
+                      expect(keystore).toHaveProperty("ca")
+                      expect(keystore).toHaveProperty("cert")
+                      expect(keystore).toHaveProperty("key")
+                      expect(keystore.ca).toBeType("array")
+                      expect(keystore.cert).toBeType("string")
+                      expect(keystore.key).toBeType("string")
+                      expect(keystore.ca[0]).toEqual(ca.certificate)
+                      expect(keystore.cert).toEqual(data.certificate)
+                      expect(keystore.key).toEqual(data.clientKey)
                       done()
                     })
                 })
             })
         })
       })
-      context('pkcs12 -export -out "$pfx" -inkey "$key" -in "$cert" -certfile "$ca_bundle" -passout "pass:"', function () {
-        it('verify right order of chains; read PKCS12', function (done) {
-          let pkcs12_5_file_pfx = fs.readFileSync('./test/fixtures/rsa_pkcs12_5_keyStore.p12')
-          let pkcs12_5_file_key = fs.readFileSync('./test/fixtures/rsa_pkcs12_5_key.pem').toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
-          let pkcs12_5_file_key_rsa = fs.readFileSync('./test/fixtures/rsa_pkcs12_5_key_RSA.pem').toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
-          let pkcs12_4_file_cert = fs.readFileSync('./test/fixtures/rsa_pkcs12_4_cert.pem').toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
-          let pkcs12_5_file_cert = fs.readFileSync('./test/fixtures/rsa_pkcs12_5_cert.pem').toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
-          let geotrust_primary_ca_cert = fs.readFileSync('./test/fixtures/GeoTrust_Primary_CA.pem').toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
+      describe("pkcs12 -export -out \"$pfx\" -inkey \"$key\" -in \"$cert\" -certfile \"$ca_bundle\" -passout \"pass:\"", function () {
+        it("verify right order of chains; read PKCS12", function (done) {
+          const pkcs12_5_file_pfx = fs.readFileSync("./test/fixtures/rsa_pkcs12_5_keyStore.p12")
+          const pkcs12_5_file_key = fs.readFileSync("./test/fixtures/rsa_pkcs12_5_key.pem").toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
+          const pkcs12_5_file_key_rsa = fs.readFileSync("./test/fixtures/rsa_pkcs12_5_key_RSA.pem").toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
+          const pkcs12_4_file_cert = fs.readFileSync("./test/fixtures/rsa_pkcs12_4_cert.pem").toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
+          const pkcs12_5_file_cert = fs.readFileSync("./test/fixtures/rsa_pkcs12_5_cert.pem").toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
+          const geotrust_primary_ca_cert = fs.readFileSync("./test/fixtures/GeoTrust_Primary_CA.pem").toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
           pem.readPkcs12(pkcs12_5_file_pfx,
             function (error, keystore) {
               debug("verify right order of chains; read PKCS12 - pem.readPkcs12", {
@@ -749,33 +748,33 @@ describe('General Tests', function () {
                 keystore: keystore
               })
               hlp.checkError(error)
-              expect(keystore).to.be.an('object')
-              expect(keystore).to.have.property('ca')
-              expect(keystore).to.have.property('cert')
-              expect(keystore).to.have.property('key')
-              expect(keystore.ca).to.be.an('array')
-              expect(keystore.cert).to.be.an('string')
-              expect(keystore.key).to.be.an('string')
-              expect(keystore.ca[0]).to.equal(pkcs12_4_file_cert)
-              expect(keystore.ca[1]).to.equal(geotrust_primary_ca_cert)
-              expect(keystore.cert).to.equal(pkcs12_5_file_cert)
-              if (hlp.openssl.get('Vendor') === "OPENSSL" && hlp.openssl.get('VendorVersionMajor') >= 3) {
-                expect(keystore.key).to.equal(pkcs12_5_file_key)
+              expect(keystore).toBeType("object")
+              expect(keystore).toHaveProperty("ca")
+              expect(keystore).toHaveProperty("cert")
+              expect(keystore).toHaveProperty("key")
+              expect(keystore.ca).toBeType("array")
+              expect(keystore.cert).toBeType("string")
+              expect(keystore.key).toBeType("string")
+              expect(keystore.ca[0]).toEqual(pkcs12_4_file_cert)
+              expect(keystore.ca[1]).toEqual(geotrust_primary_ca_cert)
+              expect(keystore.cert).toEqual(pkcs12_5_file_cert)
+              if (hlp.openssl.getConfig("Vendor") === "OPENSSL" && hlp.openssl.getConfig("VendorVersionMajor") >= 3) {
+                expect(keystore.key).toEqual(pkcs12_5_file_key)
               } else {
-                expect(keystore.key).to.equal(pkcs12_5_file_key_rsa)
+                expect(keystore.key).toEqual(pkcs12_5_file_key_rsa)
               }
               done()
             })
         })
       })
-      context('pkcs12 -export -out "pfx" -inkey "$key" -in "$cert + $ca_bundle" -passout "pass:"', function () {
-        it('verify right order of chains; read PKCS12', function (done) {
-          let pkcs12_5_file_pfx = fs.readFileSync('./test/fixtures/rsa_pkcs12_5_keyStore2.p12')
-          let pkcs12_5_file_key = fs.readFileSync('./test/fixtures/rsa_pkcs12_5_key.pem').toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
-          let pkcs12_5_file_key_rsa = fs.readFileSync('./test/fixtures/rsa_pkcs12_5_key_RSA.pem').toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
-          let pkcs12_4_file_cert = fs.readFileSync('./test/fixtures/rsa_pkcs12_4_cert.pem').toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
-          let pkcs12_5_file_cert = fs.readFileSync('./test/fixtures/rsa_pkcs12_5_cert.pem').toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
-          let geotrust_primary_ca_cert = fs.readFileSync('./test/fixtures/GeoTrust_Primary_CA.pem').toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
+      describe("pkcs12 -export -out \"pfx\" -inkey \"$key\" -in \"$cert + $ca_bundle\" -passout \"pass:\"", function () {
+        it("verify right order of chains; read PKCS12", function (done) {
+          const pkcs12_5_file_pfx = fs.readFileSync("./test/fixtures/rsa_pkcs12_5_keyStore2.p12")
+          const pkcs12_5_file_key = fs.readFileSync("./test/fixtures/rsa_pkcs12_5_key.pem").toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
+          const pkcs12_5_file_key_rsa = fs.readFileSync("./test/fixtures/rsa_pkcs12_5_key_RSA.pem").toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
+          const pkcs12_4_file_cert = fs.readFileSync("./test/fixtures/rsa_pkcs12_4_cert.pem").toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
+          const pkcs12_5_file_cert = fs.readFileSync("./test/fixtures/rsa_pkcs12_5_cert.pem").toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
+          const geotrust_primary_ca_cert = fs.readFileSync("./test/fixtures/GeoTrust_Primary_CA.pem").toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
           pem.readPkcs12(pkcs12_5_file_pfx,
             function (error, keystore) {
               debug("verify right order of chains; read PKCS12 - pem.readPkcs12", {
@@ -783,29 +782,29 @@ describe('General Tests', function () {
                 keystore: keystore
               })
               hlp.checkError(error)
-              expect(keystore).to.be.an('object')
-              expect(keystore).to.have.property('ca')
-              expect(keystore).to.have.property('cert')
-              expect(keystore).to.have.property('key')
-              expect(keystore.ca).to.be.an('array')
-              expect(keystore.cert).to.be.an('string')
-              expect(keystore.key).to.be.an('string')
-              expect(keystore.ca[0]).to.equal(pkcs12_4_file_cert)
-              expect(keystore.ca[1]).to.equal(geotrust_primary_ca_cert)
-              expect(keystore.cert).to.equal(pkcs12_5_file_cert)
-              if (hlp.openssl.get('Vendor') === "OPENSSL" && hlp.openssl.get('VendorVersionMajor') >= 3) {
-                expect(keystore.key).to.equal(pkcs12_5_file_key)
+              expect(keystore).toBeType("object")
+              expect(keystore).toHaveProperty("ca")
+              expect(keystore).toHaveProperty("cert")
+              expect(keystore).toHaveProperty("key")
+              expect(keystore.ca).toBeType("array")
+              expect(keystore.cert).toBeType("string")
+              expect(keystore.key).toBeType("string")
+              expect(keystore.ca[0]).toEqual(pkcs12_4_file_cert)
+              expect(keystore.ca[1]).toEqual(geotrust_primary_ca_cert)
+              expect(keystore.cert).toEqual(pkcs12_5_file_cert)
+              if (hlp.openssl.getConfig("Vendor") === "OPENSSL" && hlp.openssl.getConfig("VendorVersionMajor") >= 3) {
+                expect(keystore.key).toEqual(pkcs12_5_file_key)
               } else {
-                expect(keystore.key).to.equal(pkcs12_5_file_key_rsa)
+                expect(keystore.key).toEqual(pkcs12_5_file_key_rsa)
               }
               done()
             })
         })
       })
-      it('Create Certificate without CSR and use Password for PKey', function (done) {
+      it("Create Certificate without CSR and use Password for PKey", function (done) {
         pem.createCertificate({
-          cipher: 'aes256',
-          clientKeyPassword: '1234AbCd',
+          cipher: "aes256",
+          clientKeyPassword: "1234AbCd",
           serial: Date.now()
         }, function (error, data) {
           debug("Create Certificate without CSR and use Password for PKey", {error, data})
@@ -815,7 +814,7 @@ describe('General Tests', function () {
           done()
         })
       })
-      it('Fail to verify invalid sigining chain', function (done) {
+      it("Fail to verify invalid sigining chain", function (done) {
         pem.createCertificate({
           serviceKey: ca.serviceKey,
           serviceCertificate: ca.certificate,
@@ -833,26 +832,26 @@ describe('General Tests', function () {
                 valid: valid
               })
               hlp.checkError(error)
-              expect(valid).to.be.false()
+              expect(valid).toBeFalse()
               done()
             })
         })
       })
-      it('Verify google.com certificate without provided CA certificates', function (done) {
-        var certificate = fs.readFileSync('./test/fixtures/google.com-old.pem').toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
+      it("Verify google.com certificate without provided CA certificates", function (done) {
+        var certificate = fs.readFileSync("./test/fixtures/google.com-old.pem").toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
         pem.verifySigningChain(certificate, function (error, valid) {
           debug("Verify google.com certificate without provided CA certificates - verifySigningChain", {
             error: error,
             valid: valid
           })
           hlp.checkError(error)
-          expect(valid).to.be.false()
+          expect(valid).toBeFalse()
           done()
         })
       })
-      it('Verify deep sigining chain', function (done) {
+      it("Verify deep sigining chain", function (done) {
         pem.createCertificate({
-          commonName: 'Intermediate CA Certificate',
+          commonName: "Intermediate CA Certificate",
           serviceKey: ca.serviceKey,
           serviceCertificate: ca.certificate,
           config:
@@ -881,14 +880,14 @@ describe('General Tests', function () {
               ca.certificate, intermediate.certificate
             ], function (error, valid) {
               hlp.checkError(error)
-              expect(valid).to.be.true()
+              expect(valid).toBeTrue()
 
               // chain check fails -> missing ca cert in chain
               pem.verifySigningChain(cert.certificate, [
                 intermediate.certificate
               ], function (error, valid) {
                 hlp.checkError(error)
-                expect(valid).to.be.false()
+                expect(valid).toBeFalse()
 
                 // chain check fails -> missing intermediate cert in chain
                 pem.verifySigningChain(
@@ -898,7 +897,7 @@ describe('General Tests', function () {
                   function (error,
                             valid) {
                     hlp.checkError(error)
-                    expect(valid).to.be.false()
+                    expect(valid).toBeFalse()
                     done()
                   })
               })
@@ -906,12 +905,12 @@ describe('General Tests', function () {
           })
         })
       })
-      it('Verify same Root CA trust', function (done) {
+      it("Verify same Root CA trust", function (done) {
         // Verify TLS cert [Leaf, Int CA 2, Root CA] is valid
         // to the trust store [Int CA 1, Root CA] since it has
         // the same Root CA in the trust chain
         pem.createCertificate({
-          commonName: 'Intermediate CA 1 Certificate',
+          commonName: "Intermediate CA 1 Certificate",
           serviceKey: ca.serviceKey,
           serviceCertificate: ca.certificate,
           config:
@@ -926,7 +925,7 @@ describe('General Tests', function () {
           hlp.checkTmpEmpty()
 
           pem.createCertificate({
-            commonName: 'Intermediate CA 2 Certificate',
+            commonName: "Intermediate CA 2 Certificate",
             serviceKey: ca.serviceKey,
             serviceCertificate: ca.certificate,
             config:
@@ -955,7 +954,7 @@ describe('General Tests', function () {
                 [ca.certificate, intCa1.certificate],
                 function (error, valid) {
                   hlp.checkError(error)
-                  expect(valid).to.be.true()
+                  expect(valid).toBeTrue()
 
                   // chain check fails -> missing ca cert in chain
                   pem.verifySigningChain(
@@ -963,7 +962,7 @@ describe('General Tests', function () {
                     [intCa1.certificate],
                     function (error, valid) {
                       hlp.checkError(error)
-                      expect(valid).to.be.false()
+                      expect(valid).toBeFalse()
 
                       // chain check fails -> missing intermediate cert in chain
                       pem.verifySigningChain(
@@ -972,7 +971,7 @@ describe('General Tests', function () {
                         ],
                         function (error, valid) {
                           hlp.checkError(error)
-                          expect(valid).to.be.false()
+                          expect(valid).toBeFalse()
                           done()
                         })
                     })
@@ -983,7 +982,7 @@ describe('General Tests', function () {
       })
     })
 
-    it('Create self signed certificate', function (done) {
+    it("Create self signed certificate", function (done) {
       pem.createCertificate({
         selfSigned: true
       }, function (error, data) {
@@ -993,9 +992,9 @@ describe('General Tests', function () {
         done()
       })
     })
-    it('Create and verify wildcard certificate', function (done) {
+    it("Create and verify wildcard certificate", function (done) {
       var certInfo = {
-        commonName: '*.node.ee'
+        commonName: "*.node.ee"
       }
       pem.createCertificate(Object.create(certInfo), function (error, data) {
         hlp.checkError(error)
@@ -1004,35 +1003,35 @@ describe('General Tests', function () {
 
         pem.readCertificateInfo(data.certificate, function (error, data) {
           hlp.checkError(error)
-          expect(data).to.be.an('object').that.has.property('commonName')
-          expect(data.commonName).to.equal(certInfo.commonName)
+          expect(data).toBeType("object").that.has.property("commonName")
+          expect(data.commonName).toEqual(certInfo.commonName)
           hlp.checkTmpEmpty()
           done()
         })
       })
     })
-    it('Read edited cert data from certificate', function (done) {
+    it("Read edited cert data from certificate", function (done) {
       var certInfo = {
         issuer: {
-          country: 'EE',
-          state: 'Harjumaa',
-          locality: 'Tallinn',
-          organization: 'Node.ee',
-          organizationUnit: 'test',
-          commonName: 'www.node.ee',
-          dc: ''
+          country: "EE",
+          state: "Harjumaa",
+          locality: "Tallinn",
+          organization: "Node.ee",
+          organizationUnit: "test",
+          commonName: "www.node.ee",
+          dc: ""
         },
-        country: 'EE',
-        state: 'Harjumaa',
-        locality: 'Tallinn',
-        organization: 'Node.ee',
-        organizationUnit: 'test',
-        commonName: 'www.node.ee',
-        emailAddress: 'andris@node.ee',
-        dc: '',
-        signatureAlgorithm: 'sha256WithRSAEncryption',
-        publicKeyAlgorithm: 'rsaEncryption',
-        publicKeySize: '2048 bit'
+        country: "EE",
+        state: "Harjumaa",
+        locality: "Tallinn",
+        organization: "Node.ee",
+        organizationUnit: "test",
+        commonName: "www.node.ee",
+        emailAddress: "andris@node.ee",
+        dc: "",
+        signatureAlgorithm: "sha256WithRSAEncryption",
+        publicKeyAlgorithm: "rsaEncryption",
+        publicKeySize: "2048 bit"
       }
       pem.createCertificate(Object.create(certInfo), function (error, data) {
         hlp.checkError(error)
@@ -1041,7 +1040,7 @@ describe('General Tests', function () {
 
         pem.readCertificateInfo(data.certificate, function (error, data) {
           hlp.checkError(error);
-          ['validity', 'serial'].forEach(function (k) {
+          ["validity", "serial"].forEach(function (k) {
             if (data[k]) {
               delete data[k]
             }
@@ -1053,38 +1052,38 @@ describe('General Tests', function () {
       })
     })
 
-    it('Read CertInformation form ./test/fixtures/pem196.pem', function (done) {
+    it("Read CertInformation form ./test/fixtures/pem196.pem", function (done) {
       var certInfo = {
         issuer: {
-          country: 'BO',
-          state: '',
-          locality: '',
-          organization: 'ADSIB',
-          organizationUnit: '',
-          commonName: 'Entidad Certificadora Publica ADSIB',
-          dc: ''
+          country: "BO",
+          state: "",
+          locality: "",
+          organization: "ADSIB",
+          organizationUnit: "",
+          commonName: "Entidad Certificadora Publica ADSIB",
+          dc: ""
         },
-        serial: '2854046357827755658 (0x279b9c0a82d21e8a)',
-        '1.3.6.1.1.1.1.0': '#0C0734373132323836',
-        dnQualifier: 'CI',
-        country: 'BO',
-        state: '',
-        locality: '',
-        organization: '',
-        organizationUnit: '',
-        commonName: 'ILSE SILES BECERRA',
-        emailAddress: '',
-        dc: '',
+        serial: "2854046357827755658 (0x279b9c0a82d21e8a)",
+        "1.3.6.1.1.1.1.0": "#0C0734373132323836",
+        dnQualifier: "CI",
+        country: "BO",
+        state: "",
+        locality: "",
+        organization: "",
+        organizationUnit: "",
+        commonName: "ILSE SILES BECERRA",
+        emailAddress: "",
+        dc: "",
         validity: {
           start: 1524175291000,
           end: 1524434491000
         },
-        signatureAlgorithm: 'sha256WithRSAEncryption',
-        publicKeySize: '2048 bit',
-        publicKeyAlgorithm: 'rsaEncryption'
+        signatureAlgorithm: "sha256WithRSAEncryption",
+        publicKeySize: "2048 bit",
+        publicKeyAlgorithm: "rsaEncryption"
       }
 
-      var d = fs.readFileSync('./test/fixtures/pem196.pem').toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
+      var d = fs.readFileSync("./test/fixtures/pem196.pem").toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
       pem.readCertificateInfo(d, function (error, data) {
         if (data.serial) delete data.serial
         if (certInfo.serial) delete certInfo.serial
@@ -1095,44 +1094,44 @@ describe('General Tests', function () {
       })
     })
 
-    it('Read CertInformation from ./test/fixtures/ru_openssl.crt', function (done) {
+    it("Read CertInformation from ./test/fixtures/ru_openssl.crt", function (done) {
       var certInfo = {
         issuer: {
-          country: 'RU',
-          state: '',
-          locality: 'Москва',
-          organization: 'Моя компания',
-          organizationUnit: 'Моё подразделение',
-          commonName: 'Описание сайта',
-          dc: ''
+          country: "RU",
+          state: "",
+          locality: "Москва",
+          organization: "Моя компания",
+          organizationUnit: "Моё подразделение",
+          commonName: "Описание сайта",
+          dc: ""
         },
-        country: 'RU',
-        state: '',
-        locality: 'Москва',
-        organization: 'Моя компания',
-        organizationUnit: 'Моё подразделение',
-        commonName: 'Описание сайта',
-        emailAddress: 'envek@envek.name',
-        dc: '',
+        country: "RU",
+        state: "",
+        locality: "Москва",
+        organization: "Моя компания",
+        organizationUnit: "Моё подразделение",
+        commonName: "Описание сайта",
+        emailAddress: "envek@envek.name",
+        dc: "",
         validity: {
           end: 1568233615000,
           start: 1536697615000
         },
         san: {
           dns: [
-            'example.com',
-            '*.app.example.com',
-            'www.example.com'
+            "example.com",
+            "*.app.example.com",
+            "www.example.com"
           ],
           email: [],
           ip: []
         },
-        signatureAlgorithm: 'sha256WithRSAEncryption',
-        publicKeySize: '4096 bit',
-        publicKeyAlgorithm: 'rsaEncryption'
+        signatureAlgorithm: "sha256WithRSAEncryption",
+        publicKeySize: "4096 bit",
+        publicKeyAlgorithm: "rsaEncryption"
       }
 
-      var d = fs.readFileSync('./test/fixtures/ru_openssl.crt').toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
+      var d = fs.readFileSync("./test/fixtures/ru_openssl.crt").toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
       pem.readCertificateInfo(d, function (error, data) {
         if (data.serial) delete data.serial
         if (certInfo.serial) delete certInfo.serial
@@ -1143,45 +1142,45 @@ describe('General Tests', function () {
       })
     })
 
-    it('Read CertInformation from ./test/fixtures/cn_openssl.crt', function (done) {
+    it("Read CertInformation from ./test/fixtures/cn_openssl.crt", function (done) {
       var certInfo = {
         issuer: {
-          country: 'RU',
-          state: '',
-          locality: '兰克福',
-          organization: '法兰克福分行',
-          organizationUnit: '克福分',
-          commonName: '中国银行',
-          dc: ''
+          country: "RU",
+          state: "",
+          locality: "兰克福",
+          organization: "法兰克福分行",
+          organizationUnit: "克福分",
+          commonName: "中国银行",
+          dc: ""
         },
-        serial: '2854046357827755658 (0x279b9c0a82d21e8a)',
-        country: 'RU',
-        state: '',
-        locality: '兰克福',
-        organization: '法兰克福分行',
-        organizationUnit: '克福分',
-        commonName: '中国银行',
-        emailAddress: 'envek@envek.name',
-        dc: '',
+        serial: "2854046357827755658 (0x279b9c0a82d21e8a)",
+        country: "RU",
+        state: "",
+        locality: "兰克福",
+        organization: "法兰克福分行",
+        organizationUnit: "克福分",
+        commonName: "中国银行",
+        emailAddress: "envek@envek.name",
+        dc: "",
         validity: {
           end: 1568233543000,
           start: 1536697543000
         },
         san: {
           dns: [
-            'example.com',
-            '*.app.example.com',
-            'www.example.com'
+            "example.com",
+            "*.app.example.com",
+            "www.example.com"
           ],
           email: [],
           ip: []
         },
-        signatureAlgorithm: 'sha256WithRSAEncryption',
-        publicKeySize: '4096 bit',
-        publicKeyAlgorithm: 'rsaEncryption'
+        signatureAlgorithm: "sha256WithRSAEncryption",
+        publicKeySize: "4096 bit",
+        publicKeyAlgorithm: "rsaEncryption"
       }
 
-      var d = fs.readFileSync('./test/fixtures/cn_openssl.crt').toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
+      var d = fs.readFileSync("./test/fixtures/cn_openssl.crt").toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
       pem.readCertificateInfo(d, function (error, data) {
         if (data.serial) delete data.serial
         if (certInfo.serial) delete certInfo.serial
@@ -1193,46 +1192,46 @@ describe('General Tests', function () {
     })
   })
 
-  describe('#.checkCertificate tests', function () {
-    it('Check certificate file @ ./test/fixtures/test.key', function (done) {
-      var d = fs.readFileSync('./test/fixtures/test.key').toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
-      pem.checkCertificate(d, 'password', function (error, result) {
+  describe("#.checkCertificate tests", function () {
+    it("Check certificate file @ ./test/fixtures/test.key", function (done) {
+      var d = fs.readFileSync("./test/fixtures/test.key").toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
+      pem.checkCertificate(d, "password", function (error, result) {
         hlp.checkError(error)
-        expect(result).to.be.ok()
+        expect(result).toBeTruthy()
         done()
       })
     })
-    it('Check certificate file @ ./test/fixtures/test.crt', function (done) {
-      var d = fs.readFileSync('./test/fixtures/test.crt').toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
+    it("Check certificate file @ ./test/fixtures/test.crt", function (done) {
+      var d = fs.readFileSync("./test/fixtures/test.crt").toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
       pem.checkCertificate(d, function (error, result) {
         hlp.checkError(error)
-        expect(result).to.be.ok()
+        expect(result).toBeTruthy()
         done()
       })
     })
-    it('Check certificate file @ ./test/fixtures/test.csr', function (done) {
-      var d = fs.readFileSync('./test/fixtures/test.csr').toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
+    it("Check certificate file @ ./test/fixtures/test.csr", function (done) {
+      var d = fs.readFileSync("./test/fixtures/test.csr").toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
       pem.checkCertificate(d, function (error, result) {
         hlp.checkError(error)
-        expect(result).to.be.ok()
+        expect(result).toBeTruthy()
         done()
       })
     })
   })
 
-  describe('#.getModulus tests', function () {
-    it('Check matching modulus of  key and cert file', function (done) {
-      var f = fs.readFileSync('./test/fixtures/test.crt').toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
+  describe("#.getModulus tests", function () {
+    it("Check matching modulus of  key and cert file", function (done) {
+      var f = fs.readFileSync("./test/fixtures/test.crt").toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
       pem.getModulus(f, function (error, data1) {
         hlp.checkError(error)
         hlp.checkModulus(data1)
         hlp.checkTmpEmpty()
 
-        f = fs.readFileSync('./test/fixtures/test.key').toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
-        pem.getModulus(f, 'password', function (error, data2) {
+        f = fs.readFileSync("./test/fixtures/test.key").toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
+        pem.getModulus(f, "password", function (error, data2) {
           hlp.checkError(error)
           hlp.checkModulus(data2)
-          expect(data1.modulus).to.equal(data2.modulus)
+          expect(data1.modulus).toEqual(data2.modulus)
           hlp.checkTmpEmpty()
           done()
         })
@@ -1240,41 +1239,41 @@ describe('General Tests', function () {
     })
   })
 
-  describe('#.getDhparamInfo tests', function () {
-    it('Get DH param info', function (done) {
-      var dh = fs.readFileSync('./test/fixtures/test.dh').toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
+  describe("#.getDhparamInfo tests", function () {
+    it("Get DH param info", function (done) {
+      var dh = fs.readFileSync("./test/fixtures/test.dh").toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
       pem.getDhparamInfo(dh, function (error, data) {
         hlp.checkError(error)
         var size = (data && data.size) || 0
-        var prime = ((data && data.prime) || '').toString()
-        expect(size).to.be.a('number')
-        expect(size).to.equal(1024)
-        expect(prime).to.be.a('string')
-        expect(/([0-9a-f][0-9a-f]:)+[0-9a-f][0-9a-f]$/g.test(prime)).to.be.true()
+        var prime = ((data && data.prime) || "").toString()
+        expect(size).toBeType("number")
+        expect(size).toEqual(1024)
+        expect(prime).toBeType("string")
+        expect(/([0-9a-f][0-9a-f]:)+[0-9a-f][0-9a-f]$/g.test(prime)).toBeTrue()
         hlp.checkTmpEmpty()
         done()
       })
     })
   })
 
-  describe('#.readPkcs12 tests', function () {
-    it('Respond with ENOENT for missing PKCS12 file', function (
+  describe("#.readPkcs12 tests", function () {
+    it("Respond with ENOENT for missing PKCS12 file", function (
       done) {
-      pem.readPkcs12('/i/do/not/exist.p12', function (error) {
+      pem.readPkcs12("/i/do/not/exist.p12", function (error) {
         hlp.checkError(error, {
-          code: 'ENOENT'
+          code: "ENOENT"
         })
         done()
       })
     })
   })
 
-  describe('#.checkPkcs12 tests', function () {
-    it('Check PKCS12 keystore', function (done) {
-      var pkcs12 = fs.readFileSync('./test/fixtures/idsrv3test.pfx')
-      pem.checkPkcs12(pkcs12, 'idsrv3test', function (error, result) {
+  describe("#.checkPkcs12 tests", function () {
+    it("Check PKCS12 keystore", function (done) {
+      var pkcs12 = fs.readFileSync("./test/fixtures/idsrv3test.pfx")
+      pem.checkPkcs12(pkcs12, "idsrv3test", function (error, result) {
         hlp.checkError(error)
-        expect(result).to.be.ok()
+        expect(result).toBeTruthy()
         done()
       })
     })

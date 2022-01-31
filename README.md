@@ -32,37 +32,39 @@ number, like 4300, and use https://localhost:4300 to access your server.
 var https = require('https')
 var pem = require('pem')
 
-pem.createCertificate({ days: 1, selfSigned: true }, function (err, keys) {
-  if (err) {
-    throw err
-  }
-  https.createServer({ key: keys.clientKey, cert: keys.certificate }, function (req, res) {
-    res.end('o hai!')
-  }).listen(443)
+pem.createCertificate({days: 1, selfSigned: true}, function (err, keys) {
+    if (err) {
+        throw err
+    }
+    https.createServer({key: keys.clientKey, cert: keys.certificate}, function (req, res) {
+        res.end('o hai!')
+    }).listen(443)
 })
 ```
 
-###  Express
+### Express
+
 ```javascript
 var https = require('https')
 var pem = require('pem')
 var express = require('express')
 
-pem.createCertificate({ days: 1, selfSigned: true }, function (err, keys) {
-  if (err) {
-    throw err
-  }
-  var app = express()
+pem.createCertificate({days: 1, selfSigned: true}, function (err, keys) {
+    if (err) {
+        throw err
+    }
+    var app = express()
 
-  app.get('/', function (req, res) {
-    res.send('o hai!')
-  })
+    app.get('/', function (req, res) {
+        res.send('o hai!')
+    })
 
-  https.createServer({ key: keys.clientKey, cert: keys.certificate }, app).listen(443)
+    https.createServer({key: keys.clientKey, cert: keys.certificate}, app).listen(443)
 })
 ```
 
 ## API
+
 Please have a look into the [API documentation](https://dexus.github.io/pem/jsdoc/).
 
 _we had to clean up a bit_
@@ -282,9 +284,11 @@ Where
 
 ### Custom extensions config file
 
-You can specify custom OpenSSL extensions using the `config` or `extFile` options for `createCertificate` (or using `csrConfigFile` with `createCSR`).
+You can specify custom OpenSSL extensions using the `config` or `extFile` options for `createCertificate` (or
+using `csrConfigFile` with `createCSR`).
 
-`extFile` and `csrConfigFile` should be paths to the extension files. While `config` will generate a temporary file from the supplied file contents.
+`extFile` and `csrConfigFile` should be paths to the extension files. While `config` will generate a temporary file from
+the supplied file contents.
 
 If you specify `config` then the `v3_req` section of your config file will be used.
 
@@ -322,18 +326,21 @@ Note that `createCertificate` and `createCSR` supports the `altNames` option whi
 
 ### Setting openssl location
 
-In some systems the `openssl` executable might not be available by the default name or it is not included in $PATH. In this case you can define the location of the executable yourself as a one time action after you have loaded the pem module:
+In some systems the `openssl` executable might not be available by the default name or it is not included in $PATH. In
+this case you can define the location of the executable yourself as a one time action after you have loaded the pem
+module:
 
 ```javascript
 var pem = require('pem')
 pem.config({
-  pathOpenSSL: '/usr/local/bin/openssl'
+    pathOpenSSL: '/usr/local/bin/openssl'
 })
 // do something with the pem module
 ```
 
 ### :warning: CSR/Certificates with special chars
-For more details, search in `test/pem.spec.js`: `Create CSR with specialchars config file`
+
+For more details, search in `test/pem.spec.ts`: `Create CSR with specialchars config file`
 
 If you use special chars like:
 
@@ -341,9 +348,8 @@ If you use special chars like:
 -!$%^&*()_+|~=`{}[]:/;<>?,.@#
 ```
 
-You should know that the result mey have escaped characters when you read it in your application.
-Will try to fix this in the future, but not sure.
-
+You should know that the result mey have escaped characters when you read it in your application. Will try to fix this
+in the future, but not sure.
 
 ### Special thanks to
 

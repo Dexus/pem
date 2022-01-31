@@ -1,62 +1,179 @@
 "use strict"
-import {debug} from "../src/debug"
-import * as openssl from "../src/openssl"
-import chai, {expect} from "chai"
-import dirtyChai from "dirty-chai"
-const hlp = require("./pem.helper.js")
-chai.use(dirtyChai)
+import {env} from "process"
+import {debug} from "../src"
+import {exec, execBinary, getConfig as getConfig, spawn, spawn_async} from "../src/openssl"
+import {Code, ErrNull, StdOutErr} from "../src/types"
+import versions from "../versions.json"
+import * as hlp from "./pem.helper"
 
 
 // NOTE: we cover here only the test cases left in coverage report
 describe("openssl.js tests", function () {
-  this.timeout(300000)// 5 minutes
-  this.slow(2000)// 2 seconds
-
   describe("#.exec()", function () {
-    it("search string not found", function (done) {
-      openssl.exec(function (error) {
-        hlp.checkError(error, true)
-        done()
-      }, [
-        "dhparam",
-        "-outform",
-        "PEM",
-        1024
-      ], "DH PARAMETERS 1024")
+    test("search string not found", function () {
+      return new Promise((resolve, reject) => {
+        exec(function (error) {
+          hlp.checkError(error, true)
+          error && resolve(true)
+          reject(error)
+        }, [
+          "dhparam",
+          "-outform",
+          "PEM",
+          256
+        ], "DH PARAMETERS 1024")
+      })
+    })
+  })
+
+  describe("#.exec_async()", function () {
+    test.skip("search string not found", function () {
+      return new Promise((resolve, reject) => {
+        exec(function (error) {
+          hlp.checkError(error, true)
+          error && resolve(true)
+          reject(error)
+
+        }, [
+          "dhparam",
+          "-outform",
+          "PEM",
+          1024
+        ], "DH PARAMETERS 1024")
+      })
     })
   })
 
   describe("#.get(\"openSslVersion\")", function () {
-    it("get Version", function (done) {
-      debug("Settings", openssl.get())
-      if (process.env.LIBRARY && process.env.VERSION) {
-        expect(process.env.LIBRARY.toUpperCase()).to.equal(openssl.get("Vendor"))
-        expect(process.env.VERSION).to.equal(openssl.get("VendorVersion") + (openssl.get("VendorVersionBuildChar") || ""))
+    test("get Version", function (done) {
+      debug("Settings", getConfig())
+      if (!("LIBRARY" as string in env && "VERSION" as string in env)) {
+        done()
+        return
       }
+      expect(env.LIBRARY!.toUpperCase()).toEqual(getConfig("Vendor"))
+      expect(env.VERSION).toEqual(getConfig("VendorVersion") + (getConfig("VendorVersionBuildChar") || ""))
       done()
     })
   })
 
   describe("#.execBinary()", function () {
-    it("no tmpfiles parameter", function (done) {
-      openssl.execBinary(function (error, result) {
-        hlp.checkError(error)
-        expect(result).to.be.ok()
-        done()
-      }, [
-        "dhparam",
-        "-outform",
-        "PEM",
-        1024
-      ])
+    test("no tmpfiles parameter", function () {
+      return new Promise((resolve, reject) => {
+        execBinary(function (error, result) {
+          hlp.checkError(error)
+          if (error) reject(error)
+          expect(result).toBeDefined()
+          resolve(true)
+        }, [
+          "dhparam",
+          "-outform",
+          "PEM",
+          128
+        ])
+      })
+    })
+  })
+
+
+  describe("#.execBinary_async()", function () {
+    it.skip("no tmpfiles parameter", function () {
+      return new Promise((resolve, reject) => {
+        execBinary(function (error, result) {
+          hlp.checkError(error)
+          expect(result).toEqual(expect.anything())
+          error && reject(error)
+          resolve(true)
+        }, [
+          "dhparam",
+          "-outform",
+          "PEM",
+          1024
+        ])
+      })
     })
   })
 
 
   describe("#.spawn()", function () {
-    it.skip("error case [openssl return code 2]", function (done) {
-      // TODO; couldn't figure an example out
-      done()
+
+    const versionRegEx = new RegExp("^(OpenSSL|LibreSSL) (((\\d+).(\\d+)).(\\d+))([a-z]+)?")
+    test("get version", function () {
+      return new Promise((resolve, reject) => {
+
+        /* Once PEM is imported, the openSslVersion is set with this function. */
+        spawn(function (err: ErrNull, _code?: Code, stdout?: StdOutErr, stderr?: StdOutErr): void {
+          try {
+            const Vendors = ["OPENSSL", "LIBRESSL"]
+
+            const text = String(stdout) + "\n" + String(stderr) + "\n" + String(err)
+            const version = versionRegEx.exec(text)
+            expect(version).not.toBeNull()
+            expect(version!.length).toBeGreaterThanOrEqual(6)
+
+            const testVendor = version![1].toUpperCase()
+            expect(Vendors).toContain(testVendor)
+
+            const testVersion = (versions as any)[testVendor][version![2]]
+            expect(testVersion).not.toBeUndefined()
+            expect(testVersion).toBeTrue()
+
+            resolve(true)
+          } catch (error: any) {
+            reject(error)
+          }
+        }, ["version"], false)
+      })
+    })
+    test("get version (async)", async function () {
+
+      /* Once PEM is imported, the openSslVersion is set with this function. */
+      return spawn_async(["version"], false).then(({err, stdout, stderr}) => {
+        try {
+          const Vendors = ["OPENSSL", "LIBRESSL"]
+
+          const text = String(stdout) + "\n" + String(stderr) + "\n" + String(err)
+          const version = versionRegEx.exec(text)
+          expect(version).not.toBeNull()
+          expect(version!.length).toBeGreaterThanOrEqual(6)
+
+          const testVendor = version![1].toUpperCase()
+          expect(Vendors).toContain(testVendor)
+
+          const testVersion = (versions as any)[testVendor][version![2]]
+          expect(testVersion).not.toBeUndefined()
+          expect(testVersion).toBeTrue()
+          return
+        } catch (e) {
+          throw e
+        }
+      })
+    })
+    test("get '_version' - typo failure (async)", function () {
+
+      /* Once PEM is imported, the openSslVersion is set with this function. */
+      return expect(spawn_async(["_version"], false)).toReject()
+
+
+    })
+    test("get 'pkeyparam' - failure - timeout (async)", function () {
+
+      const run = spawn_async(["pkeyparam"], false)
+      run.catch((e) => {
+        console.log(e)
+        return e
+      })
+      /* Once PEM is imported, the openSslVersion is set with this function. */
+      return expect(run).toReject()
+
+
+    })
+    it.skip("error case [openssl return code 2]", function (): Promise<boolean> {
+      return new Promise((resolve) => {
+        expect(1).toEqual(1)
+        // TODO; couldn't figure an example out
+        resolve(true)
+      })
     })
     // TODO; I expect some more cases in here or code cleanup required
     /**

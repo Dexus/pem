@@ -79,7 +79,7 @@ if [ -n "$1" ] && [ -n "$2" ]; then
 
   case "${LIBRARY}" in
   "openssl")
-    ./Configure --prefix="${OPENSSL_DIR}" --openssldir="${OPENSSL_DIR}/ssl" no-shared ${OS_COMPILER} -fPIC -g ${OS_FLAGS} -static
+    ./Configure --prefix="${OPENSSL_DIR}" --openssldir="${OPENSSL_DIR}" no-shared ${OS_COMPILER} -fPIC -g ${OS_FLAGS} -static
     ;;
   "libressl")
     ./configure --prefix="${OPENSSL_DIR}" --disable-shared --with-pic
@@ -87,7 +87,7 @@ if [ -n "$1" ] && [ -n "$2" ]; then
   esac
 
   make -j$(nproc)
-  make install_sw
+  make install
 
   case "${LIBRARY}" in
   "openssl")

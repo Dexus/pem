@@ -97,7 +97,7 @@ exports.execBinary = execBinary;
  * Generically spawn openSSL, without processing the result
  *
  * @static
- * @param {CallbackErrCodeStdoutSdrerr}     callback Called with (error, exitCode, stdout, stderr)
+ * @param {CallbackErrCodeStdoutStderr}     callback Called with (error, exitCode, stdout, stderr)
  * @param {Array<string>}        params   The parameters to pass to openssl
  * @param {Boolean}      binary   Output of openssl is binary or text
  */
@@ -165,7 +165,7 @@ exports.spawn = spawn;
  * Wrapper for spawn method
  *
  * @static
- * @param {CallbackErrCodeStdoutSdrerr} callback Called with (error, exitCode, stdout, stderr)
+ * @param {CallbackErrCodeStdoutStderr} callback Called with (error, exitCode, stdout, stderr)
  * @param {Array<string>} params The parameters to pass to openssl
  * @param {Array<string>} [tmpfiles] list of temporary files
  * @param {Boolean} [binary] Output of openssl is binary or text
