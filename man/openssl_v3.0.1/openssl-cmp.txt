@@ -2,108 +2,108 @@ OPENSSL-CMP(1ossl)                  OpenSSL                 OPENSSL-CMP(1ossl)
 
 
 
-NNAAMMEE
+NAME
        openssl-cmp - Certificate Management Protocol (CMP, RFC 4210)
        application
 
-SSYYNNOOPPSSIISS
-       ooppeennssssll ccmmpp [--hheellpp] [--ccoonnffiigg _f_i_l_e_n_a_m_e] [--sseeccttiioonn _n_a_m_e_s] [--vveerrbboossiittyy
-       _l_e_v_e_l]
+SYNOPSIS
+       openssl cmp [-help] [-config filename] [-section names] [-verbosity
+       level]
 
        Generic message options:
 
-       [--ccmmdd _i_r_|_c_r_|_k_u_r_|_p_1_0_c_r_|_r_r_|_g_e_n_m] [--iinnffoottyyppee _n_a_m_e] [--ggeenniinnffoo _O_I_D_:_i_n_t_:_N]
+       [-cmd ir|cr|kur|p10cr|rr|genm] [-infotype name] [-geninfo OID:int:N]
 
        Certificate enrollment options:
 
-       [--nneewwkkeeyy _f_i_l_e_n_a_m_e|_u_r_i] [--nneewwkkeeyyppaassss _a_r_g] [--ssuubbjjeecctt _n_a_m_e] [--iissssuueerr _n_a_m_e]
-       [--ddaayyss _n_u_m_b_e_r] [--rreeqqeexxttss _n_a_m_e] [--ssaannss _s_p_e_c] [--ssaann__nnooddeeffaauulltt] [--ppoolliicciieess
-       _n_a_m_e] [--ppoolliiccyy__ooiiddss _n_a_m_e_s] [--ppoolliiccyy__ooiiddss__ccrriittiiccaall] [--ppooppoo _n_u_m_b_e_r] [--ccssrr
-       _f_i_l_e_n_a_m_e] [--oouutt__ttrruusstteedd _f_i_l_e_n_a_m_e_s|_u_r_i_s] [--iimmpplliicciitt__ccoonnffiirrmm]
-       [--ddiissaabbllee__ccoonnffiirrmm] [--cceerrttoouutt _f_i_l_e_n_a_m_e] [--cchhaaiinnoouutt _f_i_l_e_n_a_m_e]
+       [-newkey filename|uri] [-newkeypass arg] [-subject name] [-issuer name]
+       [-days number] [-reqexts name] [-sans spec] [-san_nodefault] [-policies
+       name] [-policy_oids names] [-policy_oids_critical] [-popo number] [-csr
+       filename] [-out_trusted filenames|uris] [-implicit_confirm]
+       [-disable_confirm] [-certout filename] [-chainout filename]
 
        Certificate enrollment and revocation options:
 
-       [--oollddcceerrtt _f_i_l_e_n_a_m_e|_u_r_i] [--rreevvrreeaassoonn _n_u_m_b_e_r]
+       [-oldcert filename|uri] [-revreason number]
 
        Message transfer options:
 
-       [--sseerrvveerr _[_h_t_t_p_[_s_]_:_/_/_]_[_u_s_e_r_i_n_f_o_@_]_h_o_s_t_[_:_p_o_r_t_]_[_/_p_a_t_h_]_[_?_q_u_e_r_y_]_[_#_f_r_a_g_m_e_n_t_]]
-       [--pprrooxxyy _[_h_t_t_p_[_s_]_:_/_/_]_[_u_s_e_r_i_n_f_o_@_]_h_o_s_t_[_:_p_o_r_t_]_[_/_p_a_t_h_]_[_?_q_u_e_r_y_]_[_#_f_r_a_g_m_e_n_t_]]
-       [--nnoo__pprrooxxyy _a_d_d_r_e_s_s_e_s] [--rreecciippiieenntt _n_a_m_e] [--ppaatthh _r_e_m_o_t_e___p_a_t_h]
-       [--kkeeeepp__aalliivvee _v_a_l_u_e] [--mmssgg__ttiimmeeoouutt _s_e_c_o_n_d_s] [--ttoottaall__ttiimmeeoouutt _s_e_c_o_n_d_s]
+       [-server [http[s]://][userinfo@]host[:port][/path][?query][#fragment]]
+       [-proxy [http[s]://][userinfo@]host[:port][/path][?query][#fragment]]
+       [-no_proxy addresses] [-recipient name] [-path remote_path]
+       [-keep_alive value] [-msg_timeout seconds] [-total_timeout seconds]
 
        Server authentication options:
 
-       [--ttrruusstteedd _f_i_l_e_n_a_m_e_s|_u_r_i_s] [--uunnttrruusstteedd _f_i_l_e_n_a_m_e_s|_u_r_i_s] [--ssrrvvcceerrtt
-       _f_i_l_e_n_a_m_e|_u_r_i] [--eexxppeecctt__sseennddeerr _n_a_m_e] [--iiggnnoorree__kkeeyyuussaaggee]
-       [--uunnpprrootteecctteedd__eerrrroorrss] [--eexxttrraacceerrttssoouutt _f_i_l_e_n_a_m_e] [--ccaacceerrttssoouutt _f_i_l_e_n_a_m_e]
+       [-trusted filenames|uris] [-untrusted filenames|uris] [-srvcert
+       filename|uri] [-expect_sender name] [-ignore_keyusage]
+       [-unprotected_errors] [-extracertsout filename] [-cacertsout filename]
 
        Client authentication and protection options:
 
-       [--rreeff _v_a_l_u_e] [--sseeccrreett _a_r_g] [--cceerrtt _f_i_l_e_n_a_m_e|_u_r_i] [--oowwnn__ttrruusstteedd
-       _f_i_l_e_n_a_m_e_s|_u_r_i_s] [--kkeeyy _f_i_l_e_n_a_m_e|_u_r_i] [--kkeeyyppaassss _a_r_g] [--ddiiggeesstt _n_a_m_e] [--mmaacc
-       _n_a_m_e] [--eexxttrraacceerrttss _f_i_l_e_n_a_m_e_s|_u_r_i_s] [--uunnpprrootteecctteedd__rreeqquueessttss]
+       [-ref value] [-secret arg] [-cert filename|uri] [-own_trusted
+       filenames|uris] [-key filename|uri] [-keypass arg] [-digest name] [-mac
+       name] [-extracerts filenames|uris] [-unprotected_requests]
 
        Credentials format options:
 
-       [--cceerrttffoorrmm _P_E_M_|_D_E_R] [--kkeeyyffoorrmm _P_E_M_|_D_E_R_|_P_1_2_|_E_N_G_I_N_E] [--ootthheerrppaassss _a_r_g]
-       [--eennggiinnee _i_d] [--pprroovviiddeerr _n_a_m_e] [--pprroovviiddeerr--ppaatthh _p_a_t_h] [--pprrooppqquueerryy _p_r_o_p_q]
+       [-certform PEM|DER] [-keyform PEM|DER|P12|ENGINE] [-otherpass arg]
+       [-engine id] [-provider name] [-provider-path path] [-propquery propq]
 
        Random state options:
 
-       [--rraanndd _f_i_l_e_s] [--wwrriitteerraanndd _f_i_l_e]
+       [-rand files] [-writerand file]
 
        TLS connection options:
 
-       [--ttllss__uusseedd] [--ttllss__cceerrtt _f_i_l_e_n_a_m_e|_u_r_i] [--ttllss__kkeeyy _f_i_l_e_n_a_m_e|_u_r_i]
-       [--ttllss__kkeeyyppaassss _a_r_g] [--ttllss__eexxttrraa _f_i_l_e_n_a_m_e_s|_u_r_i_s] [--ttllss__ttrruusstteedd
-       _f_i_l_e_n_a_m_e_s|_u_r_i_s] [--ttllss__hhoosstt _n_a_m_e]
+       [-tls_used] [-tls_cert filename|uri] [-tls_key filename|uri]
+       [-tls_keypass arg] [-tls_extra filenames|uris] [-tls_trusted
+       filenames|uris] [-tls_host name]
 
        Client-side debugging options:
 
-       [--bbaattcchh] [--rreeppeeaatt _n_u_m_b_e_r] [--rreeqqiinn _f_i_l_e_n_a_m_e_s] [--rreeqqiinn__nneeww__ttiidd] [--rreeqqoouutt
-       _f_i_l_e_n_a_m_e_s] [--rrssppiinn _f_i_l_e_n_a_m_e_s] [--rrssppoouutt _f_i_l_e_n_a_m_e_s] [--uussee__mmoocckk__ssrrvv]
+       [-batch] [-repeat number] [-reqin filenames] [-reqin_new_tid] [-reqout
+       filenames] [-rspin filenames] [-rspout filenames] [-use_mock_srv]
 
        Mock server options:
 
-       [--ppoorrtt _n_u_m_b_e_r] [--mmaaxx__mmssggss _n_u_m_b_e_r] [--ssrrvv__rreeff _v_a_l_u_e] [--ssrrvv__sseeccrreett _a_r_g]
-       [--ssrrvv__cceerrtt _f_i_l_e_n_a_m_e|_u_r_i] [--ssrrvv__kkeeyy _f_i_l_e_n_a_m_e|_u_r_i] [--ssrrvv__kkeeyyppaassss _a_r_g]
-       [--ssrrvv__ttrruusstteedd _f_i_l_e_n_a_m_e_s|_u_r_i_s] [--ssrrvv__uunnttrruusstteedd _f_i_l_e_n_a_m_e_s|_u_r_i_s]
-       [--rrsspp__cceerrtt _f_i_l_e_n_a_m_e|_u_r_i] [--rrsspp__eexxttrraacceerrttss _f_i_l_e_n_a_m_e_s|_u_r_i_s] [--rrsspp__ccaappuubbss
-       _f_i_l_e_n_a_m_e_s|_u_r_i_s] [--ppoollll__ccoouunntt _n_u_m_b_e_r] [--cchheecckk__aafftteerr _n_u_m_b_e_r]
-       [--ggrraanntt__iimmpplliicciittccoonnff] [--ppkkiissttaattuuss _n_u_m_b_e_r] [--ffaaiilluurree _n_u_m_b_e_r]
-       [--ffaaiilluurreebbiittss _n_u_m_b_e_r] [--ssttaattuussssttrriinngg _a_r_g] [--sseenndd__eerrrroorr]
-       [--sseenndd__uunnpprrootteecctteedd] [--sseenndd__uunnpprroott__eerrrr] [--aacccceepptt__uunnpprrootteecctteedd]
-       [--aacccceepptt__uunnpprroott__eerrrr] [--aacccceepptt__rraavveerriiffiieedd]
+       [-port number] [-max_msgs number] [-srv_ref value] [-srv_secret arg]
+       [-srv_cert filename|uri] [-srv_key filename|uri] [-srv_keypass arg]
+       [-srv_trusted filenames|uris] [-srv_untrusted filenames|uris]
+       [-rsp_cert filename|uri] [-rsp_extracerts filenames|uris] [-rsp_capubs
+       filenames|uris] [-poll_count number] [-check_after number]
+       [-grant_implicitconf] [-pkistatus number] [-failure number]
+       [-failurebits number] [-statusstring arg] [-send_error]
+       [-send_unprotected] [-send_unprot_err] [-accept_unprotected]
+       [-accept_unprot_err] [-accept_raverified]
 
        Certificate verification options, for both CMP and TLS:
 
-       [--aallllooww__pprrooxxyy__cceerrttss] [--aattttiimmee _t_i_m_e_s_t_a_m_p] [--nnoo__cchheecckk__ttiimmee]
-       [--cchheecckk__ssss__ssiigg] [--ccrrll__cchheecckk] [--ccrrll__cchheecckk__aallll] [--eexxpplliicciitt__ppoolliiccyy]
-       [--eexxtteennddeedd__ccrrll] [--iiggnnoorree__ccrriittiiccaall] [--iinnhhiibbiitt__aannyy] [--iinnhhiibbiitt__mmaapp]
-       [--ppaarrttiiaall__cchhaaiinn] [--ppoolliiccyy _a_r_g] [--ppoolliiccyy__cchheecckk] [--ppoolliiccyy__pprriinntt]
-       [--ppuurrppoossee _p_u_r_p_o_s_e] [--ssuuiitteeBB__112288] [--ssuuiitteeBB__112288__oonnllyy] [--ssuuiitteeBB__119922]
-       [--ttrruusstteedd__ffiirrsstt] [--nnoo__aalltt__cchhaaiinnss] [--uussee__ddeellttaass] [--aauutthh__lleevveell _n_u_m]
-       [--vveerriiffyy__ddeepptthh _n_u_m] [--vveerriiffyy__eemmaaiill _e_m_a_i_l] [--vveerriiffyy__hhoossttnnaammee _h_o_s_t_n_a_m_e]
-       [--vveerriiffyy__iipp _i_p] [--vveerriiffyy__nnaammee _n_a_m_e] [--xx550099__ssttrriicctt] [--iissssuueerr__cchheecckkss]
+       [-allow_proxy_certs] [-attime timestamp] [-no_check_time]
+       [-check_ss_sig] [-crl_check] [-crl_check_all] [-explicit_policy]
+       [-extended_crl] [-ignore_critical] [-inhibit_any] [-inhibit_map]
+       [-partial_chain] [-policy arg] [-policy_check] [-policy_print]
+       [-purpose purpose] [-suiteB_128] [-suiteB_128_only] [-suiteB_192]
+       [-trusted_first] [-no_alt_chains] [-use_deltas] [-auth_level num]
+       [-verify_depth num] [-verify_email email] [-verify_hostname hostname]
+       [-verify_ip ip] [-verify_name name] [-x509_strict] [-issuer_checks]
 
-DDEESSCCRRIIPPTTIIOONN
-       The ccmmpp command is a client implementation for the Certificate
+DESCRIPTION
+       The cmp command is a client implementation for the Certificate
        Management Protocol (CMP) as defined in RFC4210.  It can be used to
        request certificates from a CA server, update their certificates,
        request certificates to be revoked, and perform other types of CMP
        requests.
 
-OOPPTTIIOONNSS
-       --hheellpp
+OPTIONS
+       -help
            Display a summary of all options
 
-       --ccoonnffiigg _f_i_l_e_n_a_m_e
+       -config filename
            Configuration file to use.  An empty string "" means none.  Default
            filename is from the environment variable "OPENSSL_CONF".
 
-       --sseeccttiioonn _n_a_m_e_s
+       -section names
            Section(s) to use within config file defining CMP options.  An
            empty string "" means no specific section.  Default is "cmp".
 
@@ -114,13 +114,13 @@ OOPPTTIIOONNSS
            "[default]" section and finally the unnamed section (as far as
            present) can provide per-option fallback values.
 
-       --vveerrbboossiittyy _l_e_v_e_l
+       -verbosity level
            Level of verbosity for logging, error output, etc.  0 = EMERG, 1 =
            ALERT, 2 = CRIT, 3 = ERR, 4 = WARN, 5 = NOTE, 6 = INFO, 7 = DEBUG,
            8 = TRACE.  Defaults to 6 = INFO.
 
-   GGeenneerriicc mmeessssaaggee ooppttiioonnss
-       --ccmmdd _i_r_|_c_r_|_k_u_r_|_p_1_0_c_r_|_r_r_|_g_e_n_m
+   Generic message options
+       -cmd ir|cr|kur|p10cr|rr|genm
            CMP command to execute.  Currently implemented commands are:
 
            ir    - Initialization Request
@@ -130,60 +130,60 @@ OOPPTTIIOONNSS
            rr    - Revocation Request
            genm  - General Message
 
-           iirr requests initialization of an end entity into a PKI hierarchy by
+           ir requests initialization of an end entity into a PKI hierarchy by
            issuing a first certificate.
 
-           ccrr requests issuing an additional certificate for an end entity
+           cr requests issuing an additional certificate for an end entity
            already initialized to the PKI hierarchy.
 
-           pp1100ccrr requests issuing an additional certificate similarly to ccrr
+           p10cr requests issuing an additional certificate similarly to cr
            but using legacy PKCS#10 CSR format.
 
-           kkuurr requests a (key) update for an existing certificate.
+           kur requests a (key) update for an existing certificate.
 
-           rrrr requests revocation of an existing certificate.
+           rr requests revocation of an existing certificate.
 
-           ggeennmm requests information using a General Message, where optionally
-           included IInnffooTTyyppeeAAnnddVVaalluuees may be used to state which info is of
+           genm requests information using a General Message, where optionally
+           included InfoTypeAndValues may be used to state which info is of
            interest.  Upon receipt of the General Response, information about
-           all received ITAV iinnffooTTyyppees is printed to stdout.
+           all received ITAV infoTypes is printed to stdout.
 
-       --iinnffoottyyppee _n_a_m_e
-           Set InfoType name to use for requesting specific info in ggeennmm,
+       -infotype name
+           Set InfoType name to use for requesting specific info in genm,
            e.g., "signKeyPairTypes".
 
-       --ggeenniinnffoo _O_I_D_:_i_n_t_:_N
+       -geninfo OID:int:N
            generalInfo integer values to place in request PKIHeader with given
            OID, e.g., "1.2.3.4:int:56789".
 
-   CCeerrttiiffiiccaattee eennrroollllmmeenntt ooppttiioonnss
-       --nneewwkkeeyy _f_i_l_e_n_a_m_e|_u_r_i
+   Certificate enrollment options
+       -newkey filename|uri
            The source of the private or public key for the certificate
            requested in Initialization Request (IR), Certification
            Request(CR), or Key Update Request (KUR).  Default is the public
-           key in the PKCS#10 CSR given with the --ccssrr option, if any, or else
+           key in the PKCS#10 CSR given with the -csr option, if any, or else
            the current client key, if given.
 
-       --nneewwkkeeyyppaassss _a_r_g
-           Pass phrase source for the key given with the --nneewwkkeeyy option.  If
+       -newkeypass arg
+           Pass phrase source for the key given with the -newkey option.  If
            not given here, the password will be prompted for if needed.
 
-           For more information about the format of _a_r_g see
-           ooppeennssssll--ppaasssspphhrraassee--ooppttiioonnss(1).
+           For more information about the format of arg see
+           openssl-passphrase-options(1).
 
-       --ssuubbjjeecctt _n_a_m_e
+       -subject name
            X509 Distinguished Name (DN) of subject to use in the requested
            certificate template.  For KUR, it defaults to the public key in
-           the PKCS#10 CSR given with the --ccssrr option, if provided, or of the
-           reference certificate (see --oollddcceerrtt) if provided.  This default is
+           the PKCS#10 CSR given with the -csr option, if provided, or of the
+           reference certificate (see -oldcert) if provided.  This default is
            used for IR and CR only if no SANs are set.  If the NULL-DN ("/")
            is given then no subject is placed in the template.
 
-           If provided and neither --cceerrtt nor --oollddcceerrtt is given, the subject DN
+           If provided and neither -cert nor -oldcert is given, the subject DN
            is used as fallback sender of outgoing CMP messages.
 
            The argument must be formatted as
-           _/_t_y_p_e_0_=_v_a_l_u_e_0_/_t_y_p_e_1_=_v_a_l_u_e_1_/_t_y_p_e_2_=_._._..  Special characters may be
+           /type0=value0/type1=value1/type2=....  Special characters may be
            escaped by "\" (backslash); whitespace is retained.  Empty values
            are permitted, but the corresponding type will not be included.
            Giving a single "/" will lead to an empty sequence of RDNs (a NULL-
@@ -193,75 +193,75 @@ OOPPTTIIOONNSS
 
            "/DC=org/DC=OpenSSL/DC=users/UID=123456+CN=John Doe"
 
-       --iissssuueerr _n_a_m_e
+       -issuer name
            X509 issuer Distinguished Name (DN) of the CA server to place in
            the requested certificate template in IR/CR/KUR.  If the NULL-DN
            ("/") is given then no issuer is placed in the template.
 
-           If provided and neither --rreecciippiieenntt nor --ssrrvvcceerrtt is given, the
+           If provided and neither -recipient nor -srvcert is given, the
            issuer DN is used as fallback recipient of outgoing CMP messages.
 
            The argument must be formatted as
-           _/_t_y_p_e_0_=_v_a_l_u_e_0_/_t_y_p_e_1_=_v_a_l_u_e_1_/_t_y_p_e_2_=_._._..  For details see the
-           description of the --ssuubbjjeecctt option.
+           /type0=value0/type1=value1/type2=....  For details see the
+           description of the -subject option.
 
-       --ddaayyss _n_u_m_b_e_r
+       -days number
            Number of days the new certificate is requested to be valid for,
            counting from the current time of the host.  Also triggers the
            explicit request that the validity period starts from the current
            time (as seen by the host).
 
-       --rreeqqeexxttss _n_a_m_e
+       -reqexts name
            Name of section in OpenSSL config file defining certificate request
-           extensions.  If the --ccssrr option is present, these extensions
+           extensions.  If the -csr option is present, these extensions
            augment the extensions contained the given PKCS#10 CSR, overriding
            any extensions with same OIDs.
 
-       --ssaannss _s_p_e_c
+       -sans spec
            One or more IP addresses, DNS names, or URIs separated by commas or
            whitespace (where in the latter case the whole argument must be
            enclosed in "...")  to add as Subject Alternative Name(s) (SAN)
            certificate request extension.  If the special element "critical"
            is given the SANs are flagged as critical.  Cannot be used if any
-           Subject Alternative Name extension is set via --rreeqqeexxttss.
+           Subject Alternative Name extension is set via -reqexts.
 
-       --ssaann__nnooddeeffaauulltt
-           When Subject Alternative Names are not given via --ssaannss nor defined
-           via --rreeqqeexxttss, they are copied by default from the reference
-           certificate (see --oollddcceerrtt).  This can be disabled by giving the
-           --ssaann__nnooddeeffaauulltt option.
+       -san_nodefault
+           When Subject Alternative Names are not given via -sans nor defined
+           via -reqexts, they are copied by default from the reference
+           certificate (see -oldcert).  This can be disabled by giving the
+           -san_nodefault option.
 
-       --ppoolliicciieess _n_a_m_e
+       -policies name
            Name of section in OpenSSL config file defining policies to be set
            as certificate request extension.  This option cannot be used
-           together with --ppoolliiccyy__ooiiddss.
+           together with -policy_oids.
 
-       --ppoolliiccyy__ooiiddss _n_a_m_e_s
+       -policy_oids names
            One or more OID(s), separated by commas and/or whitespace (where in
            the latter case the whole argument must be enclosed in "...")  to
            add as certificate policies request extension.  This option cannot
-           be used together with --ppoolliicciieess.
+           be used together with -policies.
 
-       --ppoolliiccyy__ooiiddss__ccrriittiiccaall
-           Flag the policies given with --ppoolliiccyy__ooiiddss as critical.
+       -policy_oids_critical
+           Flag the policies given with -policy_oids as critical.
 
-       --ppooppoo _n_u_m_b_e_r
+       -popo number
            Proof-of-Possession (POPO) method to use for IR/CR/KUR; values:
            "-1"..<2> where "-1" = NONE, 0 = RAVERIFIED, 1 = SIGNATURE
            (default), 2 = KEYENC.
 
            Note that a signature-based POPO can only be produced if a private
-           key is provided via the --nneewwkkeeyy or --kkeeyy options.
+           key is provided via the -newkey or -key options.
 
-       --ccssrr _f_i_l_e_n_a_m_e
+       -csr filename
            PKCS#10 CSR in PEM or DER format containing a certificate request.
-           With --ccmmdd _p_1_0_c_r it is used directly in a legacy P10CR message.
-           When used with --ccmmdd _i_r, _c_r, or _k_u_r, it is transformed into the
-           respective regular CMP request.  It may also be used with --ccmmdd _r_r
+           With -cmd p10cr it is used directly in a legacy P10CR message.
+           When used with -cmd ir, cr, or kur, it is transformed into the
+           respective regular CMP request.  It may also be used with -cmd rr
            to specify the certificate to be revoked via the included subject
            name and public key.
 
-       --oouutt__ttrruusstteedd _f_i_l_e_n_a_m_e_s|_u_r_i_s
+       -out_trusted filenames|uris
            Trusted certificate(s) to use for validating the newly enrolled
            certificate.
 
@@ -269,43 +269,43 @@ OOPPTTIIOONNSS
            whitespace (where in the latter case the whole argument must be
            enclosed in "...").  Each source may contain multiple certificates.
 
-           The certificate verification options --vveerriiffyy__hhoossttnnaammee, --vveerriiffyy__iipp,
-           and --vveerriiffyy__eemmaaiill only affect the certificate verification enabled
+           The certificate verification options -verify_hostname, -verify_ip,
+           and -verify_email only affect the certificate verification enabled
            via this option.
 
-       --iimmpplliicciitt__ccoonnffiirrmm
+       -implicit_confirm
            Request implicit confirmation of newly enrolled certificates.
 
-       --ddiissaabbllee__ccoonnffiirrmm
+       -disable_confirm
            Do not send certificate confirmation message for newly enrolled
            certificate without requesting implicit confirmation to cope with
            broken servers not supporting implicit confirmation correctly.
-           WWAARRNNIINNGG:: This leads to behavior violating RFC 4210.
+           WARNING: This leads to behavior violating RFC 4210.
 
-       --cceerrttoouutt _f_i_l_e_n_a_m_e
+       -certout filename
            The file where the newly enrolled certificate should be saved.
 
-       --cchhaaiinnoouutt _f_i_l_e_n_a_m_e
+       -chainout filename
            The file where the chain of the newly enrolled certificate should
            be saved.
 
-   CCeerrttiiffiiccaattee eennrroollllmmeenntt aanndd rreevvooccaattiioonn ooppttiioonnss
-       --oollddcceerrtt _f_i_l_e_n_a_m_e|_u_r_i
+   Certificate enrollment and revocation options
+       -oldcert filename|uri
            The certificate to be updated (i.e., renewed or re-keyed) in Key
            Update Request (KUR) messages or to be revoked in Revocation
            Request (RR) messages.  For KUR the certificate to be updated
-           defaults to --cceerrtt, and the resulting certificate is called
-           _r_e_f_e_r_e_n_c_e _c_e_r_t_i_f_i_c_a_t_e.  For RR the certificate to be revoked can
-           also be specified using --ccssrr.
+           defaults to -cert, and the resulting certificate is called
+           reference certificate.  For RR the certificate to be revoked can
+           also be specified using -csr.
 
            The reference certificate, if any, is also used for deriving
            default subject DN and Subject Alternative Names and the default
            issuer entry in the requested certificate template of an IR/CR/KUR.
-           Its subject is used as sender of outgoing messages if --cceerrtt is not
+           Its subject is used as sender of outgoing messages if -cert is not
            given.  Its issuer is used as default recipient in CMP message
-           headers if neither --rreecciippiieenntt, --ssrrvvcceerrtt, nor --iissssuueerr is given.
+           headers if neither -recipient, -srvcert, nor -issuer is given.
 
-       --rreevvrreeaassoonn _n_u_m_b_e_r
+       -revreason number
            Set CRLReason to be included in revocation request (RR); values:
            0..10 or "-1" for none (which is the default).
 
@@ -325,34 +325,34 @@ OOPPTTIIOONNSS
                    aACompromise           (10)
                }
 
-   MMeessssaaggee ttrraannssffeerr ooppttiioonnss
-       --sseerrvveerr _[_h_t_t_p_[_s_]_:_/_/_]_[_u_s_e_r_i_n_f_o_@_]_h_o_s_t_[_:_p_o_r_t_]_[_/_p_a_t_h_]_[_?_q_u_e_r_y_]_[_#_f_r_a_g_m_e_n_t_]
+   Message transfer options
+       -server [http[s]://][userinfo@]host[:port][/path][?query][#fragment]
            The IP address or DNS hostname and optionally port of the CMP
            server to connect to using HTTP(S) transport.  The scheme "https"
-           may be given only if the --ttllss__uusseedd option is used.  In this case
+           may be given only if the -tls_used option is used.  In this case
            the default port is 443, else 80.  The optional userinfo and
            fragment components are ignored.  Any given query component is
            handled as part of the path component.  If a path is included it
-           provides the default value for the --ppaatthh option.
+           provides the default value for the -path option.
 
-       --pprrooxxyy _[_h_t_t_p_[_s_]_:_/_/_]_[_u_s_e_r_i_n_f_o_@_]_h_o_s_t_[_:_p_o_r_t_]_[_/_p_a_t_h_]_[_?_q_u_e_r_y_]_[_#_f_r_a_g_m_e_n_t_]
+       -proxy [http[s]://][userinfo@]host[:port][/path][?query][#fragment]
            The HTTP(S) proxy server to use for reaching the CMP server unless
-           --nnoo__pprrooxxyy applies, see below.  The proxy port defaults to 80 or 443
+           -no_proxy applies, see below.  The proxy port defaults to 80 or 443
            if the scheme is "https"; apart from that the optional "http://" or
            "https://" prefix is ignored (note that TLS may be selected by
-           --ttllss__uusseedd), as well as any path, userinfo, and query, and fragment
+           -tls_used), as well as any path, userinfo, and query, and fragment
            components.  Defaults to the environment variable "http_proxy" if
            set, else "HTTP_PROXY" in case no TLS is used, otherwise
            "https_proxy" if set, else "HTTPS_PROXY".
 
-       --nnoo__pprrooxxyy _a_d_d_r_e_s_s_e_s
+       -no_proxy addresses
            List of IP addresses and/or DNS names of servers not to use an
            HTTP(S) proxy for, separated by commas and/or whitespace (where in
            the latter case the whole argument must be enclosed in "...").
            Default is from the environment variable "no_proxy" if set, else
            "NO_PROXY".
 
-       --rreecciippiieenntt _n_a_m_e
+       -recipient name
            Distinguished Name (DN) to use in the recipient field of CMP
            request message headers, i.e., the CMP server (usually the
            addressed CA).
@@ -360,20 +360,20 @@ OOPPTTIIOONNSS
            The recipient field in the header of a CMP message is mandatory.
            If not given explicitly the recipient is determined in the
            following order: the subject of the CMP server certificate given
-           with the --ssrrvvcceerrtt option, the --iissssuueerr option, the issuer of the
-           certificate given with the --oollddcceerrtt option, the issuer of the CMP
-           client certificate (--cceerrtt option), as far as any of those is
+           with the -srvcert option, the -issuer option, the issuer of the
+           certificate given with the -oldcert option, the issuer of the CMP
+           client certificate (-cert option), as far as any of those is
            present, else the NULL-DN as last resort.
 
            The argument must be formatted as
-           _/_t_y_p_e_0_=_v_a_l_u_e_0_/_t_y_p_e_1_=_v_a_l_u_e_1_/_t_y_p_e_2_=_._._..  For details see the
-           description of the --ssuubbjjeecctt option.
+           /type0=value0/type1=value1/type2=....  For details see the
+           description of the -subject option.
 
-       --ppaatthh _r_e_m_o_t_e___p_a_t_h
+       -path remote_path
            HTTP path at the CMP server (aka CMP alias) to use for POST
-           requests.  Defaults to any path given with --sseerrvveerr, else "/".
+           requests.  Defaults to any path given with -server, else "/".
 
-       --kkeeeepp__aalliivvee _v_a_l_u_e
+       -keep_alive value
            If the given value is 0 then HTTP connections are not kept open
            after receiving a response, which is the default behavior for HTTP
            1.0.  If the value is 1 or 2 then persistent connections are
@@ -382,40 +382,40 @@ OOPPTTIIOONNSS
            occurs.  The default value is 1, which means preferring to keep the
            connection open.
 
-       --mmssgg__ttiimmeeoouutt _s_e_c_o_n_d_s
+       -msg_timeout seconds
            Number of seconds (or 0 for infinite) a CMP request-response
            message round trip is allowed to take before a timeout error is
-           returned.  Default is to use the --ttoottaall__ttiimmeeoouutt setting.
+           returned.  Default is to use the -total_timeout setting.
 
-       --ttoottaall__ttiimmeeoouutt _s_e_c_o_n_d_s
+       -total_timeout seconds
            Maximum number seconds an overall enrollment transaction may take,
            including attempts polling for certificates on "waiting" PKIStatus.
            Default is 0 (infinite).
 
-   SSeerrvveerr aauutthheennttiiccaattiioonn ooppttiioonnss
-       --ttrruusstteedd _f_i_l_e_n_a_m_e_s|_u_r_i_s
+   Server authentication options
+       -trusted filenames|uris
            When validating signature-based protection of CMP response
            messages, these are the CA certificate(s) to trust while checking
            certificate chains during CMP server authentication.  This option
-           gives more flexibility than the --ssrrvvcceerrtt option because the server-
+           gives more flexibility than the -srvcert option because the server-
            side CMP signer certificate is not pinned but may be any
            certificate for which a chain to one of the given trusted
            certificates can be constructed.
 
-           If no --ttrruusstteedd, --ssrrvvcceerrtt, and --sseeccrreett option is given then
+           If no -trusted, -srvcert, and -secret option is given then
            protected response messages from the server are not authenticated.
 
            Multiple sources may be given, separated by commas and/or
            whitespace (where in the latter case the whole argument must be
            enclosed in "...").  Each source may contain multiple certificates.
 
-           The certificate verification options --vveerriiffyy__hhoossttnnaammee, --vveerriiffyy__iipp,
-           and --vveerriiffyy__eemmaaiill have no effect on the certificate verification
+           The certificate verification options -verify_hostname, -verify_ip,
+           and -verify_email have no effect on the certificate verification
            enabled via this option.
 
-       --uunnttrruusstteedd _f_i_l_e_n_a_m_e_s|_u_r_i_s
+       -untrusted filenames|uris
            Non-trusted intermediate CA certificate(s).  Any extra certificates
-           given with the --cceerrtt option are appended to it.  All these
+           given with the -cert option are appended to it.  All these
            certificates may be useful for cert path construction for the CMP
            client certificate (to include in the extraCerts field of outgoing
            messages) and for the TLS client certificate (if TLS is enabled) as
@@ -426,39 +426,39 @@ OOPPTTIIOONNSS
            Multiple sources may be given, separated by commas and/or
            whitespace.  Each file may contain multiple certificates.
 
-       --ssrrvvcceerrtt _f_i_l_e_n_a_m_e|_u_r_i
+       -srvcert filename|uri
            The specific CMP server certificate to expect and directly trust
            (even if it is expired) when validating signature-based protection
-           of CMP response messages.  May be set alternatively to the --ttrruusstteedd
+           of CMP response messages.  May be set alternatively to the -trusted
            option to pin the accepted server.
 
            If set, the subject of the certificate is also used as default
            value for the recipient of CMP requests and as default value for
            the expected sender of incoming CMP messages.
 
-       --eexxppeecctt__sseennddeerr _n_a_m_e
+       -expect_sender name
            Distinguished Name (DN) expected in the sender field of incoming
-           CMP messages.  Defaults to the subject DN of the pinned --ssrrvvcceerrtt,
+           CMP messages.  Defaults to the subject DN of the pinned -srvcert,
            if any.
 
            This can be used to make sure that only a particular entity is
            accepted as CMP message signer, and attackers are not able to use
            arbitrary certificates of a trusted PKI hierarchy to fraudulently
            pose as a CMP server.  Note that this option gives slightly more
-           freedom than setting the --ssrrvvcceerrtt, which pins the server to the
+           freedom than setting the -srvcert, which pins the server to the
            holder of a particular certificate, while the expected sender name
            will continue to match after updates of the server cert.
 
            The argument must be formatted as
-           _/_t_y_p_e_0_=_v_a_l_u_e_0_/_t_y_p_e_1_=_v_a_l_u_e_1_/_t_y_p_e_2_=_._._..  For details see the
-           description of the --ssuubbjjeecctt option.
+           /type0=value0/type1=value1/type2=....  For details see the
+           description of the -subject option.
 
-       --iiggnnoorree__kkeeyyuussaaggee
+       -ignore_keyusage
            Ignore key usage restrictions in CMP signer certificates when
            validating signature-based protection of incoming CMP messages,
            else "digitalSignature" must be allowed for signer certificate.
 
-       --uunnpprrootteecctteedd__eerrrroorrss
+       -unprotected_errors
            Accept missing or invalid protection of negative responses from the
            server.  This applies to the following message types and contents:
 
@@ -470,7 +470,7 @@ OOPPTTIIOONNSS
 
            •   negative PKIConf messages
 
-           WWAARRNNIINNGG:: This setting leads to unspecified behavior and it is meant
+           WARNING: This setting leads to unspecified behavior and it is meant
            exclusively to allow interoperability with server implementations
            violating RFC 4210, e.g.:
 
@@ -485,39 +485,39 @@ OOPPTTIIOONNSS
 
            •   appendix D.4 shows PKIConf message having protection
 
-       --eexxttrraacceerrttssoouutt _f_i_l_e_n_a_m_e
+       -extracertsout filename
            The file where to save all certificates contained in the extraCerts
            field of the last received response message (except for pollRep and
            PKIConf).
 
-       --ccaacceerrttssoouutt _f_i_l_e_n_a_m_e
+       -cacertsout filename
            The file where to save any CA certificates contained in the caPubs
            field of the last received certificate response (i.e., IP, CP, or
            KUP) message.
 
-   CClliieenntt aauutthheennttiiccaattiioonn ooppttiioonnss
-       --rreeff _v_a_l_u_e
+   Client authentication options
+       -ref value
            Reference number/string/value to use as fallback senderKID; this is
-           required if no sender name can be determined from the --cceerrtt or
+           required if no sender name can be determined from the -cert or
            <-subject> options and is typically used when authenticating with
            pre-shared key (password-based MAC).
 
-       --sseeccrreett _a_r_g
+       -secret arg
            Prefer PBM-based message protection with given source of a secret
            value.  The secret is used for creating PBM-based protection of
            outgoing messages and (as far as needed) for validating PBM-based
            protection of incoming messages.  PBM stands for Password-Based
-           Message Authentication Code.  This takes precedence over the --cceerrtt
-           and --kkeeyy options.
+           Message Authentication Code.  This takes precedence over the -cert
+           and -key options.
 
-           For more information about the format of _a_r_g see
-           ooppeennssssll--ppaasssspphhrraassee--ooppttiioonnss(1).
+           For more information about the format of arg see
+           openssl-passphrase-options(1).
 
-       --cceerrtt _f_i_l_e_n_a_m_e|_u_r_i
+       -cert filename|uri
            The client's current CMP signer certificate.  Requires the
-           corresponding key to be given with --kkeeyy.  The subject of this
+           corresponding key to be given with -key.  The subject of this
            certificate will be used as sender of outgoing CMP messages, while
-           the subject of --oollddcceerrtt or --ssuubbjjeeccttNNaammee may provide fallback
+           the subject of -oldcert or -subjectName may provide fallback
            values.  The issuer of this certificate is used as one of the
            recipient fallback values and as fallback issuer entry in the
            certificate template of IR/CR/KUR.  When using signature-based
@@ -527,55 +527,55 @@ OOPPTTIIOONNSS
            Request (IR) messages this can be used for authenticating using an
            external entity certificate as defined in appendix E.7 of RFC 4210.
            For Key Update Request (KUR) messages this is also used as the
-           certificate to be updated if the --oollddcceerrtt option is not given.  If
+           certificate to be updated if the -oldcert option is not given.  If
            the file includes further certs, they are appended to the untrusted
            certs because they typically constitute the chain of the client
            certificate, which is included in the extraCerts field in
            signature-protected request messages.
 
-       --oowwnn__ttrruusstteedd _f_i_l_e_n_a_m_e_s|_u_r_i_s
+       -own_trusted filenames|uris
            If this list of certificates is provided then the chain built for
-           the client-side CMP signer certificate given with the --cceerrtt option
+           the client-side CMP signer certificate given with the -cert option
            is verified using the given certificates as trust anchors.
 
            Multiple sources may be given, separated by commas and/or
            whitespace (where in the latter case the whole argument must be
            enclosed in "...").  Each source may contain multiple certificates.
 
-           The certificate verification options --vveerriiffyy__hhoossttnnaammee, --vveerriiffyy__iipp,
-           and --vveerriiffyy__eemmaaiill have no effect on the certificate verification
+           The certificate verification options -verify_hostname, -verify_ip,
+           and -verify_email have no effect on the certificate verification
            enabled via this option.
 
-       --kkeeyy _f_i_l_e_n_a_m_e|_u_r_i
+       -key filename|uri
            The corresponding private key file for the client's current
-           certificate given in the --cceerrtt option.  This will be used for
-           signature-based message protection unless the --sseeccrreett option
-           indicating PBM or --uunnpprrootteecctteedd__rreeqquueessttss is given.
+           certificate given in the -cert option.  This will be used for
+           signature-based message protection unless the -secret option
+           indicating PBM or -unprotected_requests is given.
 
-       --kkeeyyppaassss _a_r_g
-           Pass phrase source for the private key given with the --kkeeyy option.
-           Also used for --cceerrtt and --oollddcceerrtt in case it is an encrypted PKCS#12
+       -keypass arg
+           Pass phrase source for the private key given with the -key option.
+           Also used for -cert and -oldcert in case it is an encrypted PKCS#12
            file.  If not given here, the password will be prompted for if
            needed.
 
-           For more information about the format of _a_r_g see
-           ooppeennssssll--ppaasssspphhrraassee--ooppttiioonnss(1).
+           For more information about the format of arg see
+           openssl-passphrase-options(1).
 
-       --ddiiggeesstt _n_a_m_e
+       -digest name
            Specifies name of supported digest to use in RFC 4210's MSG_SIG_ALG
            and as the one-way function (OWF) in MSG_MAC_ALG.  If applicable,
            this is used for message protection and Proof-of-Possession (POPO)
            signatures.  To see the list of supported digests, use "openssl
            list -digest-commands".  Defaults to "sha256".
 
-       --mmaacc _n_a_m_e
+       -mac name
            Specifies the name of the MAC algorithm in MSG_MAC_ALG.  To get the
            names of supported MAC algorithms use "openssl list
            -mac-algorithms" and possibly combine such a name with the name of
            a supported digest algorithm, e.g., hmacWithSHA256.  Defaults to
            "hmac-sha1" as per RFC 4210.
 
-       --eexxttrraacceerrttss _f_i_l_e_n_a_m_e_s|_u_r_i_s
+       -extracerts filenames|uris
            Certificates to append in the extraCerts field when sending
            messages.  They can be used as the default CMP signer certificate
            chain to include.
@@ -584,78 +584,78 @@ OOPPTTIIOONNSS
            whitespace (where in the latter case the whole argument must be
            enclosed in "...").  Each source may contain multiple certificates.
 
-       --uunnpprrootteecctteedd__rreeqquueessttss
+       -unprotected_requests
            Send messages without CMP-level protection.
 
-   CCrreeddeennttiiaallss ffoorrmmaatt ooppttiioonnss
-       --cceerrttffoorrmm _P_E_M_|_D_E_R
+   Credentials format options
+       -certform PEM|DER
            File format to use when saving a certificate to a file.  Default
            value is PEM.
 
-       --kkeeyyffoorrmm _P_E_M_|_D_E_R_|_P_1_2_|_E_N_G_I_N_E
+       -keyform PEM|DER|P12|ENGINE
            The format of the key input; unspecified by default.  See "Format
-           Options" in ooppeennssssll(1) for details.
+           Options" in openssl(1) for details.
 
-       --ootthheerrppaassss _a_r_g
-           Pass phrase source for certificate given with the --ttrruusstteedd,
-           --uunnttrruusstteedd, --oowwnn__ttrruusstteedd, --ssrrvvcceerrtt, --oouutt__ttrruusstteedd, --eexxttrraacceerrttss,
-           --ssrrvv__ttrruusstteedd, --ssrrvv__uunnttrruusstteedd, --rrsspp__eexxttrraacceerrttss, --rrsspp__ccaappuubbss,
-           --ttllss__eexxttrraa, and --ttllss__ttrruusstteedd options.  If not given here, the
+       -otherpass arg
+           Pass phrase source for certificate given with the -trusted,
+           -untrusted, -own_trusted, -srvcert, -out_trusted, -extracerts,
+           -srv_trusted, -srv_untrusted, -rsp_extracerts, -rsp_capubs,
+           -tls_extra, and -tls_trusted options.  If not given here, the
            password will be prompted for if needed.
 
-           For more information about the format of _a_r_g see
-           ooppeennssssll--ppaasssspphhrraassee--ooppttiioonnss(1).
+           For more information about the format of arg see
+           openssl-passphrase-options(1).
 
-       --eennggiinnee _i_d
-           See "Engine Options" in ooppeennssssll(1).  This option is deprecated.
+       -engine id
+           See "Engine Options" in openssl(1).  This option is deprecated.
 
            As an alternative to using this combination:
 
                -engine {engineid} -key {keyid} -keyform ENGINE
 
-           ... it's also possible to just give the key ID in URI form to --kkeeyy,
+           ... it's also possible to just give the key ID in URI form to -key,
            like this:
 
                -key org.openssl.engine:{engineid}:{keyid}
 
-           This applies to all options specifying keys: --kkeeyy, --nneewwkkeeyy, and
-           --ttllss__kkeeyy.
+           This applies to all options specifying keys: -key, -newkey, and
+           -tls_key.
 
-   PPrroovviiddeerr ooppttiioonnss
-       --pprroovviiddeerr _n_a_m_e
-       --pprroovviiddeerr--ppaatthh _p_a_t_h
-       --pprrooppqquueerryy _p_r_o_p_q
-           See "Provider Options" in ooppeennssssll(1), pprroovviiddeerr(7), and pprrooppeerrttyy(7).
+   Provider options
+       -provider name
+       -provider-path path
+       -propquery propq
+           See "Provider Options" in openssl(1), provider(7), and property(7).
 
-   RRaannddoomm ssttaattee ooppttiioonnss
-       --rraanndd _f_i_l_e_s, --wwrriitteerraanndd _f_i_l_e
-           See "Random State Options" in ooppeennssssll(1) for details.
+   Random state options
+       -rand files, -writerand file
+           See "Random State Options" in openssl(1) for details.
 
-   TTLLSS ccoonnnneeccttiioonn ooppttiioonnss
-       --ttllss__uusseedd
+   TLS connection options
+       -tls_used
            Enable using TLS (even when other TLS_related options are not set)
            when connecting to CMP server.
 
-       --ttllss__cceerrtt _f_i_l_e_n_a_m_e|_u_r_i
+       -tls_cert filename|uri
            Client's TLS certificate.  If the source includes further certs
-           they are used (along with --uunnttrruusstteedd certs) for constructing the
+           they are used (along with -untrusted certs) for constructing the
            client cert chain provided to the TLS server.
 
-       --ttllss__kkeeyy _f_i_l_e_n_a_m_e|_u_r_i
+       -tls_key filename|uri
            Private key for the client's TLS certificate.
 
-       --ttllss__kkeeyyppaassss _a_r_g
-           Pass phrase source for client's private TLS key --ttllss__kkeeyy.  Also
-           used for --ttllss__cceerrtt in case it is an encrypted PKCS#12 file.  If not
+       -tls_keypass arg
+           Pass phrase source for client's private TLS key -tls_key.  Also
+           used for -tls_cert in case it is an encrypted PKCS#12 file.  If not
            given here, the password will be prompted for if needed.
 
-           For more information about the format of _a_r_g see
-           ooppeennssssll--ppaasssspphhrraassee--ooppttiioonnss(1).
+           For more information about the format of arg see
+           openssl-passphrase-options(1).
 
-       --ttllss__eexxttrraa _f_i_l_e_n_a_m_e_s|_u_r_i_s
+       -tls_extra filenames|uris
            Extra certificates to provide to TLS server during TLS handshake
 
-       --ttllss__ttrruusstteedd _f_i_l_e_n_a_m_e_s|_u_r_i_s
+       -tls_trusted filenames|uris
            Trusted certificate(s) to use for validating the TLS server
            certificate.  This implies hostname validation.
 
@@ -663,25 +663,25 @@ OOPPTTIIOONNSS
            whitespace (where in the latter case the whole argument must be
            enclosed in "...").  Each source may contain multiple certificates.
 
-           The certificate verification options --vveerriiffyy__hhoossttnnaammee, --vveerriiffyy__iipp,
-           and --vveerriiffyy__eemmaaiill have no effect on the certificate verification
+           The certificate verification options -verify_hostname, -verify_ip,
+           and -verify_email have no effect on the certificate verification
            enabled via this option.
 
-       --ttllss__hhoosstt _n_a_m_e
+       -tls_host name
            Address to be checked during hostname validation.  This may be a
-           DNS name or an IP address.  If not given it defaults to the --sseerrvveerr
+           DNS name or an IP address.  If not given it defaults to the -server
            address.
 
-   CClliieenntt--ssiiddee ddeebbuuggggiinngg ooppttiioonnss
-       --bbaattcchh
+   Client-side debugging options
+       -batch
            Do not interactively prompt for input, for instance when a password
            is needed.  This can be useful for batch processing and testing.
 
-       --rreeppeeaatt _n_u_m_b_e_r
+       -repeat number
            Invoke the command the given positive number of times with the same
            parameters.  Default is one invocation.
 
-       --rreeqqiinn _f_i_l_e_n_a_m_e_s
+       -reqin filenames
            Take sequence of CMP requests from file(s).
 
            Multiple filenames may be given, separated by commas and/or
@@ -689,21 +689,21 @@ OOPPTTIIOONNSS
            enclosed in "...").  As many files are read as needed for a
            complete transaction.
 
-       --rreeqqiinn__nneeww__ttiidd
+       -reqin_new_tid
            Use a fresh transactionID for CMP request messages read using
-           --rreeqqiinn, which requires re-protecting them as far as they were
+           -reqin, which requires re-protecting them as far as they were
            protected before.  This may be needed in case the sequence of
            requests is reused and the CMP server complains that the
            transaction ID has already been used.
 
-       --rreeqqoouutt _f_i_l_e_n_a_m_e_s
+       -reqout filenames
            Save sequence of CMP requests to file(s).
 
            Multiple filenames may be given, separated by commas and/or
            whitespace.  As many files are written as needed to store the
            complete transaction.
 
-       --rrssppiinn _f_i_l_e_n_a_m_e_s
+       -rspin filenames
            Process sequence of CMP responses provided in file(s), skipping
            server.
 
@@ -711,128 +711,128 @@ OOPPTTIIOONNSS
            whitespace.  As many files are read as needed for the complete
            transaction.
 
-       --rrssppoouutt _f_i_l_e_n_a_m_e_s
+       -rspout filenames
            Save sequence of CMP responses to file(s).
 
            Multiple filenames may be given, separated by commas and/or
            whitespace.  As many files are written as needed to store the
            complete transaction.
 
-       --uussee__mmoocckk__ssrrvv
+       -use_mock_srv
            Use the internal mock server for testing the client.  This works at
            API level, bypassing HTTP transport.
 
-   MMoocckk sseerrvveerr ooppttiioonnss
-       --ppoorrtt _n_u_m_b_e_r
+   Mock server options
+       -port number
            Act as CMP HTTP server mock-up listening on the given port.
 
-       --mmaaxx__mmssggss _n_u_m_b_e_r
+       -max_msgs number
            Maximum number of CMP (request) messages the CMP HTTP server mock-
            up should handle, which must be nonnegative.  The default value is
            0, which means that no limit is imposed.  In any case the server
            terminates on internal errors, but not when it detects a CMP-level
            error that it can successfully answer with an error message.
 
-       --ssrrvv__rreeff _v_a_l_u_e
-           Reference value to use as senderKID of server in case no --ssrrvv__cceerrtt
+       -srv_ref value
+           Reference value to use as senderKID of server in case no -srv_cert
            is given.
 
-       --ssrrvv__sseeccrreett _a_r_g
+       -srv_secret arg
            Password source for server authentication with a pre-shared key
            (secret).
 
-       --ssrrvv__cceerrtt _f_i_l_e_n_a_m_e|_u_r_i
+       -srv_cert filename|uri
            Certificate of the server.
 
-       --ssrrvv__kkeeyy _f_i_l_e_n_a_m_e|_u_r_i
+       -srv_key filename|uri
            Private key used by the server for signing messages.
 
-       --ssrrvv__kkeeyyppaassss _a_r_g
+       -srv_keypass arg
            Server private key (and cert) file pass phrase source.
 
-       --ssrrvv__ttrruusstteedd _f_i_l_e_n_a_m_e_s|_u_r_i_s
+       -srv_trusted filenames|uris
            Trusted certificates for client authentication.
 
-           The certificate verification options --vveerriiffyy__hhoossttnnaammee, --vveerriiffyy__iipp,
-           and --vveerriiffyy__eemmaaiill have no effect on the certificate verification
+           The certificate verification options -verify_hostname, -verify_ip,
+           and -verify_email have no effect on the certificate verification
            enabled via this option.
 
-       --ssrrvv__uunnttrruusstteedd _f_i_l_e_n_a_m_e_s|_u_r_i_s
+       -srv_untrusted filenames|uris
            Intermediate CA certs that may be useful when validating client
            certificates.
 
-       --rrsspp__cceerrtt _f_i_l_e_n_a_m_e|_u_r_i
+       -rsp_cert filename|uri
            Certificate to be returned as mock enrollment result.
 
-       --rrsspp__eexxttrraacceerrttss _f_i_l_e_n_a_m_e_s|_u_r_i_s
+       -rsp_extracerts filenames|uris
            Extra certificates to be included in mock certification responses.
 
-       --rrsspp__ccaappuubbss _f_i_l_e_n_a_m_e_s|_u_r_i_s
+       -rsp_capubs filenames|uris
            CA certificates to be included in mock Initialization Response (IP)
            message.
 
-       --ppoollll__ccoouunntt _n_u_m_b_e_r
+       -poll_count number
            Number of times the client must poll before receiving a
            certificate.
 
-       --cchheecckk__aafftteerr _n_u_m_b_e_r
+       -check_after number
            The checkAfter value (number of seconds to wait) to include in poll
            response.
 
-       --ggrraanntt__iimmpplliicciittccoonnff
+       -grant_implicitconf
            Grant implicit confirmation of newly enrolled certificate.
 
-       --ppkkiissttaattuuss _n_u_m_b_e_r
+       -pkistatus number
            PKIStatus to be included in server response.  Valid range is 0
            (accepted) .. 6 (keyUpdateWarning).
 
-       --ffaaiilluurree _n_u_m_b_e_r
+       -failure number
            A single failure info bit number to be included in server response.
            Valid range is 0 (badAlg) .. 26 (duplicateCertReq).
 
-       --ffaaiilluurreebbiittss _n_u_m_b_e_r Number representing failure bits to be included in
+       -failurebits number Number representing failure bits to be included in
        server response. Valid range is 0 .. 2^27 - 1.
-       --ssttaattuussssttrriinngg _a_r_g
+       -statusstring arg
            Text to be included as status string in server response.
 
-       --sseenndd__eerrrroorr
+       -send_error
            Force server to reply with error message.
 
-       --sseenndd__uunnpprrootteecctteedd
+       -send_unprotected
            Send response messages without CMP-level protection.
 
-       --sseenndd__uunnpprroott__eerrrr
+       -send_unprot_err
            In case of negative responses, server shall send unprotected error
            messages, certificate responses (IP/CP/KUP), and revocation
            responses (RP).  WARNING: This setting leads to behavior violating
            RFC 4210.
 
-       --aacccceepptt__uunnpprrootteecctteedd
+       -accept_unprotected
            Accept missing or invalid protection of requests.
 
-       --aacccceepptt__uunnpprroott__eerrrr
+       -accept_unprot_err
            Accept unprotected error messages from client.
 
-       --aacccceepptt__rraavveerriiffiieedd
+       -accept_raverified
            Accept RAVERIFED as proof-of-possession (POPO).
 
-   CCeerrttiiffiiccaattee vveerriiffiiccaattiioonn ooppttiioonnss,, ffoorr bbootthh CCMMPP aanndd TTLLSS
-       --aallllooww__pprrooxxyy__cceerrttss, --aattttiimmee, --nnoo__cchheecckk__ttiimmee, --cchheecckk__ssss__ssiigg, --ccrrll__cchheecckk,
-       --ccrrll__cchheecckk__aallll, --eexxpplliicciitt__ppoolliiccyy, --eexxtteennddeedd__ccrrll, --iiggnnoorree__ccrriittiiccaall,
-       --iinnhhiibbiitt__aannyy, --iinnhhiibbiitt__mmaapp, --nnoo__aalltt__cchhaaiinnss, --ppaarrttiiaall__cchhaaiinn, --ppoolliiccyy,
-       --ppoolliiccyy__cchheecckk, --ppoolliiccyy__pprriinntt, --ppuurrppoossee, --ssuuiitteeBB__112288, --ssuuiitteeBB__112288__oonnllyy,
-       --ssuuiitteeBB__119922, --ttrruusstteedd__ffiirrsstt, --uussee__ddeellttaass, --aauutthh__lleevveell, --vveerriiffyy__ddeepptthh,
-       --vveerriiffyy__eemmaaiill, --vveerriiffyy__hhoossttnnaammee, --vveerriiffyy__iipp, --vveerriiffyy__nnaammee, --xx550099__ssttrriicctt
-       --iissssuueerr__cchheecckkss
+   Certificate verification options, for both CMP and TLS
+       -allow_proxy_certs, -attime, -no_check_time, -check_ss_sig, -crl_check,
+       -crl_check_all, -explicit_policy, -extended_crl, -ignore_critical,
+       -inhibit_any, -inhibit_map, -no_alt_chains, -partial_chain, -policy,
+       -policy_check, -policy_print, -purpose, -suiteB_128, -suiteB_128_only,
+       -suiteB_192, -trusted_first, -use_deltas, -auth_level, -verify_depth,
+       -verify_email, -verify_hostname, -verify_ip, -verify_name, -x509_strict
+       -issuer_checks
            Set various options of certificate chain verification.  See
-           "Verification Options" in ooppeennssssll--vveerriiffiiccaattiioonn--ooppttiioonnss(1) for
+           "Verification Options" in openssl-verification-options(1) for
            details.
 
-           The certificate verification options --vveerriiffyy__hhoossttnnaammee, --vveerriiffyy__iipp,
-           and --vveerriiffyy__eemmaaiill only affect the certificate verification enabled
-           via the --oouutt__ttrruusstteedd option.
+           The certificate verification options -verify_hostname, -verify_ip,
+           and -verify_email only affect the certificate verification enabled
+           via the -out_trusted option.
 
-NNOOTTEESS
+NOTES
        When setting up CMP configurations and experimenting with enrollment
        options typically various errors occur until the configuration is
        correct and complete.  When the CMP server reports an error the client
@@ -841,13 +841,13 @@ NNOOTTEESS
        the client will reject them, and thus their contents are not shown
        although they usually contain hints that would be helpful for
        diagnostics.  For assisting in such cases the CMP client offers a
-       workaround via the --uunnpprrootteecctteedd__eerrrroorrss option, which allows accepting
+       workaround via the -unprotected_errors option, which allows accepting
        such negative messages.
 
-EEXXAAMMPPLLEESS
-   SSiimmppllee eexxaammpplleess uussiinngg tthhee ddeeffaauulltt OOppeennSSSSLL ccoonnffiigguurraattiioonn ffiillee
+EXAMPLES
+   Simple examples using the default OpenSSL configuration file
        This CMP client implementation comes with demonstrative CMP sections in
-       the example configuration file _o_p_e_n_s_s_l_/_a_p_p_s_/_o_p_e_n_s_s_l_._c_n_f, which can be
+       the example configuration file openssl/apps/openssl.cnf, which can be
        used to interact conveniently with the Insta Demo CA.
 
        In order to enroll an initial certificate from that CA it is sufficient
@@ -858,28 +858,28 @@ EEXXAAMMPPLLEESS
          openssl genrsa -out insta.priv.pem
          openssl cmp -section insta
 
-       This should produce the file _i_n_s_t_a_._c_e_r_t_._p_e_m containing a new
-       certificate for the private key held in _i_n_s_t_a_._p_r_i_v_._p_e_m.  It can be
+       This should produce the file insta.cert.pem containing a new
+       certificate for the private key held in insta.priv.pem.  It can be
        viewed using, e.g.,
 
          openssl x509 -noout -text -in insta.cert.pem
 
        In case the network setup requires using an HTTP proxy it may be given
-       as usual via the environment variable hhttttpp__pprrooxxyy or via the --pprrooxxyy
+       as usual via the environment variable http_proxy or via the -proxy
        option in the configuration file or the CMP command-line argument
-       --pprrooxxyy, for example
+       -proxy, for example
 
          -proxy http://192.168.1.1:8080
 
        In the Insta Demo CA scenario both clients and the server may use the
-       pre-shared secret _i_n_s_t_a and the reference value _3_0_7_8 to authenticate to
+       pre-shared secret insta and the reference value 3078 to authenticate to
        each other.
 
        Alternatively, CMP messages may be protected in signature-based manner,
-       where the trust anchor in this case is _i_n_s_t_a_._c_a_._c_r_t and the client may
+       where the trust anchor in this case is insta.ca.crt and the client may
        use any certificate already obtained from that CA, as specified in the
-       [[ssiiggnnaattuurree]] section of the example configuration.  This can be used in
-       combination with the [[iinnssttaa]] section simply by
+       [signature] section of the example configuration.  This can be used in
+       combination with the [insta] section simply by
 
          openssl cmp -section insta,signature
 
@@ -888,7 +888,7 @@ EEXXAAMMPPLLEESS
 
          openssl cmp -section insta -cmd cr
 
-       or by referencing in addition the [[ccrr]] section of the example
+       or by referencing in addition the [cr] section of the example
        configuration:
 
          openssl cmp -section insta,cr
@@ -912,22 +912,22 @@ EEXXAAMMPPLLEESS
          openssl cmp -section insta,rr,signature
 
        Many more options can be given in the configuration file and/or on the
-       command line.  For instance, the --rreeqqeexxttss CLI option may refer to a
+       command line.  For instance, the -reqexts CLI option may refer to a
        section in the configuration file defining X.509 extensions to use in
-       certificate requests, such as "v3_req" in _o_p_e_n_s_s_l_/_a_p_p_s_/_o_p_e_n_s_s_l_._c_n_f:
+       certificate requests, such as "v3_req" in openssl/apps/openssl.cnf:
 
          openssl cmp -section insta,cr -reqexts v3_req
 
-   CCeerrttiiffiiccaattee eennrroollllmmeenntt
+   Certificate enrollment
        The following examples do not make use of a configuration file at
        first.  They assume that a CMP server can be contacted on the local TCP
-       port 80 and accepts requests under the alias _/_p_k_i_x_/.
+       port 80 and accepts requests under the alias /pkix/.
 
        For enrolling its very first certificate the client generates a client
        key and sends an initial request message to the local CMP server using
        a pre-shared secret key for mutual authentication.  In this example the
        client does not have the CA certificate yet, so we specify the name of
-       the CA with the --rreecciippiieenntt option and save any CA certificates that we
+       the CA with the -recipient option and save any CA certificates that we
        may receive in the "capubs.pem" file.
 
        In below command line usage examples the "\" at line ends is used just
@@ -940,7 +940,7 @@ EEXXAAMMPPLLEESS
            -newkey cl_key.pem -subject "/CN=MyName" \
            -cacertsout capubs.pem -certout cl_cert.pem
 
-   CCeerrttiiffiiccaattee uuppddaattee
+   Certificate update
        Then, when the client certificate and its related key pair needs to be
        updated, the client can send a key update request taking the certs in
        "capubs.pem" as trusted for authenticating the server and using the
@@ -956,19 +956,19 @@ EEXXAAMMPPLLEESS
 
        This command sequence can be repated as often as needed.
 
-   RReeqquueessttiinngg iinnffoorrmmaattiioonn ffrroomm CCMMPP sseerrvveerr
+   Requesting information from CMP server
        Requesting "all relevant information" with an empty General Message.
-       This prints information about all received ITAV iinnffooTTyyppees to stdout.
+       This prints information about all received ITAV infoTypes to stdout.
 
          openssl cmp -cmd genm -server 127.0.0.1/pkix/ -recipient "/CN=CMPserver" \
            -ref 1234 -secret pass:1234-5678
 
-   UUssiinngg aa ccuussttoomm ccoonnffiigguurraattiioonn ffiillee
+   Using a custom configuration file
        For CMP client invocations, in particular for certificate enrollment,
        usually many parameters need to be set, which is tedious and error-
        prone to do on the command line.  Therefore, the client offers the
        possibility to read options from sections of the OpenSSL config file,
-       usually called _o_p_e_n_s_s_l_._c_n_f.  The values found there can still be
+       usually called openssl.cnf.  The values found there can still be
        extended and even overridden by any subsequently loaded sections and on
        the command line.
 
@@ -1002,16 +1002,16 @@ EEXXAAMMPPLLEESS
 
          openssl cmp -section cmp,init -cmd genm
 
-SSEEEE AALLSSOO
-       ooppeennssssll--ggeennrrssaa(1), ooppeennssssll--eeccppaarraamm(1), ooppeennssssll--lliisstt(1), ooppeennssssll--rreeqq(1),
-       ooppeennssssll--xx550099(1), xx550099vv33__ccoonnffiigg(5)
+SEE ALSO
+       openssl-genrsa(1), openssl-ecparam(1), openssl-list(1), openssl-req(1),
+       openssl-x509(1), x509v3_config(5)
 
-HHIISSTTOORRYY
-       The ccmmpp application was added in OpenSSL 3.0.
+HISTORY
+       The cmp application was added in OpenSSL 3.0.
 
-       The --eennggiinnee ooppttiioonn was deprecated in OpenSSL 3.0.
+       The -engine option was deprecated in OpenSSL 3.0.
 
-CCOOPPYYRRIIGGHHTT
+COPYRIGHT
        Copyright 2007-2021 The OpenSSL Project Authors. All Rights Reserved.
 
        Licensed under the OpenSSL license (the "License").  You may not use

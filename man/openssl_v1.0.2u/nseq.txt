@@ -2,33 +2,33 @@ NSEQ(1)                             OpenSSL                            NSEQ(1)
 
 
 
-NNAAMMEE
+NAME
        openssl-nseq, nseq - create or examine a netscape certificate sequence
 
-SSYYNNOOPPSSIISS
-       ooppeennssssll nnsseeqq [--iinn ffiilleennaammee] [--oouutt ffiilleennaammee] [--ttoosseeqq]
+SYNOPSIS
+       openssl nseq [-in filename] [-out filename] [-toseq]
 
-DDEESSCCRRIIPPTTIIOONN
-       The nnsseeqq command takes a file containing a Netscape certificate
+DESCRIPTION
+       The nseq command takes a file containing a Netscape certificate
        sequence and prints out the certificates contained in it or takes a
        file of certificates and converts it into a Netscape certificate
        sequence.
 
-CCOOMMMMAANNDD OOPPTTIIOONNSS
-       --iinn ffiilleennaammee
+COMMAND OPTIONS
+       -in filename
            This specifies the input filename to read or standard input if this
            option is not specified.
 
-       --oouutt ffiilleennaammee
+       -out filename
            specifies the output filename or standard output by default.
 
-       --ttoosseeqq
+       -toseq
            normally a Netscape certificate sequence will be input and the
-           output is the certificates contained in it. With the --ttoosseeqq option
+           output is the certificates contained in it. With the -toseq option
            the situation is reversed: a Netscape certificate sequence is
            created from a file of certificates.
 
-EEXXAAMMPPLLEESS
+EXAMPLES
        Output the certificates in a Netscape certificate sequence
 
         openssl nseq -in nseq.pem -out certs.pem
@@ -37,8 +37,8 @@ EEXXAAMMPPLLEESS
 
         openssl nseq -in certs.pem -toseq -out nseq.pem
 
-NNOOTTEESS
-       The PPEEMM encoded form uses the same headers and footers as a
+NOTES
+       The PEM encoded form uses the same headers and footers as a
        certificate:
 
         -----BEGIN CERTIFICATE-----
@@ -50,7 +50,7 @@ NNOOTTEESS
        certificate enrollment.  It is used by Netscape certificate server for
        example.
 
-BBUUGGSS
+BUGS
        This program needs a few more options: like allowing DER or PEM input
        and output files and allowing multiple certificate files to be used.
 

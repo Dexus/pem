@@ -2,259 +2,259 @@ OCSP(1)                             OpenSSL                            OCSP(1)
 
 
 
-NNAAMMEE
+NAME
        openssl-ocsp, ocsp - Online Certificate Status Protocol utility
 
-SSYYNNOOPPSSIISS
-       ooppeennssssll ooccsspp [--hheellpp] [--oouutt ffiillee] [--iissssuueerr ffiillee] [--cceerrtt ffiillee] [--sseerriiaall
-       nn] [--ssiiggnneerr ffiillee] [--ssiiggnnkkeeyy ffiillee] [--ssiiggnn__ootthheerr ffiillee] [--nnoo__cceerrttss]
-       [--rreeqq__tteexxtt] [--rreesspp__tteexxtt] [--tteexxtt] [--rreeqqoouutt ffiillee] [--rreessppoouutt ffiillee] [--rreeqqiinn
-       ffiillee] [--rreessppiinn ffiillee] [--nnoonnccee] [--nnoo__nnoonnccee] [--uurrll UURRLL] [--hhoosstt hhoosstt::ppoorrtt]
-       [--hheeaaddeerr] [--ppaatthh] [--CCAAppaatthh ddiirr] [--CCAAffiillee ffiillee] [--nnoo--CCAAffiillee]
-       [--nnoo--CCAAppaatthh] [--aattttiimmee ttiimmeessttaammpp] [--cchheecckk__ssss__ssiigg] [--ccrrll__cchheecckk]
-       [--ccrrll__cchheecckk__aallll] [--eexxpplliicciitt__ppoolliiccyy] [--eexxtteennddeedd__ccrrll] [--iiggnnoorree__ccrriittiiccaall]
-       [--iinnhhiibbiitt__aannyy] [--iinnhhiibbiitt__mmaapp] [--nnoo__cchheecckk__ttiimmee] [--ppaarrttiiaall__cchhaaiinn]
-       [--ppoolliiccyy aarrgg] [--ppoolliiccyy__cchheecckk] [--ppoolliiccyy__pprriinntt] [--ppuurrppoossee ppuurrppoossee]
-       [--ssuuiitteeBB__112288] [--ssuuiitteeBB__112288__oonnllyy] [--ssuuiitteeBB__119922] [--ttrruusstteedd__ffiirrsstt]
-       [--nnoo__aalltt__cchhaaiinnss] [--uussee__ddeellttaass] [--aauutthh__lleevveell nnuumm] [--vveerriiffyy__ddeepptthh nnuumm]
-       [--vveerriiffyy__eemmaaiill eemmaaiill] [--vveerriiffyy__hhoossttnnaammee hhoossttnnaammee] [--vveerriiffyy__iipp iipp]
-       [--vveerriiffyy__nnaammee nnaammee] [--xx550099__ssttrriicctt] [--VVAAffiillee ffiillee] [--vvaalliiddiittyy__ppeerriioodd nn]
-       [--ssttaattuuss__aaggee nn] [--nnoovveerriiffyy] [--vveerriiffyy__ootthheerr ffiillee] [--ttrruusstt__ootthheerr]
-       [--nnoo__iinntteerrnn] [--nnoo__ssiiggnnaattuurree__vveerriiffyy] [--nnoo__cceerrtt__vveerriiffyy] [--nnoo__cchhaaiinn]
-       [--nnoo__cceerrtt__cchheecckkss] [--nnoo__eexxpplliicciitt] [--ppoorrtt nnuumm] [--iinnddeexx ffiillee] [--CCAA ffiillee]
-       [--rrssiiggnneerr ffiillee] [--rrkkeeyy ffiillee] [--rrootthheerr ffiillee] [--rreesspp__nnoo__cceerrttss] [--nnmmiinn nn]
-       [--nnddaayyss nn] [--rreesspp__kkeeyy__iidd] [--nnrreeqquueesstt nn] [--mmdd55||--sshhaa11||......]
+SYNOPSIS
+       openssl ocsp [-help] [-out file] [-issuer file] [-cert file] [-serial
+       n] [-signer file] [-signkey file] [-sign_other file] [-no_certs]
+       [-req_text] [-resp_text] [-text] [-reqout file] [-respout file] [-reqin
+       file] [-respin file] [-nonce] [-no_nonce] [-url URL] [-host host:port]
+       [-header] [-path] [-CApath dir] [-CAfile file] [-no-CAfile]
+       [-no-CApath] [-attime timestamp] [-check_ss_sig] [-crl_check]
+       [-crl_check_all] [-explicit_policy] [-extended_crl] [-ignore_critical]
+       [-inhibit_any] [-inhibit_map] [-no_check_time] [-partial_chain]
+       [-policy arg] [-policy_check] [-policy_print] [-purpose purpose]
+       [-suiteB_128] [-suiteB_128_only] [-suiteB_192] [-trusted_first]
+       [-no_alt_chains] [-use_deltas] [-auth_level num] [-verify_depth num]
+       [-verify_email email] [-verify_hostname hostname] [-verify_ip ip]
+       [-verify_name name] [-x509_strict] [-VAfile file] [-validity_period n]
+       [-status_age n] [-noverify] [-verify_other file] [-trust_other]
+       [-no_intern] [-no_signature_verify] [-no_cert_verify] [-no_chain]
+       [-no_cert_checks] [-no_explicit] [-port num] [-index file] [-CA file]
+       [-rsigner file] [-rkey file] [-rother file] [-resp_no_certs] [-nmin n]
+       [-ndays n] [-resp_key_id] [-nrequest n] [-md5|-sha1|...]
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        The Online Certificate Status Protocol (OCSP) enables applications to
        determine the (revocation) state of an identified certificate (RFC
        2560).
 
-       The ooccsspp command performs many common OCSP tasks. It can be used to
+       The ocsp command performs many common OCSP tasks. It can be used to
        print out requests and responses, create requests and send queries to
        an OCSP responder and behave like a mini OCSP server itself.
 
-OOPPTTIIOONNSS
+OPTIONS
        This command operates as either a client or a server.  The options are
        described below, divided into those two modes.
 
-   OOCCSSPP CClliieenntt OOppttiioonnss
-       --hheellpp
+   OCSP Client Options
+       -help
            Print out a usage message.
 
-       --oouutt ffiilleennaammee
+       -out filename
            specify output filename, default is standard output.
 
-       --iissssuueerr ffiilleennaammee
+       -issuer filename
            This specifies the current issuer certificate. This option can be
-           used multiple times. The certificate specified in ffiilleennaammee must be
-           in PEM format. This option MMUUSSTT come before any --cceerrtt options.
+           used multiple times. The certificate specified in filename must be
+           in PEM format. This option MUST come before any -cert options.
 
-       --cceerrtt ffiilleennaammee
-           Add the certificate ffiilleennaammee to the request. The issuer certificate
-           is taken from the previous iissssuueerr option, or an error occurs if no
+       -cert filename
+           Add the certificate filename to the request. The issuer certificate
+           is taken from the previous issuer option, or an error occurs if no
            issuer certificate is specified.
 
-       --sseerriiaall nnuumm
-           Same as the cceerrtt option except the certificate with serial number
-           nnuumm is added to the request. The serial number is interpreted as a
-           decimal integer unless preceded by 00xx. Negative integers can also
-           be specified by preceding the value by a -- sign.
+       -serial num
+           Same as the cert option except the certificate with serial number
+           num is added to the request. The serial number is interpreted as a
+           decimal integer unless preceded by 0x. Negative integers can also
+           be specified by preceding the value by a - sign.
 
-       --ssiiggnneerr ffiilleennaammee, --ssiiggnnkkeeyy ffiilleennaammee
-           Sign the OCSP request using the certificate specified in the ssiiggnneerr
-           option and the private key specified by the ssiiggnnkkeeyy option. If the
-           ssiiggnnkkeeyy option is not present then the private key is read from the
+       -signer filename, -signkey filename
+           Sign the OCSP request using the certificate specified in the signer
+           option and the private key specified by the signkey option. If the
+           signkey option is not present then the private key is read from the
            same file as the certificate. If neither option is specified then
            the OCSP request is not signed.
 
-       --ssiiggnn__ootthheerr ffiilleennaammee
+       -sign_other filename
            Additional certificates to include in the signed request.
 
-       --nnoonnccee, --nnoo__nnoonnccee
+       -nonce, -no_nonce
            Add an OCSP nonce extension to a request or disable OCSP nonce
-           addition.  Normally if an OCSP request is input using the rreeqqiinn
-           option no nonce is added: using the nnoonnccee option will force
+           addition.  Normally if an OCSP request is input using the reqin
+           option no nonce is added: using the nonce option will force
            addition of a nonce.  If an OCSP request is being created (using
-           cceerrtt and sseerriiaall options) a nonce is automatically added specifying
-           nnoo__nnoonnccee overrides this.
+           cert and serial options) a nonce is automatically added specifying
+           no_nonce overrides this.
 
-       --rreeqq__tteexxtt, --rreesspp__tteexxtt, --tteexxtt
+       -req_text, -resp_text, -text
            print out the text form of the OCSP request, response or both
            respectively.
 
-       --rreeqqoouutt ffiillee, --rreessppoouutt ffiillee
-           write out the DER encoded certificate request or response to ffiillee.
+       -reqout file, -respout file
+           write out the DER encoded certificate request or response to file.
 
-       --rreeqqiinn ffiillee, --rreessppiinn ffiillee
-           read OCSP request or response file from ffiillee. These option are
+       -reqin file, -respin file
+           read OCSP request or response file from file. These option are
            ignored if OCSP request or response creation is implied by other
-           options (for example with sseerriiaall, cceerrtt and hhoosstt options).
+           options (for example with serial, cert and host options).
 
-       --uurrll rreessppoonnddeerr__uurrll
+       -url responder_url
            specify the responder URL. Both HTTP and HTTPS (SSL/TLS) URLs can
            be specified.
 
-       --hhoosstt hhoossttnnaammee::ppoorrtt, --ppaatthh ppaatthhnnaammee
-           if the hhoosstt option is present then the OCSP request is sent to the
-           host hhoossttnnaammee on port ppoorrtt. ppaatthh specifies the HTTP path name to
-           use or "/" by default.  This is equivalent to specifying --uurrll with
+       -host hostname:port, -path pathname
+           if the host option is present then the OCSP request is sent to the
+           host hostname on port port. path specifies the HTTP path name to
+           use or "/" by default.  This is equivalent to specifying -url with
            scheme http:// and the given hostname, port, and pathname.
 
-       --hheeaaddeerr nnaammee==vvaalluuee
-           Adds the header nnaammee with the specified vvaalluuee to the OCSP request
+       -header name=value
+           Adds the header name with the specified value to the OCSP request
            that is sent to the responder.  This may be repeated.
 
-       --ttiimmeeoouutt sseeccoonnddss
+       -timeout seconds
            connection timeout to the OCSP responder in seconds
 
-       --CCAAffiillee ffiillee, --CCAAppaatthh ppaatthhnnaammee
+       -CAfile file, -CApath pathname
            file or pathname containing trusted CA certificates. These are used
            to verify the signature on the OCSP response.
 
-       --nnoo--CCAAffiillee
+       -no-CAfile
            Do not load the trusted CA certificates from the default file
            location
 
-       --nnoo--CCAAppaatthh
+       -no-CApath
            Do not load the trusted CA certificates from the default directory
            location
 
-       --aattttiimmee, --cchheecckk__ssss__ssiigg, --ccrrll__cchheecckk, --ccrrll__cchheecckk__aallll, --eexxpplliicciitt__ppoolliiccyy,
-       --eexxtteennddeedd__ccrrll, --iiggnnoorree__ccrriittiiccaall, --iinnhhiibbiitt__aannyy, --iinnhhiibbiitt__mmaapp,
-       --nnoo__aalltt__cchhaaiinnss, --nnoo__cchheecckk__ttiimmee, --ppaarrttiiaall__cchhaaiinn, --ppoolliiccyy, --ppoolliiccyy__cchheecckk,
-       --ppoolliiccyy__pprriinntt, --ppuurrppoossee, --ssuuiitteeBB__112288, --ssuuiitteeBB__112288__oonnllyy, --ssuuiitteeBB__119922,
-       --ttrruusstteedd__ffiirrsstt, --uussee__ddeellttaass, --aauutthh__lleevveell, --vveerriiffyy__ddeepptthh, --vveerriiffyy__eemmaaiill,
-       --vveerriiffyy__hhoossttnnaammee, --vveerriiffyy__iipp, --vveerriiffyy__nnaammee, --xx550099__ssttrriicctt
-           Set different certificate verification options.  See vveerriiffyy(1)
+       -attime, -check_ss_sig, -crl_check, -crl_check_all, -explicit_policy,
+       -extended_crl, -ignore_critical, -inhibit_any, -inhibit_map,
+       -no_alt_chains, -no_check_time, -partial_chain, -policy, -policy_check,
+       -policy_print, -purpose, -suiteB_128, -suiteB_128_only, -suiteB_192,
+       -trusted_first, -use_deltas, -auth_level, -verify_depth, -verify_email,
+       -verify_hostname, -verify_ip, -verify_name, -x509_strict
+           Set different certificate verification options.  See verify(1)
            manual page for details.
 
-       --vveerriiffyy__ootthheerr ffiillee
+       -verify_other file
            file containing additional certificates to search when attempting
            to locate the OCSP response signing certificate. Some responders
            omit the actual signer's certificate from the response: this option
            can be used to supply the necessary certificate in such cases.
 
-       --ttrruusstt__ootthheerr
-           the certificates specified by the --vveerriiffyy__ootthheerr option should be
+       -trust_other
+           the certificates specified by the -verify_other option should be
            explicitly trusted and no additional checks will be performed on
            them. This is useful when the complete responder certificate chain
            is not available or trusting a root CA is not appropriate.
 
-       --VVAAffiillee ffiillee
+       -VAfile file
            file containing explicitly trusted responder certificates.
-           Equivalent to the --vveerriiffyy__ootthheerr and --ttrruusstt__ootthheerr options.
+           Equivalent to the -verify_other and -trust_other options.
 
-       --nnoovveerriiffyy
+       -noverify
            don't attempt to verify the OCSP response signature or the nonce
            values. This option will normally only be used for debugging since
            it disables all verification of the responders certificate.
 
-       --nnoo__iinntteerrnn
+       -no_intern
            ignore certificates contained in the OCSP response when searching
            for the signers certificate. With this option the signers
-           certificate must be specified with either the --vveerriiffyy__ootthheerr or
-           --VVAAffiillee options.
+           certificate must be specified with either the -verify_other or
+           -VAfile options.
 
-       --nnoo__ssiiggnnaattuurree__vveerriiffyy
+       -no_signature_verify
            don't check the signature on the OCSP response. Since this option
            tolerates invalid signatures on OCSP responses it will normally
            only be used for testing purposes.
 
-       --nnoo__cceerrtt__vveerriiffyy
+       -no_cert_verify
            don't verify the OCSP response signers certificate at all. Since
            this option allows the OCSP response to be signed by any
            certificate it should only be used for testing purposes.
 
-       --nnoo__cchhaaiinn
+       -no_chain
            do not use certificates in the response as additional untrusted CA
            certificates.
 
-       --nnoo__eexxpplliicciitt
+       -no_explicit
            do not explicitly trust the root CA if it is set to be trusted for
            OCSP signing.
 
-       --nnoo__cceerrtt__cchheecckkss
+       -no_cert_checks
            don't perform any additional checks on the OCSP response signers
            certificate.  That is do not make any checks to see if the signers
            certificate is authorised to provide the necessary status
            information: as a result this option should only be used for
            testing purposes.
 
-       --vvaalliiddiittyy__ppeerriioodd nnsseecc, --ssttaattuuss__aaggee aaggee
+       -validity_period nsec, -status_age age
            these options specify the range of times, in seconds, which will be
            tolerated in an OCSP response. Each certificate status response
-           includes a nnoottBBeeffoorree time and an optional nnoottAAfftteerr time. The
+           includes a notBefore time and an optional notAfter time. The
            current time should fall between these two values, but the interval
            between the two times may be only a few seconds. In practice the
            OCSP responder and clients clocks may not be precisely synchronised
-           and so such a check may fail. To avoid this the --vvaalliiddiittyy__ppeerriioodd
+           and so such a check may fail. To avoid this the -validity_period
            option can be used to specify an acceptable error range in seconds,
            the default value is 5 minutes.
 
-           If the nnoottAAfftteerr time is omitted from a response then this means
+           If the notAfter time is omitted from a response then this means
            that new status information is immediately available. In this case
-           the age of the nnoottBBeeffoorree field is checked to see it is not older
-           than aaggee seconds old.  By default this additional check is not
+           the age of the notBefore field is checked to see it is not older
+           than age seconds old.  By default this additional check is not
            performed.
 
-       --[[ddiiggeesstt]]
+       -[digest]
            this option sets digest algorithm to use for certificate
            identification in the OCSP request. Any digest supported by the
-           OpenSSL ddggsstt command can be used.  The default is SHA-1. This
+           OpenSSL dgst command can be used.  The default is SHA-1. This
            option may be used multiple times to specify the digest used by
            subsequent certificate identifiers.
 
-   OOCCSSPP SSeerrvveerr OOppttiioonnss
-       --iinnddeexx iinnddeexxffiillee
-           iinnddeexxffiillee is a text index file in ccaa format containing certificate
+   OCSP Server Options
+       -index indexfile
+           indexfile is a text index file in ca format containing certificate
            revocation information.
 
-           If the iinnddeexx option is specified the ooccsspp utility is in responder
+           If the index option is specified the ocsp utility is in responder
            mode, otherwise it is in client mode. The request(s) the responder
-           processes can be either specified on the command line (using iissssuueerr
-           and sseerriiaall options), supplied in a file (using the rreeqqiinn option) or
-           via external OCSP clients (if ppoorrtt or uurrll is specified).
+           processes can be either specified on the command line (using issuer
+           and serial options), supplied in a file (using the reqin option) or
+           via external OCSP clients (if port or url is specified).
 
-           If the iinnddeexx option is present then the CCAA and rrssiiggnneerr options must
+           If the index option is present then the CA and rsigner options must
            also be present.
 
-       --CCAA ffiillee
+       -CA file
            CA certificate corresponding to the revocation information in
-           iinnddeexxffiillee.
+           indexfile.
 
-       --rrssiiggnneerr ffiillee
+       -rsigner file
            The certificate to sign OCSP responses with.
 
-       --rrootthheerr ffiillee
+       -rother file
            Additional certificates to include in the OCSP response.
 
-       --rreesspp__nnoo__cceerrttss
+       -resp_no_certs
            Don't include any certificates in the OCSP response.
 
-       --rreesspp__kkeeyy__iidd
+       -resp_key_id
            Identify the signer certificate using the key ID, default is to use
            the subject name.
 
-       --rrkkeeyy ffiillee
+       -rkey file
            The private key to sign OCSP responses with: if not present the
-           file specified in the rrssiiggnneerr option is used.
+           file specified in the rsigner option is used.
 
-       --ppoorrtt ppoorrttnnuumm
+       -port portnum
            Port to listen for OCSP requests on. The port may also be specified
-           using the uurrll option.
+           using the url option.
 
-       --nnrreeqquueesstt nnuummbbeerr
-           The OCSP server will exit after receiving nnuummbbeerr requests, default
+       -nrequest number
+           The OCSP server will exit after receiving number requests, default
            unlimited.
 
-       --nnmmiinn mmiinnuutteess, --nnddaayyss ddaayyss
+       -nmin minutes, -ndays days
            Number of minutes or days when fresh revocation information is
-           available: used in the nneexxttUUppddaattee field. If neither option is
-           present then the nneexxttUUppddaattee field is omitted meaning fresh
+           available: used in the nextUpdate field. If neither option is
+           present then the nextUpdate field is omitted meaning fresh
            revocation information is immediately available.
 
-OOCCSSPP RReessppoonnssee vveerriiffiiccaattiioonn..
+OCSP Response verification.
        OCSP Response follows the rules specified in RFC2560.
 
        Initially the OCSP responder certificate is located and the signature
@@ -264,7 +264,7 @@ OOCCSSPP RReessppoonnssee vveerriiffiiccaattiioonn..
        Then a normal certificate verify is performed on the OCSP responder
        certificate building up a certificate chain in the process. The
        locations of the trusted certificates used to build the chain can be
-       specified by the CCAAffiillee and CCAAppaatthh options or they will be looked for
+       specified by the CAfile and CApath options or they will be looked for
        in the standard OpenSSL certificates directory.
 
        If the initial verify fails then the OCSP verify process halts with an
@@ -279,7 +279,7 @@ OOCCSSPP RReessppoonnssee vveerriiffiiccaattiioonn..
        OCSPSigning extended key usage is present in the OCSP responder
        certificate then the OCSP verify succeeds.
 
-       Otherwise, if --nnoo__eexxpplliicciitt is nnoott set the root CA of the OCSP
+       Otherwise, if -no_explicit is not set the root CA of the OCSP
        responders CA is checked to see if it is trusted for OCSP signing. If
        it is the OCSP verify succeeds.
 
@@ -296,12 +296,12 @@ OOCCSSPP RReessppoonnssee vveerriiffiiccaattiioonn..
         openssl x509 -in ocspCA.pem -addtrust OCSPSigning -out trustedCA.pem
 
        Alternatively the responder certificate itself can be explicitly
-       trusted with the --VVAAffiillee option.
+       trusted with the -VAfile option.
 
-NNOOTTEESS
+NOTES
        As noted, most of the verify options are for testing or debugging
-       purposes.  Normally only the --CCAAppaatthh, --CCAAffiillee and (if the responder is
-       a 'global VA') --VVAAffiillee options need to be used.
+       purposes.  Normally only the -CApath, -CAfile and (if the responder is
+       a 'global VA') -VAfile options need to be used.
 
        The OCSP server is only useful for test and demonstration purposes: it
        is not really usable as a full OCSP responder. It contains only a very
@@ -311,10 +311,10 @@ NNOOTTEESS
        file format of revocation is also inefficient for large quantities of
        revocation data.
 
-       It is possible to run the ooccsspp application in responder mode via a CGI
-       script using the rreeqqiinn and rreessppoouutt options.
+       It is possible to run the ocsp application in responder mode via a CGI
+       script using the reqin and respout options.
 
-EEXXAAMMPPLLEESS
+EXAMPLES
        Create an OCSP request and write it to a file:
 
         openssl ocsp -issuer issuer.pem -cert c1.pem -cert c2.pem -reqout req.der
@@ -330,7 +330,7 @@ EEXXAAMMPPLLEESS
 
         openssl ocsp -respin resp.der -text -noverify
 
-       OCSP server on port 8888 using a standard ccaa configuration, and a
+       OCSP server on port 8888 using a standard ca configuration, and a
        separate responder certificate. All requests and responses are printed
        to a file.
 
@@ -353,10 +353,10 @@ EEXXAAMMPPLLEESS
         openssl ocsp -index demoCA/index.txt -rsigner rcert.pem -CA demoCA/cacert.pem
             -reqin req.der -respout resp.der
 
-HHIISSTTOORRYY
+HISTORY
        The -no_alt_chains options was first added to OpenSSL 1.1.0.
 
-CCOOPPYYRRIIGGHHTT
+COPYRIGHT
        Copyright 2001-2016 The OpenSSL Project Authors. All Rights Reserved.
 
        Licensed under the OpenSSL license (the "License").  You may not use

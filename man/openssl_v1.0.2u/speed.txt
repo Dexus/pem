@@ -2,28 +2,28 @@ SPEED(1)                            OpenSSL                           SPEED(1)
 
 
 
-NNAAMMEE
+NAME
        openssl-speed, speed - test library performance
 
-SSYYNNOOPPSSIISS
-       ooppeennssssll ssppeeeedd [--eennggiinnee iidd] [mmdd22] [mmddcc22] [mmdd55] [hhmmaacc] [sshhaa11] [rrmmdd116600]
-       [iiddeeaa--ccbbcc] [rrcc22--ccbbcc] [rrcc55--ccbbcc] [bbff--ccbbcc] [ddeess--ccbbcc] [ddeess--eeddee33] [rrcc44]
-       [rrssaa551122] [rrssaa11002244] [rrssaa22004488] [rrssaa44009966] [ddssaa551122] [ddssaa11002244] [ddssaa22004488]
-       [iiddeeaa] [rrcc22] [ddeess] [rrssaa] [bblloowwffiisshh]
+SYNOPSIS
+       openssl speed [-engine id] [md2] [mdc2] [md5] [hmac] [sha1] [rmd160]
+       [idea-cbc] [rc2-cbc] [rc5-cbc] [bf-cbc] [des-cbc] [des-ede3] [rc4]
+       [rsa512] [rsa1024] [rsa2048] [rsa4096] [dsa512] [dsa1024] [dsa2048]
+       [idea] [rc2] [des] [rsa] [blowfish]
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        This command is used to test the performance of cryptographic
        algorithms.
 
-OOPPTTIIOONNSS
-       --eennggiinnee iidd
-           specifying an engine (by its unique iidd string) will cause ssppeeeedd to
+OPTIONS
+       -engine id
+           specifying an engine (by its unique id string) will cause speed to
            attempt to obtain a functional reference to the specified engine,
            thus initialising it if needed. The engine will then be set as the
            default for all available algorithms.
 
-       [[zzeerroo oorr mmoorree tteesstt aallggoorriitthhmmss]]
-           If any options are given, ssppeeeedd tests those algorithms, otherwise
+       [zero or more test algorithms]
+           If any options are given, speed tests those algorithms, otherwise
            all of the above are tested.
 
 

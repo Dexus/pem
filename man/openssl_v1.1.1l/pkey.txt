@@ -2,96 +2,96 @@ PKEY(1)                             OpenSSL                            PKEY(1)
 
 
 
-NNAAMMEE
+NAME
        openssl-pkey, pkey - public or private key processing tool
 
-SSYYNNOOPPSSIISS
-       ooppeennssssll ppkkeeyy [--hheellpp] [--iinnffoorrmm PPEEMM||DDEERR] [--oouuttffoorrmm PPEEMM||DDEERR] [--iinn
-       ffiilleennaammee] [--ppaassssiinn aarrgg] [--oouutt ffiilleennaammee] [--ppaassssoouutt aarrgg] [--ttrraaddiittiioonnaall]
-       [--_cc_ii_pp_hh_ee_rr] [--tteexxtt] [--tteexxtt__ppuubb] [--nnoooouutt] [--ppuubbiinn] [--ppuubboouutt] [--eennggiinnee iidd]
-       [--cchheecckk] [--ppuubbcchheecckk]
+SYNOPSIS
+       openssl pkey [-help] [-inform PEM|DER] [-outform PEM|DER] [-in
+       filename] [-passin arg] [-out filename] [-passout arg] [-traditional]
+       [-cipher] [-text] [-text_pub] [-noout] [-pubin] [-pubout] [-engine id]
+       [-check] [-pubcheck]
 
-DDEESSCCRRIIPPTTIIOONN
-       The ppkkeeyy command processes public or private keys. They can be
+DESCRIPTION
+       The pkey command processes public or private keys. They can be
        converted between various forms and their components printed out.
 
-OOPPTTIIOONNSS
-       --hheellpp
+OPTIONS
+       -help
            Print out a usage message.
 
-       --iinnffoorrmm DDEERR||PPEEMM
+       -inform DER|PEM
            This specifies the input format DER or PEM. The default format is
            PEM.
 
-       --oouuttffoorrmm DDEERR||PPEEMM
+       -outform DER|PEM
            This specifies the output format, the options have the same meaning
-           and default as the --iinnffoorrmm option.
+           and default as the -inform option.
 
-       --iinn ffiilleennaammee
+       -in filename
            This specifies the input filename to read a key from or standard
            input if this option is not specified. If the key is encrypted a
            pass phrase will be prompted for.
 
-       --ppaassssiinn aarrgg
+       -passin arg
            The input file password source. For more information about the
-           format of aarrgg see "Pass Phrase Options" in ooppeennssssll(1).
+           format of arg see "Pass Phrase Options" in openssl(1).
 
-       --oouutt ffiilleennaammee
+       -out filename
            This specifies the output filename to write a key to or standard
            output if this option is not specified. If any encryption options
            are set then a pass phrase will be prompted for. The output
-           filename should nnoott be the same as the input filename.
+           filename should not be the same as the input filename.
 
-       --ppaassssoouutt ppaasssswwoorrdd
+       -passout password
            The output file password source. For more information about the
-           format of aarrgg see "Pass Phrase Options" in ooppeennssssll(1).
+           format of arg see "Pass Phrase Options" in openssl(1).
 
-       --ttrraaddiittiioonnaall
+       -traditional
            Normally a private key is written using standard format: this is
            PKCS#8 form with the appropriate encryption algorithm (if any). If
-           the --ttrraaddiittiioonnaall option is specified then the older "traditional"
+           the -traditional option is specified then the older "traditional"
            format is used instead.
 
-       --_cc_ii_pp_hh_ee_rr
+       -cipher
            These options encrypt the private key with the supplied cipher. Any
-           algorithm name accepted by EEVVPP__ggeett__cciipphheerrbbyynnaammee(()) is acceptable
-           such as ddeess33.
+           algorithm name accepted by EVP_get_cipherbyname() is acceptable
+           such as des3.
 
-       --tteexxtt
+       -text
            Prints out the various public or private key components in plain
            text in addition to the encoded version.
 
-       --tteexxtt__ppuubb
+       -text_pub
            Print out only public key components even if a private key is being
            processed.
 
-       --nnoooouutt
+       -noout
            Do not output the encoded version of the key.
 
-       --ppuubbiinn
+       -pubin
            By default a private key is read from the input file: with this
            option a public key is read instead.
 
-       --ppuubboouutt
+       -pubout
            By default a private key is output: with this option a public key
            will be output instead. This option is automatically set if the
            input is a public key.
 
-       --eennggiinnee iidd
-           Specifying an engine (by its unique iidd string) will cause ppkkeeyy to
+       -engine id
+           Specifying an engine (by its unique id string) will cause pkey to
            attempt to obtain a functional reference to the specified engine,
            thus initialising it if needed. The engine will then be set as the
            default for all available algorithms.
 
-       --cchheecckk
+       -check
            This option checks the consistency of a key pair for both public
            and private components.
 
-       --ppuubbcchheecckk
+       -pubcheck
            This option checks the correctness of either a public key or the
            public component of a key pair.
 
-EEXXAAMMPPLLEESS
+EXAMPLES
        To remove the pass phrase on an RSA private key:
 
         openssl pkey -in key.pem -out keyout.pem
@@ -116,10 +116,10 @@ EEXXAAMMPPLLEESS
 
         openssl pkey -in key.pem -pubout -out pubkey.pem
 
-SSEEEE AALLSSOO
-       ggeennppkkeeyy(1), rrssaa(1), ppkkccss88(1), ddssaa(1), ggeennrrssaa(1), ggeennddssaa(1)
+SEE ALSO
+       genpkey(1), rsa(1), pkcs8(1), dsa(1), genrsa(1), gendsa(1)
 
-CCOOPPYYRRIIGGHHTT
+COPYRIGHT
        Copyright 2006-2021 The OpenSSL Project Authors. All Rights Reserved.
 
        Licensed under the OpenSSL license (the "License").  You may not use

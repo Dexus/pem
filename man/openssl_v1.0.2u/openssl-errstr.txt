@@ -2,19 +2,19 @@ ERRSTR(1)                           OpenSSL                          ERRSTR(1)
 
 
 
-NNAAMMEE
+NAME
        openssl-errstr, errstr - lookup error codes
 
-SSYYNNOOPPSSIISS
-       ooppeennssssll eerrrrssttrr eerrrroorr__ccooddee
+SYNOPSIS
+       openssl errstr error_code
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        Sometimes an application will not load error message and only numerical
-       forms will be available. The eerrrrssttrr utility can be used to display the
+       forms will be available. The errstr utility can be used to display the
        meaning of the hex code. The hex code is the hex digits after the
        second colon.
 
-EEXXAAMMPPLLEE
+EXAMPLE
        The error code:
 
         27594:error:2006D080:lib(32):func(109):reason(128):bss_file.c:107:
@@ -27,8 +27,8 @@ EEXXAAMMPPLLEE
 
         error:2006D080:BIO routines:BIO_new_file:no such file
 
-SSEEEE AALLSSOO
-       eerrrr(3), EERRRR__llooaadd__ccrryyppttoo__ssttrriinnggss(3), SSSSLL__llooaadd__eerrrroorr__ssttrriinnggss(3)
+SEE ALSO
+       err(3), ERR_load_crypto_strings(3), SSL_load_error_strings(3)
 
 
 

@@ -2,42 +2,42 @@ PRIME(1)                            OpenSSL                           PRIME(1)
 
 
 
-NNAAMMEE
+NAME
        openssl-prime, prime - compute prime numbers
 
-SSYYNNOOPPSSIISS
-       ooppeennssssll pprriimmee [--hheellpp] [--hheexx] [--ggeenneerraattee] [--bbiittss] [--ssaaffee] [--cchheecckkss]
-       [_n_u_m_b_e_r_._._.]
+SYNOPSIS
+       openssl prime [-help] [-hex] [-generate] [-bits] [-safe] [-checks]
+       [number...]
 
-DDEESSCCRRIIPPTTIIOONN
-       The pprriimmee command checks if the specified numbers are prime.
+DESCRIPTION
+       The prime command checks if the specified numbers are prime.
 
-       If no numbers are given on the command line, the --ggeenneerraattee flag should
+       If no numbers are given on the command line, the -generate flag should
        be used to generate primes according to the requirements specified by
        the rest of the flags.
 
-OOPPTTIIOONNSS
-       [--hheellpp]
+OPTIONS
+       [-help]
            Display an option summary.
 
-       [--hheexx]
+       [-hex]
            Generate hex output.
 
-       [--ggeenneerraattee]
+       [-generate]
            Generate a prime number.
 
-       [--bbiittss nnuumm]
-           Generate a prime with nnuumm bits.
+       [-bits num]
+           Generate a prime with num bits.
 
-       [--ssaaffee]
-           When used with --ggeenneerraattee, generates a "safe" prime. If the number
-           generated is nn, then check that ((nn--11))//22 is also prime.
+       [-safe]
+           When used with -generate, generates a "safe" prime. If the number
+           generated is n, then check that (n-1)/2 is also prime.
 
-       [--cchheecckkss nnuumm]
-           Perform the checks nnuumm times to see that the generated number is
+       [-checks num]
+           Perform the checks num times to see that the generated number is
            prime.  The default is 20.
 
-CCOOPPYYRRIIGGHHTT
+COPYRIGHT
        Copyright 2017 The OpenSSL Project Authors. All Rights Reserved.
 
        Licensed under the OpenSSL license (the "License").  You may not use

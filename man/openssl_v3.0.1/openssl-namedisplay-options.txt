@@ -2,136 +2,136 @@ OPENSSL-NAMEDISPLAY-OPTIONS(1ossl)  OpenSSL OPENSSL-NAMEDISPLAY-OPTIONS(1ossl)
 
 
 
-NNAAMMEE
+NAME
        openssl-namedisplay-options - Distinguished name display options
 
-SSYYNNOOPPSSIISS
-       ooppeennssssll _c_o_m_m_a_n_d [ _o_p_t_i_o_n_s ... ] [ _p_a_r_a_m_e_t_e_r_s ... ]
+SYNOPSIS
+       openssl command [ options ... ] [ parameters ... ]
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        OpenSSL provides fine-grain control over how the subject and issuer
-       DN's are displayed.  This is specified by using the --nnaammeeoopptt option,
+       DN's are displayed.  This is specified by using the -nameopt option,
        which takes a comma-separated list of options from the following set.
        An option may be preceded by a minus sign, "-", to turn it off.  The
        default value is "oneline".  The first four are the most commonly used.
 
-OOPPTTIIOONNSS
-   NNaammee FFoorrmmaatt OOppttiioonn AArrgguummeennttss
+OPTIONS
+   Name Format Option Arguments
        The DN output format can be fine tuned with the following flags.
 
-       ccoommppaatt
+       compat
            Display the name using an old format from previous OpenSSL
            versions.
 
-       RRFFCC22225533
+       RFC2253
            Display the name using the format defined in RFC 2253.  It is
-           equivalent to eesscc__22225533, eesscc__ccttrrll, eesscc__mmssbb, uuttff88, dduummpp__nnoossttrr,
-           dduummpp__uunnkknnoowwnn, dduummpp__ddeerr, sseepp__ccoommmmaa__pplluuss, ddnn__rreevv and ssnnaammee.
+           equivalent to esc_2253, esc_ctrl, esc_msb, utf8, dump_nostr,
+           dump_unknown, dump_der, sep_comma_plus, dn_rev and sname.
 
-       oonneelliinnee
+       oneline
            Display the name in one line, using a format that is more readable
-           RFC 2253.  It is equivalent to eesscc__22225533, eesscc__ccttrrll, eesscc__mmssbb, uuttff88,
-           dduummpp__nnoossttrr, dduummpp__ddeerr, uussee__qquuoottee, sseepp__ccoommmmaa__pplluuss__ssppaaccee, ssppaaccee__eeqq and
-           ssnnaammee options.
+           RFC 2253.  It is equivalent to esc_2253, esc_ctrl, esc_msb, utf8,
+           dump_nostr, dump_der, use_quote, sep_comma_plus_space, space_eq and
+           sname options.
 
-       mmuullttiilliinnee
+       multiline
            Display the name using multiple lines.  It is equivalent to
-           eesscc__ccttrrll, eesscc__mmssbb, sseepp__mmuullttiilliinnee, ssppaaccee__eeqq, llnnaammee and aalliiggnn.
+           esc_ctrl, esc_msb, sep_multiline, space_eq, lname and align.
 
-       eesscc__22225533
+       esc_2253
            Escape the "special" characters in a field, as required by RFC
            2253.  That is, any of the characters ",+"<>;", "#" at the
            beginning of a string and leading or trailing spaces.
 
-       eesscc__22225544
+       esc_2254
            Escape the "special" characters in a field as required by RFC 2254
-           in a field.  That is, the NNUULL character and of "()*".
+           in a field.  That is, the NUL character and of "()*".
 
-       eesscc__ccttrrll
+       esc_ctrl
            Escape non-printable ASCII characters, codes less than 0x20 (space)
            or greater than 0x7F (DELETE). They are displayed using RFC 2253
-           "\XX" notation where XXXX are the two hex digits representing the
+           "\XX" notation where XX are the two hex digits representing the
            character value.
 
-       eesscc__mmssbb
+       esc_msb
            Escape any characters with the most significant bit set, that is
-           with values larger than 127, as described in eesscc__ccttrrll.
+           with values larger than 127, as described in esc_ctrl.
 
-       uussee__qquuoottee
+       use_quote
            Escapes some characters by surrounding the entire string with
            quotation marks, """.  Without this option, individual special
            characters are preceded with a backslash character, "\".
 
-       uuttff88
+       utf8
            Convert all strings to UTF-8 format first as required by RFC 2253.
            If the output device is UTF-8 compatible, then using this option
-           (and not setting eesscc__mmssbb) may give the correct display of multibyte
+           (and not setting esc_msb) may give the correct display of multibyte
            characters.  If this option is not set, then multibyte characters
            larger than 0xFF will be output as "\UXXXX" for 16 bits or
            "\WXXXXXXXX" for 32 bits.  In addition, any UTF8Strings will be
            converted to their character form first.
 
-       iiggnnoorree__ttyyppee
+       ignore_type
            This option does not attempt to interpret multibyte characters in
            any way. That is, the content octets are merely dumped as though
            one octet represents each character. This is useful for diagnostic
            purposes but will result in rather odd looking output.
 
-       sshhooww__ttyyppee
+       show_type
            Display the type of the ASN1 character string before the value,
            such as "BMPSTRING: Hello World".
 
-       dduummpp__ddeerr
+       dump_der
            Any fields that would be output in hex format are displayed using
            the DER encoding of the field.  If not set, just the content octets
-           are displayed.  Either way, the ##XXXXXXXX...... format of RFC 2253 is
+           are displayed.  Either way, the #XXXX... format of RFC 2253 is
            used.
 
-       dduummpp__nnoossttrr
-           Dump non-character strings, such as ASN.1 OOCCTTEETT SSTTRRIINNGG.  If this
+       dump_nostr
+           Dump non-character strings, such as ASN.1 OCTET STRING.  If this
            option is not set, then non character string types will be
            displayed as though each content octet represents a single
            character.
 
-       dduummpp__aallll
-           Dump all fields. When this used with dduummpp__ddeerr, this allows the DER
+       dump_all
+           Dump all fields. When this used with dump_der, this allows the DER
            encoding of the structure to be unambiguously determined.
 
-       dduummpp__uunnkknnoowwnn
+       dump_unknown
            Dump any field whose OID is not recognised by OpenSSL.
 
-       sseepp__ccoommmmaa__pplluuss, sseepp__ccoommmmaa__pplluuss__ssppaaccee, sseepp__sseemmii__pplluuss__ssppaaccee,
-       sseepp__mmuullttiilliinnee
+       sep_comma_plus, sep_comma_plus_space, sep_semi_plus_space,
+       sep_multiline
            Specify the field separators. The first word is used between the
            Relative Distinguished Names (RDNs) and the second is between
            multiple Attribute Value Assertions (AVAs). Multiple AVAs are very
            rare and their use is discouraged.  The options ending in "space"
            additionally place a space after the separator to make it more
-           readable.  The sseepp__mmuullttiilliinnee starts each field on its own line, and
+           readable.  The sep_multiline starts each field on its own line, and
            uses "plus space" for the AVA separator.  It also indents the
            fields by four characters.  The default value is
-           sseepp__ccoommmmaa__pplluuss__ssppaaccee.
+           sep_comma_plus_space.
 
-       ddnn__rreevv
+       dn_rev
            Reverse the fields of the DN as required by RFC 2253.  This also
            reverses the order of multiple AVAs in a field, but this is
            permissible as there is no ordering on values.
 
-       nnooffnnaammee, ssnnaammee, llnnaammee, ooiidd
-           Specify how the field name is displayed.  nnooffnnaammee does not display
-           the field at all.  ssnnaammee uses the "short name" form (CN for
-           commonName for example).  llnnaammee uses the long form.  ooiidd represents
+       nofname, sname, lname, oid
+           Specify how the field name is displayed.  nofname does not display
+           the field at all.  sname uses the "short name" form (CN for
+           commonName for example).  lname uses the long form.  oid represents
            the OID in numerical form and is useful for diagnostic purpose.
 
-       aalliiggnn
+       align
            Align field values for a more readable output. Only usable with
-           sseepp__mmuullttiilliinnee.
+           sep_multiline.
 
-       ssppaaccee__eeqq
+       space_eq
            Places spaces round the equal sign, "=", character which follows
            the field name.
 
-CCOOPPYYRRIIGGHHTT
+COPYRIGHT
        Copyright 2000-2020 The OpenSSL Project Authors. All Rights Reserved.
 
        Licensed under the Apache License 2.0 (the "License").  You may not use

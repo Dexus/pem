@@ -2,21 +2,21 @@ TSGET(1)                            OpenSSL                           TSGET(1)
 
 
 
-NNAAMMEE
+NAME
        openssl-tsget, tsget - Time Stamping HTTP/HTTPS client
 
-SSYYNNOOPPSSIISS
-       ttssggeett --hh server_url [--ee extension] [--oo output] [--vv] [--dd] [--kk
-       private_key.pem] [--pp key_password] [--cc client_cert.pem] [--CC
-       CA_certs.pem] [--PP CA_path] [--rr file:file...]  [--gg EGD_socket]
+SYNOPSIS
+       tsget -h server_url [-e extension] [-o output] [-v] [-d] [-k
+       private_key.pem] [-p key_password] [-c client_cert.pem] [-C
+       CA_certs.pem] [-P CA_path] [-r file:file...]  [-g EGD_socket]
        [request]...
 
-DDEESSCCRRIIPPTTIIOONN
-       The ttssggeett command can be used for sending a time stamp request, as
-       specified in RRFFCC 33116611, to a time stamp server over HTTP or HTTPS and
+DESCRIPTION
+       The tsget command can be used for sending a time stamp request, as
+       specified in RFC 3161, to a time stamp server over HTTP or HTTPS and
        storing the time stamp response in a file. This tool cannot be used for
        creating the requests and verifying responses, you can use the OpenSSL
-       ttss((11)) command to do that. ttssggeett can send several requests to the server
+       ts(1) command to do that. tsget can send several requests to the server
        without closing the TCP connection if more than one requests are
        specified on the command line.
 
@@ -32,20 +32,20 @@ DDEESSCCRRIIPPTTIIOONN
 
                ...binary request specified by the user...
 
-       ttssggeett expects a response of type application/timestamp-reply, which is
+       tsget expects a response of type application/timestamp-reply, which is
        written to a file without any interpretation.
 
-OOPPTTIIOONNSS
-       --hh server_url
+OPTIONS
+       -h server_url
            The URL of the HTTP/HTTPS server listening for time stamp requests.
 
-       --ee extension
-           If the --oo option is not given this argument specifies the extension
+       -e extension
+           If the -o option is not given this argument specifies the extension
            of the output files. The base name of the output file will be the
            same as those of the input files. Default extension is '.tsr'.
            (Optional)
 
-       --oo output
+       -o output
            This option can be specified only when just one request is sent to
            the server. The time stamp response will be written to the given
            output file. '-' means standard output. In case of multiple time
@@ -53,62 +53,62 @@ OOPPTTIIOONNSS
            output files will be derived from the names of the input files and
            the default or specified extension argument. (Optional)
 
-       --vv  The name of the currently processed request is printed on standard
+       -v  The name of the currently processed request is printed on standard
            error. (Optional)
 
-       --dd  Switches on verbose mode for the underlying ccuurrll library. You can
+       -d  Switches on verbose mode for the underlying curl library. You can
            see detailed debug messages for the connection. (Optional)
 
-       --kk private_key.pem
+       -k private_key.pem
            (HTTPS) In case of certificate-based client authentication over
            HTTPS <private_key.pem> must contain the private key of the user.
            The private key file can optionally be protected by a passphrase.
-           The --cc option must also be specified. (Optional)
+           The -c option must also be specified. (Optional)
 
-       --pp key_password
+       -p key_password
            (HTTPS) Specifies the passphrase for the private key specified by
-           the --kk argument. If this option is omitted and the key is
-           passphrase protected ttssggeett will ask for it. (Optional)
+           the -k argument. If this option is omitted and the key is
+           passphrase protected tsget will ask for it. (Optional)
 
-       --cc client_cert.pem
+       -c client_cert.pem
            (HTTPS) In case of certificate-based client authentication over
            HTTPS <client_cert.pem> must contain the X.509 certificate of the
-           user.  The --kk option must also be specified. If this option is not
+           user.  The -k option must also be specified. If this option is not
            specified no certificate-based client authentication will take
            place. (Optional)
 
-       --CC CA_certs.pem
+       -C CA_certs.pem
            (HTTPS) The trusted CA certificate store. The certificate chain of
            the peer's certificate must include one of the CA certificates
-           specified in this file.  Either option --CC or option --PP must be
+           specified in this file.  Either option -C or option -P must be
            given in case of HTTPS. (Optional)
 
-       --PP CA_path
+       -P CA_path
            (HTTPS) The path containing the trusted CA certificates to verify
            the peer's certificate. The directory must be prepared with the
-           cc__rreehhaasshh OpenSSL utility. Either option --CC or option --PP must be
+           c_rehash OpenSSL utility. Either option -C or option -P must be
            given in case of HTTPS. (Optional)
 
-       --rraanndd file:file...
+       -rand file:file...
            The files containing random data for seeding the random number
-           generator. Multiple files can be specified, the separator is ;; for
-           MS-Windows, ,, for VMS and :: for all other platforms. (Optional)
+           generator. Multiple files can be specified, the separator is ; for
+           MS-Windows, , for VMS and : for all other platforms. (Optional)
 
-       --gg EGD_socket
+       -g EGD_socket
            The name of an EGD socket to get random data from. (Optional)
 
        [request]...
-           List of files containing RRFFCC 33116611 DER-encoded time stamp requests.
+           List of files containing RFC 3161 DER-encoded time stamp requests.
            If no requests are specified only one request will be sent to the
            server and it will be read from the standard input. (Optional)
 
-EENNVVIIRROONNMMEENNTT VVAARRIIAABBLLEESS
-       The TTSSGGEETT environment variable can optionally contain default
+ENVIRONMENT VARIABLES
+       The TSGET environment variable can optionally contain default
        arguments. The content of this variable is added to the list of command
        line arguments.
 
-EEXXAAMMPPLLEESS
-       The examples below presume that ffiillee11..ttssqq and ffiillee22..ttssqq contain valid
+EXAMPLES
+       The examples below presume that file1.tsq and file2.tsq contain valid
        time stamp requests, tsa.opentsa.org listens at port 8080 for HTTP
        requests and at port 8443 for HTTPS requests, the TSA service is
        available at the /tsa absolute path.
@@ -145,7 +145,7 @@ EEXXAAMMPPLLEESS
          tsget -h https://tsa.opentsa.org:8443/tsa -C cacerts.pem \
                -k client_key.pem -c client_cert.pem file1.tsq
 
-       You can shorten the previous command line if you make use of the TTSSGGEETT
+       You can shorten the previous command line if you make use of the TSGET
        environment variable. The following commands do the same as the
        previous example:
 
@@ -154,12 +154,12 @@ EEXXAAMMPPLLEESS
          export TSGET
          tsget file1.tsq
 
-AAUUTTHHOORR
+AUTHOR
        Zoltan Glozik <zglozik@opentsa.org>, OpenTSA project
        (http://www.opentsa.org)
 
-SSEEEE AALLSSOO
-       ooppeennssssll(1), ttss(1), ccuurrll(1), RRFFCC 33116611
+SEE ALSO
+       openssl(1), ts(1), curl(1), RFC 3161
 
 
 

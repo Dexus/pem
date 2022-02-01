@@ -2,102 +2,102 @@ ENC(1)                              OpenSSL                             ENC(1)
 
 
 
-NNAAMMEE
+NAME
        enc - symmetric cipher routines
 
-SSYYNNOOPPSSIISS
-       ooppeennssssll eenncc --cciipphheerrnnaammee [--iinn ffiilleennaammee] [--oouutt ffiilleennaammee] [--ppaassss aarrgg] [--ee]
-       [--dd] [--aa] [--AA] [--kk ppaasssswwoorrdd] [--kkffiillee ffiilleennaammee] [--KK kkeeyy] [--iivv IIVV] [--pp]
-       [--PP] [--bbuuffssiizzee nnuummbbeerr] [--nnooppaadd] [--ddeebbuugg]
+SYNOPSIS
+       openssl enc -ciphername [-in filename] [-out filename] [-pass arg] [-e]
+       [-d] [-a] [-A] [-k password] [-kfile filename] [-K key] [-iv IV] [-p]
+       [-P] [-bufsize number] [-nopad] [-debug]
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        The symmetric cipher commands allow data to be encrypted or decrypted
        using various block and stream ciphers using keys based on passwords or
        explicitly provided. Base64 encoding or decoding can also be performed
        either by itself or in addition to the encryption or decryption.
 
-OOPPTTIIOONNSS
-       --iinn ffiilleennaammee
+OPTIONS
+       -in filename
            the input filename, standard input by default.
 
-       --oouutt ffiilleennaammee
+       -out filename
            the output filename, standard output by default.
 
-       --ppaassss aarrgg
-           the password source. For more information about the format of aarrgg
-           see the PPAASSSS PPHHRRAASSEE AARRGGUUMMEENNTTSS section in ooppeennssssll(1).
+       -pass arg
+           the password source. For more information about the format of arg
+           see the PASS PHRASE ARGUMENTS section in openssl(1).
 
-       --ssaalltt
+       -salt
            use a salt in the key derivation routines. This is the default.
 
-       --nnoossaalltt
-           don't use a salt in the key derivation routines. This option SSHHOOUULLDD
-           NNOOTT be used except for test purposes or compatibility with ancient
+       -nosalt
+           don't use a salt in the key derivation routines. This option SHOULD
+           NOT be used except for test purposes or compatibility with ancient
            versions of OpenSSL and SSLeay.
 
-       --ee  encrypt the input data: this is the default.
+       -e  encrypt the input data: this is the default.
 
-       --dd  decrypt the input data.
+       -d  decrypt the input data.
 
-       --aa  base64 process the data. This means that if encryption is taking
+       -a  base64 process the data. This means that if encryption is taking
            place the data is base64 encoded after encryption. If decryption is
            set then the input data is base64 decoded before being decrypted.
 
-       --AA  if the --aa option is set then base64 process the data on one line.
+       -A  if the -a option is set then base64 process the data on one line.
 
-       --kk ppaasssswwoorrdd
+       -k password
            the password to derive the key from. This is for compatibility with
-           previous versions of OpenSSL. Superseded by the --ppaassss argument.
+           previous versions of OpenSSL. Superseded by the -pass argument.
 
-       --kkffiillee ffiilleennaammee
+       -kfile filename
            read the password to derive the key from the first line of
-           ffiilleennaammee.  This is for compatibility with previous versions of
-           OpenSSL. Superseded by the --ppaassss argument.
+           filename.  This is for compatibility with previous versions of
+           OpenSSL. Superseded by the -pass argument.
 
-       --SS ssaalltt
+       -S salt
            the actual salt to use: this must be represented as a string
            comprised only of hex digits.
 
-       --KK kkeeyy
+       -K key
            the actual key to use: this must be represented as a string
            comprised only of hex digits. If only the key is specified, the IV
-           must additionally specified using the --iivv option. When both a key
-           and a password are specified, the key given with the --KK option will
+           must additionally specified using the -iv option. When both a key
+           and a password are specified, the key given with the -K option will
            be used and the IV generated from the password will be taken. It
            probably does not make much sense to specify both key and password.
 
-       --iivv IIVV
+       -iv IV
            the actual IV to use: this must be represented as a string
            comprised only of hex digits. When only the key is specified using
-           the --KK option, the IV must explicitly be defined. When a password
+           the -K option, the IV must explicitly be defined. When a password
            is being specified using one of the other options, the IV is
            generated from this password.
 
-       --pp  print out the key and IV used.
+       -p  print out the key and IV used.
 
-       --PP  print out the key and IV used then immediately exit: don't do any
+       -P  print out the key and IV used then immediately exit: don't do any
            encryption or decryption.
 
-       --bbuuffssiizzee nnuummbbeerr
+       -bufsize number
            set the buffer size for I/O
 
-       --nnooppaadd
+       -nopad
            disable standard block padding
 
-       --ddeebbuugg
+       -debug
            debug the BIOs used for I/O.
 
-NNOOTTEESS
-       The program can be called either as ooppeennssssll cciipphheerrnnaammee or ooppeennssssll eenncc
-       --cciipphheerrnnaammee.
+NOTES
+       The program can be called either as openssl ciphername or openssl enc
+       -ciphername.
 
        A password will be prompted for to derive the key and IV if necessary.
 
-       The --ssaalltt option should AALLWWAAYYSS be used if the key is being derived from
+       The -salt option should ALWAYS be used if the key is being derived from
        a password unless you want compatibility with previous versions of
        OpenSSL and SSLeay.
 
-       Without the --ssaalltt option it is possible to perform efficient dictionary
+       Without the -salt option it is possible to perform efficient dictionary
        attacks on the password and to attack stream cipher encrypted data. The
        reason for this is that without the salt the same password always
        generates the same encryption key. When the salt is being used the
@@ -121,7 +121,7 @@ NNOOTTEESS
 
        Blowfish and RC5 algorithms use a 128 bit key.
 
-SSUUPPPPOORRTTEEDD CCIIPPHHEERRSS
+SUPPORTED CIPHERS
         base64             Base 64
 
         bf-cbc             Blowfish in CBC mode
@@ -188,7 +188,7 @@ SSUUPPPPOORRTTEEDD CCIIPPHHEERRSS
         aes-[128|192|256]-ecb  128/192/256 bit AES in ECB mode
         aes-[128|192|256]-ofb  128/192/256 bit AES in OFB mode
 
-EEXXAAMMPPLLEESS
+EXAMPLES
        Just base64 encode a binary file:
 
         openssl base64 -in file.bin -out file.b64
@@ -218,12 +218,12 @@ EEXXAAMMPPLLEESS
 
         openssl rc4-40 -in file.rc4 -out file.txt -K 0102030405
 
-BBUUGGSS
-       The --AA option when used with large files doesn't work properly.
+BUGS
+       The -A option when used with large files doesn't work properly.
 
        There should be an option to allow an iteration count to be included.
 
-       The eenncc program only supports a fixed number of algorithms with certain
+       The enc program only supports a fixed number of algorithms with certain
        parameters. So if, for example, you want to use RC2 with a 76 bit key
        or RC4 with an 84 bit key you can't use this program.
 

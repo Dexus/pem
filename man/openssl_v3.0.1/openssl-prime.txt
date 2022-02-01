@@ -2,47 +2,47 @@ OPENSSL-PRIME(1ossl)                OpenSSL               OPENSSL-PRIME(1ossl)
 
 
 
-NNAAMMEE
+NAME
        openssl-prime - compute prime numbers
 
-SSYYNNOOPPSSIISS
-       ooppeennssssll pprriimmee [--hheellpp] [--hheexx] [--ggeenneerraattee] [--bbiittss _n_u_m] [--ssaaffee] [--pprroovviiddeerr
-       _n_a_m_e] [--pprroovviiddeerr--ppaatthh _p_a_t_h] [--pprrooppqquueerryy _p_r_o_p_q] [--cchheecckkss _n_u_m] [_n_u_m_b_e_r
+SYNOPSIS
+       openssl prime [-help] [-hex] [-generate] [-bits num] [-safe] [-provider
+       name] [-provider-path path] [-propquery propq] [-checks num] [number
        ...]
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        This command checks if the specified numbers are prime.
 
-       If no numbers are given on the command line, the --ggeenneerraattee flag should
+       If no numbers are given on the command line, the -generate flag should
        be used to generate primes according to the requirements specified by
        the rest of the flags.
 
-OOPPTTIIOONNSS
-       --hheellpp
+OPTIONS
+       -help
            Display an option summary.
 
-       --hheexx
+       -hex
            Generate hex output.
 
-       --ggeenneerraattee
+       -generate
            Generate a prime number.
 
-       --bbiittss _n_u_m
-           Generate a prime with _n_u_m bits.
+       -bits num
+           Generate a prime with num bits.
 
-       --ssaaffee
-           When used with --ggeenneerraattee, generates a "safe" prime. If the number
-           generated is _n, then check that "(_n_-_1_)_/_2_" is also prime.
+       -safe
+           When used with -generate, generates a "safe" prime. If the number
+           generated is n, then check that "(n-1)/2" is also prime.
 
-       --pprroovviiddeerr _n_a_m_e
-       --pprroovviiddeerr--ppaatthh _p_a_t_h
-       --pprrooppqquueerryy _p_r_o_p_q
-           See "Provider Options" in ooppeennssssll(1), pprroovviiddeerr(7), and pprrooppeerrttyy(7).
+       -provider name
+       -provider-path path
+       -propquery propq
+           See "Provider Options" in openssl(1), provider(7), and property(7).
 
-       --cchheecckkss _n_u_m
+       -checks num
            This parameter is ignored.
 
-CCOOPPYYRRIIGGHHTT
+COPYRIGHT
        Copyright 2017-2020 The OpenSSL Project Authors. All Rights Reserved.
 
        Licensed under the Apache License 2.0 (the "License").  You may not use

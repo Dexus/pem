@@ -2,38 +2,38 @@ OPENSSL-VERIFICATION-OPTIONS(1ossl) OpenSSLOPENSSL-VERIFICATION-OPTIONS(1ossl)
 
 
 
-NNAAMMEE
+NAME
        openssl-verification-options - generic X.509 certificate verification
        options
 
-SSYYNNOOPPSSIISS
-       ooppeennssssll _c_o_m_m_a_n_d [ _o_p_t_i_o_n_s ... ] [ _p_a_r_a_m_e_t_e_r_s ... ]
+SYNOPSIS
+       openssl command [ options ... ] [ parameters ... ]
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        There are many situations where X.509 certificates are verified within
        the OpenSSL libraries and in various OpenSSL commands.
 
-       Certificate verification is implemented by XX550099__vveerriiffyy__cceerrtt(3).  It is
+       Certificate verification is implemented by X509_verify_cert(3).  It is
        a complicated process consisting of a number of steps and depending on
        numerous options.  The most important of them are detailed in the
        following sections.
 
        In a nutshell, a valid chain of certificates needs to be built up and
-       verified starting from the _t_a_r_g_e_t _c_e_r_t_i_f_i_c_a_t_e that is to be verified
+       verified starting from the target certificate that is to be verified
        and ending in a certificate that due to some policy is trusted.
-       Verification is done relative to the given _p_u_r_p_o_s_e, which is the
+       Verification is done relative to the given purpose, which is the
        intended use of the target certificate, such as SSL server, or by
        default for any purpose.
 
        The details of how each OpenSSL command handles errors are documented
        on the specific command page.
 
-       DANE support is documented in ooppeennssssll--ss__cclliieenntt(1),
-       SSSSLL__CCTTXX__ddaannee__eennaabbllee(3), SSSSLL__sseett11__hhoosstt(3),
-       XX550099__VVEERRIIFFYY__PPAARRAAMM__sseett__ffllaaggss(3), and XX550099__cchheecckk__hhoosstt(3).
+       DANE support is documented in openssl-s_client(1),
+       SSL_CTX_dane_enable(3), SSL_set1_host(3),
+       X509_VERIFY_PARAM_set_flags(3), and X509_check_host(3).
 
-   TTrruusstt AAnncchhoorrss
-       In general, according to RFC 4158 and RFC 5280, a _t_r_u_s_t _a_n_c_h_o_r is any
+   Trust Anchors
+       In general, according to RFC 4158 and RFC 5280, a trust anchor is any
        public key and related subject distinguished name (DN) that for some
        reason is considered trusted and thus is acceptable as the root of a
        chain of certificates.
@@ -46,7 +46,7 @@ DDEESSCCRRIIPPTTIIOONN
        for matching trust anchors during chain building.
 
        In the most simple and common case, trust anchors are by default all
-       self-signed "root" CA certificates that are placed in the _t_r_u_s_t _s_t_o_r_e,
+       self-signed "root" CA certificates that are placed in the trust store,
        which is a collection of certificates that are trusted for certain
        uses.  This is akin to what is used in the trust stores of Mozilla
        Firefox, or Apple's and Microsoft's certificate stores, ...
@@ -62,11 +62,11 @@ DDEESSCCRRIIPPTTIIOONN
        usages (EKUs) that may be given in X.509 extensions of end-entity
        certificates.  See also the "Extended Key Usage" section below.
 
-       The currently recognized uses are cclliieennttAAuutthh (SSL client use),
-       sseerrvveerrAAuutthh (SSL server use), eemmaaiillPPrrootteeccttiioonn (S/MIME email use),
-       ccooddeeSSiiggnniinngg (object signer use), OOCCSSPPSSiiggnniinngg (OCSP responder use), OOCCSSPP
-       (OCSP request use), ttiimmeeSSttaammppiinngg (TSA server use), and
-       aannyyEExxtteennddeeddKKeeyyUUssaaggee.  As of OpenSSL 1.1.0, the last of these blocks all
+       The currently recognized uses are clientAuth (SSL client use),
+       serverAuth (SSL server use), emailProtection (S/MIME email use),
+       codeSigning (object signer use), OCSPSigning (OCSP responder use), OCSP
+       (OCSP request use), timeStamping (TSA server use), and
+       anyExtendedKeyUsage.  As of OpenSSL 1.1.0, the last of these blocks all
        uses when rejected or enables all uses when trusted.
 
        A certificate, which may be CA certificate or an end-entity
@@ -80,10 +80,10 @@ DDEESSCCRRIIPPTTIIOONN
 
        •   It has a positive trust attribute accepting the given use or (by
            default) one of the following compatibilty conditions apply: It is
-           self-signed or the --ppaarrttiiaall__cchhaaiinn option is given (which
-           corresponds to the XX550099__VV__FFLLAAGG__PPAARRTTIIAALL__CCHHAAIINN flag being set).
+           self-signed or the -partial_chain option is given (which
+           corresponds to the X509_V_FLAG_PARTIAL_CHAIN flag being set).
 
-   CCeerrttiiffiiccaattiioonn PPaatthh BBuuiillddiinngg
+   Certification Path Building
        First, a certificate chain is built up starting from the target
        certificate and ending in a trust anchor.
 
@@ -119,15 +119,15 @@ DDEESSCCRRIIPPTTIIOONN
        If it does not find a match there it consults the list of untrusted
        ("intermediate" CA) certificates, if provided.
 
-   CCeerrttiiffiiccaattiioonn PPaatthh VVaalliiddaattiioonn
+   Certification Path Validation
        When the certificate chain building process was successful the chain
        components and their links are checked thoroughly.
 
        The first step is to check that each certificate is well-formed.  Part
-       of these checks are enabled only if the --xx550099__ssttrriicctt option is given.
+       of these checks are enabled only if the -x509_strict option is given.
 
        The second step is to check the extensions of every untrusted
-       certificate for consistency with the supplied purpose.  If the --ppuurrppoossee
+       certificate for consistency with the supplied purpose.  If the -purpose
        option is not given then no such checks are done except for SSL/TLS
        connection setup, where by default "sslserver" or "sslclient", are
        checked.  The target or "leaf" certificate, as well as any other
@@ -135,7 +135,7 @@ DDEESSCCRRIIPPTTIIOONN
        specified purpose.  All certificates except the target or "leaf" must
        also be valid CA certificates.  The precise extensions required are
        described in more detail in "CERTIFICATE EXTENSIONS" in
-       ooppeennssssll--xx550099(1).
+       openssl-x509(1).
 
        The third step is to check the trust settings on the last certificate
        (which typically is a self-signed root CA certificate).  It must be
@@ -147,10 +147,10 @@ DDEESSCCRRIIPPTTIIOONN
        chain.  For each element in the chain, including the root CA
        certificate, the validity period as specified by the "notBefore" and
        "notAfter" fields is checked against the current system time.  The
-       --aattttiimmee flag may be used to use a reference time other than "now."  The
+       -attime flag may be used to use a reference time other than "now."  The
        certificate signature is checked as well (except for the signature of
        the typically self-signed root CA certificate, which is verified only
-       if the --cchheecckk__ssss__ssiigg option is given).  When verifying a certificate
+       if the -check_ss_sig option is given).  When verifying a certificate
        signature the keyUsage extension (if present) of the candidate issuer
        certificate is checked to permit digitalSignature for signing proxy
        certificates or to permit keyCertSign for signing other certificates,
@@ -158,11 +158,11 @@ DDEESSCCRRIIPPTTIIOONN
        is considered valid. If any operation fails then the certificate is not
        valid.
 
-OOPPTTIIOONNSS
-   TTrruusstteedd CCeerrttiiffiiccaattee OOppttiioonnss
+OPTIONS
+   Trusted Certificate Options
        The following options specify how to supply the certificates that can
        be used as trust anchors for certain uses.  As mentioned, a collection
-       of such certificates is called a _t_r_u_s_t _s_t_o_r_e.
+       of such certificates is called a trust store.
 
        Note that OpenSSL does not provide a default set of trust anchors.
        Many Linux distributions include a system default and configure OpenSSL
@@ -173,58 +173,58 @@ OOPPTTIIOONNSS
        The certificates to add to the trust store can be specified using
        following options.
 
-       --CCAAffiillee _f_i_l_e
+       -CAfile file
            Load the specified file which contains a certificate or several of
            them in case the input is in PEM or PKCS#12 format.  PEM-encoded
            certificates may also have trust attributes set.
 
-       --nnoo--CCAAffiillee
+       -no-CAfile
            Do not load the default file of trusted certificates.
 
-       --CCAAppaatthh _d_i_r
+       -CApath dir
            Use the specified directory as a collection of trusted
            certificates, i.e., a trust store.  Files should be named with the
            hash value of the X.509 SubjectName of each certificate. This is so
            that the library can extract the IssuerName, hash it, and directly
            lookup the file to get the issuer certificate.  See
-           ooppeennssssll--rreehhaasshh(1) for information on creating this type of
+           openssl-rehash(1) for information on creating this type of
            directory.
 
-       --nnoo--CCAAppaatthh
+       -no-CApath
            Do not use the default directory of trusted certificates.
 
-       --CCAAssttoorree _u_r_i
-           Use _u_r_i as a store of CA certificates.  The URI may indicate a
+       -CAstore uri
+           Use uri as a store of CA certificates.  The URI may indicate a
            single certificate, as well as a collection of them.  With URIs in
-           the "file:" scheme, this acts as --CCAAffiillee or --CCAAppaatthh, depending on
+           the "file:" scheme, this acts as -CAfile or -CApath, depending on
            if the URI indicates a single file or directory.  See
-           oossssll__ssttoorree--ffiillee(7) for more information on the "file:" scheme.
+           ossl_store-file(7) for more information on the "file:" scheme.
 
            These certificates are also used when building the server
-           certificate chain (for example with ooppeennssssll--ss__sseerrvveerr(1)) or client
-           certificate chain (for example with ooppeennssssll--ss__ttiimmee(1)).
+           certificate chain (for example with openssl-s_server(1)) or client
+           certificate chain (for example with openssl-s_time(1)).
 
-       --nnoo--CCAAssttoorree
+       -no-CAstore
            Do not use the default store of trusted CA certificates.
 
-   VVeerriiffiiccaattiioonn OOppttiioonnss
+   Verification Options
        The certificate verification can be fine-tuned with the following
        flags.
 
-       --vveerrbboossee
+       -verbose
            Print extra information about the operations being performed.
 
-       --aattttiimmee _t_i_m_e_s_t_a_m_p
-           Perform validation checks using time specified by _t_i_m_e_s_t_a_m_p and not
-           current system time. _t_i_m_e_s_t_a_m_p is the number of seconds since
+       -attime timestamp
+           Perform validation checks using time specified by timestamp and not
+           current system time. timestamp is the number of seconds since
            January 1, 1970 (i.e., the Unix Epoch).
 
-       --nnoo__cchheecckk__ttiimmee
+       -no_check_time
            This option suppresses checking the validity period of certificates
-           and CRLs against the current time. If option --aattttiimmee is used to
+           and CRLs against the current time. If option -attime is used to
            specify a verification time, the check is not suppressed.
 
-       --xx550099__ssttrriicctt
+       -x509_strict
            This disables non-compliant workarounds for broken certificates.
            Thus errors are thrown on certificates not compliant with RFC 5280.
 
@@ -262,60 +262,60 @@ OOPPTTIIOONNSS
            •   The subjectKeyIdentifier must be given for all X.509v3 CA
                certs.
 
-       --iiggnnoorree__ccrriittiiccaall
+       -ignore_critical
            Normally if an unhandled critical extension is present that is not
            supported by OpenSSL the certificate is rejected (as required by
            RFC5280).  If this option is set critical extensions are ignored.
 
-       --iissssuueerr__cchheecckkss
+       -issuer_checks
            Ignored.
 
-       --ccrrll__cchheecckk
+       -crl_check
            Checks end entity certificate validity by attempting to look up a
            valid CRL.  If a valid CRL cannot be found an error occurs.
 
-       --ccrrll__cchheecckk__aallll
-           Checks the validity of aallll certificates in the chain by attempting
+       -crl_check_all
+           Checks the validity of all certificates in the chain by attempting
            to look up valid CRLs.
 
-       --uussee__ddeellttaass
+       -use_deltas
            Enable support for delta CRLs.
 
-       --eexxtteennddeedd__ccrrll
+       -extended_crl
            Enable extended CRL features such as indirect CRLs and alternate
            CRL signing keys.
 
-       --ssuuiitteeBB__112288__oonnllyy, --ssuuiitteeBB__112288, --ssuuiitteeBB__119922
+       -suiteB_128_only, -suiteB_128, -suiteB_192
            Enable the Suite B mode operation at 128 bit Level of Security, 128
            bit or 192 bit, or only 192 bit Level of Security respectively.
            See RFC6460 for details. In particular the supported signature
            algorithms are reduced to support only ECDSA and SHA256 or SHA384
            and only the elliptic curves P-256 and P-384.
 
-       --aauutthh__lleevveell _l_e_v_e_l
-           Set the certificate chain authentication security level to _l_e_v_e_l.
+       -auth_level level
+           Set the certificate chain authentication security level to level.
            The authentication security level determines the acceptable
            signature and public key strength when verifying certificate
            chains.  For a certificate chain to validate, the public keys of
-           all the certificates must meet the specified security _l_e_v_e_l.  The
+           all the certificates must meet the specified security level.  The
            signature algorithm security level is enforced for all the
-           certificates in the chain except for the chain's _t_r_u_s_t _a_n_c_h_o_r,
+           certificates in the chain except for the chain's trust anchor,
            which is either directly trusted or validated by means other than
-           its signature.  See SSSSLL__CCTTXX__sseett__sseeccuurriittyy__lleevveell(3) for the
+           its signature.  See SSL_CTX_set_security_level(3) for the
            definitions of the available levels.  The default security level is
            -1, or "not set".  At security level 0 or lower all algorithms are
            acceptable.  Security level 1 requires at least 80-bit-equivalent
            security and is broadly interoperable, though it will, for example,
            reject MD5 signatures or RSA keys shorter than 1024 bits.
 
-       --ppaarrttiiaall__cchhaaiinn
+       -partial_chain
            Allow verification to succeed if an incomplete chain can be built.
            That is, a chain ending in a certificate that normally would not be
            trusted (because it has no matching positive trust attributes and
            is not self-signed) but is an element of the trust store.  This
            certificate may be self-issued or belong to an intermediate CA.
 
-       --cchheecckk__ssss__ssiigg
+       -check_ss_sig
            Verify the signature of the last certificate in a chain if the
            certificate is supposedly self-signed.  This is prohibited and will
            result in an error if it is a non-conforming CA certificate with
@@ -323,101 +323,101 @@ OOPPTTIIOONNSS
            verification is disabled by default because it doesn't add any
            security.
 
-       --aallllooww__pprrooxxyy__cceerrttss
+       -allow_proxy_certs
            Allow the verification of proxy certificates.
 
-       --ttrruusstteedd__ffiirrsstt
+       -trusted_first
            As of OpenSSL 1.1.0 this option is on by default and cannot be
            disabled.
 
            When constructing the certificate chain, the trusted certificates
-           specified via --CCAAffiillee, --CCAAppaatthh, --CCAAssttoorree or --ttrruusstteedd are always
-           used before any certificates specified via --uunnttrruusstteedd.
+           specified via -CAfile, -CApath, -CAstore or -trusted are always
+           used before any certificates specified via -untrusted.
 
-       --nnoo__aalltt__cchhaaiinnss
-           As of OpenSSL 1.1.0, since --ttrruusstteedd__ffiirrsstt always on, this option
+       -no_alt_chains
+           As of OpenSSL 1.1.0, since -trusted_first always on, this option
            has no effect.
 
-       --ttrruusstteedd _f_i_l_e
-           Parse _f_i_l_e as a set of one or more certificates.  Each of them
+       -trusted file
+           Parse file as a set of one or more certificates.  Each of them
            qualifies as trusted if has a suitable positive trust attribute or
-           it is self-signed or the --ppaarrttiiaall__cchhaaiinn option is specified.  This
-           option implies the --nnoo--CCAAffiillee, --nnoo--CCAAppaatthh, and --nnoo--CCAAssttoorree options
-           and it cannot be used with the --CCAAffiillee, --CCAAppaatthh or --CCAAssttoorree
-           options, so only certificates specified using the --ttrruusstteedd option
+           it is self-signed or the -partial_chain option is specified.  This
+           option implies the -no-CAfile, -no-CApath, and -no-CAstore options
+           and it cannot be used with the -CAfile, -CApath or -CAstore
+           options, so only certificates specified using the -trusted option
            are trust anchors.  This option may be used multiple times.
 
-       --uunnttrruusstteedd _f_i_l_e
-           Parse _f_i_l_e as a set of one or more certificates.  All certificates
+       -untrusted file
+           Parse file as a set of one or more certificates.  All certificates
            (typically of intermediate CAs) are considered untrusted and may be
            used to construct a certificate chain from the target certificate
            to a trust anchor.  This option may be used multiple times.
 
-       --ppoolliiccyy _a_r_g
-           Enable policy processing and add _a_r_g to the user-initial-policy-set
-           (see RFC5280). The policy _a_r_g can be an object name an OID in
+       -policy arg
+           Enable policy processing and add arg to the user-initial-policy-set
+           (see RFC5280). The policy arg can be an object name an OID in
            numeric form.  This argument can appear more than once.
 
-       --eexxpplliicciitt__ppoolliiccyy
+       -explicit_policy
            Set policy variable require-explicit-policy (see RFC5280).
 
-       --ppoolliiccyy__cchheecckk
+       -policy_check
            Enables certificate policy processing.
 
-       --ppoolliiccyy__pprriinntt
+       -policy_print
            Print out diagnostics related to policy processing.
 
-       --iinnhhiibbiitt__aannyy
+       -inhibit_any
            Set policy variable inhibit-any-policy (see RFC5280).
 
-       --iinnhhiibbiitt__mmaapp
+       -inhibit_map
            Set policy variable inhibit-policy-mapping (see RFC5280).
 
-       --ppuurrppoossee _p_u_r_p_o_s_e
+       -purpose purpose
            The intended use for the certificate.  Currently defined purposes
            are "sslclient", "sslserver", "nssslserver", "smimesign",
            "smimeencrypt", "crlsign", "ocsphelper", "timestampsign", and
            "any".  If peer certificate verification is enabled, by default the
-           TLS implementation as well as the commands ss__cclliieenntt and ss__sseerrvveerr
+           TLS implementation as well as the commands s_client and s_server
            check for consistency with TLS server or TLS client use,
            respectively.
 
-           While IETF RFC 5280 says that iidd--kkpp--sseerrvveerrAAuutthh and iidd--kkpp--cclliieennttAAuutthh
+           While IETF RFC 5280 says that id-kp-serverAuth and id-kp-clientAuth
            are only for WWW use, in practice they are used for all kinds of
            TLS clients and servers, and this is what OpenSSL assumes as well.
 
-       --vveerriiffyy__ddeepptthh _n_u_m
-           Limit the certificate chain to _n_u_m intermediate CA certificates.  A
-           maximal depth chain can have up to _n_u_m+2 certificates, since
+       -verify_depth num
+           Limit the certificate chain to num intermediate CA certificates.  A
+           maximal depth chain can have up to num+2 certificates, since
            neither the end-entity certificate nor the trust-anchor certificate
-           count against the --vveerriiffyy__ddeepptthh limit.
+           count against the -verify_depth limit.
 
-       --vveerriiffyy__eemmaaiill _e_m_a_i_l
-           Verify if _e_m_a_i_l matches the email address in Subject Alternative
+       -verify_email email
+           Verify if email matches the email address in Subject Alternative
            Name or the email in the subject Distinguished Name.
 
-       --vveerriiffyy__hhoossttnnaammee _h_o_s_t_n_a_m_e
-           Verify if _h_o_s_t_n_a_m_e matches DNS name in Subject Alternative Name or
+       -verify_hostname hostname
+           Verify if hostname matches DNS name in Subject Alternative Name or
            Common Name in the subject certificate.
 
-       --vveerriiffyy__iipp _i_p
-           Verify if _i_p matches the IP address in Subject Alternative Name of
+       -verify_ip ip
+           Verify if ip matches the IP address in Subject Alternative Name of
            the subject certificate.
 
-       --vveerriiffyy__nnaammee _n_a_m_e
+       -verify_name name
            Use default verification policies like trust model and required
-           certificate policies identified by _n_a_m_e.  The trust model
+           certificate policies identified by name.  The trust model
            determines which auxiliary trust or reject OIDs are applicable to
            verifying the given certificate chain.  They can be given using the
-           --aaddddttrruusstt and --aaddddrreejjeecctt options for ooppeennssssll--xx550099(1).  Supported
-           policy names include: ddeeffaauulltt, ppkkccss77, ssmmiimmee__ssiiggnn, ssssll__cclliieenntt,
-           ssssll__sseerrvveerr.  These mimics the combinations of purpose and trust
+           -addtrust and -addreject options for openssl-x509(1).  Supported
+           policy names include: default, pkcs7, smime_sign, ssl_client,
+           ssl_server.  These mimics the combinations of purpose and trust
            settings used in SSL, CMS and S/MIME.  As of OpenSSL 1.1.0, the
            trust model is inferred from the purpose when not specified, so the
-           --vveerriiffyy__nnaammee options are functionally equivalent to the
-           corresponding --ppuurrppoossee settings.
+           -verify_name options are functionally equivalent to the
+           corresponding -purpose settings.
 
-   EExxtteennddeedd VVeerriiffiiccaattiioonn OOppttiioonnss
+   Extended Verification Options
        Sometimes there may be more than one certificate chain leading to an
        end-entity certificate.  This usually happens when a root or
        intermediate CA signs a certificate for another a CA in other
@@ -428,35 +428,35 @@ OOPPTTIIOONNSS
        The following options can be used to provide data that will allow the
        OpenSSL command to generate an alternative chain.
 
-       --xxkkeeyy _i_n_f_i_l_e, --xxcceerrtt _i_n_f_i_l_e, --xxcchhaaiinn
+       -xkey infile, -xcert infile, -xchain
            Specify an extra certificate, private key and certificate chain.
-           These behave in the same manner as the --cceerrtt, --kkeeyy and --cceerrtt__cchhaaiinn
+           These behave in the same manner as the -cert, -key and -cert_chain
            options.  When specified, the callback returning the first valid
            chain will be in use by the client.
 
-       --xxcchhaaiinn__bbuuiilldd
+       -xchain_build
            Specify whether the application should build the certificate chain
            to be provided to the server for the extra certificates via the
-           --xxkkeeyy, --xxcceerrtt, and --xxcchhaaiinn options.
+           -xkey, -xcert, and -xchain options.
 
-       --xxcceerrttffoorrmm DDEERR|PPEEMM|PP1122
+       -xcertform DER|PEM|P12
            The input format for the extra certificate.  This option has no
            effect and is retained for backward compatibility only.
 
-       --xxkkeeyyffoorrmm DDEERR|PPEEMM|PP1122
+       -xkeyform DER|PEM|P12
            The input format for the extra key.  This option has no effect and
            is retained for backward compatibility only.
 
-   CCeerrttiiffiiccaattee EExxtteennssiioonnss
-       Options like --ppuurrppoossee lead to checking the certificate extensions,
+   Certificate Extensions
+       Options like -purpose lead to checking the certificate extensions,
        which determine what the target certificate and intermediate CA
        certificates can be used for.
 
-       _B_a_s_i_c _C_o_n_s_t_r_a_i_n_t_s
+       Basic Constraints
 
        The basicConstraints extension CA flag is used to determine whether the
        certificate can be used as a CA. If the CA flag is true then it is a
-       CA, if the CA flag is false then it is not a CA. AAllll CAs should have
+       CA, if the CA flag is false then it is not a CA. All CAs should have
        the CA flag set to true.
 
        If the basicConstraints extension is absent, which includes the case
@@ -466,13 +466,13 @@ OOPPTTIIOONNSS
        basicConstraints as a CA is presently supported, but this could change
        in the future.
 
-       _K_e_y _U_s_a_g_e
+       Key Usage
 
        If the keyUsage extension is present then additional restraints are
-       made on the uses of the certificate. A CA certificate mmuusstt have the
+       made on the uses of the certificate. A CA certificate must have the
        keyCertSign bit set if the keyUsage extension is present.
 
-       _E_x_t_e_n_d_e_d _K_e_y _U_s_a_g_e
+       Extended Key Usage
 
        The extKeyUsage (EKU) extension places additional restrictions on the
        certificate uses. If this extension is present (whether critical or
@@ -480,42 +480,42 @@ OOPPTTIIOONNSS
 
        A complete description of each check is given below. The comments about
        basicConstraints and keyUsage and X.509v1 certificates above apply to
-       aallll CA certificates.
+       all CA certificates.
 
-       SSSSLL CClliieenntt
+       SSL Client
            The extended key usage extension must be absent or include the "web
            client authentication" OID.  The keyUsage extension must be absent
            or it must have the digitalSignature bit set.  The Netscape
            certificate type must be absent or it must have the SSL client bit
            set.
 
-       SSSSLL CClliieenntt CCAA
+       SSL Client CA
            The extended key usage extension must be absent or include the "web
            client authentication" OID.  The Netscape certificate type must be
            absent or it must have the SSL CA bit set.  This is used as a work
            around if the basicConstraints extension is absent.
 
-       SSSSLL SSeerrvveerr
+       SSL Server
            The extended key usage extension must be absent or include the "web
            server authentication" and/or one of the SGC OIDs.  The keyUsage
            extension must be absent or it must have the digitalSignature, the
            keyEncipherment set or both bits set.  The Netscape certificate
            type must be absent or have the SSL server bit set.
 
-       SSSSLL SSeerrvveerr CCAA
+       SSL Server CA
            The extended key usage extension must be absent or include the "web
            server authentication" and/or one of the SGC OIDs.  The Netscape
            certificate type must be absent or the SSL CA bit must be set.
            This is used as a work around if the basicConstraints extension is
            absent.
 
-       NNeettssccaappee SSSSLL SSeerrvveerr
+       Netscape SSL Server
            For Netscape SSL clients to connect to an SSL server it must have
            the keyEncipherment bit set if the keyUsage extension is present.
            This isn't always valid because some cipher suites use the key for
            digital signing.  Otherwise it is the same as a normal SSL server.
 
-       CCoommmmoonn SS//MMIIMMEE CClliieenntt TTeessttss
+       Common S/MIME Client Tests
            The extended key usage extension must be absent or include the
            "email protection" OID.  The Netscape certificate type must be
            absent or should have the S/MIME bit set. If the S/MIME bit is not
@@ -523,47 +523,47 @@ OOPPTTIIOONNSS
            tolerated as an alternative but a warning is shown.  This is
            because some Verisign certificates don't set the S/MIME bit.
 
-       SS//MMIIMMEE SSiiggnniinngg
+       S/MIME Signing
            In addition to the common S/MIME client tests the digitalSignature
            bit or the nonRepudiation bit must be set if the keyUsage extension
            is present.
 
-       SS//MMIIMMEE EEnnccrryyppttiioonn
+       S/MIME Encryption
            In addition to the common S/MIME tests the keyEncipherment bit must
            be set if the keyUsage extension is present.
 
-       SS//MMIIMMEE CCAA
+       S/MIME CA
            The extended key usage extension must be absent or include the
            "email protection" OID.  The Netscape certificate type must be
            absent or must have the S/MIME CA bit set.  This is used as a work
            around if the basicConstraints extension is absent.
 
-       CCRRLL SSiiggnniinngg
+       CRL Signing
            The keyUsage extension must be absent or it must have the CRL
            signing bit set.
 
-       CCRRLL SSiiggnniinngg CCAA
+       CRL Signing CA
            The normal CA tests apply. Except in this case the basicConstraints
            extension must be present.
 
-BBUUGGSS
+BUGS
        The issuer checks still suffer from limitations in the underlying
        X509_LOOKUP API.  One consequence of this is that trusted certificates
        with matching subject name must appear in a file (as specified by the
-       --CCAAffiillee option), a directory (as specified by --CCAAppaatthh), or a store (as
-       specified by --CCAAssttoorree).  If there are multiple such matches, possibly
+       -CAfile option), a directory (as specified by -CApath), or a store (as
+       specified by -CAstore).  If there are multiple such matches, possibly
        in multiple locations, only the first one (in the mentioned order of
        locations) is recognised.
 
-SSEEEE AALLSSOO
-       XX550099__vveerriiffyy__cceerrtt(3), ooppeennssssll--vveerriiffyy(1), ooppeennssssll--ooccsspp(1), ooppeennssssll--ttss(1),
-       ooppeennssssll--ss__cclliieenntt(1), ooppeennssssll--ss__sseerrvveerr(1), ooppeennssssll--ssmmiimmee(1),
-       ooppeennssssll--ccmmpp(1), ooppeennssssll--ccmmss(1)
+SEE ALSO
+       X509_verify_cert(3), openssl-verify(1), openssl-ocsp(1), openssl-ts(1),
+       openssl-s_client(1), openssl-s_server(1), openssl-smime(1),
+       openssl-cmp(1), openssl-cms(1)
 
-HHIISSTTOORRYY
-       The checks enabled by --xx550099__ssttrriicctt have been extended in OpenSSL 3.0.
+HISTORY
+       The checks enabled by -x509_strict have been extended in OpenSSL 3.0.
 
-CCOOPPYYRRIIGGHHTT
+COPYRIGHT
        Copyright 2000-2021 The OpenSSL Project Authors. All Rights Reserved.
 
        Licensed under the Apache License 2.0 (the "License").  You may not use
@@ -573,4 +573,4 @@ CCOOPPYYRRIIGGHHTT
 
 
 
-3.0.1                             2021-12-14OPENSSL-VERIFICATION-OPTIONS(1ossl)
+3.0.1                             2021-12-1OPENSSL-VERIFICATION-OPTIONS(1ossl)

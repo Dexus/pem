@@ -2,84 +2,84 @@ RSAUTL(1)                           OpenSSL                          RSAUTL(1)
 
 
 
-NNAAMMEE
+NAME
        openssl-rsautl, rsautl - RSA utility
 
-SSYYNNOOPPSSIISS
-       ooppeennssssll rrssaauuttll [--hheellpp] [--iinn ffiillee] [--oouutt ffiillee] [--iinnkkeeyy ffiillee] [--kkeeyyffoorrmm
-       PPEEMM||DDEERR||EENNGGIINNEE] [--ppuubbiinn] [--cceerrttiinn] [--ssiiggnn] [--vveerriiffyy] [--eennccrryypptt]
-       [--ddeeccrryypptt] [--rraanndd ffiillee......]  [--wwrriitteerraanndd ffiillee] [--ppkkccss] [--ssssll] [--rraaww]
-       [--hheexxdduummpp] [--aassnn11ppaarrssee]
+SYNOPSIS
+       openssl rsautl [-help] [-in file] [-out file] [-inkey file] [-keyform
+       PEM|DER|ENGINE] [-pubin] [-certin] [-sign] [-verify] [-encrypt]
+       [-decrypt] [-rand file...]  [-writerand file] [-pkcs] [-ssl] [-raw]
+       [-hexdump] [-asn1parse]
 
-DDEESSCCRRIIPPTTIIOONN
-       The rrssaauuttll command can be used to sign, verify, encrypt and decrypt
+DESCRIPTION
+       The rsautl command can be used to sign, verify, encrypt and decrypt
        data using the RSA algorithm.
 
-OOPPTTIIOONNSS
-       --hheellpp
+OPTIONS
+       -help
            Print out a usage message.
 
-       --iinn ffiilleennaammee
+       -in filename
            This specifies the input filename to read data from or standard
            input if this option is not specified.
 
-       --oouutt ffiilleennaammee
+       -out filename
            Specifies the output filename to write to or standard output by
            default.
 
-       --iinnkkeeyy ffiillee
+       -inkey file
            The input key file, by default it should be an RSA private key.
 
-       --kkeeyyffoorrmm PPEEMM||DDEERR||EENNGGIINNEE
+       -keyform PEM|DER|ENGINE
            The key format PEM, DER or ENGINE.
 
-       --ppuubbiinn
+       -pubin
            The input file is an RSA public key.
 
-       --cceerrttiinn
+       -certin
            The input is a certificate containing an RSA public key.
 
-       --ssiiggnn
+       -sign
            Sign the input data and output the signed result. This requires an
            RSA private key.
 
-       --vveerriiffyy
+       -verify
            Verify the input data and output the recovered data.
 
-       --eennccrryypptt
+       -encrypt
            Encrypt the input data using an RSA public key.
 
-       --ddeeccrryypptt
+       -decrypt
            Decrypt the input data using an RSA private key.
 
-       --rraanndd ffiillee......
+       -rand file...
            A file or files containing random data used to seed the random
            number generator.  Multiple files can be specified separated by an
-           OS-dependent character.  The separator is ;; for MS-Windows, ,, for
-           OpenVMS, and :: for all others.
+           OS-dependent character.  The separator is ; for MS-Windows, , for
+           OpenVMS, and : for all others.
 
-       [--wwrriitteerraanndd ffiillee]
-           Writes random data to the specified _f_i_l_e upon exit.  This can be
-           used with a subsequent --rraanndd flag.
+       [-writerand file]
+           Writes random data to the specified file upon exit.  This can be
+           used with a subsequent -rand flag.
 
-       --ppkkccss,, --ooaaeepp,, --ssssll,, --rraaww
+       -pkcs, -oaep, -ssl, -raw
            The padding to use: PKCS#1 v1.5 (the default), PKCS#1 OAEP, special
            padding used in SSL v2 backwards compatible handshakes, or no
-           padding, respectively.  For signatures, only --ppkkccss and --rraaww can be
+           padding, respectively.  For signatures, only -pkcs and -raw can be
            used.
 
-       --hheexxdduummpp
+       -hexdump
            Hex dump the output data.
 
-       --aassnn11ppaarrssee
+       -asn1parse
            Parse the ASN.1 output data, this is useful when combined with the
-           --vveerriiffyy option.
+           -verify option.
 
-NNOOTTEESS
-       rrssaauuttll because it uses the RSA algorithm directly can only be used to
+NOTES
+       rsautl because it uses the RSA algorithm directly can only be used to
        sign or verify small pieces of data.
 
-EEXXAAMMPPLLEESS
+EXAMPLES
        Sign some data using a private key:
 
         openssl rsautl -sign -in file -inkey key.pem -out sig
@@ -106,8 +106,8 @@ EEXXAAMMPPLLEESS
        second byte) and random padding data visible instead of the 0xff bytes.
 
        It is possible to analyse the signature of certificates using this
-       utility in conjunction with aassnn11ppaarrssee. Consider the self signed example
-       in certs/pca-cert.pem . Running aassnn11ppaarrssee as follows yields:
+       utility in conjunction with asn1parse. Consider the self signed example
+       in certs/pca-cert.pem . Running asn1parse as follows yields:
 
         openssl asn1parse -in pca-cert.pem
 
@@ -163,10 +163,10 @@ EEXXAAMMPPLLEESS
 
        which it can be seen agrees with the recovered value above.
 
-SSEEEE AALLSSOO
-       ddggsstt(1), rrssaa(1), ggeennrrssaa(1)
+SEE ALSO
+       dgst(1), rsa(1), genrsa(1)
 
-CCOOPPYYRRIIGGHHTT
+COPYRIGHT
        Copyright 2000-2017 The OpenSSL Project Authors. All Rights Reserved.
 
        Licensed under the OpenSSL license (the "License").  You may not use

@@ -2,61 +2,61 @@ LIST(1)                             OpenSSL                            LIST(1)
 
 
 
-NNAAMMEE
+NAME
        openssl-list, list - list algorithms and features
 
-SSYYNNOOPPSSIISS
-       ooppeennssssll lliisstt [--hheellpp] [--11] [--ccoommmmaannddss] [--ddiiggeesstt--ccoommmmaannddss]
-       [--ddiiggeesstt--aallggoorriitthhmmss] [--cciipphheerr--ccoommmmaannddss] [--cciipphheerr--aallggoorriitthhmmss]
-       [--ppuubblliicc--kkeeyy--aallggoorriitthhmmss] [--ppuubblliicc--kkeeyy--mmeetthhooddss] [--ddiissaabblleedd]
+SYNOPSIS
+       openssl list [-help] [-1] [-commands] [-digest-commands]
+       [-digest-algorithms] [-cipher-commands] [-cipher-algorithms]
+       [-public-key-algorithms] [-public-key-methods] [-disabled]
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        This command is used to generate list of algorithms or disabled
        features.
 
-OOPPTTIIOONNSS
-       --hheellpp
+OPTIONS
+       -help
            Display a usage message.
 
-       --11  List the commands, digest-commands, or cipher-commands in a single
+       -1  List the commands, digest-commands, or cipher-commands in a single
            column.  If used, this option must be given first.
 
-       --ccoommmmaannddss
+       -commands
            Display a list of standard commands.
 
-       --ddiiggeesstt--ccoommmmaannddss
+       -digest-commands
            Display a list of message digest commands, which are typically used
-           as input to the ddggsstt(1) or ssppeeeedd(1) commands.
+           as input to the dgst(1) or speed(1) commands.
 
-       --ddiiggeesstt--aallggoorriitthhmmss
+       -digest-algorithms
            Display a list of message digest algorithms.  If a line is of the
            form
-             foo => bar then ffoooo is an alias for the official algorithm name,
-           bbaarr.
+             foo => bar then foo is an alias for the official algorithm name,
+           bar.
 
-       --cciipphheerr--ccoommmmaannddss
+       -cipher-commands
            Display a list of cipher commands, which are typically used as
-           input to the ddggsstt(1) or ssppeeeedd(1) commands.
+           input to the dgst(1) or speed(1) commands.
 
-       --cciipphheerr--aallggoorriitthhmmss
+       -cipher-algorithms
            Display a list of cipher algorithms.  If a line is of the form
-             foo => bar then ffoooo is an alias for the official algorithm name,
-           bbaarr.
+             foo => bar then foo is an alias for the official algorithm name,
+           bar.
 
-       --ppuubblliicc--kkeeyy--aallggoorriitthhmmss
+       -public-key-algorithms
            Display a list of public key algorithms, with each algorithm as a
            block of multiple lines, all but the first are indented.
 
-       --ppuubblliicc--kkeeyy--mmeetthhooddss
+       -public-key-methods
            Display a list of public key method OIDs: this also includes public
            key methods without an associated ASN.1 method, for example, KDF
            algorithms.
 
-       --ddiissaabblleedd
+       -disabled
            Display a list of disabled features, those that were compiled out
            of the installation.
 
-CCOOPPYYRRIIGGHHTT
+COPYRIGHT
        Copyright 2016-2017 The OpenSSL Project Authors. All Rights Reserved.
 
        Licensed under the OpenSSL license (the "License").  You may not use

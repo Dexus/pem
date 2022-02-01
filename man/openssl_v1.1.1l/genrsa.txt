@@ -2,75 +2,75 @@ GENRSA(1)                           OpenSSL                          GENRSA(1)
 
 
 
-NNAAMMEE
+NAME
        openssl-genrsa, genrsa - generate an RSA private key
 
-SSYYNNOOPPSSIISS
-       ooppeennssssll ggeennrrssaa [--hheellpp] [--oouutt ffiilleennaammee] [--ppaassssoouutt aarrgg] [--aaeess112288]
-       [--aaeess119922] [--aaeess225566] [--aarriiaa112288] [--aarriiaa119922] [--aarriiaa225566] [--ccaammeelllliiaa112288]
-       [--ccaammeelllliiaa119922] [--ccaammeelllliiaa225566] [--ddeess] [--ddeess33] [--iiddeeaa] [--ff44] [--33] [--rraanndd
-       ffiillee......]  [--wwrriitteerraanndd ffiillee] [--eennggiinnee iidd] [--pprriimmeess nnuumm] [nnuummbbiittss]
+SYNOPSIS
+       openssl genrsa [-help] [-out filename] [-passout arg] [-aes128]
+       [-aes192] [-aes256] [-aria128] [-aria192] [-aria256] [-camellia128]
+       [-camellia192] [-camellia256] [-des] [-des3] [-idea] [-f4] [-3] [-rand
+       file...]  [-writerand file] [-engine id] [-primes num] [numbits]
 
-DDEESSCCRRIIPPTTIIOONN
-       The ggeennrrssaa command generates an RSA private key.
+DESCRIPTION
+       The genrsa command generates an RSA private key.
 
-OOPPTTIIOONNSS
-       --hheellpp
+OPTIONS
+       -help
            Print out a usage message.
 
-       --oouutt ffiilleennaammee
+       -out filename
            Output the key to the specified file. If this argument is not
            specified then standard output is used.
 
-       --ppaassssoouutt aarrgg
+       -passout arg
            The output file password source. For more information about the
-           format of aarrgg see "Pass Phrase Options" in ooppeennssssll(1).
+           format of arg see "Pass Phrase Options" in openssl(1).
 
-       --aaeess112288, --aaeess119922, --aaeess225566, --aarriiaa112288, --aarriiaa119922, --aarriiaa225566, --ccaammeelllliiaa112288,
-       --ccaammeelllliiaa119922, --ccaammeelllliiaa225566, --ddeess, --ddeess33, --iiddeeaa
+       -aes128, -aes192, -aes256, -aria128, -aria192, -aria256, -camellia128,
+       -camellia192, -camellia256, -des, -des3, -idea
            These options encrypt the private key with specified cipher before
            outputting it. If none of these options is specified no encryption
            is used. If encryption is used a pass phrase is prompted for if it
-           is not supplied via the --ppaassssoouutt argument.
+           is not supplied via the -passout argument.
 
-       --FF44||--33
+       -F4|-3
            The public exponent to use, either 65537 or 3. The default is
            65537.
 
-       --rraanndd ffiillee......
+       -rand file...
            A file or files containing random data used to seed the random
            number generator.  Multiple files can be specified separated by an
-           OS-dependent character.  The separator is ;; for MS-Windows, ,, for
-           OpenVMS, and :: for all others.
+           OS-dependent character.  The separator is ; for MS-Windows, , for
+           OpenVMS, and : for all others.
 
-       [--wwrriitteerraanndd ffiillee]
-           Writes random data to the specified _f_i_l_e upon exit.  This can be
-           used with a subsequent --rraanndd flag.
+       [-writerand file]
+           Writes random data to the specified file upon exit.  This can be
+           used with a subsequent -rand flag.
 
-       --eennggiinnee iidd
-           Specifying an engine (by its unique iidd string) will cause ggeennrrssaa to
+       -engine id
+           Specifying an engine (by its unique id string) will cause genrsa to
            attempt to obtain a functional reference to the specified engine,
            thus initialising it if needed. The engine will then be set as the
            default for all available algorithms.
 
-       --pprriimmeess nnuumm
+       -primes num
            Specify the number of primes to use while generating the RSA key.
-           The nnuumm parameter must be a positive integer that is greater than 1
-           and less than 16.  If nnuumm is greater than 2, then the generated key
+           The num parameter must be a positive integer that is greater than 1
+           and less than 16.  If num is greater than 2, then the generated key
            is called a 'multi-prime' RSA key, which is defined in RFC 8017.
 
-       nnuummbbiittss
+       numbits
            The size of the private key to generate in bits. This must be the
            last option specified. The default is 2048 and values less than 512
            are not allowed.
 
-NNOOTTEESS
+NOTES
        RSA private key generation essentially involves the generation of two
        or more prime numbers. When generating a private key various symbols
-       will be output to indicate the progress of the generation. A ..
-       represents each number which has passed an initial sieve test, ++ means
+       will be output to indicate the progress of the generation. A .
+       represents each number which has passed an initial sieve test, + means
        a number has passed a single round of the Miller-Rabin primality test,
-       ** means the current prime starts a regenerating progress due to some
+       * means the current prime starts a regenerating progress due to some
        failed tests. A newline means that the number has passed all the prime
        tests (the actual number depends on the key size).
 
@@ -78,10 +78,10 @@ NNOOTTEESS
        key may vary somewhat. But in general, more primes lead to less
        generation time of a key.
 
-SSEEEE AALLSSOO
-       ggeennddssaa(1)
+SEE ALSO
+       gendsa(1)
 
-CCOOPPYYRRIIGGHHTT
+COPYRIGHT
        Copyright 2000-2021 The OpenSSL Project Authors. All Rights Reserved.
 
        Licensed under the OpenSSL license (the "License").  You may not use

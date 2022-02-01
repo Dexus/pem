@@ -2,64 +2,64 @@ C_REHASH(1)                         OpenSSL                        C_REHASH(1)
 
 
 
-NNAAMMEE
+NAME
        c_rehash - Create symbolic links to files named by the hash values
 
-SSYYNNOOPPSSIISS
-       cc__rreehhaasshh [ _d_i_r_e_c_t_o_r_y...]
+SYNOPSIS
+       c_rehash [ directory...]
 
-DDEESSCCRRIIPPTTIIOONN
-       cc__rreehhaasshh scans directories and calculates a hash value of each ".pem"
+DESCRIPTION
+       c_rehash scans directories and calculates a hash value of each ".pem"
        file in the specified directory list and creates symbolic links for
        each file, where the name of the link is the hash value.  This utility
        is useful as many programs that use OpenSSL require directories to be
        set up like this in order to find certificates.
 
        If any directories are named on the command line, then those are
-       processed in turn. If not, then the SSSSLL__CCEERRTT__DDIIRR environment variable
+       processed in turn. If not, then the SSL_CERT_DIR environment variable
        is consulted; this shold be a colon-separated list of directories, like
-       the Unix PPAATTHH variable.  If that is not set then the default directory
-       (installation-specific but often //uussrr//llooccaall//ssssll//cceerrttss) is processed.
+       the Unix PATH variable.  If that is not set then the default directory
+       (installation-specific but often /usr/local/ssl/certs) is processed.
 
        In order for a directory to be processed, the user must have write
        permissions on that directory, otherwise it will be skipped.  The links
-       created are of the form "HHHHHHHH.D", where each HH is a hexadecimal
-       character and DD is a single decimal digit.  When processing a
-       directory, cc__rreehhaasshh will first remove all links that have a name in
+       created are of the form "HHHHHHHH.D", where each H is a hexadecimal
+       character and D is a single decimal digit.  When processing a
+       directory, c_rehash will first remove all links that have a name in
        that syntax. If you have links in that format used for other purposes,
        they will be removed.  Hashes for CRL's look similar except the letter
-       rr appears after the period, like this: "HHHHHHHH.rD".
+       r appears after the period, like this: "HHHHHHHH.rD".
 
        Multiple objects may have the same hash; they will be indicated by
-       incrementing the DD value. Duplicates are found by comparing the full
+       incrementing the D value. Duplicates are found by comparing the full
        SHA-1 fingerprint. A warning will be displayed if a duplicate is found.
 
-       A warning will also be displayed if there are ..ppeemm files that cannot be
+       A warning will also be displayed if there are .pem files that cannot be
        parsed as either a certificate or a CRL.
 
-       The program uses the ooppeennssssll program to compute the hashes and
-       fingerprints. If not found in the user's PPAATTHH, then set the OOPPEENNSSSSLL
+       The program uses the openssl program to compute the hashes and
+       fingerprints. If not found in the user's PATH, then set the OPENSSL
        environment variable to the full pathname.  Any program can be used, it
        will be invoked as follows for either a certificate or CRL:
 
          $OPENSSL x509 -hash -fingerprint -noout -in FFFFFF
          $OPENSSL crl -hash -fingerprint -noout -in FFFFFF
 
-       where FFFFFFFFFFFF is the filename. It must output the hash of the file on
+       where FFFFFF is the filename. It must output the hash of the file on
        the first line, and the fingerprint on the second, optionally prefixed
        with some text and an equals sign.
 
-EENNVVIIRROONNMMEENNTT
-       OOPPEENNSSSSLL
+ENVIRONMENT
+       OPENSSL
            The path to an executable to use to generate hashes and
            fingerprints (see above).
 
-       SSSSLL__CCEERRTT__DDIIRR
+       SSL_CERT_DIR
            Colon separated list of directories to operate on.  Ignored if
            directories are listed on the command line.
 
-SSEEEE AALLSSOO
-       ooppeennssssll(1), ccrrll(1).  xx550099(1).
+SEE ALSO
+       openssl(1), crl(1).  x509(1).
 
 
 

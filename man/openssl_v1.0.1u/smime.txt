@@ -2,27 +2,27 @@ SMIME(1)                            OpenSSL                           SMIME(1)
 
 
 
-NNAAMMEE
+NAME
        smime - S/MIME utility
 
-SSYYNNOOPPSSIISS
-       ooppeennssssll ssmmiimmee [--eennccrryypptt] [--ddeeccrryypptt] [--ssiiggnn] [--rreessiiggnn] [--vveerriiffyy]
-       [--ppkk77oouutt] [--[[cciipphheerr]]] [--iinn ffiillee] [--nnoo__aalltt__cchhaaiinnss] [--cceerrttffiillee ffiillee]
-       [--ssiiggnneerr ffiillee] [--rreecciipp  ffiillee] [--iinnffoorrmm SSMMIIMMEE||PPEEMM||DDEERR] [--ppaassssiinn aarrgg]
-       [--iinnkkeeyy ffiillee] [--oouutt ffiillee] [--oouuttffoorrmm SSMMIIMMEE||PPEEMM||DDEERR] [--ccoonntteenntt ffiillee] [--ttoo
-       aaddddrr] [--ffrroomm aadd] [--ssuubbjjeecctt ss] [--tteexxtt] [--iinnddeeff] [--nnooiinnddeeff] [--ssttrreeaamm]
-       [--rraanndd ffiillee((ss))] [--mmdd ddiiggeesstt] [cert.pem]...
+SYNOPSIS
+       openssl smime [-encrypt] [-decrypt] [-sign] [-resign] [-verify]
+       [-pk7out] [-[cipher]] [-in file] [-no_alt_chains] [-certfile file]
+       [-signer file] [-recip  file] [-inform SMIME|PEM|DER] [-passin arg]
+       [-inkey file] [-out file] [-outform SMIME|PEM|DER] [-content file] [-to
+       addr] [-from ad] [-subject s] [-text] [-indef] [-noindef] [-stream]
+       [-rand file(s)] [-md digest] [cert.pem]...
 
-DDEESSCCRRIIPPTTIIOONN
-       The ssmmiimmee command handles S/MIME mail. It can encrypt, decrypt, sign
+DESCRIPTION
+       The smime command handles S/MIME mail. It can encrypt, decrypt, sign
        and verify S/MIME messages.
 
-CCOOMMMMAANNDD OOPPTTIIOONNSS
+COMMAND OPTIONS
        There are six operation options that set the type of operation to be
        performed.  The meaning of the other options varies according to the
        operation type.
 
-       --eennccrryypptt
+       -encrypt
            encrypt mail for the given recipient certificates. Input file is
            the message to be encrypted. The output file is the encrypted mail
            in MIME format.
@@ -31,197 +31,197 @@ CCOOMMMMAANNDD OOPPTTIIOONNSS
            that key has been compromised, others may be able to decrypt the
            text.
 
-       --ddeeccrryypptt
+       -decrypt
            decrypt mail using the supplied certificate and private key.
            Expects an encrypted mail message in MIME format for the input
            file. The decrypted mail is written to the output file.
 
-       --ssiiggnn
+       -sign
            sign mail using the supplied certificate and private key. Input
            file is the message to be signed. The signed message in MIME format
            is written to the output file.
 
-       --vveerriiffyy
+       -verify
            verify signed mail. Expects a signed mail message on input and
            outputs the signed data. Both clear text and opaque signing is
            supported.
 
-       --ppkk77oouutt
+       -pk7out
            takes an input message and writes out a PEM encoded PKCS#7
            structure.
 
-       --rreessiiggnn
+       -resign
            resign a message: take an existing message and one or more new
            signers.
 
-       --iinn ffiilleennaammee
+       -in filename
            the input message to be encrypted or signed or the MIME message to
            be decrypted or verified.
 
-       --iinnffoorrmm SSMMIIMMEE||PPEEMM||DDEERR
+       -inform SMIME|PEM|DER
            this specifies the input format for the PKCS#7 structure. The
-           default is SSMMIIMMEE which reads an S/MIME format message. PPEEMM and DDEERR
+           default is SMIME which reads an S/MIME format message. PEM and DER
            format change this to expect PEM and DER format PKCS#7 structures
            instead. This currently only affects the input format of the PKCS#7
            structure, if no PKCS#7 structure is being input (for example with
-           --eennccrryypptt or --ssiiggnn) this option has no effect.
+           -encrypt or -sign) this option has no effect.
 
-       --oouutt ffiilleennaammee
+       -out filename
            the message text that has been decrypted or verified or the output
            MIME format message that has been signed or verified.
 
-       --oouuttffoorrmm SSMMIIMMEE||PPEEMM||DDEERR
+       -outform SMIME|PEM|DER
            this specifies the output format for the PKCS#7 structure. The
-           default is SSMMIIMMEE which write an S/MIME format message. PPEEMM and DDEERR
+           default is SMIME which write an S/MIME format message. PEM and DER
            format change this to write PEM and DER format PKCS#7 structures
            instead. This currently only affects the output format of the
            PKCS#7 structure, if no PKCS#7 structure is being output (for
-           example with --vveerriiffyy or --ddeeccrryypptt) this option has no effect.
+           example with -verify or -decrypt) this option has no effect.
 
-       --ssttrreeaamm --iinnddeeff --nnooiinnddeeff
-           the --ssttrreeaamm and --iinnddeeff options are equivalent and enable streaming
+       -stream -indef -noindef
+           the -stream and -indef options are equivalent and enable streaming
            I/O for encoding operations. This permits single pass processing of
            data without the need to hold the entire contents in memory,
            potentially supporting very large files. Streaming is automatically
            set for S/MIME signing with detached data if the output format is
-           SSMMIIMMEE it is currently off by default for all other operations.
+           SMIME it is currently off by default for all other operations.
 
-       --nnooiinnddeeff
+       -noindef
            disable streaming I/O where it would produce and indefinite length
            constructed encoding. This option currently has no effect. In
            future streaming will be enabled by default on all relevant
            operations and this option will disable it.
 
-       --ccoonntteenntt ffiilleennaammee
+       -content filename
            This specifies a file containing the detached content, this is only
-           useful with the --vveerriiffyy command. This is only usable if the PKCS#7
+           useful with the -verify command. This is only usable if the PKCS#7
            structure is using the detached signature form where the content is
            not included. This option will override any content if the input
            format is S/MIME and it uses the multipart/signed MIME content
            type.
 
-       --tteexxtt
+       -text
            this option adds plain text (text/plain) MIME headers to the
            supplied message if encrypting or signing. If decrypting or
            verifying it strips off text headers: if the decrypted or verified
            message is not of MIME type text/plain then an error occurs.
 
-       --CCAAffiillee ffiillee
-           a file containing trusted CA certificates, only used with --vveerriiffyy.
+       -CAfile file
+           a file containing trusted CA certificates, only used with -verify.
 
-       --CCAAppaatthh ddiirr
+       -CApath dir
            a directory containing trusted CA certificates, only used with
-           --vveerriiffyy. This directory must be a standard certificate directory:
-           that is a hash of each subject name (using xx550099 --hhaasshh) should be
+           -verify. This directory must be a standard certificate directory:
+           that is a hash of each subject name (using x509 -hash) should be
            linked to each certificate.
 
-       --mmdd ddiiggeesstt
+       -md digest
            digest algorithm to use when signing or resigning. If not present
            then the default digest algorithm for the signing key will be used
            (usually SHA1).
 
-       --[[cciipphheerr]]
-           the encryption algorithm to use. For example DES  (56 bits) - --ddeess,
-           triple DES (168 bits) - --ddeess33, EEVVPP__ggeett__cciipphheerrbbyynnaammee(()) function) can
-           also be used preceded by a dash, for example --aaeess__112288__ccbbcc. See eenncc
+       -[cipher]
+           the encryption algorithm to use. For example DES  (56 bits) - -des,
+           triple DES (168 bits) - -des3, EVP_get_cipherbyname() function) can
+           also be used preceded by a dash, for example -aes_128_cbc. See enc
            for list of ciphers supported by your version of OpenSSL.
 
-           If not specified triple DES is used. Only used with --eennccrryypptt.
+           If not specified triple DES is used. Only used with -encrypt.
 
-       --nnooiinntteerrnn
+       -nointern
            when verifying a message normally certificates (if any) included in
            the message are searched for the signing certificate. With this
-           option only the certificates specified in the --cceerrttffiillee option are
+           option only the certificates specified in the -certfile option are
            used.  The supplied certificates can still be used as untrusted CAs
            however.
 
-       --nnoovveerriiffyy
+       -noverify
            do not verify the signers certificate of a signed message.
 
-       --nnoocchhaaiinn
+       -nochain
            do not do chain verification of signers certificates: that is don't
            use the certificates in the signed message as untrusted CAs.
 
-       --nnoossiiggss
+       -nosigs
            don't try to verify the signatures on the message.
 
-       --nnoocceerrttss
+       -nocerts
            when signing a message the signer's certificate is normally
            included with this option it is excluded. This will reduce the size
            of the signed message but the verifier must have a copy of the
-           signers certificate available locally (passed using the --cceerrttffiillee
+           signers certificate available locally (passed using the -certfile
            option for example).
 
-       --nnooaattttrr
+       -noattr
            normally when a message is signed a set of attributes are included
            which include the signing time and supported symmetric algorithms.
            With this option they are not included.
 
-       --bbiinnaarryy
+       -binary
            normally the input message is converted to "canonical" format which
            is effectively using CR and LF as end of line: as required by the
            S/MIME specification. When this option is present no translation
            occurs. This is useful when handling binary data which may not be
            in MIME format.
 
-       --nnooddeettaacchh
+       -nodetach
            when signing a message use opaque signing: this form is more
            resistant to translation by mail relays but it cannot be read by
            mail agents that do not support S/MIME.  Without this option
            cleartext signing with the MIME type multipart/signed is used.
 
-       --cceerrttffiillee ffiillee
+       -certfile file
            allows additional certificates to be specified. When signing these
            will be included with the message. When verifying these will be
            searched for the signers certificates. The certificates should be
            in PEM format.
 
-       --ssiiggnneerr ffiillee
+       -signer file
            a signing certificate when signing or resigning a message, this
            option can be used multiple times if more than one signer is
            required. If a message is being verified then the signers
            certificates will be written to this file if the verification was
            successful.
 
-       --rreecciipp ffiillee
+       -recip file
            the recipients certificate when decrypting a message. This
            certificate must match one of the recipients of the message or an
            error occurs.
 
-       --iinnkkeeyy ffiillee
+       -inkey file
            the private key to use when signing or decrypting. This must match
            the corresponding certificate. If this option is not specified then
            the private key must be included in the certificate file specified
-           with the --rreecciipp or --ssiiggnneerr file. When signing this option can be
+           with the -recip or -signer file. When signing this option can be
            used multiple times to specify successive keys.
 
-       --ppaassssiinn aarrgg
+       -passin arg
            the private key password source. For more information about the
-           format of aarrgg see the PPAASSSS PPHHRRAASSEE AARRGGUUMMEENNTTSS section in ooppeennssssll(1).
+           format of arg see the PASS PHRASE ARGUMENTS section in openssl(1).
 
-       --rraanndd ffiillee((ss))
+       -rand file(s)
            a file or files containing random data used to seed the random
-           number generator, or an EGD socket (see RRAANNDD__eeggdd(3)).  Multiple
+           number generator, or an EGD socket (see RAND_egd(3)).  Multiple
            files can be specified separated by a OS-dependent character.  The
-           separator is ;; for MS-Windows, ,, for OpenVMS, and :: for all others.
+           separator is ; for MS-Windows, , for OpenVMS, and : for all others.
 
-       cceerrtt..ppeemm......
+       cert.pem...
            one or more certificates of message recipients: used when
            encrypting a message.
 
-       --ttoo,, --ffrroomm,, --ssuubbjjeecctt
+       -to, -from, -subject
            the relevant mail headers. These are included outside the signed
            portion of a message so they may be included manually. If signing
            then many S/MIME mail clients check the signers certificate's email
            address matches that specified in the From: address.
 
-       --ppuurrppoossee,, --iiggnnoorree__ccrriittiiccaall,, --iissssuueerr__cchheecckkss,, --ccrrll__cchheecckk,, --ccrrll__cchheecckk__aallll,,
-       --ppoolliiccyy__cchheecckk,, --eexxtteennddeedd__ccrrll,, --xx550099__ssttrriicctt,, --ppoolliiccyy --cchheecckk__ssss__ssiigg
-       --nnoo__aalltt__cchhaaiinnss
-           Set various options of certificate chain verification. See vveerriiffyy
+       -purpose, -ignore_critical, -issuer_checks, -crl_check, -crl_check_all,
+       -policy_check, -extended_crl, -x509_strict, -policy -check_ss_sig
+       -no_alt_chains
+           Set various options of certificate chain verification. See verify
            manual page for details.
 
-NNOOTTEESS
+NOTES
        The MIME message must be sent without any blank lines between the
        headers and the output. Some mail programs will automatically add a
        blank line. Piping the mail directly to sendmail is one way to achieve
@@ -229,7 +229,7 @@ NNOOTTEESS
 
        The supplied message to be signed or encrypted must include the
        necessary MIME headers or many S/MIME clients wont display it properly
-       (if at all). You can use the --tteexxtt option to automatically add plain
+       (if at all). You can use the -text option to automatically add plain
        text headers.
 
        A "signed and encrypted" message is one where a signed message is then
@@ -241,26 +241,26 @@ NNOOTTEESS
        choke if a message contains multiple signers. It is possible to sign
        messages "in parallel" by signing an already signed message.
 
-       The options --eennccrryypptt and --ddeeccrryypptt reflect common usage in S/MIME
+       The options -encrypt and -decrypt reflect common usage in S/MIME
        clients. Strictly speaking these process PKCS#7 enveloped data: PKCS#7
        encrypted data is used for other purposes.
 
-       The --rreessiiggnn option uses an existing message digest when adding a new
+       The -resign option uses an existing message digest when adding a new
        signer. This means that attributes must be present in at least one
        existing signer using the same message digest or this operation will
        fail.
 
-       The --ssttrreeaamm and --iinnddeeff options enable experimental streaming I/O
+       The -stream and -indef options enable experimental streaming I/O
        support.  As a result the encoding is BER using indefinite length
        constructed encoding and no longer DER. Streaming is supported for the
-       --eennccrryypptt operation and the --ssiiggnn operation if the content is not
+       -encrypt operation and the -sign operation if the content is not
        detached.
 
-       Streaming is always used for the --ssiiggnn operation with detached data but
+       Streaming is always used for the -sign operation with detached data but
        since the content is no longer part of the PKCS#7 structure the
        encoding remains DER.
 
-EEXXIITT CCOODDEESS
+EXIT CODES
        0   the operation was completely successfully.
 
        1   an error occurred parsing the command options.
@@ -275,7 +275,7 @@ EEXXIITT CCOODDEESS
        5   the message was verified correctly but an error occurred writing
            out the signers certificates.
 
-EEXXAAMMPPLLEESS
+EXAMPLES
        Create a cleartext signed message:
 
         openssl smime -sign -in message.txt -text -out mail.msg \
@@ -321,7 +321,7 @@ EEXXAAMMPPLLEESS
                -from steve@openssl.org -to someone@somewhere \
                -subject "Signed and Encrypted message" -des3 user.pem
 
-       Note: the encryption command does not include the --tteexxtt option because
+       Note: the encryption command does not include the -text option because
        the message being encrypted already has MIME headers.
 
        Decrypt mail:
@@ -352,7 +352,7 @@ EEXXAAMMPPLLEESS
 
         openssl smime -resign -in mail.msg -signer newsign.pem -out mail2.msg
 
-BBUUGGSS
+BUGS
        The MIME parser isn't very clever: it seems to handle most messages
        that I've thrown at it but it may choke on others.
 
@@ -375,8 +375,8 @@ BBUUGGSS
        The current code can only handle S/MIME v2 messages, the more complex
        S/MIME v3 structures may cause parsing errors.
 
-HHIISSTTOORRYY
-       The use of multiple --ssiiggnneerr options and the --rreessiiggnn command were first
+HISTORY
+       The use of multiple -signer options and the -resign command were first
        added in OpenSSL 1.0.0
 
        The -no_alt_chains options was first added to OpenSSL 1.0.1n and

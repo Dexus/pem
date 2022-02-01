@@ -2,40 +2,40 @@ OPENSSL-PKEYUTL(1ossl)              OpenSSL             OPENSSL-PKEYUTL(1ossl)
 
 
 
-NNAAMMEE
+NAME
        openssl-pkeyutl - public key algorithm command
 
-SSYYNNOOPPSSIISS
-       ooppeennssssll ppkkeeyyuuttll [--hheellpp] [--iinn _f_i_l_e] [--rraawwiinn] [--ddiiggeesstt _a_l_g_o_r_i_t_h_m] [--oouutt
-       _f_i_l_e] [--ssiiggffiillee _f_i_l_e] [--iinnkkeeyy _f_i_l_e_n_a_m_e|_u_r_i] [--kkeeyyffoorrmm
-       DDEERR|PPEEMM|PP1122|EENNGGIINNEE] [--ppaassssiinn _a_r_g] [--ppeeeerrkkeeyy _f_i_l_e] [--ppeeeerrffoorrmm
-       DDEERR|PPEEMM|PP1122|EENNGGIINNEE] [--ppuubbiinn] [--cceerrttiinn] [--rreevv] [--ssiiggnn] [--vveerriiffyy]
-       [--vveerriiffyyrreeccoovveerr] [--eennccrryypptt] [--ddeeccrryypptt] [--ddeerriivvee] [--kkddff _a_l_g_o_r_i_t_h_m]
-       [--kkddfflleenn _l_e_n_g_t_h] [--ppkkeeyyoopptt _o_p_t:_v_a_l_u_e] [--ppkkeeyyoopptt__ppaassssiinn _o_p_t[:_p_a_s_s_a_r_g]]
-       [--hheexxdduummpp] [--aassnn11ppaarrssee] [--eennggiinnee _i_d] [--eennggiinnee__iimmppll] [--rraanndd _f_i_l_e_s]
-       [--wwrriitteerraanndd _f_i_l_e] [--pprroovviiddeerr _n_a_m_e] [--pprroovviiddeerr--ppaatthh _p_a_t_h] [--pprrooppqquueerryy
-       _p_r_o_p_q] [--ccoonnffiigg _c_o_n_f_i_g_f_i_l_e]
+SYNOPSIS
+       openssl pkeyutl [-help] [-in file] [-rawin] [-digest algorithm] [-out
+       file] [-sigfile file] [-inkey filename|uri] [-keyform
+       DER|PEM|P12|ENGINE] [-passin arg] [-peerkey file] [-peerform
+       DER|PEM|P12|ENGINE] [-pubin] [-certin] [-rev] [-sign] [-verify]
+       [-verifyrecover] [-encrypt] [-decrypt] [-derive] [-kdf algorithm]
+       [-kdflen length] [-pkeyopt opt:value] [-pkeyopt_passin opt[:passarg]]
+       [-hexdump] [-asn1parse] [-engine id] [-engine_impl] [-rand files]
+       [-writerand file] [-provider name] [-provider-path path] [-propquery
+       propq] [-config configfile]
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        This command can be used to perform low-level public key operations
        using any supported algorithm.
 
-OOPPTTIIOONNSS
-       --hheellpp
+OPTIONS
+       -help
            Print out a usage message.
 
-       --iinn _f_i_l_e_n_a_m_e
+       -in filename
            This specifies the input filename to read data from or standard
            input if this option is not specified.
 
-       --rraawwiinn
+       -rawin
            This indicates that the input data is raw data, which is not hashed
            by any message digest algorithm. The user can specify a digest
-           algorithm by using the --ddiiggeesstt option. This option can only be used
-           with --ssiiggnn and --vveerriiffyy and must be used with the Ed25519 and Ed448
+           algorithm by using the -digest option. This option can only be used
+           with -sign and -verify and must be used with the Ed25519 and Ed448
            algorithms.
 
-       --ddiiggeesstt _a_l_g_o_r_i_t_h_m
+       -digest algorithm
            This specifies the digest algorithm which is used to hash the input
            data before signing or verifying it with the input key. This option
            could be omitted if the signature algorithm does not require one
@@ -43,123 +43,123 @@ OOPPTTIIOONNSS
            algorithm requires one, a default value will be used. For signature
            algorithms like RSA, DSA and ECDSA, SHA-256 will be the default
            digest algorithm. For SM2, it will be SM3. If this option is
-           present, then the --rraawwiinn option must be also specified.
+           present, then the -rawin option must be also specified.
 
-       --oouutt _f_i_l_e_n_a_m_e
+       -out filename
            Specifies the output filename to write to or standard output by
            default.
 
-       --ssiiggffiillee _f_i_l_e
-           Signature file, required for --vveerriiffyy operations only
+       -sigfile file
+           Signature file, required for -verify operations only
 
-       --iinnkkeeyy _f_i_l_e_n_a_m_e|_u_r_i
+       -inkey filename|uri
            The input key, by default it should be a private key.
 
-       --kkeeyyffoorrmm DDEERR|PPEEMM|PP1122|EENNGGIINNEE
+       -keyform DER|PEM|P12|ENGINE
            The key format; unspecified by default.  See
-           ooppeennssssll--ffoorrmmaatt--ooppttiioonnss(1) for details.
+           openssl-format-options(1) for details.
 
-       --ppaassssiinn _a_r_g
+       -passin arg
            The input key password source. For more information about the
-           format of _a_r_g see ooppeennssssll--ppaasssspphhrraassee--ooppttiioonnss(1).
+           format of arg see openssl-passphrase-options(1).
 
-       --ppeeeerrkkeeyy _f_i_l_e
+       -peerkey file
            The peer key file, used by key derivation (agreement) operations.
 
-       --ppeeeerrffoorrmm DDEERR|PPEEMM|PP1122|EENNGGIINNEE
+       -peerform DER|PEM|P12|ENGINE
            The peer key format; unspecified by default.  See
-           ooppeennssssll--ffoorrmmaatt--ooppttiioonnss(1) for details.
+           openssl-format-options(1) for details.
 
-       --ppuubbiinn
+       -pubin
            The input file is a public key.
 
-       --cceerrttiinn
+       -certin
            The input is a certificate containing a public key.
 
-       --rreevv
+       -rev
            Reverse the order of the input buffer. This is useful for some
            libraries (such as CryptoAPI) which represent the buffer in little
            endian format.
 
-       --ssiiggnn
+       -sign
            Sign the input data (which must be a hash) and output the signed
            result. This requires a private key.
 
-       --vveerriiffyy
+       -verify
            Verify the input data (which must be a hash) against the signature
            file and indicate if the verification succeeded or failed.
 
-       --vveerriiffyyrreeccoovveerr
+       -verifyrecover
            Verify the input data (which must be a hash) and output the
            recovered data.
 
-       --eennccrryypptt
+       -encrypt
            Encrypt the input data using a public key.
 
-       --ddeeccrryypptt
+       -decrypt
            Decrypt the input data using a private key.
 
-       --ddeerriivvee
+       -derive
            Derive a shared secret using the peer key.
 
-       --kkddff _a_l_g_o_r_i_t_h_m
-           Use key derivation function _a_l_g_o_r_i_t_h_m.  The supported algorithms
-           are at present TTLLSS11--PPRRFF and HHKKDDFF.  Note: additional parameters and
+       -kdf algorithm
+           Use key derivation function algorithm.  The supported algorithms
+           are at present TLS1-PRF and HKDF.  Note: additional parameters and
            the KDF output length will normally have to be set for this to
-           work.  See EEVVPP__PPKKEEYY__CCTTXX__sseett__hhkkddff__mmdd(3) and
-           EEVVPP__PPKKEEYY__CCTTXX__sseett__ttllss11__pprrff__mmdd(3) for the supported string parameters
+           work.  See EVP_PKEY_CTX_set_hkdf_md(3) and
+           EVP_PKEY_CTX_set_tls1_prf_md(3) for the supported string parameters
            of each algorithm.
 
-       --kkddfflleenn _l_e_n_g_t_h
+       -kdflen length
            Set the output length for KDF.
 
-       --ppkkeeyyoopptt _o_p_t:_v_a_l_u_e
+       -pkeyopt opt:value
            Public key options specified as opt:value. See NOTES below for more
            details.
 
-       --ppkkeeyyoopptt__ppaassssiinn _o_p_t[:_p_a_s_s_a_r_g]
-           Allows reading a public key option _o_p_t from stdin or a password
-           source.  If only _o_p_t is specified, the user will be prompted to
-           enter a password on stdin.  Alternatively, _p_a_s_s_a_r_g can be specified
-           which can be any value supported by ooppeennssssll--ppaasssspphhrraassee--ooppttiioonnss(1).
+       -pkeyopt_passin opt[:passarg]
+           Allows reading a public key option opt from stdin or a password
+           source.  If only opt is specified, the user will be prompted to
+           enter a password on stdin.  Alternatively, passarg can be specified
+           which can be any value supported by openssl-passphrase-options(1).
 
-       --hheexxdduummpp
+       -hexdump
            hex dump the output data.
 
-       --aassnn11ppaarrssee
+       -asn1parse
            Parse the ASN.1 output data, this is useful when combined with the
-           --vveerriiffyyrreeccoovveerr option when an ASN1 structure is signed.
+           -verifyrecover option when an ASN1 structure is signed.
 
-       --eennggiinnee _i_d
-           See "Engine Options" in ooppeennssssll(1).  This option is deprecated.
+       -engine id
+           See "Engine Options" in openssl(1).  This option is deprecated.
 
-       --eennggiinnee__iimmppll
-           When used with the --eennggiinnee option, it specifies to also use engine
-           _i_d for crypto operations.
+       -engine_impl
+           When used with the -engine option, it specifies to also use engine
+           id for crypto operations.
 
-       --rraanndd _f_i_l_e_s, --wwrriitteerraanndd _f_i_l_e
-           See "Random State Options" in ooppeennssssll(1) for details.
+       -rand files, -writerand file
+           See "Random State Options" in openssl(1) for details.
 
-       --pprroovviiddeerr _n_a_m_e
-       --pprroovviiddeerr--ppaatthh _p_a_t_h
-       --pprrooppqquueerryy _p_r_o_p_q
-           See "Provider Options" in ooppeennssssll(1), pprroovviiddeerr(7), and pprrooppeerrttyy(7).
+       -provider name
+       -provider-path path
+       -propquery propq
+           See "Provider Options" in openssl(1), provider(7), and property(7).
 
-       --ccoonnffiigg _c_o_n_f_i_g_f_i_l_e
-           See "Configuration Option" in ooppeennssssll(1).
+       -config configfile
+           See "Configuration Option" in openssl(1).
 
-NNOOTTEESS
+NOTES
        The operations and options supported vary according to the key
        algorithm and its implementation. The OpenSSL operations and options
        are indicated below.
 
-       Unless otherwise mentioned all algorithms support the ddiiggeesstt::_a_l_g option
+       Unless otherwise mentioned all algorithms support the digest:alg option
        which specifies the digest in use for sign, verify and verifyrecover
-       operations.  The value _a_l_g should represent a digest name as used in
-       the EEVVPP__ggeett__ddiiggeessttbbyynnaammee(()) function for example sshhaa11. This value is not
+       operations.  The value alg should represent a digest name as used in
+       the EVP_get_digestbyname() function for example sha1. This value is not
        used to hash the input data. It is used (by some algorithms) for
        sanity-checking the lengths of data passed in and for creating the
-       structures that make up the signature (e.g. DDiiggeessttIInnffoo in RSASSA PKCS#1
+       structures that make up the signature (e.g. DigestInfo in RSASSA PKCS#1
        v1.5 signatures).
 
        This command does not hash the input data (except where -rawin is used)
@@ -172,59 +172,59 @@ NNOOTTEESS
        event the input size must not be larger than the largest supported
        digest size.
 
-       In other words, if the value of digest is sshhaa11 the input should be the
+       In other words, if the value of digest is sha1 the input should be the
        20 bytes long binary encoding of the SHA-1 hash function output.
 
-RRSSAA AALLGGOORRIITTHHMM
+RSA ALGORITHM
        The RSA algorithm generally supports the encrypt, decrypt, sign, verify
        and verifyrecover operations. However, some padding modes support only
-       a subset of these operations. The following additional ppkkeeyyoopptt values
+       a subset of these operations. The following additional pkeyopt values
        are supported:
 
-       rrssaa__ppaaddddiinngg__mmooddee::_m_o_d_e
-           This sets the RSA padding mode. Acceptable values for _m_o_d_e are
-           ppkkccss11 for PKCS#1 padding, nnoonnee for no padding, ooaaeepp for OOAAEEPP mode,
-           xx993311 for X9.31 mode and ppssss for PSS.
+       rsa_padding_mode:mode
+           This sets the RSA padding mode. Acceptable values for mode are
+           pkcs1 for PKCS#1 padding, none for no padding, oaep for OAEP mode,
+           x931 for X9.31 mode and pss for PSS.
 
            In PKCS#1 padding if the message digest is not set then the
            supplied data is signed or verified directly instead of using a
-           DDiiggeessttIInnffoo structure. If a digest is set then the a DDiiggeessttIInnffoo
+           DigestInfo structure. If a digest is set then the a DigestInfo
            structure is used and its the length must correspond to the digest
            type.
 
-           For ooaaeepp mode only encryption and decryption is supported.
+           For oaep mode only encryption and decryption is supported.
 
-           For xx993311 if the digest type is set it is used to format the block
+           For x931 if the digest type is set it is used to format the block
            data otherwise the first byte is used to specify the X9.31 digest
            ID. Sign, verify and verifyrecover are can be performed in this
            mode.
 
-           For ppssss mode only sign and verify are supported and the digest type
+           For pss mode only sign and verify are supported and the digest type
            must be specified.
 
-       rrssaa__ppssss__ssaallttlleenn::_l_e_n
-           For ppssss mode only this option specifies the salt length. Three
-           special values are supported: ddiiggeesstt sets the salt length to the
-           digest length, mmaaxx sets the salt length to the maximum permissible
-           value. When verifying aauuttoo causes the salt length to be
-           automatically determined based on the PPSSSS block structure.
+       rsa_pss_saltlen:len
+           For pss mode only this option specifies the salt length. Three
+           special values are supported: digest sets the salt length to the
+           digest length, max sets the salt length to the maximum permissible
+           value. When verifying auto causes the salt length to be
+           automatically determined based on the PSS block structure.
 
-       rrssaa__mmggff11__mmdd::_d_i_g_e_s_t
+       rsa_mgf1_md:digest
            For PSS and OAEP padding sets the MGF1 digest. If the MGF1 digest
            is not explicitly set in PSS mode then the signing digest is used.
 
-       rrssaa__ooaaeepp__mmdd::_d_i_g_e_s_t
+       rsa_oaep_md:digest
            Sets the digest used for the OAEP hash function. If not explicitly
            set then SHA1 is used.
 
-RRSSAA--PPSSSS AALLGGOORRIITTHHMM
+RSA-PSS ALGORITHM
        The RSA-PSS algorithm is a restricted version of the RSA algorithm
        which only supports the sign and verify operations with PSS padding.
-       The following additional --ppkkeeyyoopptt values are supported:
+       The following additional -pkeyopt values are supported:
 
-       rrssaa__ppaaddddiinngg__mmooddee::_m_o_d_e, rrssaa__ppssss__ssaallttlleenn::_l_e_n, rrssaa__mmggff11__mmdd::_d_i_g_e_s_t
-           These have the same meaning as the RRSSAA algorithm with some
-           additional restrictions. The padding mode can only be set to ppssss
+       rsa_padding_mode:mode, rsa_pss_saltlen:len, rsa_mgf1_md:digest
+           These have the same meaning as the RSA algorithm with some
+           additional restrictions. The padding mode can only be set to pss
            which is the default value.
 
            If the key has parameter restrictions than the digest, MGF1 digest
@@ -232,29 +232,29 @@ RRSSAA--PPSSSS AALLGGOORRIITTHHMM
            The digest and MG cannot be changed and the salt length cannot be
            set to a value less than the minimum restriction.
 
-DDSSAA AALLGGOORRIITTHHMM
+DSA ALGORITHM
        The DSA algorithm supports signing and verification operations only.
-       Currently there are no additional --ppkkeeyyoopptt options other than ddiiggeesstt.
+       Currently there are no additional -pkeyopt options other than digest.
        The SHA1 digest is assumed by default.
 
-DDHH AALLGGOORRIITTHHMM
+DH ALGORITHM
        The DH algorithm only supports the derivation operation and no
-       additional --ppkkeeyyoopptt options.
+       additional -pkeyopt options.
 
-EECC AALLGGOORRIITTHHMM
+EC ALGORITHM
        The EC algorithm supports sign, verify and derive operations. The sign
        and verify operations use ECDSA and derive uses ECDH. SHA1 is assumed
-       by default for the --ppkkeeyyoopptt ddiiggeesstt option.
+       by default for the -pkeyopt digest option.
 
-XX2255551199 AANNDD XX444488 AALLGGOORRIITTHHMMSS
+X25519 AND X448 ALGORITHMS
        The X25519 and X448 algorithms support key derivation only. Currently
        there are no additional options.
 
-EEDD2255551199 AANNDD EEDD444488 AALLGGOORRIITTHHMMSS
+ED25519 AND ED448 ALGORITHMS
        These algorithms only support signing and verifying. OpenSSL only
        implements the "pure" variants of these algorithms so raw data can be
-       passed directly to them without hashing them first. The option --rraawwiinn
-       must be used with these algorithms with no --ddiiggeesstt specified.
+       passed directly to them without hashing them first. The option -rawin
+       must be used with these algorithms with no -digest specified.
        Additionally OpenSSL only supports "oneshot" operation with these
        algorithms. This means that the entire file to be signed/verified must
        be read into memory before processing it. Signing or Verifying very
@@ -263,26 +263,26 @@ EEDD2255551199 AANNDD EEDD444488 AALLGGOORRIITTHHMMSS
        (for example if the input is stdin) then the sign or verify operation
        will fail.
 
-SSMM22
+SM2
        The SM2 algorithm supports sign, verify, encrypt and decrypt
        operations. For the sign and verify operations, SM2 requires an
-       Distinguishing ID string to be passed in. The following --ppkkeeyyoopptt value
+       Distinguishing ID string to be passed in. The following -pkeyopt value
        is supported:
 
-       ddiissttiidd::_s_t_r_i_n_g
+       distid:string
            This sets the ID string used in SM2 sign or verify operations.
            While verifying an SM2 signature, the ID string must be the same
            one used when signing the data.  Otherwise the verification will
            fail.
 
-       hheexxddiissttiidd::_h_e_x___s_t_r_i_n_g
+       hexdistid:hex_string
            This sets the ID string used in SM2 sign or verify operations.
            While verifying an SM2 signature, the ID string must be the same
            one used when signing the data.  Otherwise the verification will
            fail. The ID string provided with this option should be a valid
            hexadecimal value.
 
-EEXXAAMMPPLLEESS
+EXAMPLES
        Sign some data using a private key:
 
         openssl pkeyutl -sign -in file -inkey key.pem -out sig
@@ -304,13 +304,13 @@ EEXXAAMMPPLLEESS
 
         openssl pkeyutl -derive -inkey key.pem -peerkey pubkey.pem -out secret
 
-       Hexdump 48 bytes of TLS1 PRF using digest SSHHAA225566 and shared secret and
+       Hexdump 48 bytes of TLS1 PRF using digest SHA256 and shared secret and
        seed consisting of the single byte 0xFF:
 
         openssl pkeyutl -kdf TLS1-PRF -kdflen 48 -pkeyopt md:SHA256 \
            -pkeyopt hexsecret:ff -pkeyopt hexseed:ff -hexdump
 
-       Derive a key using ssccrryypptt where the password is read from command line:
+       Derive a key using scrypt where the password is read from command line:
 
         openssl pkeyutl -kdf scrypt -kdflen 16 -pkeyopt_passin pass \
            -pkeyopt hexsalt:aabbcc -pkeyopt N:16384 -pkeyopt r:8 -pkeyopt p:1
@@ -321,12 +321,12 @@ EEXXAAMMPPLLEESS
         openssl pkeyutl -kdf scrypt -kdflen 16 -pkeyopt_passin pass:env:MYPASS \
            -pkeyopt hexsalt:aabbcc -pkeyopt N:16384 -pkeyopt r:8 -pkeyopt p:1
 
-       Sign some data using an SSMM22(7) private key and a specific ID:
+       Sign some data using an SM2(7) private key and a specific ID:
 
         openssl pkeyutl -sign -in file -inkey sm2.key -out sig -rawin -digest sm3 \
            -pkeyopt distid:someid
 
-       Verify some data using an SSMM22(7) certificate and a specific ID:
+       Verify some data using an SM2(7) certificate and a specific ID:
 
         openssl pkeyutl -verify -certin -in file -inkey sm2.cert -sigfile sig \
            -rawin -digest sm3 -pkeyopt distid:someid
@@ -336,15 +336,15 @@ EEXXAAMMPPLLEESS
         openssl pkeyutl -decrypt -in file -inkey key.pem -out secret \
            -pkeyopt rsa_padding_mode:oaep -pkeyopt rsa_oaep_md:sha256
 
-SSEEEE AALLSSOO
-       ooppeennssssll(1), ooppeennssssll--ggeennppkkeeyy(1), ooppeennssssll--ppkkeeyy(1), ooppeennssssll--rrssaauuttll(1)
-       ooppeennssssll--ddggsstt(1), ooppeennssssll--rrssaa(1), ooppeennssssll--ggeennrrssaa(1), ooppeennssssll--kkddff(1)
-       EEVVPP__PPKKEEYY__CCTTXX__sseett__hhkkddff__mmdd(3), EEVVPP__PPKKEEYY__CCTTXX__sseett__ttllss11__pprrff__mmdd(3),
+SEE ALSO
+       openssl(1), openssl-genpkey(1), openssl-pkey(1), openssl-rsautl(1)
+       openssl-dgst(1), openssl-rsa(1), openssl-genrsa(1), openssl-kdf(1)
+       EVP_PKEY_CTX_set_hkdf_md(3), EVP_PKEY_CTX_set_tls1_prf_md(3),
 
-HHIISSTTOORRYY
-       The --eennggiinnee option was deprecated in OpenSSL 3.0.
+HISTORY
+       The -engine option was deprecated in OpenSSL 3.0.
 
-CCOOPPYYRRIIGGHHTT
+COPYRIGHT
        Copyright 2006-2021 The OpenSSL Project Authors. All Rights Reserved.
 
        Licensed under the Apache License 2.0 (the "License").  You may not use

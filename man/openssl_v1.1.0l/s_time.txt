@@ -2,45 +2,45 @@ S_TIME(1)                           OpenSSL                          S_TIME(1)
 
 
 
-NNAAMMEE
+NAME
        openssl-s_time, s_time - SSL/TLS performance timing program
 
-SSYYNNOOPPSSIISS
-       ooppeennssssll ss__ttiimmee [--hheellpp] [--ccoonnnneecctt hhoosstt::ppoorrtt] [--wwwwww ppaaggee] [--cceerrtt
-       ffiilleennaammee] [--kkeeyy ffiilleennaammee] [--CCAAppaatthh ddiirreeccttoorryy] [--CCAAffiillee ffiilleennaammee]
-       [--nnoo--CCAAffiillee] [--nnoo--CCAAppaatthh] [--rreeuussee] [--nneeww] [--vveerriiffyy ddeepptthh] [--nnbbiioo]
-       [--ttiimmee sseeccoonnddss] [--ssssll33] [--bbuuggss] [--cciipphheerr cciipphheerrlliisstt]
+SYNOPSIS
+       openssl s_time [-help] [-connect host:port] [-www page] [-cert
+       filename] [-key filename] [-CApath directory] [-CAfile filename]
+       [-no-CAfile] [-no-CApath] [-reuse] [-new] [-verify depth] [-nbio]
+       [-time seconds] [-ssl3] [-bugs] [-cipher cipherlist]
 
-DDEESSCCRRIIPPTTIIOONN
-       The ss__ttiimmee command implements a generic SSL/TLS client which connects
+DESCRIPTION
+       The s_time command implements a generic SSL/TLS client which connects
        to a remote host using SSL/TLS. It can request a page from the server
        and includes the time to transfer the payload data in its timing
        measurements. It measures the number of connections within a given
        timeframe, the amount of data transferred (if any), and calculates the
        average time spent for one connection.
 
-OOPPTTIIOONNSS
-       --hheellpp
+OPTIONS
+       -help
            Print out a usage message.
 
-       --ccoonnnneecctt hhoosstt::ppoorrtt
+       -connect host:port
            This specifies the host and optional port to connect to.
 
-       --wwwwww ppaaggee
+       -www page
            This specifies the page to GET from the server. A value of '/' gets
            the index.htm[l] page. If this parameter is not specified, then
-           ss__ttiimmee will only perform the handshake to establish SSL connections
+           s_time will only perform the handshake to establish SSL connections
            but not transfer any payload data.
 
-       --cceerrtt cceerrttnnaammee
+       -cert certname
            The certificate to use, if one is requested by the server. The
            default is not to use a certificate. The file is in PEM format.
 
-       --kkeeyy kkeeyyffiillee
+       -key keyfile
            The private key to use. If not specified then the certificate file
            will be used. The file is in PEM format.
 
-       --vveerriiffyy ddeepptthh
+       -verify depth
            The verify depth to use. This specifies the maximum length of the
            server certificate chain and turns on server certificate
            verification.  Currently the verify operation continues after
@@ -48,109 +48,109 @@ OOPPTTIIOONNSS
            a side effect the connection will never fail due to a server
            certificate verify failure.
 
-       --CCAAppaatthh ddiirreeccttoorryy
+       -CApath directory
            The directory to use for server certificate verification. This
-           directory must be in "hash format", see vveerriiffyy for more
+           directory must be in "hash format", see verify for more
            information. These are also used when building the client
            certificate chain.
 
-       --CCAAffiillee ffiillee
+       -CAfile file
            A file containing trusted certificates to use during server
            authentication and to use when attempting to build the client
            certificate chain.
 
-       --nnoo--CCAAffiillee
+       -no-CAfile
            Do not load the trusted CA certificates from the default file
            location
 
-       --nnoo--CCAAppaatthh
+       -no-CApath
            Do not load the trusted CA certificates from the default directory
            location
 
-       --nneeww
+       -new
            performs the timing test using a new session ID for each
-           connection.  If neither --nneeww nor --rreeuussee are specified, they are
+           connection.  If neither -new nor -reuse are specified, they are
            both on by default and executed in sequence.
 
-       --rreeuussee
+       -reuse
            performs the timing test using the same session ID; this can be
-           used as a test that session caching is working. If neither --nneeww nor
-           --rreeuussee are specified, they are both on by default and executed in
+           used as a test that session caching is working. If neither -new nor
+           -reuse are specified, they are both on by default and executed in
            sequence.
 
-       --nnbbiioo
+       -nbio
            turns on non-blocking I/O.
 
-       --ssssll33
+       -ssl3
            these options disable the use of certain SSL or TLS protocols. By
            default the initial handshake uses a method which should be
            compatible with all servers and permit them to use SSL v3 or TLS as
            appropriate.  The timing program is not as rich in options to turn
-           protocols on and off as the ss__cclliieenntt(1) program and may not connect
+           protocols on and off as the s_client(1) program and may not connect
            to all servers.
 
            Unfortunately there are a lot of ancient and broken servers in use
            which cannot handle this technique and will fail to connect. Some
-           servers only work if TLS is turned off with the --ssssll33 option.
+           servers only work if TLS is turned off with the -ssl3 option.
 
-       --bbuuggss
+       -bugs
            there are several known bug in SSL and TLS implementations. Adding
            this option enables various workarounds.
 
-       --cciipphheerr cciipphheerrlliisstt
+       -cipher cipherlist
            this allows the cipher list sent by the client to be modified.
            Although the server determines which cipher suite is used it should
            take the first supported cipher in the list sent by the client.
-           See the cciipphheerrss(1) command for more information.
+           See the ciphers(1) command for more information.
 
-       --ttiimmee lleennggtthh
-           specifies how long (in seconds) ss__ttiimmee should establish connections
+       -time length
+           specifies how long (in seconds) s_time should establish connections
            and optionally transfer payload data from a server. Server and
            client performance and the link speed determine how many
-           connections ss__ttiimmee can establish.
+           connections s_time can establish.
 
-NNOOTTEESS
-       ss__ttiimmee can be used to measure the performance of an SSL connection.  To
+NOTES
+       s_time can be used to measure the performance of an SSL connection.  To
        connect to an SSL HTTP server and get the default page the command
 
         openssl s_time -connect servername:443 -www / -CApath yourdir -CAfile yourfile.pem -cipher commoncipher [-ssl3]
 
        would typically be used (https uses port 443). 'commoncipher' is a
-       cipher to which both client and server can agree, see the cciipphheerrss(1)
+       cipher to which both client and server can agree, see the ciphers(1)
        command for details.
 
        If the handshake fails then there are several possible causes, if it is
-       nothing obvious like no client certificate then the --bbuuggss and --ssssll33
+       nothing obvious like no client certificate then the -bugs and -ssl3
        options can be tried in case it is a buggy server. In particular you
-       should play with these options bbeeffoorree submitting a bug report to an
+       should play with these options before submitting a bug report to an
        OpenSSL mailing list.
 
        A frequent problem when attempting to get client certificates working
        is that a web client complains it has no certificates or gives an empty
        list to choose from. This is normally because the server is not sending
        the clients certificate authority in its "acceptable CA list" when it
-       requests a certificate. By using ss__cclliieenntt(1) the CA list can be viewed
+       requests a certificate. By using s_client(1) the CA list can be viewed
        and checked. However some servers only request client authentication
        after a specific URL is requested. To obtain the list in this case it
-       is necessary to use the --pprreexxiitt option of ss__cclliieenntt(1) and send an HTTP
+       is necessary to use the -prexit option of s_client(1) and send an HTTP
        request for an appropriate page.
 
-       If a certificate is specified on the command line using the --cceerrtt
+       If a certificate is specified on the command line using the -cert
        option it will not be used unless the server specifically requests a
        client certificate. Therefor merely including a client certificate on
        the command line is no guarantee that the certificate works.
 
-BBUUGGSS
-       Because this program does not have all the options of the ss__cclliieenntt(1)
+BUGS
+       Because this program does not have all the options of the s_client(1)
        program to turn protocols on and off, you may not be able to measure
        the performance of all protocols with all servers.
 
-       The --vveerriiffyy option should really exit if the server verification fails.
+       The -verify option should really exit if the server verification fails.
 
-SSEEEE AALLSSOO
-       ss__cclliieenntt(1), ss__sseerrvveerr(1), cciipphheerrss(1)
+SEE ALSO
+       s_client(1), s_server(1), ciphers(1)
 
-CCOOPPYYRRIIGGHHTT
+COPYRIGHT
        Copyright 2004-2016 The OpenSSL Project Authors. All Rights Reserved.
 
        Licensed under the OpenSSL license (the "License").  You may not use

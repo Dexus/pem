@@ -2,86 +2,86 @@ STOREUTL(1)                         OpenSSL                        STOREUTL(1)
 
 
 
-NNAAMMEE
+NAME
        openssl-storeutl, storeutl - STORE utility
 
-SSYYNNOOPPSSIISS
-       ooppeennssssll ssttoorreeuuttll [--hheellpp] [--oouutt ffiillee] [--nnoooouutt] [--ppaassssiinn aarrgg] [--tteexxtt aarrgg]
-       [--eennggiinnee iidd] [--rr] [--cceerrttss] [--kkeeyyss] [--ccrrllss] [--ssuubbjjeecctt aarrgg] [--iissssuueerr aarrgg]
-       [--sseerriiaall aarrgg] [--aalliiaass aarrgg] [--ffiinnggeerrpprriinntt aarrgg] [--_dd_ii_gg_ee_ss_tt] uurrii ...
+SYNOPSIS
+       openssl storeutl [-help] [-out file] [-noout] [-passin arg] [-text arg]
+       [-engine id] [-r] [-certs] [-keys] [-crls] [-subject arg] [-issuer arg]
+       [-serial arg] [-alias arg] [-fingerprint arg] [-digest] uri ...
 
-DDEESSCCRRIIPPTTIIOONN
-       The ssttoorreeuuttll command can be used to display the contents (after
+DESCRIPTION
+       The storeutl command can be used to display the contents (after
        decryption as the case may be) fetched from the given URIs.
 
-OOPPTTIIOONNSS
-       --hheellpp
+OPTIONS
+       -help
            Print out a usage message.
 
-       --oouutt ffiilleennaammee
+       -out filename
            specifies the output filename to write to or standard output by
            default.
 
-       --nnoooouutt
+       -noout
            this option prevents output of the PEM data.
 
-       --ppaassssiinn aarrgg
+       -passin arg
            the key password source. For more information about the format of
-           aarrgg see "Pass Phrase Options" in ooppeennssssll(1).
+           arg see "Pass Phrase Options" in openssl(1).
 
-       --tteexxtt
-           Prints out the objects in text form, similarly to the --tteexxtt output
-           from ooppeennssssll xx550099, ooppeennssssll ppkkeeyy, etc.
+       -text
+           Prints out the objects in text form, similarly to the -text output
+           from openssl x509, openssl pkey, etc.
 
-       --eennggiinnee iidd
-           specifying an engine (by its unique iidd string) will cause ssttoorreeuuttll
+       -engine id
+           specifying an engine (by its unique id string) will cause storeutl
            to attempt to obtain a functional reference to the specified
            engine, thus initialising it if needed.  The engine will then be
            set as the default for all available algorithms.
 
-       --rr  Fetch objects recursively when possible.
+       -r  Fetch objects recursively when possible.
 
-       --cceerrttss
-       --kkeeyyss
-       --ccrrllss
+       -certs
+       -keys
+       -crls
            Only select the certificates, keys or CRLs from the given URI.
            However, if this URI would return a set of names (URIs), those are
            always returned.
 
-       --ssuubbjjeecctt aarrgg
-           Search for an object having the subject name aarrgg.  The arg must be
-           formatted as _/_t_y_p_e_0_=_v_a_l_u_e_0_/_t_y_p_e_1_=_v_a_l_u_e_1_/_t_y_p_e_2_=_._._..  Keyword
+       -subject arg
+           Search for an object having the subject name arg.  The arg must be
+           formatted as /type0=value0/type1=value1/type2=....  Keyword
            characters may be escaped by \ (backslash), and whitespace is
            retained.  Empty values are permitted but are ignored for the
            search.  That is, a search with an empty value will have the same
            effect as not specifying the type at all.
 
-       --iissssuueerr aarrgg
-       --sseerriiaall aarrgg
+       -issuer arg
+       -serial arg
            Search for an object having the given issuer name and serial
-           number.  These two options _m_u_s_t be used together.  The issuer arg
-           must be formatted as _/_t_y_p_e_0_=_v_a_l_u_e_0_/_t_y_p_e_1_=_v_a_l_u_e_1_/_t_y_p_e_2_=_._._.,
+           number.  These two options must be used together.  The issuer arg
+           must be formatted as /type0=value0/type1=value1/type2=...,
            characters may be escaped by \ (backslash), no spaces are skipped.
            The serial arg may be specified as a decimal value or a hex value
-           if preceded by 00xx.
+           if preceded by 0x.
 
-       --aalliiaass aarrgg
+       -alias arg
            Search for an object having the given alias.
 
-       --ffiinnggeerrpprriinntt aarrgg
+       -fingerprint arg
            Search for an object having the given fingerprint.
 
-       --_dd_ii_gg_ee_ss_tt
+       -digest
            The digest that was used to compute the fingerprint given with
-           --ffiinnggeerrpprriinntt.
+           -fingerprint.
 
-SSEEEE AALLSSOO
-       ooppeennssssll(1)
+SEE ALSO
+       openssl(1)
 
-HHIISSTTOORRYY
-       The ooppeennssssll ssttoorreeuuttll app was added in OpenSSL 1.1.1.
+HISTORY
+       The openssl storeutl app was added in OpenSSL 1.1.1.
 
-CCOOPPYYRRIIGGHHTT
+COPYRIGHT
        Copyright 2016-2021 The OpenSSL Project Authors. All Rights Reserved.
 
        Licensed under the OpenSSL license (the "License").  You may not use

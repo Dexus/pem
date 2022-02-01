@@ -1,0 +1,420 @@
+{
+  "_values": [
+    "Creator     : groff version 1.22.4",
+    "CreationDate: Tue Feb  1 14:18:48 2022",
+    "html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\"\n\"http://www.w3.org/TR/html4/loose.dtd\""
+  ],
+  "html": [
+    {
+      "head": [
+        {
+          "meta": [
+            {
+              "_attributes": {
+                "name": "generator",
+                "content": "groff -Thtml, see www.gnu.org"
+              }
+            },
+            {
+              "_attributes": {
+                "http-equiv": "Content-Type",
+                "content": "text/html; charset=US-ASCII"
+              }
+            },
+            {
+              "_attributes": {
+                "name": "Content-Style",
+                "content": "text/css"
+              }
+            }
+          ],
+          "style": [
+            {
+              "_attributes": {
+                "type": "text/css"
+              },
+              "_value": "p       { margin-top: 0; margin-bottom: 0; vertical-align: top }\n       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }\n       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }\n       h1      { text-align: center }"
+            }
+          ],
+          "title": [
+            {
+              "_value": "C_REHASH"
+            }
+          ]
+        }
+      ],
+      "body": [
+        {
+          "h1": [
+            {
+              "_attributes": {
+                "align": "center"
+              },
+              "_value": "C_REHASH"
+            }
+          ],
+          "a": [
+            {
+              "_attributes": {
+                "href": "#NAME"
+              },
+              "_value": "NAME"
+            },
+            {
+              "_attributes": {
+                "href": "#SYNOPSIS"
+              },
+              "_value": "SYNOPSIS"
+            },
+            {
+              "_attributes": {
+                "href": "#DESCRIPTION"
+              },
+              "_value": "DESCRIPTION"
+            },
+            {
+              "_attributes": {
+                "href": "#ENVIRONMENT"
+              },
+              "_value": "ENVIRONMENT"
+            },
+            {
+              "_attributes": {
+                "href": "#SEE ALSO"
+              },
+              "_value": "SEE ALSO"
+            }
+          ],
+          "br": [
+            {},
+            {},
+            {},
+            {},
+            {}
+          ],
+          "hr": [
+            {},
+            {}
+          ],
+          "h2": [
+            {
+              "_value": "NAME",
+              "a": [
+                {
+                  "_attributes": {
+                    "name": "NAME"
+                  }
+                }
+              ]
+            },
+            {
+              "_value": "SYNOPSIS",
+              "a": [
+                {
+                  "_attributes": {
+                    "name": "SYNOPSIS"
+                  }
+                }
+              ]
+            },
+            {
+              "_value": "DESCRIPTION",
+              "a": [
+                {
+                  "_attributes": {
+                    "name": "DESCRIPTION"
+                  }
+                }
+              ]
+            },
+            {
+              "_value": "ENVIRONMENT",
+              "a": [
+                {
+                  "_attributes": {
+                    "name": "ENVIRONMENT"
+                  }
+                }
+              ]
+            },
+            {
+              "_value": "SEE ALSO",
+              "a": [
+                {
+                  "_attributes": {
+                    "name": "SEE ALSO"
+                  }
+                }
+              ]
+            }
+          ],
+          "p": [
+            {
+              "_attributes": {
+                "style": "margin-left:11%; margin-top: 1em"
+              },
+              "_value": "c_rehash -\nCreate symbolic links to files named by the hash values"
+            },
+            {
+              "_attributes": {
+                "style": "margin-left:11%; margin-top: 1em"
+              },
+              "b": [
+                {
+                  "_value": "c_rehash"
+                }
+              ],
+              "i": [
+                {
+                  "_value": "directory"
+                }
+              ],
+              "_values": [
+                "[",
+                "...]"
+              ]
+            },
+            {
+              "_attributes": {
+                "style": "margin-left:11%; margin-top: 1em"
+              },
+              "b": [
+                {
+                  "_value": "c_rehash"
+                }
+              ],
+              "_value": "scans directories and calculates a hash value of each\n\".pem\" file in the specified directory list and\ncreates symbolic links for each file, where the name of the\nlink is the hash value. This utility is useful as many\nprograms that use OpenSSL require directories to be set up\nlike this in order to find certificates."
+            },
+            {
+              "_attributes": {
+                "style": "margin-left:11%; margin-top: 1em"
+              },
+              "b": [
+                {
+                  "small": [
+                    {
+                      "_value": "SSL_CERT_DIR"
+                    }
+                  ]
+                },
+                {
+                  "small": [
+                    {
+                      "_value": "PATH"
+                    }
+                  ]
+                },
+                {
+                  "_value": "/usr/local/ssl/certs"
+                }
+              ],
+              "_values": [
+                "If any\ndirectories are named on the command line, then those are\nprocessed in turn. If not, then the",
+                "environment variable is\nconsulted; this shold be a colon-separated list of\ndirectories, like the Unix",
+                "variable. If that is not set then the default directory\n(installation-specific but often",
+                ") is processed."
+              ]
+            },
+            {
+              "_attributes": {
+                "style": "margin-left:11%; margin-top: 1em"
+              },
+              "b": [
+                {
+                  "_value": "H"
+                },
+                {
+                  "_value": "D"
+                },
+                {
+                  "_value": "c_rehash"
+                },
+                {
+                  "_value": "r"
+                }
+              ],
+              "_values": [
+                "In order for a\ndirectory to be processed, the user must have write\npermissions on that directory, otherwise it will be skipped.\nThe links created are of the form \"HHHHHHHH.D\",\nwhere each",
+                "is a hexadecimal character and",
+                "is a single decimal digit. When processing a directory,",
+                "will first remove all links that have a name\nin that syntax. If you have links in that format used for\nother purposes, they will be removed. Hashes for",
+                "\u2019s look similar except the letter",
+                "appears after the period, like this:\n\"HHHHHHHH.rD\"."
+              ],
+              "small": [
+                {
+                  "_value": "CRL"
+                }
+              ]
+            },
+            {
+              "_attributes": {
+                "style": "margin-left:11%; margin-top: 1em"
+              },
+              "b": [
+                {
+                  "_value": "D"
+                }
+              ],
+              "_values": [
+                "Multiple\nobjects may have the same hash; they will be indicated by\nincrementing the",
+                "value. Duplicates are found by\ncomparing the full",
+                "fingerprint. A\nwarning will be displayed if a duplicate is found."
+              ],
+              "small": [
+                {
+                  "_value": "SHA-1"
+                }
+              ]
+            },
+            {
+              "_attributes": {
+                "style": "margin-left:11%; margin-top: 1em"
+              },
+              "b": [
+                {
+                  "_value": ".pem"
+                }
+              ],
+              "_values": [
+                "A warning will\nalso be displayed if there are",
+                "files that cannot\nbe parsed as either a certificate or a"
+              ],
+              "small": [
+                {
+                  "_value": "CRL."
+                }
+              ]
+            },
+            {
+              "_attributes": {
+                "style": "margin-left:11%; margin-top: 1em"
+              },
+              "b": [
+                {
+                  "_value": "openssl"
+                },
+                {
+                  "small": [
+                    {
+                      "_value": "PATH"
+                    }
+                  ]
+                },
+                {
+                  "small": [
+                    {
+                      "_value": "OPENSSL"
+                    }
+                  ]
+                }
+              ],
+              "_values": [
+                "The program\nuses the",
+                "program to compute the hashes and\nfingerprints. If not found in the user\u2019s",
+                ", then set the",
+                "environment variable to the\nfull pathname. Any program can be used, it will be invoked\nas follows for either a certificate or"
+              ],
+              "small": [
+                {
+                  "_value": "CRL:"
+                }
+              ]
+            },
+            {
+              "_attributes": {
+                "style": "margin-left:11%; margin-top: 1em"
+              },
+              "br": [
+                {}
+              ],
+              "_values": [
+                "$OPENSSL x509\n-hash -fingerprint -noout -in FFFFFF",
+                "$OPENSSL crl -hash -fingerprint -noout -in FFFFFF"
+              ]
+            },
+            {
+              "_attributes": {
+                "style": "margin-left:11%; margin-top: 1em"
+              },
+              "b": [
+                {
+                  "small": [
+                    {
+                      "_value": "FFFFFF"
+                    }
+                  ]
+                }
+              ],
+              "_values": [
+                "where",
+                "is the filename. It must output\nthe hash of the file on the first line, and the fingerprint\non the second, optionally prefixed with some text and an\nequals sign."
+              ]
+            },
+            {
+              "_attributes": {
+                "style": "margin-left:11%; margin-top: 1em"
+              },
+              "b": [
+                {
+                  "small": [
+                    {
+                      "_value": "OPENSSL"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "_attributes": {
+                "style": "margin-left:17%;"
+              },
+              "_value": "The path to an executable to\nuse to generate hashes and fingerprints (see above)."
+            },
+            {
+              "_attributes": {
+                "style": "margin-left:11%;"
+              },
+              "b": [
+                {
+                  "small": [
+                    {
+                      "_value": "SSL_CERT_DIR"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "_attributes": {
+                "style": "margin-left:17%;"
+              },
+              "_value": "Colon separated list of\ndirectories to operate on. Ignored if directories are listed\non the command line."
+            },
+            {
+              "_attributes": {
+                "style": "margin-left:11%; margin-top: 1em"
+              },
+              "b": [
+                {
+                  "_value": "openssl"
+                },
+                {
+                  "_value": "crl"
+                },
+                {
+                  "_value": "x509"
+                }
+              ],
+              "_values": [
+                "(1),",
+                "(1).",
+                "(1)."
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

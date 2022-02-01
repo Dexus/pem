@@ -2,14 +2,14 @@ OPENSSL-SESS_ID(1ossl)              OpenSSL             OPENSSL-SESS_ID(1ossl)
 
 
 
-NNAAMMEE
+NAME
        openssl-sess_id - SSL/TLS session handling command
 
-SSYYNNOOPPSSIISS
-       ooppeennssssll sseessss__iidd [--hheellpp] [--iinnffoorrmm DDEERR|PPEEMM] [--oouuttffoorrmm DDEERR|PPEEMM|NNSSSS] [--iinn
-       _f_i_l_e_n_a_m_e] [--oouutt _f_i_l_e_n_a_m_e] [--tteexxtt] [--cceerrtt] [--nnoooouutt] [--ccoonntteexxtt _I_D]
+SYNOPSIS
+       openssl sess_id [-help] [-inform DER|PEM] [-outform DER|PEM|NSS] [-in
+       filename] [-out filename] [-text] [-cert] [-noout] [-context ID]
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        This command processes the encoded version of the SSL session structure
        and optionally prints out SSL session details (for example the SSL
        session master key) in human readable format. Since this is a
@@ -19,43 +19,43 @@ DDEESSCCRRIIPPTTIIOONN
        The precise format of the data can vary across OpenSSL versions and is
        not documented.
 
-OOPPTTIIOONNSS
-       --hheellpp
+OPTIONS
+       -help
            Print out a usage message.
 
-       --iinnffoorrmm DDEERR|PPEEMM, --oouuttffoorrmm DDEERR|PPEEMM|NNSSSS
+       -inform DER|PEM, -outform DER|PEM|NSS
            The input and output formats; the default is PEM.  See
-           ooppeennssssll--ffoorrmmaatt--ooppttiioonnss(1) for details.
+           openssl-format-options(1) for details.
 
-           For NNSSSS output, the session ID and master key are reported in NSS
+           For NSS output, the session ID and master key are reported in NSS
            "keylog" format.
 
-       --iinn _f_i_l_e_n_a_m_e
+       -in filename
            This specifies the input filename to read session information from
            or standard input by default.
 
-       --oouutt _f_i_l_e_n_a_m_e
+       -out filename
            This specifies the output filename to write session information to
            or standard output if this option is not specified.
 
-       --tteexxtt
+       -text
            Prints out the various public or private key components in plain
            text in addition to the encoded version.
 
-       --cceerrtt
+       -cert
            If a certificate is present in the session it will be output using
-           this option, if the --tteexxtt option is also present then it will be
+           this option, if the -text option is also present then it will be
            printed out in text form.
 
-       --nnoooouutt
+       -noout
            This option prevents output of the encoded version of the session.
 
-       --ccoonntteexxtt _I_D
+       -context ID
            This option can set the session id so the output session
            information uses the supplied ID. The ID can be any string of
            characters. This option won't normally be used.
 
-OOUUTTPPUUTT
+OUTPUT
        Typical output:
 
         SSL-Session:
@@ -71,47 +71,47 @@ OOUUTTPPUUTT
 
        These are described below in more detail.
 
-       PPrroottooccooll
+       Protocol
            This is the protocol in use TLSv1.3, TLSv1.2, TLSv1.1, TLSv1 or
            SSLv3.
 
-       CCiipphheerr
+       Cipher
            The cipher used this is the actual raw SSL or TLS cipher code, see
            the SSL or TLS specifications for more information.
 
-       SSeessssiioonn--IIDD
+       Session-ID
            The SSL session ID in hex format.
 
-       SSeessssiioonn--IIDD--ccttxx
+       Session-ID-ctx
            The session ID context in hex format.
 
-       MMaasstteerr--KKeeyy
+       Master-Key
            This is the SSL session master key.
 
-       SSttaarrtt TTiimmee
+       Start Time
            This is the session start time represented as an integer in
            standard Unix format.
 
-       TTiimmeeoouutt
+       Timeout
            The timeout in seconds.
 
-       VVeerriiffyy rreettuurrnn ccooddee
+       Verify return code
            This is the return code when an SSL client certificate is verified.
 
-NNOOTTEESS
+NOTES
        Since the SSL session output contains the master key it is possible to
        read the contents of an encrypted session using this information.
        Therefore, appropriate security precautions should be taken if the
        information is being output by a "real" application. This is however
        strongly discouraged and should only be used for debugging purposes.
 
-BBUUGGSS
+BUGS
        The cipher and start time should be printed out in human readable form.
 
-SSEEEE AALLSSOO
-       ooppeennssssll(1), ooppeennssssll--cciipphheerrss(1), ooppeennssssll--ss__sseerrvveerr(1)
+SEE ALSO
+       openssl(1), openssl-ciphers(1), openssl-s_server(1)
 
-CCOOPPYYRRIIGGHHTT
+COPYRIGHT
        Copyright 2000-2020 The OpenSSL Project Authors. All Rights Reserved.
 
        Licensed under the Apache License 2.0 (the "License").  You may not use

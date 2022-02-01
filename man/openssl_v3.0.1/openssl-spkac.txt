@@ -2,82 +2,82 @@ OPENSSL-SPKAC(1ossl)                OpenSSL               OPENSSL-SPKAC(1ossl)
 
 
 
-NNAAMMEE
+NAME
        openssl-spkac - SPKAC printing and generating command
 
-SSYYNNOOPPSSIISS
-       ooppeennssssll ssppkkaacc [--hheellpp] [--iinn _f_i_l_e_n_a_m_e] [--oouutt _f_i_l_e_n_a_m_e] [--ddiiggeesstt _d_i_g_e_s_t]
-       [--kkeeyy _f_i_l_e_n_a_m_e|_u_r_i] [--kkeeyyffoorrmm DDEERR|PPEEMM|PP1122|EENNGGIINNEE] [--ppaassssiinn _a_r_g]
-       [--cchhaalllleennggee _s_t_r_i_n_g] [--ppuubbkkeeyy] [--ssppkkaacc _s_p_k_a_c_n_a_m_e] [--ssppkksseecctt _s_e_c_t_i_o_n]
-       [--nnoooouutt] [--vveerriiffyy] [--eennggiinnee _i_d] [--pprroovviiddeerr _n_a_m_e] [--pprroovviiddeerr--ppaatthh _p_a_t_h]
-       [--pprrooppqquueerryy _p_r_o_p_q]
+SYNOPSIS
+       openssl spkac [-help] [-in filename] [-out filename] [-digest digest]
+       [-key filename|uri] [-keyform DER|PEM|P12|ENGINE] [-passin arg]
+       [-challenge string] [-pubkey] [-spkac spkacname] [-spksect section]
+       [-noout] [-verify] [-engine id] [-provider name] [-provider-path path]
+       [-propquery propq]
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        This command processes Netscape signed public key and challenge (SPKAC)
        files. It can print out their contents, verify the signature and
        produce its own SPKACs from a supplied private key.
 
-OOPPTTIIOONNSS
-       --hheellpp
+OPTIONS
+       -help
            Print out a usage message.
 
-       --iinn _f_i_l_e_n_a_m_e
+       -in filename
            This specifies the input filename to read from or standard input if
-           this option is not specified. Ignored if the --kkeeyy option is used.
+           this option is not specified. Ignored if the -key option is used.
 
-       --oouutt _f_i_l_e_n_a_m_e
+       -out filename
            Specifies the output filename to write to or standard output by
            default.
 
-       --ddiiggeesstt _d_i_g_e_s_t
-           Use the specified _d_i_g_e_s_t to sign a created SPKAC file.  The default
+       -digest digest
+           Use the specified digest to sign a created SPKAC file.  The default
            digest algorithm is MD5.
 
-       --kkeeyy _f_i_l_e_n_a_m_e|_u_r_i
-           Create an SPKAC file using the private key specified by _f_i_l_e_n_a_m_e or
-           _u_r_i.  The --iinn, --nnoooouutt, --ssppkksseecctt and --vveerriiffyy options are ignored if
+       -key filename|uri
+           Create an SPKAC file using the private key specified by filename or
+           uri.  The -in, -noout, -spksect and -verify options are ignored if
            present.
 
-       --kkeeyyffoorrmm DDEERR|PPEEMM|PP1122|EENNGGIINNEE
+       -keyform DER|PEM|P12|ENGINE
            The key format; unspecified by default.  See
-           ooppeennssssll--ffoorrmmaatt--ooppttiioonnss(1) for details.
+           openssl-format-options(1) for details.
 
-       --ppaassssiinn _a_r_g
+       -passin arg
            The input file password source. For more information about the
-           format of _a_r_g see ooppeennssssll--ppaasssspphhrraassee--ooppttiioonnss(1).
+           format of arg see openssl-passphrase-options(1).
 
-       --cchhaalllleennggee _s_t_r_i_n_g
+       -challenge string
            Specifies the challenge string if an SPKAC is being created.
 
-       --ssppkkaacc _s_p_k_a_c_n_a_m_e
+       -spkac spkacname
            Allows an alternative name form the variable containing the SPKAC.
            The default is "SPKAC". This option affects both generated and
            input SPKAC files.
 
-       --ssppkksseecctt _s_e_c_t_i_o_n
+       -spksect section
            Allows an alternative name form the section containing the SPKAC.
            The default is the default section.
 
-       --nnoooouutt
+       -noout
            Don't output the text version of the SPKAC (not used if an SPKAC is
            being created).
 
-       --ppuubbkkeeyy
+       -pubkey
            Output the public key of an SPKAC (not used if an SPKAC is being
            created).
 
-       --vveerriiffyy
+       -verify
            Verifies the digital signature on the supplied SPKAC.
 
-       --eennggiinnee _i_d
-           See "Engine Options" in ooppeennssssll(1).  This option is deprecated.
+       -engine id
+           See "Engine Options" in openssl(1).  This option is deprecated.
 
-       --pprroovviiddeerr _n_a_m_e
-       --pprroovviiddeerr--ppaatthh _p_a_t_h
-       --pprrooppqquueerryy _p_r_o_p_q
-           See "Provider Options" in ooppeennssssll(1), pprroovviiddeerr(7), and pprrooppeerrttyy(7).
+       -provider name
+       -provider-path path
+       -propquery propq
+           See "Provider Options" in openssl(1), provider(7), and property(7).
 
-EEXXAAMMPPLLEESS
+EXAMPLES
        Print out the contents of an SPKAC:
 
         openssl spkac -in spkac.cnf
@@ -99,12 +99,12 @@ EEXXAAMMPPLLEESS
         h1bEIYuc2EeM2KHTWPEepWYeawvHD0gQ3DngSC75YCWnnD\
         dq+NQ3F+X4deMx9AaEglZtULwV4=
 
-NNOOTTEESS
+NOTES
        A created SPKAC with suitable DN components appended can be fed to
-       ooppeennssssll--ccaa(1).
+       openssl-ca(1).
 
        SPKACs are typically generated by Netscape when a form is submitted
-       containing the KKEEYYGGEENN tag as part of the certificate enrollment
+       containing the KEYGEN tag as part of the certificate enrollment
        process.
 
        The challenge string permits a primitive form of proof of possession of
@@ -114,15 +114,15 @@ NNOOTTEESS
        some applications. Without this it is possible for a previous SPKAC to
        be used in a "replay attack".
 
-SSEEEE AALLSSOO
-       ooppeennssssll(1), ooppeennssssll--ccaa(1)
+SEE ALSO
+       openssl(1), openssl-ca(1)
 
-HHIISSTTOORRYY
-       The --eennggiinnee option was deprecated in OpenSSL 3.0.
+HISTORY
+       The -engine option was deprecated in OpenSSL 3.0.
 
-       The --ddiiggeesstt option was added in OpenSSL 3.0.
+       The -digest option was added in OpenSSL 3.0.
 
-CCOOPPYYRRIIGGHHTT
+COPYRIGHT
        Copyright 2000-2021 The OpenSSL Project Authors. All Rights Reserved.
 
        Licensed under the Apache License 2.0 (the "License").  You may not use

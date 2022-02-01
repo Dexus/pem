@@ -2,51 +2,51 @@ PKEYPARAM(1)                        OpenSSL                       PKEYPARAM(1)
 
 
 
-NNAAMMEE
+NAME
        pkeyparam - public key algorithm parameter processing tool
 
-SSYYNNOOPPSSIISS
-       ooppeennssssll ppkkeeyyppaarraamm [--iinn ffiilleennaammee] [--oouutt ffiilleennaammee] [--tteexxtt] [--nnoooouutt]
-       [--eennggiinnee iidd]
+SYNOPSIS
+       openssl pkeyparam [-in filename] [-out filename] [-text] [-noout]
+       [-engine id]
 
-DDEESSCCRRIIPPTTIIOONN
-       The ppkkeeyy command processes public or private keys. They can be
+DESCRIPTION
+       The pkey command processes public or private keys. They can be
        converted between various forms and their components printed out.
 
-CCOOMMMMAANNDD OOPPTTIIOONNSS
-       --iinn ffiilleennaammee
+COMMAND OPTIONS
+       -in filename
            This specifies the input filename to read parameters from or
            standard input if this option is not specified.
 
-       --oouutt ffiilleennaammee
+       -out filename
            This specifies the output filename to write parameters to or
            standard output if this option is not specified.
 
-       --tteexxtt
+       -text
            prints out the parameters in plain text in addition to the encoded
            version.
 
-       --nnoooouutt
+       -noout
            do not output the encoded version of the parameters.
 
-       --eennggiinnee iidd
-           specifying an engine (by its unique iidd string) will cause ppkkeeyyppaarraamm
+       -engine id
+           specifying an engine (by its unique id string) will cause pkeyparam
            to attempt to obtain a functional reference to the specified
            engine, thus initialising it if needed. The engine will then be set
            as the default for all available algorithms.
 
-EEXXAAMMPPLLEE
+EXAMPLE
        Print out text version of parameters:
 
         openssl pkeyparam -in param.pem -text
 
-NNOOTTEESS
-       There are no --iinnffoorrmm or --oouuttffoorrmm options for this command because only
+NOTES
+       There are no -inform or -outform options for this command because only
        PEM format is supported because the key type is determined by the PEM
        headers.
 
-SSEEEE AALLSSOO
-       ggeennppkkeeyy(1), rrssaa(1), ppkkccss88(1), ddssaa(1), ggeennrrssaa(1), ggeennddssaa(1)
+SEE ALSO
+       genpkey(1), rsa(1), pkcs8(1), dsa(1), genrsa(1), gendsa(1)
 
 
 

@@ -2,63 +2,63 @@ OPENSSL-FORMAT-OPTIONS(1ossl)       OpenSSL      OPENSSL-FORMAT-OPTIONS(1ossl)
 
 
 
-NNAAMMEE
+NAME
        openssl-format-options - OpenSSL command input and output format
        options
 
-SSYYNNOOPPSSIISS
-       ooppeennssssll _c_o_m_m_a_n_d [ _o_p_t_i_o_n_s ... ] [ _p_a_r_a_m_e_t_e_r_s ... ]
+SYNOPSIS
+       openssl command [ options ... ] [ parameters ... ]
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        Several OpenSSL commands can take input or generate output in a variety
        of formats.
 
        Since OpenSSL 3.0 keys, single certificates, and CRLs can be read from
-       files in any of the DDEERR, PPEEMM or PP1122 formats. Specifying their input
+       files in any of the DER, PEM or P12 formats. Specifying their input
        format is no more needed and the openssl commands will automatically
-       try all the possible formats. However if the DDEERR or PPEEMM input format is
+       try all the possible formats. However if the DER or PEM input format is
        specified it will be enforced.
 
-       In order to access a key via an engine the input format EENNGGIINNEE may be
+       In order to access a key via an engine the input format ENGINE may be
        used; alternatively the key identifier in the <uri> argument of the
        respective key option may be preceded by "org.openssl.engine:".  See
-       "Engine Options" in ooppeennssssll(1) for an example usage of the latter.
+       "Engine Options" in openssl(1) for an example usage of the latter.
 
-OOPPTTIIOONNSS
-   FFoorrmmaatt OOppttiioonnss
+OPTIONS
+   Format Options
        The options to specify the format are as follows.  Refer to the
        individual man page to see which options are accepted.
 
-       --iinnffoorrmm _f_o_r_m_a_t, --oouuttffoorrmm _f_o_r_m_a_t
+       -inform format, -outform format
            The format of the input or output streams.
 
-       --kkeeyyffoorrmm _f_o_r_m_a_t
+       -keyform format
            Format of a private key input source.
 
-       --CCRRLLffoorrmm _f_o_r_m_a_t
+       -CRLform format
            Format of a CRL input source.
 
-   FFoorrmmaatt OOppttiioonn AArrgguummeennttss
+   Format Option Arguments
        The possible format arguments are described below.  Both uppercase and
        lowercase are accepted.
 
        The list of acceptable format arguments, and the default, is described
        in each command documentation.
 
-       DDEERR A binary format, encoded or parsed according to Distinguished
+       DER A binary format, encoded or parsed according to Distinguished
            Encoding Rules (DER) of the ASN.1 data language.
 
-       EENNGGIINNEE
+       ENGINE
            Used to specify that the cryptographic material is in an OpenSSL
-           eennggiinnee.  An engine must be configured or specified using the
-           --eennggiinnee option.  A password or PIN may be supplied to the engine
-           using the --ppaassssiinn option.
+           engine.  An engine must be configured or specified using the
+           -engine option.  A password or PIN may be supplied to the engine
+           using the -passin option.
 
-       PP1122 A DER-encoded file containing a PKCS#12 object.  It might be
+       P12 A DER-encoded file containing a PKCS#12 object.  It might be
            necessary to provide a decryption password to retrieve the private
            key.
 
-       PPEEMM A text format defined in IETF RFC 1421 and IETF RFC 7468. Briefly,
+       PEM A text format defined in IETF RFC 1421 and IETF RFC 7468. Briefly,
            this is a block of base-64 encoding (defined in IETF RFC 4648),
            with specific lines used to mark the start and end:
 
@@ -70,7 +70,7 @@ OOPPTTIIOONNSS
             ----- END object-type -----
             Text after the END line is also ignored
 
-           The _o_b_j_e_c_t_-_t_y_p_e must match the type of object that is expected.
+           The object-type must match the type of object that is expected.
            For example a "BEGIN X509 CERTIFICATE" will not match if the
            command is trying to read a private key. The types supported
            include:
@@ -97,7 +97,7 @@ OOPPTTIIOONNSS
             X509 CRL
             X9.42 DH PARAMETERS
 
-           The following legacy _o_b_j_e_c_t_-_t_y_p_e's are also supported for
+           The following legacy object-type's are also supported for
            compatibility with earlier releases:
 
             DSA PRIVATE KEY
@@ -105,12 +105,12 @@ OOPPTTIIOONNSS
             RSA PUBLIC KEY
             X509 CERTIFICATE
 
-       SSMMIIMMEE
+       SMIME
            An S/MIME object as described in IETF RFC 8551.  Earlier versions
            were known as CMS and are compatible.  Note that the parsing is
            simple and might fail to parse some legal data.
 
-CCOOPPYYRRIIGGHHTT
+COPYRIGHT
        Copyright 2000-2021 The OpenSSL Project Authors. All Rights Reserved.
 
        Licensed under the Apache License 2.0 (the "License").  You may not use

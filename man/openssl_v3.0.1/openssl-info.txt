@@ -2,14 +2,14 @@ OPENSSL-INFO(1ossl)                 OpenSSL                OPENSSL-INFO(1ossl)
 
 
 
-NNAAMMEE
+NAME
        openssl-info - print OpenSSL built-in information
 
-SSYYNNOOPPSSIISS
-       ooppeennssssll iinnffoo [--hheellpp] [--ccoonnffiiggddiirr] [--eennggiinneessddiirr] [--mmoodduulleessddiirr ]
-       [--ddssooeexxtt] [--ddiirrnnaammeesseepp] [--lliissttsseepp] [--sseeeeddss] [--ccppuusseettttiinnggss]
+SYNOPSIS
+       openssl info [-help] [-configdir] [-enginesdir] [-modulesdir ]
+       [-dsoext] [-dirnamesep] [-listsep] [-seeds] [-cpusettings]
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        This command is used to print out information about OpenSSL.  The
        information is written exactly as it is with no extra text, which makes
        useful for scripts.
@@ -17,42 +17,42 @@ DDEESSCCRRIIPPTTIIOONN
        As a consequence, only one item may be chosen for each run of this
        command.
 
-OOPPTTIIOONNSS
-       --hheellpp
+OPTIONS
+       -help
            Print out a usage message.
 
-       --ccoonnffiiggddiirr
+       -configdir
            Outputs the default directory for OpenSSL configuration files.
 
-       --eennggiinneessddiirr
+       -enginesdir
            Outputs the default directory for OpenSSL engine modules.
 
-       --mmoodduulleessddiirr
+       -modulesdir
            Outputs the default directory for OpenSSL dynamically loadable
            modules other than engine modules.
 
-       --ddssooeexxtt
+       -dsoext
            Outputs the DSO extension OpenSSL uses.
 
-       --ddiirrnnaammeesseepp
+       -dirnamesep
            Outputs the separator character between a directory specification
            and a filename.  Note that on some operating systems, this is not
            the same as the separator between directory elements.
 
-       --lliissttsseepp
+       -listsep
            Outputs the OpenSSL list separator character.  This is typically
            used to construct $PATH ("%PATH%" on Windows) style lists.
 
-       --sseeeeddss
+       -seeds
            Outputs the randomness seed sources.
 
-       --ccppuusseettttiinnggss
+       -cpusettings
            Outputs the OpenSSL CPU settings info.
 
-HHIISSTTOORRYY
+HISTORY
        This command was added in OpenSSL 3.0.
 
-CCOOPPYYRRIIGGHHTT
+COPYRIGHT
        Copyright 2019-2020 The OpenSSL Project Authors. All Rights Reserved.
 
        Licensed under the Apache License 2.0 (the "License").  You may not use

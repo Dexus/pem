@@ -5,11 +5,15 @@
 #  Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
 #  Vestibulum commodo. Ut rhoncus gravida arcu.
 
+import json
+import re
 import shlex
 from os import listdir, path as osPath, makedirs
 from os.path import isdir, isfile, join, dirname, realpath, splitext
 from subprocess import Popen, PIPE
 from threading import Timer
+
+import html_to_json
 
 dir_path = dirname(realpath(__file__))
 result = []
@@ -32,11 +36,16 @@ def run(cmd, timeout_sec):
 
 def writefiles(dir, file):
     _, stdout, stderr = run(cmd + " " + dir + " " + file, 5)
-    with open(join(out, splitext(f)[0] + ".txt"), mode="w", encoding="utf-8") as vf:
-        vf.write(stdout)
+    with open(join(out, splitext(f)[0] + ".txt"), mode="w", encoding="utf-8") as vf1:
+        stdout = re.sub("[\w\W]\x08", "", stdout, flags=re.UNICODE)
+        vf1.write(stdout)
     _, stdout, stderr = run(cmd2 + " " + dir + " " + file, 5)
-    with open(join(out, splitext(f)[0] + ".html"), mode="w", encoding="utf-8") as vf:
-        vf.write(stdout)
+    with open(join(out, splitext(f)[0] + ".html"), mode="w", encoding="utf-8") as vf2:
+        vf2.write(stdout)
+    output_json = html_to_json.convert(stdout)
+    output_json_file = json.dumps(output_json)
+    with open(join(out, splitext(f)[0] + ".json"), mode="w", encoding="utf-8") as vf3:
+        vf3.write(output_json_file)
 
 
 with open(osPath.join(dir_path, '../versions')) as vf:

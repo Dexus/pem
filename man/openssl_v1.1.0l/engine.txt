@@ -2,41 +2,41 @@ ENGINE(1)                           OpenSSL                          ENGINE(1)
 
 
 
-NNAAMMEE
+NAME
        openssl-engine, engine - load and query engines
 
-SSYYNNOOPPSSIISS
-       ooppeennssssll eennggiinnee [ _e_n_g_i_n_e_._._. ] [--vv] [--vvvv] [--vvvvvv] [--vvvvvv] [--vvvvvv] [--cc] [--tt]
-       [--tttt] [--pprree _c_o_m_m_a_n_d] [--ppoosstt _c_o_m_m_a_n_d] [ _e_n_g_i_n_e_._._. ]
+SYNOPSIS
+       openssl engine [ engine... ] [-v] [-vv] [-vvv] [-vvv] [-vvv] [-c] [-t]
+       [-tt] [-pre command] [-post command] [ engine... ]
 
-DDEESSCCRRIIPPTTIIOONN
-       The eennggiinnee command is used to query the status and capabilities of the
-       specified eennggiinnee's.  Engines may be specified before and after all
+DESCRIPTION
+       The engine command is used to query the status and capabilities of the
+       specified engine's.  Engines may be specified before and after all
        other command-line flags.  Only those specified are queried.
 
-OOPPTTIIOONNSS
-       --vv --vvvv --vvvvvv --vvvvvvvv
+OPTIONS
+       -v -vv -vvv -vvvv
            Provides information about each specified engine. The first flag
            lists all the possible run-time control commands; the second adds a
            description of each command; the third adds the input flags, and
            the final option adds the internal input flags.
 
-       --cc  Lists the capabilities of each engine.
+       -c  Lists the capabilities of each engine.
 
-       --tt  Tests if each specified engine is available, and displays the
+       -t  Tests if each specified engine is available, and displays the
            answer.
 
-       --tttt Displays an error trace for any unavailable engine.
+       -tt Displays an error trace for any unavailable engine.
 
-       --pprree _c_o_m_m_a_n_d
-       --ppoosstt _c_o_m_m_a_n_d
-           Command-line configuration of engines.  The --pprree command is given
-           to the engine before it is loaded and the --ppoosstt command is given
-           after the engine is loaded.  The _c_o_m_m_a_n_d is of the form _c_m_d_:_v_a_l
-           where _c_m_d is the command, and _v_a_l is the value for the command.
+       -pre command
+       -post command
+           Command-line configuration of engines.  The -pre command is given
+           to the engine before it is loaded and the -post command is given
+           after the engine is loaded.  The command is of the form cmd:val
+           where cmd is the command, and val is the value for the command.
            See the example below.
 
-EEXXAAMMPPLLEE
+EXAMPLE
        To list all the commands available to a dynamic engine:
 
         % openssl engine -t -tt -vvvv dynamic
@@ -57,18 +57,18 @@ EEXXAAMMPPLLEE
              LOAD: Load up the ENGINE specified by other settings
                   (input flags): NO_INPUT
 
-       To list the capabilities of the _r_s_a_x engine:
+       To list the capabilities of the rsax engine:
 
         % openssl engine -c
         (rsax) RSAX engine support
          [RSA]
         (dynamic) Dynamic engine loading support
 
-EENNVVIIRROONNMMEENNTT
-       OOPPEENNSSSSLL__EENNGGIINNEESS
+ENVIRONMENT
+       OPENSSL_ENGINES
            The path to the engines directory.
 
-CCOOPPYYRRIIGGHHTT
+COPYRIGHT
        Copyright 2016-2018 The OpenSSL Project Authors. All Rights Reserved.
 
        Licensed under the OpenSSL license (the "License").  You may not use

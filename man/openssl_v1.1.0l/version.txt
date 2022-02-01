@@ -2,40 +2,40 @@ VERSION(1)                          OpenSSL                         VERSION(1)
 
 
 
-NNAAMMEE
+NAME
        openssl-version, version - print OpenSSL version information
 
-SSYYNNOOPPSSIISS
-       ooppeennssssll vveerrssiioonn [--hheellpp] [--aa] [--vv] [--bb] [--oo] [--ff] [--pp] [--dd] [--ee]
+SYNOPSIS
+       openssl version [-help] [-a] [-v] [-b] [-o] [-f] [-p] [-d] [-e]
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        This command is used to print out version information about OpenSSL.
 
-OOPPTTIIOONNSS
-       --hheellpp
+OPTIONS
+       -help
            Print out a usage message.
 
-       --aa  all information, this is the same as setting all the other flags.
+       -a  all information, this is the same as setting all the other flags.
 
-       --vv  the current OpenSSL version.
+       -v  the current OpenSSL version.
 
-       --bb  the date the current version of OpenSSL was built.
+       -b  the date the current version of OpenSSL was built.
 
-       --oo  option information: various options set when the library was built.
+       -o  option information: various options set when the library was built.
 
-       --ff  compilation flags.
+       -f  compilation flags.
 
-       --pp  platform setting.
+       -p  platform setting.
 
-       --dd  OPENSSLDIR setting.
+       -d  OPENSSLDIR setting.
 
-       --ee  ENGINESDIR setting.
+       -e  ENGINESDIR setting.
 
-NNOOTTEESS
-       The output of ooppeennssssll vveerrssiioonn --aa would typically be used when sending
+NOTES
+       The output of openssl version -a would typically be used when sending
        in a bug report.
 
-CCOOPPYYRRIIGGHHTT
+COPYRIGHT
        Copyright 2000-2016 The OpenSSL Project Authors. All Rights Reserved.
 
        Licensed under the OpenSSL license (the "License").  You may not use

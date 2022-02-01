@@ -2,83 +2,83 @@ OPENSSL-ASN1PARSE(1ossl)            OpenSSL           OPENSSL-ASN1PARSE(1ossl)
 
 
 
-NNAAMMEE
+NAME
        openssl-asn1parse - ASN.1 parsing command
 
-SSYYNNOOPPSSIISS
-       ooppeennssssll aassnn11ppaarrssee [--hheellpp] [--iinnffoorrmm DDEERR|PPEEMM] [--iinn _f_i_l_e_n_a_m_e] [--oouutt
-       _f_i_l_e_n_a_m_e] [--nnoooouutt] [--ooffffsseett _n_u_m_b_e_r] [--lleennggtthh _n_u_m_b_e_r] [--ii] [--ooiidd
-       _f_i_l_e_n_a_m_e] [--dduummpp] [--ddlliimmiitt _n_u_m] [--ssttrrppaarrssee _o_f_f_s_e_t] [--ggeennssttrr _s_t_r_i_n_g]
-       [--ggeennccoonnff _f_i_l_e] [--ssttrriiccttppeemm] [--iitteemm _n_a_m_e]
+SYNOPSIS
+       openssl asn1parse [-help] [-inform DER|PEM] [-in filename] [-out
+       filename] [-noout] [-offset number] [-length number] [-i] [-oid
+       filename] [-dump] [-dlimit num] [-strparse offset] [-genstr string]
+       [-genconf file] [-strictpem] [-item name]
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        This command is a diagnostic utility that can parse ASN.1 structures.
        It can also be used to extract data from ASN.1 formatted data.
 
-OOPPTTIIOONNSS
-       --hheellpp
+OPTIONS
+       -help
            Print out a usage message.
 
-       --iinnffoorrmm DDEERR|PPEEMM
-           The input format; the default is PPEEMM.  See
-           ooppeennssssll--ffoorrmmaatt--ooppttiioonnss(1) for details.
+       -inform DER|PEM
+           The input format; the default is PEM.  See
+           openssl-format-options(1) for details.
 
-       --iinn _f_i_l_e_n_a_m_e
+       -in filename
            The input file, default is standard input.
 
-       --oouutt _f_i_l_e_n_a_m_e
+       -out filename
            Output file to place the DER encoded data into. If this option is
            not present then no data will be output. This is most useful when
-           combined with the --ssttrrppaarrssee option.
+           combined with the -strparse option.
 
-       --nnoooouutt
+       -noout
            Don't output the parsed version of the input file.
 
-       --ooffffsseett _n_u_m_b_e_r
+       -offset number
            Starting offset to begin parsing, default is start of file.
 
-       --lleennggtthh _n_u_m_b_e_r
+       -length number
            Number of bytes to parse, default is until end of file.
 
-       --ii  Indents the output according to the "depth" of the structures.
+       -i  Indents the output according to the "depth" of the structures.
 
-       --ooiidd _f_i_l_e_n_a_m_e
+       -oid filename
            A file containing additional OBJECT IDENTIFIERs (OIDs). The format
            of this file is described in the NOTES section below.
 
-       --dduummpp
+       -dump
            Dump unknown data in hex format.
 
-       --ddlliimmiitt _n_u_m
-           Like --dduummpp, but only the first nnuumm bytes are output.
+       -dlimit num
+           Like -dump, but only the first num bytes are output.
 
-       --ssttrrppaarrssee _o_f_f_s_e_t
-           Parse the contents octets of the ASN.1 object starting at ooffffsseett.
+       -strparse offset
+           Parse the contents octets of the ASN.1 object starting at offset.
            This option can be used multiple times to "drill down" into a
            nested structure.
 
-       --ggeennssttrr _s_t_r_i_n_g, --ggeennccoonnff _f_i_l_e
-           Generate encoded data based on _s_t_r_i_n_g, _f_i_l_e or both using
-           AASSNN11__ggeenneerraattee__nnccoonnff(3) format. If _f_i_l_e only is present then the
-           string is obtained from the default section using the name aassnn11.
+       -genstr string, -genconf file
+           Generate encoded data based on string, file or both using
+           ASN1_generate_nconf(3) format. If file only is present then the
+           string is obtained from the default section using the name asn1.
            The encoded data is passed through the ASN1 parser and printed out
            as though it came from a file, the contents can thus be examined
-           and written to a file using the --oouutt option.
+           and written to a file using the -out option.
 
-       --ssttrriiccttppeemm
-           If this option is used then --iinnffoorrmm will be ignored. Without this
+       -strictpem
+           If this option is used then -inform will be ignored. Without this
            option any data in a PEM format input file will be treated as being
            base64 encoded and processed whether it has the normal PEM BEGIN
            and END markers or not. This option will ignore any data prior to
            the start of the BEGIN marker, or after an END marker in a PEM
            file.
 
-       --iitteemm _n_a_m_e
-           Attempt to decode and print the data as an AASSNN11__IITTEEMM _n_a_m_e. This can
+       -item name
+           Attempt to decode and print the data as an ASN1_ITEM name. This can
            be used to print out the fields of any supported ASN.1 structure if
            the type is known.
 
-   OOuuttppuutt
+   Output
        The output will typically contain lines like this:
 
          0:d=0  hl=4 l= 681 cons: SEQUENCE
@@ -104,7 +104,7 @@ OOPPTTIIOONNSS
        gives the header length (tag and length octets) of the current type.
        "l=XX" gives the length of the contents octets.
 
-       The --ii option can be used to make the output more readable.
+       The -i option can be used to make the output more readable.
 
        Some knowledge of the ASN.1 structure is needed to interpret the
        output.
@@ -118,10 +118,10 @@ OOPPTTIIOONNSS
            3:d=1  hl=3 l= 129 prim: INTEGER           :E5D21E1F5C8D208EA7A2166C7FAF9F6BDF2059669C60876DDB70840F1A5AAFA59699FE471F379F1DD6A487E7D5409AB6A88D4A9746E24B91D8CF55DB3521015460C8EDE44EE8A4189F7A7BE77D6CD3A9AF2696F486855CF58BF0EDF2B4068058C7A947F52548DDF7E15E96B385F86422BEA9064A3EE9E1158A56E4A6F47E5897
          135:d=1  hl=2 l=   3 prim: INTEGER           :010001
 
-NNOOTTEESS
+NOTES
        If an OID is not part of OpenSSL's internal table it will be
        represented in numerical form (for example 1.2.3.4). The file passed to
-       the --ooiidd option allows additional OIDs to be included. Each line
+       the -oid option allows additional OIDs to be included. Each line
        consists of three columns, the first column is the OID in numerical
        format and should be followed by white space. The second column is the
        "short name" which is a single word followed by whitespace. The final
@@ -132,7 +132,7 @@ NNOOTTEESS
        For any OID with an associated short and long name, this command will
        display the long name.
 
-EEXXAAMMPPLLEESS
+EXAMPLES
        Parse a file:
 
         openssl asn1parse -in file.pem
@@ -162,14 +162,14 @@ EEXXAAMMPPLLEESS
         field1=BOOL:TRUE
         field2=EXP:0, UTF8:some random string
 
-BBUUGGSS
+BUGS
        There should be options to change the format of output lines. The
        output of some ASN.1 types is not well handled (if at all).
 
-SSEEEE AALLSSOO
-       ooppeennssssll(1), AASSNN11__ggeenneerraattee__nnccoonnff(3)
+SEE ALSO
+       openssl(1), ASN1_generate_nconf(3)
 
-CCOOPPYYRRIIGGHHTT
+COPYRIGHT
        Copyright 2000-2020 The OpenSSL Project Authors. All Rights Reserved.
 
        Licensed under the Apache License 2.0 (the "License").  You may not use

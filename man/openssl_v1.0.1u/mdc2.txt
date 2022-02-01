@@ -2,123 +2,123 @@ DGST(1)                             OpenSSL                            DGST(1)
 
 
 
-NNAAMMEE
+NAME
        dgst, sha, sha1, mdc2, ripemd160, sha224, sha256, sha384, sha512, md2,
        md4, md5, dss1 - message digests
 
-SSYYNNOOPPSSIISS
-       ooppeennssssll ddggsstt
-       [--sshhaa||--sshhaa11||--mmddcc22||--rriippeemmdd116600||--sshhaa222244||--sshhaa225566||--sshhaa338844||--sshhaa551122||--mmdd22||--mmdd44||--mmdd55||--ddssss11]
-       [--cc] [--dd] [--hheexx] [--bbiinnaarryy] [--rr] [--nnoonn--ffiippss--aallllooww] [--oouutt ffiilleennaammee]
-       [--ssiiggnn ffiilleennaammee] [--kkeeyyffoorrmm aarrgg] [--ppaassssiinn aarrgg] [--vveerriiffyy ffiilleennaammee]
-       [--pprrvveerriiffyy ffiilleennaammee] [--ssiiggnnaattuurree ffiilleennaammee] [--hhmmaacc kkeeyy]
-       [--nnoonn--ffiippss--aallllooww] [--ffiippss--ffiinnggeerrpprriinntt] [ffiillee......]
+SYNOPSIS
+       openssl dgst
+       [-sha|-sha1|-mdc2|-ripemd160|-sha224|-sha256|-sha384|-sha512|-md2|-md4|-md5|-dss1]
+       [-c] [-d] [-hex] [-binary] [-r] [-non-fips-allow] [-out filename]
+       [-sign filename] [-keyform arg] [-passin arg] [-verify filename]
+       [-prverify filename] [-signature filename] [-hmac key]
+       [-non-fips-allow] [-fips-fingerprint] [file...]
 
-       ooppeennssssll [_d_i_g_e_s_t] [......]
+       openssl [digest] [...]
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        The digest functions output the message digest of a supplied file or
        files in hexadecimal.  The digest functions also generate and verify
        digital signatures using message digests.
 
-OOPPTTIIOONNSS
-       --cc  print out the digest in two digit groups separated by colons, only
-           relevant if hheexx format output is used.
+OPTIONS
+       -c  print out the digest in two digit groups separated by colons, only
+           relevant if hex format output is used.
 
-       --dd  print out BIO debugging information.
+       -d  print out BIO debugging information.
 
-       --hheexx
+       -hex
            digest is to be output as a hex dump. This is the default case for
            a "normal" digest as opposed to a digital signature.  See NOTES
-           below for digital signatures using --hheexx.
+           below for digital signatures using -hex.
 
-       --bbiinnaarryy
+       -binary
            output the digest or signature in binary form.
 
-       --rr  output the digest in the "coreutils" format used by programs like
-           sshhaa11ssuumm.
+       -r  output the digest in the "coreutils" format used by programs like
+           sha1sum.
 
-       --nnoonn--ffiippss--aallllooww
+       -non-fips-allow
            Allow use of non FIPS digest when in FIPS mode.  This has no effect
            when not in FIPS mode.
 
-       --oouutt ffiilleennaammee
+       -out filename
            filename to output to, or standard output by default.
 
-       --ssiiggnn ffiilleennaammee
+       -sign filename
            digitally sign the digest using the private key in "filename".
 
-       --kkeeyyffoorrmm aarrgg
+       -keyform arg
            Specifies the key format to sign digest with. The DER, PEM, P12,
            and ENGINE formats are supported.
 
-       --eennggiinnee iidd
-           Use engine iidd for operations (including private key storage).  This
+       -engine id
+           Use engine id for operations (including private key storage).  This
            engine is not used as source for digest algorithms, unless it is
            also specified in the configuration file.
 
-       --ssiiggoopptt nnmm::vv
+       -sigopt nm:v
            Pass options to the signature algorithm during sign or verify
            operations.  Names and values of these options are algorithm-
            specific.
 
-       --ppaassssiinn aarrgg
+       -passin arg
            the private key password source. For more information about the
-           format of aarrgg see the PPAASSSS PPHHRRAASSEE AARRGGUUMMEENNTTSS section in ooppeennssssll(1).
+           format of arg see the PASS PHRASE ARGUMENTS section in openssl(1).
 
-       --vveerriiffyy ffiilleennaammee
+       -verify filename
            verify the signature using the the public key in "filename".  The
            output is either "Verification OK" or "Verification Failure".
 
-       --pprrvveerriiffyy ffiilleennaammee
+       -prverify filename
            verify the signature using the  the private key in "filename".
 
-       --ssiiggnnaattuurree ffiilleennaammee
+       -signature filename
            the actual signature to verify.
 
-       --hhmmaacc kkeeyy
+       -hmac key
            create a hashed MAC using "key".
 
-       --mmaacc aallgg
+       -mac alg
            create MAC (keyed Message Authentication Code). The most popular
            MAC algorithm is HMAC (hash-based MAC), but there are other MAC
-           algorithms which are not based on hash, for instance ggoosstt--mmaacc
-           algorithm, supported by ccccggoosstt engine. MAC keys and other options
-           should be set via --mmaaccoopptt parameter.
+           algorithms which are not based on hash, for instance gost-mac
+           algorithm, supported by ccgost engine. MAC keys and other options
+           should be set via -macopt parameter.
 
-       --mmaaccoopptt nnmm::vv
-           Passes options to MAC algorithm, specified by --mmaacc key.  Following
-           options are supported by both by HHMMAACC and ggoosstt--mmaacc:
+       -macopt nm:v
+           Passes options to MAC algorithm, specified by -mac key.  Following
+           options are supported by both by HMAC and gost-mac:
 
-           kkeeyy::ssttrriinngg
+           key:string
                    Specifies MAC key as alphnumeric string (use if key contain
                    printable characters only). String length must conform to
                    any restrictions of the MAC algorithm for example exactly
                    32 chars for gost-mac.
 
-           hheexxkkeeyy::ssttrriinngg
+           hexkey:string
                    Specifies MAC key in hexadecimal form (two hex digits per
                    byte).  Key length must conform to any restrictions of the
                    MAC algorithm for example exactly 32 chars for gost-mac.
 
-       --rraanndd ffiillee((ss))
+       -rand file(s)
            a file or files containing random data used to seed the random
-           number generator, or an EGD socket (see RRAANNDD__eeggdd(3)).  Multiple
+           number generator, or an EGD socket (see RAND_egd(3)).  Multiple
            files can be specified separated by a OS-dependent character.  The
-           separator is ;; for MS-Windows, ,, for OpenVMS, and :: for all others.
+           separator is ; for MS-Windows, , for OpenVMS, and : for all others.
 
-       --nnoonn--ffiippss--aallllooww
+       -non-fips-allow
            enable use of non-FIPS algorithms such as MD5 even in FIPS mode.
 
-       --ffiippss--ffiinnggeerrpprriinntt
+       -fips-fingerprint
            compute HMAC using a specific key for certain OpenSSL-FIPS
            operations.
 
-       ffiillee......
+       file...
            file or files to digest. If no files are specified then standard
            input is used.
 
-EEXXAAMMPPLLEESS
+EXAMPLES
        To create a hex-encoded message digest of a file:
         openssl dgst -md5 -hex file.txt
 
@@ -130,11 +130,11 @@ EEXXAAMMPPLLEESS
         -signature signature.sign \
         file.txt
 
-NNOOTTEESS
+NOTES
        The digest of choice for all new applications is SHA1. Other digests
        are however still widely used.
 
-       When signing a file, ddggsstt will automatically determine the algorithm
+       When signing a file, dgst will automatically determine the algorithm
        (RSA, ECC, etc) to use for signing based on the private key's ASN.1
        info.  When verifying signatures, it only handles the RSA, DSA, or
        ECDSA signature itself, not the related data to identify the signer and
@@ -146,7 +146,7 @@ NNOOTTEESS
        The signing and verify options should only be used if a single file is
        being signed or verified.
 
-       Hex signatures cannot be verified using ooppeennssssll.  Instead, use "xxd -r"
+       Hex signatures cannot be verified using openssl.  Instead, use "xxd -r"
        or similar program to transform the hex signature into a binary
        signature prior to verification.
 

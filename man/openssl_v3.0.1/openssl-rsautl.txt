@@ -2,98 +2,98 @@ OPENSSL-RSAUTL(1ossl)               OpenSSL              OPENSSL-RSAUTL(1ossl)
 
 
 
-NNAAMMEE
+NAME
        openssl-rsautl - RSA command
 
-SSYYNNOOPPSSIISS
-       ooppeennssssll rrssaauuttll [--hheellpp] [--iinn _f_i_l_e] [--ppaassssiinn _a_r_g] [--rreevv] [--oouutt _f_i_l_e]
-       [--iinnkkeeyy _f_i_l_e_n_a_m_e|_u_r_i] [--kkeeyyffoorrmm DDEERR|PPEEMM|PP1122|EENNGGIINNEE] [--ppuubbiinn] [--cceerrttiinn]
-       [--ssiiggnn] [--vveerriiffyy] [--eennccrryypptt] [--ddeeccrryypptt] [--ppkkccss] [--xx993311] [--ooaaeepp] [--rraaww]
-       [--hheexxdduummpp] [--aassnn11ppaarrssee] [--eennggiinnee _i_d] [--rraanndd _f_i_l_e_s] [--wwrriitteerraanndd _f_i_l_e]
-       [--pprroovviiddeerr _n_a_m_e] [--pprroovviiddeerr--ppaatthh _p_a_t_h] [--pprrooppqquueerryy _p_r_o_p_q]
+SYNOPSIS
+       openssl rsautl [-help] [-in file] [-passin arg] [-rev] [-out file]
+       [-inkey filename|uri] [-keyform DER|PEM|P12|ENGINE] [-pubin] [-certin]
+       [-sign] [-verify] [-encrypt] [-decrypt] [-pkcs] [-x931] [-oaep] [-raw]
+       [-hexdump] [-asn1parse] [-engine id] [-rand files] [-writerand file]
+       [-provider name] [-provider-path path] [-propquery propq]
 
-DDEESSCCRRIIPPTTIIOONN
-       This command has been deprecated.  The ooppeennssssll--ppkkeeyyuuttll(1) command
+DESCRIPTION
+       This command has been deprecated.  The openssl-pkeyutl(1) command
        should be used instead.
 
        This command can be used to sign, verify, encrypt and decrypt data
        using the RSA algorithm.
 
-OOPPTTIIOONNSS
-       --hheellpp
+OPTIONS
+       -help
            Print out a usage message.
 
-       --iinn _f_i_l_e_n_a_m_e
+       -in filename
            This specifies the input filename to read data from or standard
            input if this option is not specified.
 
-       --ppaassssiinn _a_r_g
+       -passin arg
            The passphrase used in the output file.  See see
-           ooppeennssssll--ppaasssspphhrraassee--ooppttiioonnss(1).
+           openssl-passphrase-options(1).
 
-       --rreevv
+       -rev
            Reverse the order of the input.
 
-       --oouutt _f_i_l_e_n_a_m_e
+       -out filename
            Specifies the output filename to write to or standard output by
            default.
 
-       --iinnkkeeyy _f_i_l_e_n_a_m_e|_u_r_i
+       -inkey filename|uri
            The input key, by default it should be an RSA private key.
 
-       --kkeeyyffoorrmm DDEERR|PPEEMM|PP1122|EENNGGIINNEE
+       -keyform DER|PEM|P12|ENGINE
            The key format; unspecified by default.  See
-           ooppeennssssll--ffoorrmmaatt--ooppttiioonnss(1) for details.
+           openssl-format-options(1) for details.
 
-       --ppuubbiinn
+       -pubin
            The input file is an RSA public key.
 
-       --cceerrttiinn
+       -certin
            The input is a certificate containing an RSA public key.
 
-       --ssiiggnn
+       -sign
            Sign the input data and output the signed result. This requires an
            RSA private key.
 
-       --vveerriiffyy
+       -verify
            Verify the input data and output the recovered data.
 
-       --eennccrryypptt
+       -encrypt
            Encrypt the input data using an RSA public key.
 
-       --ddeeccrryypptt
+       -decrypt
            Decrypt the input data using an RSA private key.
 
-       --ppkkccss, --ooaaeepp, --xx993311 --rraaww
+       -pkcs, -oaep, -x931 -raw
            The padding to use: PKCS#1 v1.5 (the default), PKCS#1 OAEP, ANSI
-           X9.31, or no padding, respectively.  For signatures, only --ppkkccss and
-           --rraaww can be used.
+           X9.31, or no padding, respectively.  For signatures, only -pkcs and
+           -raw can be used.
 
-       --hheexxdduummpp
+       -hexdump
            Hex dump the output data.
 
-       --aassnn11ppaarrssee
+       -asn1parse
            Parse the ASN.1 output data, this is useful when combined with the
-           --vveerriiffyy option.
+           -verify option.
 
-       --eennggiinnee _i_d
-           See "Engine Options" in ooppeennssssll(1).  This option is deprecated.
+       -engine id
+           See "Engine Options" in openssl(1).  This option is deprecated.
 
-       --rraanndd _f_i_l_e_s, --wwrriitteerraanndd _f_i_l_e
-           See "Random State Options" in ooppeennssssll(1) for details.
+       -rand files, -writerand file
+           See "Random State Options" in openssl(1) for details.
 
-       --pprroovviiddeerr _n_a_m_e
-       --pprroovviiddeerr--ppaatthh _p_a_t_h
-       --pprrooppqquueerryy _p_r_o_p_q
-           See "Provider Options" in ooppeennssssll(1), pprroovviiddeerr(7), and pprrooppeerrttyy(7).
+       -provider name
+       -provider-path path
+       -propquery propq
+           See "Provider Options" in openssl(1), provider(7), and property(7).
 
-NNOOTTEESS
+NOTES
        Since this command uses the RSA algorithm directly, it can only be used
        to sign or verify small pieces of data.
 
-EEXXAAMMPPLLEESS
+EXAMPLES
        Examples equivalent to these can be found in the documentation for the
-       non-deprecated ooppeennssssll--ppkkeeyyuuttll(1) command.
+       non-deprecated openssl-pkeyutl(1) command.
 
        Sign some data using a private key:
 
@@ -121,8 +121,8 @@ EEXXAAMMPPLLEESS
        second byte) and random padding data visible instead of the 0xff bytes.
 
        It is possible to analyse the signature of certificates using this
-       command in conjunction with ooppeennssssll--aassnn11ppaarrssee(1). Consider the self
-       signed example in _c_e_r_t_s_/_p_c_a_-_c_e_r_t_._p_e_m. Running ooppeennssssll--aassnn11ppaarrssee(1) as
+       command in conjunction with openssl-asn1parse(1). Consider the self
+       signed example in certs/pca-cert.pem. Running openssl-asn1parse(1) as
        follows yields:
 
         openssl asn1parse -in pca-cert.pem
@@ -179,16 +179,16 @@ EEXXAAMMPPLLEESS
 
        which it can be seen agrees with the recovered value above.
 
-SSEEEE AALLSSOO
-       ooppeennssssll(1), ooppeennssssll--ppkkeeyyuuttll(1), ooppeennssssll--ddggsstt(1), ooppeennssssll--rrssaa(1),
-       ooppeennssssll--ggeennrrssaa(1)
+SEE ALSO
+       openssl(1), openssl-pkeyutl(1), openssl-dgst(1), openssl-rsa(1),
+       openssl-genrsa(1)
 
-HHIISSTTOORRYY
+HISTORY
        This command was deprecated in OpenSSL 3.0.
 
-       The --eennggiinnee option was deprecated in OpenSSL 3.0.
+       The -engine option was deprecated in OpenSSL 3.0.
 
-CCOOPPYYRRIIGGHHTT
+COPYRIGHT
        Copyright 2000-2021 The OpenSSL Project Authors. All Rights Reserved.
 
        Licensed under the Apache License 2.0 (the "License").  You may not use

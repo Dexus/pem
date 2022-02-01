@@ -2,158 +2,158 @@ OPENSSL-ENC(1ossl)                  OpenSSL                 OPENSSL-ENC(1ossl)
 
 
 
-NNAAMMEE
+NAME
        openssl-enc - symmetric cipher routines
 
-SSYYNNOOPPSSIISS
-       ooppeennssssll eenncc|_c_i_p_h_e_r [--_cc_ii_pp_hh_ee_rr] [--hheellpp] [--lliisstt] [--cciipphheerrss] [--iinn _f_i_l_e_n_a_m_e]
-       [--oouutt _f_i_l_e_n_a_m_e] [--ppaassss _a_r_g] [--ee] [--dd] [--aa] [--bbaassee6644] [--AA] [--kk _p_a_s_s_w_o_r_d]
-       [--kkffiillee _f_i_l_e_n_a_m_e] [--KK _k_e_y] [--iivv _I_V] [--SS _s_a_l_t] [--ssaalltt] [--nnoossaalltt] [--zz]
-       [--mmdd _d_i_g_e_s_t] [--iitteerr _c_o_u_n_t] [--ppbbkkddff22] [--pp] [--PP] [--bbuuffssiizzee _n_u_m_b_e_r]
-       [--nnooppaadd] [--vv] [--ddeebbuugg] [--nnoonnee] [--eennggiinnee _i_d] [--rraanndd _f_i_l_e_s] [--wwrriitteerraanndd
-       _f_i_l_e] [--pprroovviiddeerr _n_a_m_e] [--pprroovviiddeerr--ppaatthh _p_a_t_h] [--pprrooppqquueerryy _p_r_o_p_q]
+SYNOPSIS
+       openssl enc|cipher [-cipher] [-help] [-list] [-ciphers] [-in filename]
+       [-out filename] [-pass arg] [-e] [-d] [-a] [-base64] [-A] [-k password]
+       [-kfile filename] [-K key] [-iv IV] [-S salt] [-salt] [-nosalt] [-z]
+       [-md digest] [-iter count] [-pbkdf2] [-p] [-P] [-bufsize number]
+       [-nopad] [-v] [-debug] [-none] [-engine id] [-rand files] [-writerand
+       file] [-provider name] [-provider-path path] [-propquery propq]
 
-       ooppeennssssll _c_i_p_h_e_r [......]
+       openssl cipher [...]
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        The symmetric cipher commands allow data to be encrypted or decrypted
        using various block and stream ciphers using keys based on passwords or
        explicitly provided. Base64 encoding or decoding can also be performed
        either by itself or in addition to the encryption or decryption.
 
-OOPPTTIIOONNSS
-       --_cc_ii_pp_hh_ee_rr
+OPTIONS
+       -cipher
            The cipher to use.
 
-       --hheellpp
+       -help
            Print out a usage message.
 
-       --lliisstt
+       -list
            List all supported ciphers.
 
-       --cciipphheerrss
+       -ciphers
            Alias of -list to display all supported ciphers.
 
-       --iinn _f_i_l_e_n_a_m_e
+       -in filename
            The input filename, standard input by default.
 
-       --oouutt _f_i_l_e_n_a_m_e
+       -out filename
            The output filename, standard output by default.
 
-       --ppaassss _a_r_g
-           The password source. For more information about the format of _a_r_g
-           see ooppeennssssll--ppaasssspphhrraassee--ooppttiioonnss(1).
+       -pass arg
+           The password source. For more information about the format of arg
+           see openssl-passphrase-options(1).
 
-       --ee  Encrypt the input data: this is the default.
+       -e  Encrypt the input data: this is the default.
 
-       --dd  Decrypt the input data.
+       -d  Decrypt the input data.
 
-       --aa  Base64 process the data. This means that if encryption is taking
+       -a  Base64 process the data. This means that if encryption is taking
            place the data is base64 encoded after encryption. If decryption is
            set then the input data is base64 decoded before being decrypted.
 
-       --bbaassee6644
-           Same as --aa
+       -base64
+           Same as -a
 
-       --AA  If the --aa option is set then base64 process the data on one line.
+       -A  If the -a option is set then base64 process the data on one line.
 
-       --kk _p_a_s_s_w_o_r_d
+       -k password
            The password to derive the key from. This is for compatibility with
-           previous versions of OpenSSL. Superseded by the --ppaassss argument.
+           previous versions of OpenSSL. Superseded by the -pass argument.
 
-       --kkffiillee _f_i_l_e_n_a_m_e
+       -kfile filename
            Read the password to derive the key from the first line of
-           _f_i_l_e_n_a_m_e.  This is for compatibility with previous versions of
-           OpenSSL. Superseded by the --ppaassss argument.
+           filename.  This is for compatibility with previous versions of
+           OpenSSL. Superseded by the -pass argument.
 
-       --mmdd _d_i_g_e_s_t
+       -md digest
            Use the specified digest to create the key from the passphrase.
            The default algorithm is sha-256.
 
-       --iitteerr _c_o_u_n_t
+       -iter count
            Use a given number of iterations on the password in deriving the
            encryption key.  High values increase the time required to brute-
            force the resulting file.  This option enables the use of PBKDF2
            algorithm to derive the key.
 
-       --ppbbkkddff22
+       -pbkdf2
            Use PBKDF2 algorithm with default iteration count unless otherwise
            specified.
 
-       --nnoossaalltt
-           Don't use a salt in the key derivation routines. This option SSHHOOUULLDD
-           NNOOTT be used except for test purposes or compatibility with ancient
+       -nosalt
+           Don't use a salt in the key derivation routines. This option SHOULD
+           NOT be used except for test purposes or compatibility with ancient
            versions of OpenSSL.
 
-       --ssaalltt
-           Use salt (randomly generated or provide with --SS option) when
+       -salt
+           Use salt (randomly generated or provide with -S option) when
            encrypting, this is the default.
 
-       --SS _s_a_l_t
+       -S salt
            The actual salt to use: this must be represented as a string of hex
            digits.  If this option is used while encrypting, the same exact
            value will be needed again during decryption.
 
-       --KK _k_e_y
+       -K key
            The actual key to use: this must be represented as a string
            comprised only of hex digits. If only the key is specified, the IV
-           must additionally specified using the --iivv option. When both a key
-           and a password are specified, the key given with the --KK option will
+           must additionally specified using the -iv option. When both a key
+           and a password are specified, the key given with the -K option will
            be used and the IV generated from the password will be taken. It
            does not make much sense to specify both key and password.
 
-       --iivv _I_V
+       -iv IV
            The actual IV to use: this must be represented as a string
            comprised only of hex digits. When only the key is specified using
-           the --KK option, the IV must explicitly be defined. When a password
+           the -K option, the IV must explicitly be defined. When a password
            is being specified using one of the other options, the IV is
            generated from this password.
 
-       --pp  Print out the key and IV used.
+       -p  Print out the key and IV used.
 
-       --PP  Print out the key and IV used then immediately exit: don't do any
+       -P  Print out the key and IV used then immediately exit: don't do any
            encryption or decryption.
 
-       --bbuuffssiizzee _n_u_m_b_e_r
+       -bufsize number
            Set the buffer size for I/O.
 
-       --nnooppaadd
+       -nopad
            Disable standard block padding.
 
-       --vv  Verbose print; display some statistics about I/O and buffer sizes.
+       -v  Verbose print; display some statistics about I/O and buffer sizes.
 
-       --ddeebbuugg
+       -debug
            Debug the BIOs used for I/O.
 
-       --zz  Compress or decompress encrypted data using zlib after encryption
+       -z  Compress or decompress encrypted data using zlib after encryption
            or before decryption. This option exists only if OpenSSL was
            compiled with the zlib or zlib-dynamic option.
 
-       --nnoonnee
+       -none
            Use NULL cipher (no encryption or decryption of input).
 
-       --rraanndd _f_i_l_e_s, --wwrriitteerraanndd _f_i_l_e
-           See "Random State Options" in ooppeennssssll(1) for details.
+       -rand files, -writerand file
+           See "Random State Options" in openssl(1) for details.
 
-       --pprroovviiddeerr _n_a_m_e
-       --pprroovviiddeerr--ppaatthh _p_a_t_h
-       --pprrooppqquueerryy _p_r_o_p_q
-           See "Provider Options" in ooppeennssssll(1), pprroovviiddeerr(7), and pprrooppeerrttyy(7).
+       -provider name
+       -provider-path path
+       -propquery propq
+           See "Provider Options" in openssl(1), provider(7), and property(7).
 
-       --eennggiinnee _i_d
-           See "Engine Options" in ooppeennssssll(1).  This option is deprecated.
+       -engine id
+           See "Engine Options" in openssl(1).  This option is deprecated.
 
-NNOOTTEESS
-       The program can be called either as "openssl _c_i_p_h_e_r_" or "openssl enc
-       -_c_i_p_h_e_r_". The first form doesn't work with engine-provided ciphers,
+NOTES
+       The program can be called either as "openssl cipher" or "openssl enc
+       -cipher". The first form doesn't work with engine-provided ciphers,
        because this form is processed before the configuration file is read
-       and any ENGINEs loaded.  Use the ooppeennssssll--lliisstt(1) command to get a list
+       and any ENGINEs loaded.  Use the openssl-list(1) command to get a list
        of supported ciphers.
 
        Engines which provide entirely new encryption algorithms (such as the
        ccgost engine which provides gost89 algorithm) should be configured in
        the configuration file. Engines specified on the command line using
-       --eennggiinnee option can only be used for hardware-assisted implementations
+       -engine option can only be used for hardware-assisted implementations
        of ciphers which are supported by the OpenSSL core or another engine
        specified in the configuration file.
 
@@ -162,17 +162,17 @@ NNOOTTEESS
 
        A password will be prompted for to derive the key and IV if necessary.
 
-       The --ssaalltt option should AALLWWAAYYSS be used if the key is being derived from
+       The -salt option should ALWAYS be used if the key is being derived from
        a password unless you want compatibility with previous versions of
        OpenSSL.
 
-       Without the --ssaalltt option it is possible to perform efficient dictionary
+       Without the -salt option it is possible to perform efficient dictionary
        attacks on the password and to attack stream cipher encrypted data. The
        reason for this is that without the salt the same password always
        generates the same encryption key.
 
        When the salt is generated at random (that means when encrypting using
-       a passphrase without explicit salt given using --SS option), the first
+       a passphrase without explicit salt given using -S option), the first
        bytes of the encrypted data are reserved to store the salt for later
        decrypting.
 
@@ -192,29 +192,29 @@ NNOOTTEESS
 
        Blowfish and RC5 algorithms use a 128 bit key.
 
-SSUUPPPPOORRTTEEDD CCIIPPHHEERRSS
+SUPPORTED CIPHERS
        Note that some of these ciphers can be disabled at compile time and
        some are available only if an appropriate engine is configured in the
        configuration file. The output when invoking this command with the
-       --lliisstt option (that is "openssl enc -list") is a list of ciphers,
+       -list option (that is "openssl enc -list") is a list of ciphers,
        supported by your version of OpenSSL, including ones provided by
        configured engines.
 
        This command does not support authenticated encryption modes like CCM
        and GCM, and will not support such modes in the future.  This is due to
-       having to begin streaming output (e.g., to standard output when --oouutt is
+       having to begin streaming output (e.g., to standard output when -out is
        not used) before the authentication tag could be validated.  When this
        command is used in a pipeline, the receiving end will not be able to
        roll back upon authentication failure.  The AEAD modes currently in
        common use also suffer from catastrophic failure of confidentiality
-       and/or integrity upon reuse of key/iv/nonce, and since ooppeennssssll eenncc
+       and/or integrity upon reuse of key/iv/nonce, and since openssl enc
        places the entire burden of key/iv/nonce management upon the user, the
        risk of exposing AEAD modes is too great to allow.  These key/iv/nonce
        management issues also affect other modes currently exposed in this
        command, but the failure modes are less extreme in these cases, and the
        functionality cannot be removed with a stable release branch.  For bulk
        encryption of data, whether using authenticated encryption modes or
-       other modes, ooppeennssssll--ccmmss(1) is recommended, as it provides a standard
+       other modes, openssl-cms(1) is recommended, as it provides a standard
        data format and performs the needed key/iv/nonce management.
 
         base64             Base 64
@@ -321,7 +321,7 @@ SSUUPPPPOORRTTEEDD CCIIPPHHEERRSS
         camellia-[128|192|256]-ecb  128/192/256 bit Camellia in ECB mode
         camellia-[128|192|256]-ofb  128/192/256 bit Camellia in OFB mode
 
-EEXXAAMMPPLLEESS
+EXAMPLES
        Just base64 encode a binary file:
 
         openssl base64 -in file.bin -out file.b64
@@ -351,21 +351,21 @@ EEXXAAMMPPLLEESS
         openssl enc -aes-256-ctr -pbkdf2 -d -a -in file.aes256 -out file.txt \
            -pass file:<passfile>
 
-BBUUGGSS
-       The --AA option when used with large files doesn't work properly.
+BUGS
+       The -A option when used with large files doesn't work properly.
 
-       The ooppeennssssll eenncc command only supports a fixed number of algorithms with
+       The openssl enc command only supports a fixed number of algorithms with
        certain parameters. So if, for example, you want to use RC2 with a 76
        bit key or RC4 with an 84 bit key you can't use this program.
 
-HHIISSTTOORRYY
+HISTORY
        The default digest was changed from MD5 to SHA256 in OpenSSL 1.1.0.
 
-       The --lliisstt option was added in OpenSSL 1.1.1e.
+       The -list option was added in OpenSSL 1.1.1e.
 
-       The --cciipphheerrss and --eennggiinnee options were deprecated in OpenSSL 3.0.
+       The -ciphers and -engine options were deprecated in OpenSSL 3.0.
 
-CCOOPPYYRRIIGGHHTT
+COPYRIGHT
        Copyright 2000-2021 The OpenSSL Project Authors. All Rights Reserved.
 
        Licensed under the Apache License 2.0 (the "License").  You may not use

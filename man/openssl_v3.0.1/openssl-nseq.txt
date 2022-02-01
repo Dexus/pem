@@ -2,14 +2,14 @@ OPENSSL-NSEQ(1ossl)                 OpenSSL                OPENSSL-NSEQ(1ossl)
 
 
 
-NNAAMMEE
+NAME
        openssl-nseq - create or examine a Netscape certificate sequence
 
-SSYYNNOOPPSSIISS
-       ooppeennssssll nnsseeqq [--hheellpp] [--iinn _f_i_l_e_n_a_m_e] [--oouutt _f_i_l_e_n_a_m_e] [--ttoosseeqq] [--pprroovviiddeerr
-       _n_a_m_e] [--pprroovviiddeerr--ppaatthh _p_a_t_h] [--pprrooppqquueerryy _p_r_o_p_q]
+SYNOPSIS
+       openssl nseq [-help] [-in filename] [-out filename] [-toseq] [-provider
+       name] [-provider-path path] [-propquery propq]
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        This command takes a file containing a Netscape certificate sequence
        and prints out the certificates contained in it or takes a file of
        certificates and converts it into a Netscape certificate sequence.
@@ -20,29 +20,29 @@ DDEESSCCRRIIPPTTIIOONN
        example during certificate enrollment.  It was also used by Netscape
        certificate server.
 
-OOPPTTIIOONNSS
-       --hheellpp
+OPTIONS
+       -help
            Print out a usage message.
 
-       --iinn _f_i_l_e_n_a_m_e
+       -in filename
            This specifies the input filename to read or standard input if this
            option is not specified.
 
-       --oouutt _f_i_l_e_n_a_m_e
+       -out filename
            Specifies the output filename or standard output by default.
 
-       --ttoosseeqq
+       -toseq
            Normally a Netscape certificate sequence will be input and the
-           output is the certificates contained in it. With the --ttoosseeqq option
+           output is the certificates contained in it. With the -toseq option
            the situation is reversed: a Netscape certificate sequence is
            created from a file of certificates.
 
-       --pprroovviiddeerr _n_a_m_e
-       --pprroovviiddeerr--ppaatthh _p_a_t_h
-       --pprrooppqquueerryy _p_r_o_p_q
-           See "Provider Options" in ooppeennssssll(1), pprroovviiddeerr(7), and pprrooppeerrttyy(7).
+       -provider name
+       -provider-path path
+       -propquery propq
+           See "Provider Options" in openssl(1), provider(7), and property(7).
 
-EEXXAAMMPPLLEESS
+EXAMPLES
        Output the certificates in a Netscape certificate sequence
 
         openssl nseq -in nseq.pem -out certs.pem
@@ -51,7 +51,7 @@ EEXXAAMMPPLLEESS
 
         openssl nseq -in certs.pem -toseq -out nseq.pem
 
-CCOOPPYYRRIIGGHHTT
+COPYRIGHT
        Copyright 2000-2020 The OpenSSL Project Authors. All Rights Reserved.
 
        Licensed under the Apache License 2.0 (the "License").  You may not use

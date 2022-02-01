@@ -2,101 +2,101 @@ PKEYUTL(1)                          OpenSSL                         PKEYUTL(1)
 
 
 
-NNAAMMEE
+NAME
        openssl-pkeyutl, pkeyutl - public key algorithm utility
 
-SSYYNNOOPPSSIISS
-       ooppeennssssll ppkkeeyyuuttll [--iinn ffiillee] [--oouutt ffiillee] [--ssiiggffiillee ffiillee] [--iinnkkeeyy ffiillee]
-       [--kkeeyyffoorrmm PPEEMM||DDEERR] [--ppaassssiinn aarrgg] [--ppeeeerrkkeeyy ffiillee] [--ppeeeerrffoorrmm PPEEMM||DDEERR]
-       [--ppuubbiinn] [--cceerrttiinn] [--rreevv] [--ssiiggnn] [--vveerriiffyy] [--vveerriiffyyrreeccoovveerr] [--eennccrryypptt]
-       [--ddeeccrryypptt] [--ddeerriivvee] [--ppkkeeyyoopptt oopptt::vvaalluuee] [--hheexxdduummpp] [--aassnn11ppaarrssee]
-       [--eennggiinnee iidd]
+SYNOPSIS
+       openssl pkeyutl [-in file] [-out file] [-sigfile file] [-inkey file]
+       [-keyform PEM|DER] [-passin arg] [-peerkey file] [-peerform PEM|DER]
+       [-pubin] [-certin] [-rev] [-sign] [-verify] [-verifyrecover] [-encrypt]
+       [-decrypt] [-derive] [-pkeyopt opt:value] [-hexdump] [-asn1parse]
+       [-engine id]
 
-DDEESSCCRRIIPPTTIIOONN
-       The ppkkeeyyuuttll command can be used to perform public key operations using
+DESCRIPTION
+       The pkeyutl command can be used to perform public key operations using
        any supported algorithm.
 
-CCOOMMMMAANNDD OOPPTTIIOONNSS
-       --iinn ffiilleennaammee
+COMMAND OPTIONS
+       -in filename
            This specifies the input filename to read data from or standard
            input if this option is not specified.
 
-       --oouutt ffiilleennaammee
+       -out filename
            specifies the output filename to write to or standard output by
            default.
 
-       --iinnkkeeyy ffiillee
+       -inkey file
            the input key file, by default it should be a private key.
 
-       --kkeeyyffoorrmm PPEEMM||DDEERR
+       -keyform PEM|DER
            the key format PEM, DER or ENGINE.
 
-       --ppaassssiinn aarrgg
+       -passin arg
            the input key password source. For more information about the
-           format of aarrgg see the PPAASSSS PPHHRRAASSEE AARRGGUUMMEENNTTSS section in ooppeennssssll(1).
+           format of arg see the PASS PHRASE ARGUMENTS section in openssl(1).
 
-       --ppeeeerrkkeeyy ffiillee
+       -peerkey file
            the peer key file, used by key derivation (agreement) operations.
 
-       --ppeeeerrffoorrmm PPEEMM||DDEERR
+       -peerform PEM|DER
            the peer key format PEM, DER or ENGINE.
 
-       --eennggiinnee iidd
-           specifying an engine (by its unique iidd string) will cause ppkkeeyyuuttll
+       -engine id
+           specifying an engine (by its unique id string) will cause pkeyutl
            to attempt to obtain a functional reference to the specified
            engine, thus initialising it if needed. The engine will then be set
            as the default for all available algorithms.
 
-       --ppuubbiinn
+       -pubin
            the input file is a public key.
 
-       --cceerrttiinn
+       -certin
            the input is a certificate containing a public key.
 
-       --rreevv
+       -rev
            reverse the order of the input buffer. This is useful for some
            libraries (such as CryptoAPI) which represent the buffer in little
            endian format.
 
-       --ssiiggnn
+       -sign
            sign the input data and output the signed result. This requires a
            private key.
 
-       --vveerriiffyy
+       -verify
            verify the input data against the signature file and indicate if
            the verification succeeded or failed.
 
-       --vveerriiffyyrreeccoovveerr
+       -verifyrecover
            verify the input data and output the recovered data.
 
-       --eennccrryypptt
+       -encrypt
            encrypt the input data using a public key.
 
-       --ddeeccrryypptt
+       -decrypt
            decrypt the input data using a private key.
 
-       --ddeerriivvee
+       -derive
            derive a shared secret using the peer key.
 
-       --hheexxdduummpp
+       -hexdump
            hex dump the output data.
 
-       --aassnn11ppaarrssee
+       -asn1parse
            asn1parse the output data, this is useful when combined with the
-           --vveerriiffyyrreeccoovveerr option when an ASN1 structure is signed.
+           -verifyrecover option when an ASN1 structure is signed.
 
-NNOOTTEESS
+NOTES
        The operations and options supported vary according to the key
        algorithm and its implementation. The OpenSSL operations and options
        are indicated below.
 
-       Unless otherwise mentioned all algorithms support the ddiiggeesstt::aallgg option
+       Unless otherwise mentioned all algorithms support the digest:alg option
        which specifies the digest in use for sign, verify and verifyrecover
-       operations.  The value aallgg should represent a digest name as used in
-       the EEVVPP__ggeett__ddiiggeessttbbyynnaammee(()) function for example sshhaa11.  This value is
+       operations.  The value alg should represent a digest name as used in
+       the EVP_get_digestbyname() function for example sha1.  This value is
        used only for sanity-checking the lengths of data passed in to the
-       ppkkeeyyuuttll and for creating the structures that make up the signature
-       (e.g. DDiiggeessttIInnffoo in RSASSA PKCS#1 v1.5 signatures).  In case of RSA,
+       pkeyutl and for creating the structures that make up the signature
+       (e.g. DigestInfo in RSASSA PKCS#1 v1.5 signatures).  In case of RSA,
        ECDSA and DSA signatures, this utility will not perform hashing on
        input data but rather use the data directly as input of signature
        algorithm. Depending on key type, signature type and mode of padding,
@@ -105,58 +105,58 @@ NNOOTTEESS
        ECDSA and DSA the data shouldn't be longer than field size, otherwise
        it will be silently truncated to field size.
 
-       In other words, if the value of digest is sshhaa11 the input should be 20
+       In other words, if the value of digest is sha1 the input should be 20
        bytes long binary encoding of SHA-1 hash function output.
 
-RRSSAA AALLGGOORRIITTHHMM
+RSA ALGORITHM
        The RSA algorithm supports encrypt, decrypt, sign, verify and
        verifyrecover operations in general. Some padding modes only support
        some of these operations however.
 
-       -rrssaa__ppaaddddiinngg__mmooddee::mmooddee
-           This sets the RSA padding mode. Acceptable values for mmooddee are
-           ppkkccss11 for PKCS#1 padding, ssssllvv2233 for SSLv23 padding, nnoonnee for no
-           padding, ooaaeepp for OOAAEEPP mode, xx993311 for X9.31 mode and ppssss for PSS.
+       -rsa_padding_mode:mode
+           This sets the RSA padding mode. Acceptable values for mode are
+           pkcs1 for PKCS#1 padding, sslv23 for SSLv23 padding, none for no
+           padding, oaep for OAEP mode, x931 for X9.31 mode and pss for PSS.
 
            In PKCS#1 padding if the message digest is not set then the
            supplied data is signed or verified directly instead of using a
-           DDiiggeessttIInnffoo structure. If a digest is set then the a DDiiggeessttIInnffoo
+           DigestInfo structure. If a digest is set then the a DigestInfo
            structure is used and its the length must correspond to the digest
            type.
 
-           For ooeeaapp mode only encryption and decryption is supported.
+           For oeap mode only encryption and decryption is supported.
 
-           For xx993311 if the digest type is set it is used to format the block
+           For x931 if the digest type is set it is used to format the block
            data otherwise the first byte is used to specify the X9.31 digest
            ID. Sign, verify and verifyrecover are can be performed in this
            mode.
 
-           For ppssss mode only sign and verify are supported and the digest type
+           For pss mode only sign and verify are supported and the digest type
            must be specified.
 
-       rrssaa__ppssss__ssaallttlleenn::lleenn
-           For ppssss mode only this option specifies the salt length. Two
+       rsa_pss_saltlen:len
+           For pss mode only this option specifies the salt length. Two
            special values are supported: -1 sets the salt length to the digest
            length. When signing -2 sets the salt length to the maximum
            permissible value. When verifying -2 causes the salt length to be
-           automatically determined based on the PPSSSS block structure.
+           automatically determined based on the PSS block structure.
 
-DDSSAA AALLGGOORRIITTHHMM
+DSA ALGORITHM
        The DSA algorithm supports signing and verification operations only.
-       Currently there are no additional options other than ddiiggeesstt. Only the
+       Currently there are no additional options other than digest. Only the
        SHA1 digest can be used and this digest is assumed by default.
 
-DDHH AALLGGOORRIITTHHMM
+DH ALGORITHM
        The DH algorithm only supports the derivation operation and no
        additional options.
 
-EECC AALLGGOORRIITTHHMM
+EC ALGORITHM
        The EC algorithm supports sign, verify and derive operations. The sign
        and verify operations use ECDSA and derive uses ECDH. Currently there
-       are no additional options other than ddiiggeesstt. Only the SHA1 digest can
+       are no additional options other than digest. Only the SHA1 digest can
        be used and this digest is assumed by default.
 
-EEXXAAMMPPLLEESS
+EXAMPLES
        Sign some data using a private key:
 
         openssl pkeyutl -sign -in file -inkey key.pem -out sig
@@ -178,8 +178,8 @@ EEXXAAMMPPLLEESS
 
         openssl pkeyutl -derive -inkey key.pem -peerkey pubkey.pem -out secret
 
-SSEEEE AALLSSOO
-       ggeennppkkeeyy(1), ppkkeeyy(1), rrssaauuttll(1) ddggsstt(1), rrssaa(1), ggeennrrssaa(1)
+SEE ALSO
+       genpkey(1), pkey(1), rsautl(1) dgst(1), rsa(1), genrsa(1)
 
 
 

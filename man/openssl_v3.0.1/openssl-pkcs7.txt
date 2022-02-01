@@ -2,61 +2,61 @@ OPENSSL-PKCS7(1ossl)                OpenSSL               OPENSSL-PKCS7(1ossl)
 
 
 
-NNAAMMEE
+NAME
        openssl-pkcs7 - PKCS#7 command
 
-SSYYNNOOPPSSIISS
-       ooppeennssssll ppkkccss77 [--hheellpp] [--iinnffoorrmm DDEERR|PPEEMM] [--oouuttffoorrmm DDEERR|PPEEMM] [--iinn
-       _f_i_l_e_n_a_m_e] [--oouutt _f_i_l_e_n_a_m_e] [--pprriinntt] [--pprriinntt__cceerrttss] [--tteexxtt] [--nnoooouutt]
-       [--eennggiinnee _i_d] [--pprroovviiddeerr _n_a_m_e] [--pprroovviiddeerr--ppaatthh _p_a_t_h] [--pprrooppqquueerryy _p_r_o_p_q]
+SYNOPSIS
+       openssl pkcs7 [-help] [-inform DER|PEM] [-outform DER|PEM] [-in
+       filename] [-out filename] [-print] [-print_certs] [-text] [-noout]
+       [-engine id] [-provider name] [-provider-path path] [-propquery propq]
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        This command processes PKCS#7 files.  Note that it only understands
        PKCS#7 v 1.5 as specified in IETF RFC 2315.  It cannot currently parse
        CMS as described in IETF RFC 2630.
 
-OOPPTTIIOONNSS
-       --hheellpp
+OPTIONS
+       -help
            Print out a usage message.
 
-       --iinnffoorrmm DDEERR|PPEEMM, --oouuttffoorrmm DDEERR|PPEEMM
-           The input and formats; the default is PPEEMM.  See
-           ooppeennssssll--ffoorrmmaatt--ooppttiioonnss(1) for details.
+       -inform DER|PEM, -outform DER|PEM
+           The input and formats; the default is PEM.  See
+           openssl-format-options(1) for details.
 
            The data is a PKCS#7 Version 1.5 structure.
 
-       --iinn _f_i_l_e_n_a_m_e
+       -in filename
            This specifies the input filename to read from or standard input if
            this option is not specified.
 
-       --oouutt _f_i_l_e_n_a_m_e
+       -out filename
            Specifies the output filename to write to or standard output by
            default.
 
-       --pprriinntt
+       -print
            Print out the full PKCS7 object.
 
-       --pprriinntt__cceerrttss
+       -print_certs
            Prints out any certificates or CRLs contained in the file. They are
            preceded by their subject and issuer names in one line format.
 
-       --tteexxtt
+       -text
            Prints out certificate details in full rather than just subject and
            issuer names.
 
-       --nnoooouutt
+       -noout
            Don't output the encoded version of the PKCS#7 structure (or
-           certificates if --pprriinntt__cceerrttss is set).
+           certificates if -print_certs is set).
 
-       --eennggiinnee _i_d
-           See "Engine Options" in ooppeennssssll(1).  This option is deprecated.
+       -engine id
+           See "Engine Options" in openssl(1).  This option is deprecated.
 
-       --pprroovviiddeerr _n_a_m_e
-       --pprroovviiddeerr--ppaatthh _p_a_t_h
-       --pprrooppqquueerryy _p_r_o_p_q
-           See "Provider Options" in ooppeennssssll(1), pprroovviiddeerr(7), and pprrooppeerrttyy(7).
+       -provider name
+       -provider-path path
+       -propquery propq
+           See "Provider Options" in openssl(1), provider(7), and property(7).
 
-EEXXAAMMPPLLEESS
+EXAMPLES
        Convert a PKCS#7 file from PEM to DER:
 
         openssl pkcs7 -in file.pem -outform DER -out file.der
@@ -65,13 +65,13 @@ EEXXAAMMPPLLEESS
 
         openssl pkcs7 -in file.pem -print_certs -out certs.pem
 
-SSEEEE AALLSSOO
-       ooppeennssssll(1), ooppeennssssll--ccrrll22ppkkccss77(1)
+SEE ALSO
+       openssl(1), openssl-crl2pkcs7(1)
 
-HHIISSTTOORRYY
-       The --eennggiinnee option was deprecated in OpenSSL 3.0.
+HISTORY
+       The -engine option was deprecated in OpenSSL 3.0.
 
-CCOOPPYYRRIIGGHHTT
+COPYRIGHT
        Copyright 2000-2021 The OpenSSL Project Authors. All Rights Reserved.
 
        Licensed under the Apache License 2.0 (the "License").  You may not use

@@ -2,98 +2,98 @@ GENPKEY(1)                          OpenSSL                         GENPKEY(1)
 
 
 
-NNAAMMEE
+NAME
        genpkey - generate a private key
 
-SSYYNNOOPPSSIISS
-       ooppeennssssll ggeennppkkeeyy [--oouutt ffiilleennaammee] [--oouuttffoorrmm PPEEMM||DDEERR] [--ppaassss aarrgg]
-       [--cciipphheerr] [--eennggiinnee iidd] [--ppaarraammffiillee ffiillee] [--aallggoorriitthhmm aallgg] [--ppkkeeyyoopptt
-       oopptt::vvaalluuee] [--ggeennppaarraamm] [--tteexxtt]
+SYNOPSIS
+       openssl genpkey [-out filename] [-outform PEM|DER] [-pass arg]
+       [-cipher] [-engine id] [-paramfile file] [-algorithm alg] [-pkeyopt
+       opt:value] [-genparam] [-text]
 
-DDEESSCCRRIIPPTTIIOONN
-       The ggeennppkkeeyy command generates a private key.
+DESCRIPTION
+       The genpkey command generates a private key.
 
-OOPPTTIIOONNSS
-       --oouutt ffiilleennaammee
+OPTIONS
+       -out filename
            the output filename. If this argument is not specified then
            standard output is used.
 
-       --oouuttffoorrmm DDEERR||PPEEMM
+       -outform DER|PEM
            This specifies the output format DER or PEM.
 
-       --ppaassss aarrgg
+       -pass arg
            the output file password source. For more information about the
-           format of aarrgg see the PPAASSSS PPHHRRAASSEE AARRGGUUMMEENNTTSS section in ooppeennssssll(1).
+           format of arg see the PASS PHRASE ARGUMENTS section in openssl(1).
 
-       --cciipphheerr
+       -cipher
            This option encrypts the private key with the supplied cipher. Any
-           algorithm name accepted by EEVVPP__ggeett__cciipphheerrbbyynnaammee(()) is acceptable
-           such as ddeess33.
+           algorithm name accepted by EVP_get_cipherbyname() is acceptable
+           such as des3.
 
-       --eennggiinnee iidd
-           specifying an engine (by its unique iidd string) will cause ggeennppkkeeyy
+       -engine id
+           specifying an engine (by its unique id string) will cause genpkey
            to attempt to obtain a functional reference to the specified
            engine, thus initialising it if needed. The engine will then be set
            as the default for all available algorithms. If used this option
            should precede all other options.
 
-       --aallggoorriitthhmm aallgg
+       -algorithm alg
            public key algorithm to use such as RSA, DSA or DH. If used this
-           option must precede any --ppkkeeyyoopptt options. The options --ppaarraammffiillee
-           and --aallggoorriitthhmm are mutually exclusive.
+           option must precede any -pkeyopt options. The options -paramfile
+           and -algorithm are mutually exclusive.
 
-       --ppkkeeyyoopptt oopptt::vvaalluuee
-           set the public key algorithm option oopptt to vvaalluuee. The precise set
+       -pkeyopt opt:value
+           set the public key algorithm option opt to value. The precise set
            of options supported depends on the public key algorithm used and
-           its implementation. See KKEEYY GGEENNEERRAATTIIOONN OOPPTTIIOONNSS below for more
+           its implementation. See KEY GENERATION OPTIONS below for more
            details.
 
-       --ggeennppaarraamm
+       -genparam
            generate a set of parameters instead of a private key. If used this
-           option must precede and --aallggoorriitthhmm, --ppaarraammffiillee or --ppkkeeyyoopptt options.
+           option must precede and -algorithm, -paramfile or -pkeyopt options.
 
-       --ppaarraammffiillee ffiilleennaammee
+       -paramfile filename
            Some public key algorithms generate a private key based on a set of
            parameters.  They can be supplied using this option. If this option
            is used the public key algorithm used is determined by the
-           parameters. If used this option must precede and --ppkkeeyyoopptt options.
-           The options --ppaarraammffiillee and --aallggoorriitthhmm are mutually exclusive.
+           parameters. If used this option must precede and -pkeyopt options.
+           The options -paramfile and -algorithm are mutually exclusive.
 
-       --tteexxtt
+       -text
            Print an (unencrypted) text representation of private and public
            keys and parameters along with the PEM or DER structure.
 
-KKEEYY GGEENNEERRAATTIIOONN OOPPTTIIOONNSS
+KEY GENERATION OPTIONS
        The options supported by each algorith and indeed each implementation
        of an algorithm can vary. The options for the OpenSSL implementations
        are detailed below.
 
-RRSSAA KKEEYY GGEENNEERRAATTIIOONN OOPPTTIIOONNSS
-       rrssaa__kkeeyyggeenn__bbiittss::nnuummbbiittss
+RSA KEY GENERATION OPTIONS
+       rsa_keygen_bits:numbits
            The number of bits in the generated key. If not specified 1024 is
            used.
 
-       rrssaa__kkeeyyggeenn__ppuubbeexxpp::vvaalluuee
+       rsa_keygen_pubexp:value
            The RSA public exponent value. This can be a large decimal or
-           hexadecimal value if preceded by 00xx. Default value is 65537.
+           hexadecimal value if preceded by 0x. Default value is 65537.
 
-DDSSAA PPAARRAAMMEETTEERR GGEENNEERRAATTIIOONN OOPPTTIIOONNSS
-       ddssaa__ppaarraammggeenn__bbiittss::nnuummbbiittss
+DSA PARAMETER GENERATION OPTIONS
+       dsa_paramgen_bits:numbits
            The number of bits in the generated parameters. If not specified
            1024 is used.
 
-DDHH PPAARRAAMMEETTEERR GGEENNEERRAATTIIOONN OOPPTTIIOONNSS
-       ddhh__ppaarraammggeenn__pprriimmee__lleenn::nnuummbbiittss
-           The number of bits in the prime parameter pp.
+DH PARAMETER GENERATION OPTIONS
+       dh_paramgen_prime_len:numbits
+           The number of bits in the prime parameter p.
 
-       ddhh__ppaarraammggeenn__ggeenneerraattoorr::vvaalluuee
-           The value to use for the generator gg.
+       dh_paramgen_generator:value
+           The value to use for the generator g.
 
-EECC PPAARRAAMMEETTEERR GGEENNEERRAATTIIOONN OOPPTTIIOONNSS
-       eecc__ppaarraammggeenn__ccuurrvvee::ccuurrvvee
+EC PARAMETER GENERATION OPTIONS
+       ec_paramgen_curve:curve
            the EC curve to use.
 
-GGOOSSTT22000011 KKEEYY GGEENNEERRAATTIIOONN AANNDD PPAARRAAMMEETTEERR OOPPTTIIOONNSS
+GOST2001 KEY GENERATION AND PARAMETER OPTIONS
        Gost 2001 support is not enabled by default. To enable this algorithm,
        one should load the ccgost engine in the OpenSSL configuration file.
        See README.gost file in the engines/ccgost directiry of the source
@@ -103,7 +103,7 @@ GGOOSSTT22000011 KKEEYY GGEENNEERRAATTIIOONN AANNDD PPA
        Parameters can be specified during key generation directly as well as
        during generation of parameter file.
 
-       ppaarraammsseett::nnaammee
+       paramset:name
            Specifies GOST R 34.10-2001 parameter set according to RFC 4357.
            Parameter set can be specified using abbreviated name, object short
            name or numeric OID. Following parameter sets are supported:
@@ -116,12 +116,12 @@ GGOOSSTT22000011 KKEEYY GGEENNEERRAATTIIOONN AANNDD PPA
              XB         1.2.643.2.2.36.1  Key exchange
              test       1.2.643.2.2.35.0  Test purposes
 
-NNOOTTEESS
+NOTES
        The use of the genpkey program is encouraged over the algorithm
        specific utilities because additional algorithm options and ENGINE
        provided algorithms can be used.
 
-EEXXAAMMPPLLEESS
+EXAMPLES
        Generate an RSA private key using default parameters:
 
         openssl genpkey -algorithm RSA -out key.pem

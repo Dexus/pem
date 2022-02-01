@@ -2,72 +2,72 @@ SPEED(1)                            OpenSSL                           SPEED(1)
 
 
 
-NNAAMMEE
+NAME
        openssl-speed, speed - test library performance
 
-SSYYNNOOPPSSIISS
-       ooppeennssssll ssppeeeedd [--hheellpp] [--eennggiinnee iidd] [--eellaappsseedd] [--eevvpp aallggoo] [--ddeeccrryypptt]
-       [--rraanndd ffiillee......]  [--wwrriitteerraanndd ffiillee] [--pprriimmeess nnuumm] [--sseeccoonnddss nnuumm] [--bbyytteess
-       nnuumm] [aallggoorriitthhmm......]
+SYNOPSIS
+       openssl speed [-help] [-engine id] [-elapsed] [-evp algo] [-decrypt]
+       [-rand file...]  [-writerand file] [-primes num] [-seconds num] [-bytes
+       num] [algorithm...]
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        This command is used to test the performance of cryptographic
-       algorithms.  To see the list of supported algorithms, use the _l_i_s_t
-       _-_-_d_i_g_e_s_t_-_c_o_m_m_a_n_d_s or _l_i_s_t _-_-_c_i_p_h_e_r_-_c_o_m_m_a_n_d_s command. The global CSPRNG
-       is denoted by the _r_a_n_d algorithm name.
+       algorithms.  To see the list of supported algorithms, use the list
+       --digest-commands or list --cipher-commands command. The global CSPRNG
+       is denoted by the rand algorithm name.
 
-OOPPTTIIOONNSS
-       --hheellpp
+OPTIONS
+       -help
            Print out a usage message.
 
-       --eennggiinnee iidd
-           Specifying an engine (by its unique iidd string) will cause ssppeeeedd to
+       -engine id
+           Specifying an engine (by its unique id string) will cause speed to
            attempt to obtain a functional reference to the specified engine,
            thus initialising it if needed. The engine will then be set as the
            default for all available algorithms.
 
-       --eellaappsseedd
+       -elapsed
            When calculating operations- or bytes-per-second, use wall-clock
            time instead of CPU user time as divisor. It can be useful when
            testing speed of hardware engines.
 
-       --eevvpp aallggoo
+       -evp algo
            Use the specified cipher or message digest algorithm via the EVP
-           interface.  If aallggoo is an AEAD cipher, then you can pass <-aead> to
-           benchmark a TLS-like sequence. And if aallggoo is a multi-buffer
-           capable cipher, e.g.  aes-128-cbc-hmac-sha1, then --mmbb will time
+           interface.  If algo is an AEAD cipher, then you can pass <-aead> to
+           benchmark a TLS-like sequence. And if algo is a multi-buffer
+           capable cipher, e.g.  aes-128-cbc-hmac-sha1, then -mb will time
            multi-buffer operation.
 
-       --ddeeccrryypptt
+       -decrypt
            Time the decryption instead of encryption. Affects only the EVP
            testing.
 
-       --rraanndd ffiillee......
+       -rand file...
            A file or files containing random data used to seed the random
            number generator.  Multiple files can be specified separated by an
-           OS-dependent character.  The separator is ;; for MS-Windows, ,, for
-           OpenVMS, and :: for all others.
+           OS-dependent character.  The separator is ; for MS-Windows, , for
+           OpenVMS, and : for all others.
 
-       [--wwrriitteerraanndd ffiillee]
-           Writes random data to the specified _f_i_l_e upon exit.  This can be
-           used with a subsequent --rraanndd flag.
+       [-writerand file]
+           Writes random data to the specified file upon exit.  This can be
+           used with a subsequent -rand flag.
 
-       --pprriimmeess nnuumm
-           Generate a nnuumm-prime RSA key and use it to run the benchmarks. This
+       -primes num
+           Generate a num-prime RSA key and use it to run the benchmarks. This
            option is only effective if RSA algorithm is specified to test.
 
-       --sseeccoonnddss nnuumm
-           Run benchmarks for nnuumm seconds.
+       -seconds num
+           Run benchmarks for num seconds.
 
-       --bbyytteess nnuumm
-           Run benchmarks on nnuumm-byte buffers. Affects ciphers, digests and
+       -bytes num
+           Run benchmarks on num-byte buffers. Affects ciphers, digests and
            the CSPRNG.
 
-       [[zzeerroo oorr mmoorree tteesstt aallggoorriitthhmmss]]
-           If any options are given, ssppeeeedd tests those algorithms, otherwise a
+       [zero or more test algorithms]
+           If any options are given, speed tests those algorithms, otherwise a
            pre-compiled grand selection is tested.
 
-CCOOPPYYRRIIGGHHTT
+COPYRIGHT
        Copyright 2000-2018 The OpenSSL Project Authors. All Rights Reserved.
 
        Licensed under the OpenSSL license (the "License").  You may not use

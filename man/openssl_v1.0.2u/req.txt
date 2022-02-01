@@ -2,365 +2,365 @@ REQ(1)                              OpenSSL                             REQ(1)
 
 
 
-NNAAMMEE
+NAME
        openssl-req, req - PKCS#10 certificate request and certificate
        generating utility.
 
-SSYYNNOOPPSSIISS
-       ooppeennssssll rreeqq [--iinnffoorrmm PPEEMM||DDEERR] [--oouuttffoorrmm PPEEMM||DDEERR] [--iinn ffiilleennaammee]
-       [--ppaassssiinn aarrgg] [--oouutt ffiilleennaammee] [--ppaassssoouutt aarrgg] [--tteexxtt] [--ppuubbkkeeyy] [--nnoooouutt]
-       [--vveerriiffyy] [--mmoodduulluuss] [--nneeww] [--rraanndd ffiillee((ss))] [--nneewwkkeeyy rrssaa::bbiittss] [--nneewwkkeeyy
-       aallgg::ffiillee] [--nnooddeess] [--kkeeyy ffiilleennaammee] [--kkeeyyffoorrmm PPEEMM||DDEERR] [--kkeeyyoouutt
-       ffiilleennaammee] [--kkeeyyggeenn__eennggiinnee iidd] [--[[ddiiggeesstt]]] [--ccoonnffiigg ffiilleennaammee]
-       [--mmuullttiivvaalluuee--rrddnn] [--xx550099] [--ddaayyss nn] [--sseett__sseerriiaall nn] [--aassnn11--kklluuddggee]
-       [--nnoo--aassnn11--kklluuddggee] [--nneewwhhddrr] [--eexxtteennssiioonnss sseeccttiioonn] [--rreeqqeexxttss sseeccttiioonn]
-       [--uuttff88] [--nnaammeeoopptt] [--rreeqqoopptt] [--ssuubbjjeecctt] [--ssuubbjj aarrgg] [--bbaattcchh] [--vveerrbboossee]
-       [--eennggiinnee iidd]
+SYNOPSIS
+       openssl req [-inform PEM|DER] [-outform PEM|DER] [-in filename]
+       [-passin arg] [-out filename] [-passout arg] [-text] [-pubkey] [-noout]
+       [-verify] [-modulus] [-new] [-rand file(s)] [-newkey rsa:bits] [-newkey
+       alg:file] [-nodes] [-key filename] [-keyform PEM|DER] [-keyout
+       filename] [-keygen_engine id] [-[digest]] [-config filename]
+       [-multivalue-rdn] [-x509] [-days n] [-set_serial n] [-asn1-kludge]
+       [-no-asn1-kludge] [-newhdr] [-extensions section] [-reqexts section]
+       [-utf8] [-nameopt] [-reqopt] [-subject] [-subj arg] [-batch] [-verbose]
+       [-engine id]
 
-DDEESSCCRRIIPPTTIIOONN
-       The rreeqq command primarily creates and processes certificate requests in
+DESCRIPTION
+       The req command primarily creates and processes certificate requests in
        PKCS#10 format. It can additionally create self signed certificates for
        use as root CAs for example.
 
-CCOOMMMMAANNDD OOPPTTIIOONNSS
-       --iinnffoorrmm DDEERR||PPEEMM
-           This specifies the input format. The DDEERR option uses an ASN1 DER
-           encoded form compatible with the PKCS#10. The PPEEMM form is the
-           default format: it consists of the DDEERR format base64 encoded with
+COMMAND OPTIONS
+       -inform DER|PEM
+           This specifies the input format. The DER option uses an ASN1 DER
+           encoded form compatible with the PKCS#10. The PEM form is the
+           default format: it consists of the DER format base64 encoded with
            additional header and footer lines.
 
-       --oouuttffoorrmm DDEERR||PPEEMM
+       -outform DER|PEM
            This specifies the output format, the options have the same meaning
-           as the --iinnffoorrmm option.
+           as the -inform option.
 
-       --iinn ffiilleennaammee
+       -in filename
            This specifies the input filename to read a request from or
            standard input if this option is not specified. A request is only
-           read if the creation options (--nneeww and --nneewwkkeeyy) are not specified.
+           read if the creation options (-new and -newkey) are not specified.
 
-       --ppaassssiinn aarrgg
+       -passin arg
            the input file password source. For more information about the
-           format of aarrgg see the PPAASSSS PPHHRRAASSEE AARRGGUUMMEENNTTSS section in ooppeennssssll(1).
+           format of arg see the PASS PHRASE ARGUMENTS section in openssl(1).
 
-       --oouutt ffiilleennaammee
+       -out filename
            This specifies the output filename to write to or standard output
            by default.
 
-       --ppaassssoouutt aarrgg
+       -passout arg
            the output file password source. For more information about the
-           format of aarrgg see the PPAASSSS PPHHRRAASSEE AARRGGUUMMEENNTTSS section in ooppeennssssll(1).
+           format of arg see the PASS PHRASE ARGUMENTS section in openssl(1).
 
-       --tteexxtt
+       -text
            prints out the certificate request in text form.
 
-       --ssuubbjjeecctt
-           prints out the request subject (or certificate subject if --xx550099 is
+       -subject
+           prints out the request subject (or certificate subject if -x509 is
            specified)
 
-       --ppuubbkkeeyy
+       -pubkey
            outputs the public key.
 
-       --nnoooouutt
+       -noout
            this option prevents output of the encoded version of the request.
 
-       --mmoodduulluuss
+       -modulus
            this option prints out the value of the modulus of the public key
            contained in the request.
 
-       --vveerriiffyy
+       -verify
            verifies the signature on the request.
 
-       --nneeww
+       -new
            this option generates a new certificate request. It will prompt the
            user for the relevant field values. The actual fields prompted for
            and their maximum and minimum sizes are specified in the
            configuration file and any requested extensions.
 
-           If the --kkeeyy option is not used it will generate a new RSA private
+           If the -key option is not used it will generate a new RSA private
            key using information specified in the configuration file.
 
-       --ssuubbjj aarrgg
+       -subj arg
            Replaces subject field of input request with specified data and
            outputs modified request. The arg must be formatted as
-           _/_t_y_p_e_0_=_v_a_l_u_e_0_/_t_y_p_e_1_=_v_a_l_u_e_1_/_t_y_p_e_2_=_._._., characters may be escaped by
+           /type0=value0/type1=value1/type2=..., characters may be escaped by
            \ (backslash), no spaces are skipped.
 
-       --rraanndd ffiillee((ss))
+       -rand file(s)
            a file or files containing random data used to seed the random
-           number generator, or an EGD socket (see RRAANNDD__eeggdd(3)).  Multiple
+           number generator, or an EGD socket (see RAND_egd(3)).  Multiple
            files can be specified separated by a OS-dependent character.  The
-           separator is ;; for MS-Windows, ,, for OpenVMS, and :: for all others.
+           separator is ; for MS-Windows, , for OpenVMS, and : for all others.
 
-       --nneewwkkeeyy aarrgg
+       -newkey arg
            this option creates a new certificate request and a new private
-           key. The argument takes one of several forms. rrssaa::nnbbiittss, where
-           nnbbiittss is the number of bits, generates an RSA key nnbbiittss in size. If
-           nnbbiittss is omitted, i.e. --nneewwkkeeyy rrssaa specified, the default key size,
+           key. The argument takes one of several forms. rsa:nbits, where
+           nbits is the number of bits, generates an RSA key nbits in size. If
+           nbits is omitted, i.e. -newkey rsa specified, the default key size,
            specified in the configuration file is used.
 
-           All other algorithms support the --nneewwkkeeyy aallgg::ffiillee form, where file
-           may be an algorithm parameter file, created by the ggeennppkkeeyy
-           --ggeennppaarraamm command or and X.509 certificate for a key with
+           All other algorithms support the -newkey alg:file form, where file
+           may be an algorithm parameter file, created by the genpkey
+           -genparam command or and X.509 certificate for a key with
            approriate algorithm.
 
-           ppaarraamm::ffiillee generates a key using the parameter file or certificate
-           ffiillee, the algorithm is determined by the parameters. aallggnnaammee::ffiillee
-           use algorithm aallggnnaammee and parameter file ffiillee: the two algorithms
-           must match or an error occurs. aallggnnaammee just uses algorithm aallggnnaammee,
-           and parameters, if neccessary should be specified via --ppkkeeyyoopptt
+           param:file generates a key using the parameter file or certificate
+           file, the algorithm is determined by the parameters. algname:file
+           use algorithm algname and parameter file file: the two algorithms
+           must match or an error occurs. algname just uses algorithm algname,
+           and parameters, if neccessary should be specified via -pkeyopt
            parameter.
 
-           ddssaa::ffiilleennaammee generates a DSA key using the parameters in the file
-           ffiilleennaammee. eecc::ffiilleennaammee generates EC key (usable both with ECDSA or
-           ECDH algorithms), ggoosstt22000011::ffiilleennaammee generates GOST R 34.10-2001 key
-           (requires ccccggoosstt engine configured in the configuration file). If
-           just ggoosstt22000011 is specified a parameter set should be specified by
-           --ppkkeeyyoopptt ppaarraammsseett::XX
+           dsa:filename generates a DSA key using the parameters in the file
+           filename. ec:filename generates EC key (usable both with ECDSA or
+           ECDH algorithms), gost2001:filename generates GOST R 34.10-2001 key
+           (requires ccgost engine configured in the configuration file). If
+           just gost2001 is specified a parameter set should be specified by
+           -pkeyopt paramset:X
 
-       --ppkkeeyyoopptt oopptt::vvaalluuee
-           set the public key algorithm option oopptt to vvaalluuee. The precise set
+       -pkeyopt opt:value
+           set the public key algorithm option opt to value. The precise set
            of options supported depends on the public key algorithm used and
-           its implementation. See KKEEYY GGEENNEERRAATTIIOONN OOPPTTIIOONNSS in the ggeennppkkeeyy
+           its implementation. See KEY GENERATION OPTIONS in the genpkey
            manual page for more details.
 
-       --kkeeyy ffiilleennaammee
+       -key filename
            This specifies the file to read the private key from. It also
            accepts PKCS#8 format private keys for PEM format files.
 
-       --kkeeyyffoorrmm PPEEMM||DDEERR
-           the format of the private key file specified in the --kkeeyy argument.
+       -keyform PEM|DER
+           the format of the private key file specified in the -key argument.
            PEM is the default.
 
-       --kkeeyyoouutt ffiilleennaammee
+       -keyout filename
            this gives the filename to write the newly created private key to.
            If this option is not specified then the filename present in the
            configuration file is used.
 
-       --nnooddeess
+       -nodes
            if this option is specified then if a private key is created it
            will not be encrypted.
 
-       --[[ddiiggeesstt]]
+       -[digest]
            this specifies the message digest to sign the request with (such as
-           --mmdd55, --sshhaa11). This overrides the digest algorithm specified in the
+           -md5, -sha1). This overrides the digest algorithm specified in the
            configuration file.
 
            Some public key algorithms may override this choice. For instance,
            DSA signatures always use SHA1, GOST R 34.10 signatures always use
-           GOST R 34.11-94 (--mmdd__ggoosstt9944).
+           GOST R 34.11-94 (-md_gost94).
 
-       --ccoonnffiigg ffiilleennaammee
+       -config filename
            this allows an alternative configuration file to be specified, this
            overrides the compile time filename or any specified in the
-           OOPPEENNSSSSLL__CCOONNFF environment variable.
+           OPENSSL_CONF environment variable.
 
-       --ssuubbjj aarrgg
+       -subj arg
            sets subject name for new request or supersedes the subject name
            when processing a request.  The arg must be formatted as
-           _/_t_y_p_e_0_=_v_a_l_u_e_0_/_t_y_p_e_1_=_v_a_l_u_e_1_/_t_y_p_e_2_=_._._., characters may be escaped by
+           /type0=value0/type1=value1/type2=..., characters may be escaped by
            \ (backslash), no spaces are skipped.
 
-       --mmuullttiivvaalluuee--rrddnn
+       -multivalue-rdn
            this option causes the -subj argument to be interpreted with full
            support for multivalued RDNs. Example:
 
-           _/_D_C_=_o_r_g_/_D_C_=_O_p_e_n_S_S_L_/_D_C_=_u_s_e_r_s_/_U_I_D_=_1_2_3_4_5_6_+_C_N_=_J_o_h_n _D_o_e
+           /DC=org/DC=OpenSSL/DC=users/UID=123456+CN=John Doe
 
-           If -multi-rdn is not used then the UID value is _1_2_3_4_5_6_+_C_N_=_J_o_h_n _D_o_e.
+           If -multi-rdn is not used then the UID value is 123456+CN=John Doe.
 
-       --xx550099
+       -x509
            this option outputs a self signed certificate instead of a
            certificate request. This is typically used to generate a test
            certificate or a self signed root CA. The extensions added to the
            certificate (if any) are specified in the configuration file.
-           Unless specified using the sseett__sseerriiaall option, a large random number
+           Unless specified using the set_serial option, a large random number
            will be used for the serial number.
 
-           If existing request is specified with the --iinn option, it is
+           If existing request is specified with the -in option, it is
            converted to the self signed certificate otherwise new request is
            created.
 
-       --ddaayyss nn
-           when the --xx550099 option is being used this specifies the number of
+       -days n
+           when the -x509 option is being used this specifies the number of
            days to certify the certificate for. The default is 30 days.
 
-       --sseett__sseerriiaall nn
+       -set_serial n
            serial number to use when outputting a self signed certificate.
            This may be specified as a decimal value or a hex value if preceded
-           by 00xx.  It is possible to use negative serial numbers but this is
+           by 0x.  It is possible to use negative serial numbers but this is
            not recommended.
 
-       --eexxtteennssiioonnss sseeccttiioonn
-       --rreeqqeexxttss sseeccttiioonn
+       -extensions section
+       -reqexts section
            these options specify alternative sections to include certificate
-           extensions (if the --xx550099 option is present) or certificate request
+           extensions (if the -x509 option is present) or certificate request
            extensions. This allows several different sections to be used in
            the same configuration file to specify requests for a variety of
            purposes.
 
-       --uuttff88
+       -utf8
            this option causes field values to be interpreted as UTF8 strings,
            by default they are interpreted as ASCII. This means that the field
            values, whether prompted from a terminal or obtained from a
            configuration file, must be valid UTF8 strings.
 
-       --nnaammeeoopptt ooppttiioonn
+       -nameopt option
            option which determines how the subject or issuer names are
-           displayed. The ooppttiioonn argument can be a single option or multiple
-           options separated by commas.  Alternatively the --nnaammeeoopptt switch may
-           be used more than once to set multiple options. See the xx550099(1)
+           displayed. The option argument can be a single option or multiple
+           options separated by commas.  Alternatively the -nameopt switch may
+           be used more than once to set multiple options. See the x509(1)
            manual page for details.
 
-       --rreeqqoopptt
-           customise the output format used with --tteexxtt. The ooppttiioonn argument
+       -reqopt
+           customise the output format used with -text. The option argument
            can be a single option or multiple options separated by commas.
 
-           See discission of the  --cceerrttoopptt parameter in the xx550099 command.
+           See discission of the  -certopt parameter in the x509 command.
 
-       --aassnn11--kklluuddggee
-           by default the rreeqq command outputs certificate requests containing
+       -asn1-kludge
+           by default the req command outputs certificate requests containing
            no attributes in the correct PKCS#10 format. However certain CAs
            will only accept requests containing no attributes in an invalid
            form: this option produces this invalid format.
 
-           More precisely the AAttttrriibbuutteess in a PKCS#10 certificate request are
-           defined as a SSEETT OOFF AAttttrriibbuuttee. They are nnoott OOPPTTIIOONNAALL so if no
-           attributes are present then they should be encoded as an empty SSEETT
-           OOFF. The invalid form does not include the empty SSEETT OOFF whereas the
+           More precisely the Attributes in a PKCS#10 certificate request are
+           defined as a SET OF Attribute. They are not OPTIONAL so if no
+           attributes are present then they should be encoded as an empty SET
+           OF. The invalid form does not include the empty SET OF whereas the
            correct form does.
 
            It should be noted that very few CAs still require the use of this
            option.
 
-       --nnoo--aassnn11--kklluuddggee
-           Reverses effect of --aassnn11--kklluuddggee
+       -no-asn1-kludge
+           Reverses effect of -asn1-kludge
 
-       --nneewwhhddrr
-           Adds the word NNEEWW to the PEM file header and footer lines on the
+       -newhdr
+           Adds the word NEW to the PEM file header and footer lines on the
            outputted request. Some software (Netscape certificate server) and
            some CAs need this.
 
-       --bbaattcchh
+       -batch
            non-interactive mode.
 
-       --vveerrbboossee
+       -verbose
            print extra details about the operations being performed.
 
-       --eennggiinnee iidd
-           specifying an engine (by its unique iidd string) will cause rreeqq to
+       -engine id
+           specifying an engine (by its unique id string) will cause req to
            attempt to obtain a functional reference to the specified engine,
            thus initialising it if needed. The engine will then be set as the
            default for all available algorithms.
 
-       --kkeeyyggeenn__eennggiinnee iidd
-           specifies an engine (by its unique iidd string) which would be used
+       -keygen_engine id
+           specifies an engine (by its unique id string) which would be used
            for key generation operations.
 
-CCOONNFFIIGGUURRAATTIIOONN FFIILLEE FFOORRMMAATT
-       The configuration options are specified in the rreeqq section of the
+CONFIGURATION FILE FORMAT
+       The configuration options are specified in the req section of the
        configuration file. As with all configuration files if no value is
-       specified in the specific section (i.e. rreeqq) then the initial unnamed
-       or ddeeffaauulltt section is searched too.
+       specified in the specific section (i.e. req) then the initial unnamed
+       or default section is searched too.
 
        The options available are described in detail below.
 
-       iinnppuutt__ppaasssswwoorrdd oouuttppuutt__ppaasssswwoorrdd
+       input_password output_password
            The passwords for the input private key file (if present) and the
            output private key file (if one will be created). The command line
-           options ppaassssiinn and ppaassssoouutt override the configuration file values.
+           options passin and passout override the configuration file values.
 
-       ddeeffaauulltt__bbiittss
+       default_bits
            Specifies the default key size in bits.
 
-           This option is used in conjunction with the --nneeww option to generate
+           This option is used in conjunction with the -new option to generate
            a new key. It can be overridden by specifying an explicit key size
-           in the --nneewwkkeeyy option. The smallest accepted key size is 512 bits.
+           in the -newkey option. The smallest accepted key size is 512 bits.
            If no key size is specified then 2048 bits is used.
 
-       ddeeffaauulltt__kkeeyyffiillee
+       default_keyfile
            This is the default filename to write a private key to. If not
            specified the key is written to standard output. This can be
-           overridden by the --kkeeyyoouutt option.
+           overridden by the -keyout option.
 
-       ooiidd__ffiillee
-           This specifies a file containing additional OOBBJJEECCTT IIDDEENNTTIIFFIIEERRSS.
+       oid_file
+           This specifies a file containing additional OBJECT IDENTIFIERS.
            Each line of the file should consist of the numerical form of the
            object identifier followed by white space then the short name
            followed by white space and finally the long name.
 
-       ooiidd__sseeccttiioonn
+       oid_section
            This specifies a section in the configuration file containing extra
            object identifiers. Each line should consist of the short name of
-           the object identifier followed by == and the numerical form. The
+           the object identifier followed by = and the numerical form. The
            short and long names are the same when this option is used.
 
-       RRAANNDDFFIILLEE
+       RANDFILE
            This specifies a filename in which random number seed information
-           is placed and read from, or an EGD socket (see RRAANNDD__eeggdd(3)).  It is
+           is placed and read from, or an EGD socket (see RAND_egd(3)).  It is
            used for private key generation.
 
-       eennccrryypptt__kkeeyy
-           If this is set to nnoo then if a private key is generated it is nnoott
-           encrypted. This is equivalent to the --nnooddeess command line option.
-           For compatibility eennccrryypptt__rrssaa__kkeeyy is an equivalent option.
+       encrypt_key
+           If this is set to no then if a private key is generated it is not
+           encrypted. This is equivalent to the -nodes command line option.
+           For compatibility encrypt_rsa_key is an equivalent option.
 
-       ddeeffaauulltt__mmdd
+       default_md
            This option specifies the digest algorithm to use. Possible values
-           include mmdd55 sshhaa11 mmddcc22. This option can be overridden on the command
+           include md5 sha1 mdc2. This option can be overridden on the command
            line.
 
-       ssttrriinngg__mmaasskk
+       string_mask
            This option masks out the use of certain string types in certain
            fields. Most users will not need to change this option.
 
-           It can be set to several values ddeeffaauulltt which is also the default
-           option uses PrintableStrings, T61Strings and BMPStrings if the ppkkiixx
+           It can be set to several values default which is also the default
+           option uses PrintableStrings, T61Strings and BMPStrings if the pkix
            value is used then only PrintableStrings and BMPStrings will be
            used. This follows the PKIX recommendation in RFC2459. If the
-           uuttff88oonnllyy option is used then only UTF8Strings will be used: this is
-           the PKIX recommendation in RFC2459 after 2003. Finally the nnoommbbssttrr
+           utf8only option is used then only UTF8Strings will be used: this is
+           the PKIX recommendation in RFC2459 after 2003. Finally the nombstr
            option just uses PrintableStrings and T61Strings: certain software
            has problems with BMPStrings and UTF8Strings: in particular
            Netscape.
 
-       rreeqq__eexxtteennssiioonnss
+       req_extensions
            this specifies the configuration file section containing a list of
            extensions to add to the certificate request. It can be overridden
-           by the --rreeqqeexxttss command line switch. See the xx550099vv33__ccoonnffiigg(5)
+           by the -reqexts command line switch. See the x509v3_config(5)
            manual page for details of the extension section format.
 
-       xx550099__eexxtteennssiioonnss
+       x509_extensions
            this specifies the configuration file section containing a list of
-           extensions to add to certificate generated when the --xx550099 switch is
-           used. It can be overridden by the --eexxtteennssiioonnss command line switch.
+           extensions to add to certificate generated when the -x509 switch is
+           used. It can be overridden by the -extensions command line switch.
 
-       pprroommpptt
-           if set to the value nnoo this disables prompting of certificate
+       prompt
+           if set to the value no this disables prompting of certificate
            fields and just takes values from the config file directly. It also
-           changes the expected format of the ddiissttiinngguuiisshheedd__nnaammee and
-           aattttrriibbuutteess sections.
+           changes the expected format of the distinguished_name and
+           attributes sections.
 
-       uuttff88
-           if set to the value yyeess then field values to be interpreted as UTF8
+       utf8
+           if set to the value yes then field values to be interpreted as UTF8
            strings, by default they are interpreted as ASCII. This means that
            the field values, whether prompted from a terminal or obtained from
            a configuration file, must be valid UTF8 strings.
 
-       aattttrriibbuutteess
+       attributes
            this specifies the section containing any request attributes: its
-           format is the same as ddiissttiinngguuiisshheedd__nnaammee. Typically these may
+           format is the same as distinguished_name. Typically these may
            contain the challengePassword or unstructuredName types. They are
            currently ignored by OpenSSL's request signing utilities but some
            CAs might want them.
 
-       ddiissttiinngguuiisshheedd__nnaammee
+       distinguished_name
            This specifies the section containing the distinguished name fields
            to prompt for when generating a certificate or certificate request.
            The format is described in the next section.
 
-DDIISSTTIINNGGUUIISSHHEEDD NNAAMMEE AANNDD AATTTTRRIIBBUUTTEE SSEECCTTIIOONN FFOORRMMAATT
+DISTINGUISHED NAME AND ATTRIBUTE SECTION FORMAT
        There are two separate formats for the distinguished name and attribute
-       sections. If the pprroommpptt option is set to nnoo then these sections just
+       sections. If the prompt option is set to no then these sections just
        consist of field names and values: for example,
 
         CN=My Name
@@ -368,11 +368,11 @@ DDIISSTTIINNGGUUIISSHHEEDD NNAAMMEE AANNDD AATTTTRRIIB
         emailAddress=someone@somewhere.org
 
        This allows external programs (e.g. GUI based) to generate a template
-       file with all the field names and values and just pass it to rreeqq. An
-       example of this kind of configuration file is contained in the EEXXAAMMPPLLEESS
+       file with all the field names and values and just pass it to req. An
+       example of this kind of configuration file is contained in the EXAMPLES
        section.
 
-       Alternatively if the pprroommpptt option is absent or not set to nnoo then the
+       Alternatively if the prompt option is absent or not set to no then the
        file contains field prompting information. It consists of lines of the
        form:
 
@@ -407,11 +407,11 @@ DDIISSTTIINNGGUUIISSHHEEDD NNAAMMEE AANNDD AATTTTRRIIB
        is include as well as name, surname, givenName initials and
        dnQualifier.
 
-       Additional object identifiers can be defined with the ooiidd__ffiillee or
-       ooiidd__sseeccttiioonn options in the configuration file. Any additional fields
+       Additional object identifiers can be defined with the oid_file or
+       oid_section options in the configuration file. Any additional fields
        will be treated as though they were a DirectoryString.
 
-EEXXAAMMPPLLEESS
+EXAMPLES
        Examine and verify certificate request:
 
         openssl req -in req.pem -text -verify -noout
@@ -429,12 +429,12 @@ EEXXAAMMPPLLEESS
 
         openssl req -x509 -newkey rsa:2048 -keyout key.pem -out req.pem
 
-       Example of a file pointed to by the ooiidd__ffiillee option:
+       Example of a file pointed to by the oid_file option:
 
         1.2.3.4        shortName       A longer Name
         1.2.3.6        otherName       Other longer Name
 
-       Example of a section pointed to by ooiidd__sseeccttiioonn making use of variable
+       Example of a section pointed to by oid_section making use of variable
        expansion:
 
         testoid1=1.2.3.5
@@ -502,8 +502,8 @@ EEXXAAMMPPLLEESS
         [ req_attributes ]
         challengePassword              = A challenge password
 
-NNOOTTEESS
-       The header and footer lines in the PPEEMM format are normally:
+NOTES
+       The header and footer lines in the PEM format are normally:
 
         -----BEGIN CERTIFICATE REQUEST-----
         -----END CERTIFICATE REQUEST-----
@@ -514,15 +514,15 @@ NNOOTTEESS
         -----BEGIN NEW CERTIFICATE REQUEST-----
         -----END NEW CERTIFICATE REQUEST-----
 
-       which is produced with the --nneewwhhddrr option but is otherwise compatible.
+       which is produced with the -newhdr option but is otherwise compatible.
        Either form is accepted transparently on input.
 
-       The certificate requests generated by XXeennrroollll with MSIE have extensions
-       added. It includes the kkeeyyUUssaaggee extension which determines the type of
+       The certificate requests generated by Xenroll with MSIE have extensions
+       added. It includes the keyUsage extension which determines the type of
        key (signature only or general purpose) and any additional OIDs entered
        by the script in an extendedKeyUsage extension.
 
-DDIIAAGGNNOOSSTTIICCSS
+DIAGNOSTICS
        The following messages are frequently asked about:
 
                Using configuration from /some/path/openssl.cnf
@@ -545,23 +545,23 @@ DDIIAAGGNNOOSSTTIICCSS
                    a0:00
 
        this is displayed when no attributes are present and the request
-       includes the correct empty SSEETT OOFF structure (the DER encoding of which
+       includes the correct empty SET OF structure (the DER encoding of which
        is 0xa0 0x00). If you just see:
 
                Attributes:
 
-       then the SSEETT OOFF is missing and the encoding is technically invalid (but
+       then the SET OF is missing and the encoding is technically invalid (but
        it is tolerated). See the description of the command line option
-       --aassnn11--kklluuddggee for more information.
+       -asn1-kludge for more information.
 
-EENNVVIIRROONNMMEENNTT VVAARRIIAABBLLEESS
-       The variable OOPPEENNSSSSLL__CCOONNFF if defined allows an alternative
+ENVIRONMENT VARIABLES
+       The variable OPENSSL_CONF if defined allows an alternative
        configuration file location to be specified, it will be overridden by
-       the --ccoonnffiigg command line switch if it is present. For compatibility
-       reasons the SSSSLLEEAAYY__CCOONNFF environment variable serves the same purpose
+       the -config command line switch if it is present. For compatibility
+       reasons the SSLEAY_CONF environment variable serves the same purpose
        but its use is discouraged.
 
-BBUUGGSS
+BUGS
        OpenSSL's handling of T61Strings (aka TeletexStrings) is broken: it
        effectively treats them as ISO-8859-1 (Latin 1), Netscape and MSIE have
        similar behaviour.  This can cause problems if you need characters that
@@ -580,8 +580,8 @@ BBUUGGSS
        Some of these: like an email address in subjectAltName should be input
        by the user.
 
-SSEEEE AALLSSOO
-       xx550099(1), ccaa(1), ggeennrrssaa(1), ggeennddssaa(1), ccoonnffiigg(5), xx550099vv33__ccoonnffiigg(5)
+SEE ALSO
+       x509(1), ca(1), genrsa(1), gendsa(1), config(5), x509v3_config(5)
 
 
 

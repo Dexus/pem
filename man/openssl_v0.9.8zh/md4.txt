@@ -2,69 +2,69 @@ DGST(1)                             OpenSSL                            DGST(1)
 
 
 
-NNAAMMEE
+NAME
        dgst, md5, md4, md2, sha1, sha, mdc2, ripemd160 - message digests
 
-SSYYNNOOPPSSIISS
-       ooppeennssssll ddggsstt [--mmdd55||--mmdd44||--mmdd22||--sshhaa11||--sshhaa||--mmddcc22||--rriippeemmdd116600||--ddssss11] [--cc]
-       [--dd] [--hheexx] [--bbiinnaarryy] [--oouutt ffiilleennaammee] [--ssiiggnn ffiilleennaammee] [--ppaassssiinn aarrgg]
-       [--vveerriiffyy ffiilleennaammee] [--pprrvveerriiffyy ffiilleennaammee] [--ssiiggnnaattuurree ffiilleennaammee] [--hhmmaacc
-       kkeeyy] [ffiillee......]
+SYNOPSIS
+       openssl dgst [-md5|-md4|-md2|-sha1|-sha|-mdc2|-ripemd160|-dss1] [-c]
+       [-d] [-hex] [-binary] [-out filename] [-sign filename] [-passin arg]
+       [-verify filename] [-prverify filename] [-signature filename] [-hmac
+       key] [file...]
 
-       [mmdd55||mmdd44||mmdd22||sshhaa11||sshhaa||mmddcc22||rriippeemmdd116600] [--cc] [--dd] [ffiillee......]
+       [md5|md4|md2|sha1|sha|mdc2|ripemd160] [-c] [-d] [file...]
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        The digest functions output the message digest of a supplied file or
        files in hexadecimal form. They can also be used for digital signing
        and verification.
 
-OOPPTTIIOONNSS
-       --cc  print out the digest in two digit groups separated by colons, only
-           relevant if hheexx format output is used.
+OPTIONS
+       -c  print out the digest in two digit groups separated by colons, only
+           relevant if hex format output is used.
 
-       --dd  print out BIO debugging information.
+       -d  print out BIO debugging information.
 
-       --hheexx
+       -hex
            digest is to be output as a hex dump. This is the default case for
            a "normal" digest as opposed to a digital signature.
 
-       --bbiinnaarryy
+       -binary
            output the digest or signature in binary form.
 
-       --oouutt ffiilleennaammee
+       -out filename
            filename to output to, or standard output by default.
 
-       --ssiiggnn ffiilleennaammee
+       -sign filename
            digitally sign the digest using the private key in "filename".
 
-       --ppaassssiinn aarrgg
+       -passin arg
            the private key password source. For more information about the
-           format of aarrgg see the PPAASSSS PPHHRRAASSEE AARRGGUUMMEENNTTSS section in ooppeennssssll(1).
+           format of arg see the PASS PHRASE ARGUMENTS section in openssl(1).
 
-       --vveerriiffyy ffiilleennaammee
+       -verify filename
            verify the signature using the the public key in "filename".  The
            output is either "Verification OK" or "Verification Failure".
 
-       --pprrvveerriiffyy ffiilleennaammee
+       -prverify filename
            verify the signature using the  the private key in "filename".
 
-       --ssiiggnnaattuurree ffiilleennaammee
+       -signature filename
            the actual signature to verify.
 
-       --hhmmaacc kkeeyy
+       -hmac key
            create a hashed MAC using "key".
 
-       --rraanndd ffiillee((ss))
+       -rand file(s)
            a file or files containing random data used to seed the random
-           number generator, or an EGD socket (see RRAANNDD__eeggdd(3)).  Multiple
+           number generator, or an EGD socket (see RAND_egd(3)).  Multiple
            files can be specified separated by a OS-dependent character.  The
-           separator is ;; for MS-Windows, ,, for OpenVMS, and :: for all others.
+           separator is ; for MS-Windows, , for OpenVMS, and : for all others.
 
-       ffiillee......
+       file...
            file or files to digest. If no files are specified then standard
            input is used.
 
-NNOOTTEESS
+NOTES
        The digest of choice for all new applications is SHA1. Other digests
        are however still widely used.
 

@@ -2,18 +2,18 @@ OPENSSL-FIPSINSTALL(1ossl)          OpenSSL         OPENSSL-FIPSINSTALL(1ossl)
 
 
 
-NNAAMMEE
+NAME
        openssl-fipsinstall - perform FIPS configuration installation
 
-SSYYNNOOPPSSIISS
-       ooppeennssssll ffiippssiinnssttaallll [--hheellpp] [--iinn _c_o_n_f_i_g_f_i_l_e_n_a_m_e] [--oouutt _c_o_n_f_i_g_f_i_l_e_n_a_m_e]
-       [--mmoodduullee _m_o_d_u_l_e_f_i_l_e_n_a_m_e] [--pprroovviiddeerr__nnaammee _p_r_o_v_i_d_e_r_n_a_m_e] [--sseeccttiioonn__nnaammee
-       _s_e_c_t_i_o_n_n_a_m_e] [--vveerriiffyy] [--mmaacc__nnaammee _m_a_c_n_a_m_e] [--mmaaccoopptt _n_m:_v] [--nnoooouutt]
-       [--qquuiieett] [--nnoo__ccoonnddiittiioonnaall__eerrrroorrss] [--nnoo__sseeccuurriittyy__cchheecckkss]
-       [--sseellff__tteesstt__oonnllooaadd] [--ccoorrrruupptt__ddeesscc _s_e_l_f_t_e_s_t___d_e_s_c_r_i_p_t_i_o_n] [--ccoorrrruupptt__ttyyppee
-       _s_e_l_f_t_e_s_t___t_y_p_e] [--ccoonnffiigg _p_a_r_e_n_t___c_o_n_f_i_g]
+SYNOPSIS
+       openssl fipsinstall [-help] [-in configfilename] [-out configfilename]
+       [-module modulefilename] [-provider_name providername] [-section_name
+       sectionname] [-verify] [-mac_name macname] [-macopt nm:v] [-noout]
+       [-quiet] [-no_conditional_errors] [-no_security_checks]
+       [-self_test_onload] [-corrupt_desc selftest_description] [-corrupt_type
+       selftest_type] [-config parent_config]
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        This command is used to generate a FIPS module configuration file.
        This configuration file can be used each time a FIPS module is loaded
        in order to pass data to the FIPS module self tests. The FIPS module
@@ -47,50 +47,50 @@ DDEESSCCRRIIPPTTIIOONN
            performed and FIPS compliance must be done by procedures documented
            in the relevant Security Policy.
 
-       This file is described in ffiippss__ccoonnffiigg(5).
+       This file is described in fips_config(5).
 
-OOPPTTIIOONNSS
-       --hheellpp
+OPTIONS
+       -help
            Print a usage message.
 
-       --mmoodduullee _f_i_l_e_n_a_m_e
+       -module filename
            Filename of the FIPS module to perform an integrity check on.  The
            path provided in the filename is used to load the module when it is
            activated, and this overrides the environment variable
-           OOPPEENNSSSSLL__MMOODDUULLEESS.
+           OPENSSL_MODULES.
 
-       --oouutt _c_o_n_f_i_g_f_i_l_e_n_a_m_e
+       -out configfilename
            Filename to output the configuration data to; the default is
            standard output.
 
-       --iinn _c_o_n_f_i_g_f_i_l_e_n_a_m_e
+       -in configfilename
            Input filename to load configuration data from.  Must be used if
-           the --vveerriiffyy option is specified.
+           the -verify option is specified.
 
-       --vveerriiffyy
+       -verify
            Verify that the input configuration file contains the correct
            information.
 
-       --pprroovviiddeerr__nnaammee _p_r_o_v_i_d_e_r_n_a_m_e
+       -provider_name providername
            Name of the provider inside the configuration file.  The default
            value is "fips".
 
-       --sseeccttiioonn__nnaammee _s_e_c_t_i_o_n_n_a_m_e
+       -section_name sectionname
            Name of the section inside the configuration file.  The default
            value is "fips_sect".
 
-       --mmaacc__nnaammee _n_a_m_e
+       -mac_name name
            Specifies the name of a supported MAC algorithm which will be used.
            The MAC mechanisms that are available will depend on the options
            used when building OpenSSL.  To see the list of supported MAC's use
-           the command "openssl list -mac-algorithms".  The default is HHMMAACC.
+           the command "openssl list -mac-algorithms".  The default is HMAC.
 
-       --mmaaccoopptt _n_m:_v
+       -macopt nm:v
            Passes options to the MAC algorithm.  A comprehensive list of
            controls can be found in the EVP_MAC implementation documentation.
            Common control strings used for this command are:
 
-           kkeeyy:_s_t_r_i_n_g
+           key:string
                Specifies the MAC key as an alphanumeric string (use if the key
                contains printable characters only).  The string length must
                conform to any restrictions of the MAC algorithm.  A key must
@@ -98,32 +98,32 @@ OOPPTTIIOONNSS
                the default that was specified when OpenSSL was configured is
                used.
 
-           hheexxkkeeyy:_s_t_r_i_n_g
+           hexkey:string
                Specifies the MAC key in hexadecimal form (two hex digits per
                byte).  The key length must conform to any restrictions of the
                MAC algorithm.  A key must be specified for every MAC
                algorithm.  If no key is provided, the default that was
                specified when OpenSSL was configured is used.
 
-           ddiiggeesstt:_s_t_r_i_n_g
+           digest:string
                Used by HMAC as an alphanumeric string (use if the key contains
                printable characters only).  The string length must conform to
                any restrictions of the MAC algorithm.  To see the list of
                supported digests, use the command "openssl list
                -digest-commands".  The default digest is SHA-256.
 
-       --nnoooouutt
+       -noout
            Disable logging of the self tests.
 
-       --nnoo__ccoonnddiittiioonnaall__eerrrroorrss
+       -no_conditional_errors
            Configure the module to not enter an error state if a conditional
            self test fails as described above.
 
-       --nnoo__sseeccuurriittyy__cchheecckkss
+       -no_security_checks
            Configure the module to not perform run-time security checks as
            described above.
 
-       --sseellff__tteesstt__oonnllooaadd
+       -self_test_onload
            Do not write the two fields related to the "test status indicator"
            and "MAC status indicator" to the output configuration file.
            Without these fields the self tests KATS will run each time the
@@ -133,41 +133,41 @@ OOPPTTIIOONNSS
            user could possibly then add the 2 fields into the configuration
            using some other mechanism.
 
-       --qquuiieett
-           Do not output pass/fail messages. Implies --nnoooouutt.
+       -quiet
+           Do not output pass/fail messages. Implies -noout.
 
-       --ccoorrrruupptt__ddeesscc _s_e_l_f_t_e_s_t___d_e_s_c_r_i_p_t_i_o_n, --ccoorrrruupptt__ttyyppee _s_e_l_f_t_e_s_t___t_y_p_e
+       -corrupt_desc selftest_description, -corrupt_type selftest_type
            The corrupt options can be used to test failure of one or more self
            tests by name.  Either option or both may be used to select the
-           tests to corrupt.  Refer to the entries for sstt--ddeesscc and sstt--ttyyppee in
-           OOSSSSLL__PPRROOVVIIDDEERR--FFIIPPSS(7) for values that can be used.
+           tests to corrupt.  Refer to the entries for st-desc and st-type in
+           OSSL_PROVIDER-FIPS(7) for values that can be used.
 
-       --ccoonnffiigg _p_a_r_e_n_t___c_o_n_f_i_g
+       -config parent_config
            Test that a FIPS provider can be loaded from the specified
            configuration file.  A previous call to this application needs to
            generate the extra configuration data that is included by the base
-           "parent_config" configuration file.  See ccoonnffiigg(5) for further
+           "parent_config" configuration file.  See config(5) for further
            information on how to set up a provider section.  All other options
            are ignored if '-config' is used.
 
-NNOOTTEESS
-       Self tests results are logged by default if the options --qquuiieett and
-       --nnoooouutt are not specified, or if either of the options --ccoorrrruupptt__ddeesscc or
-       --ccoorrrruupptt__ttyyppee are used.  If the base configuration file is set up to
+NOTES
+       Self tests results are logged by default if the options -quiet and
+       -noout are not specified, or if either of the options -corrupt_desc or
+       -corrupt_type are used.  If the base configuration file is set up to
        autoload the fips module, then the fips module will be loaded and self
        tested BEFORE the fipsinstall application has a chance to set up its
        own self test callback. As a result of this the self test output and
-       the options --ccoorrrruupptt__ddeesscc and --ccoorrrruupptt__ttyyppee will be ignored.  For
+       the options -corrupt_desc and -corrupt_type will be ignored.  For
        normal usage the base configuration file should use the default
        provider when generating the fips configuration file.
 
-EEXXAAMMPPLLEESS
-       Calculate the mac of a FIPS module _f_i_p_s_._s_o and run a FIPS self test for
-       the module, and save the _f_i_p_s_._c_n_f configuration file:
+EXAMPLES
+       Calculate the mac of a FIPS module fips.so and run a FIPS self test for
+       the module, and save the fips.cnf configuration file:
 
         openssl fipsinstall -module ./fips.so -out fips.cnf -provider_name fips
 
-       Verify that the configuration file _f_i_p_s_._c_n_f contains the correct info:
+       Verify that the configuration file fips.cnf contains the correct info:
 
         openssl fipsinstall -module ./fips.so -in fips.cnf  -provider_name fips -verify
 
@@ -183,10 +183,10 @@ EEXXAAMMPPLLEESS
         export OPENSSL_MODULES=<provider-path>
         openssl fipsinstall -config' 'default.cnf'
 
-SSEEEE AALLSSOO
-       ccoonnffiigg(5), ffiippss__ccoonnffiigg(5), OOSSSSLL__PPRROOVVIIDDEERR--FFIIPPSS(7), EEVVPP__MMAACC(3)
+SEE ALSO
+       config(5), fips_config(5), OSSL_PROVIDER-FIPS(7), EVP_MAC(3)
 
-CCOOPPYYRRIIGGHHTT
+COPYRIGHT
        Copyright 2019-2021 The OpenSSL Project Authors. All Rights Reserved.
 
        Licensed under the Apache License 2.0 (the "License").  You may not use

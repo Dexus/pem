@@ -2,23 +2,23 @@ OPENSSL-REHASH(1ossl)               OpenSSL              OPENSSL-REHASH(1ossl)
 
 
 
-NNAAMMEE
+NAME
        openssl-rehash, c_rehash - Create symbolic links to files named by the
        hash values
 
-SSYYNNOOPPSSIISS
-       ooppeennssssll rreehhaasshh [--hh] [--hheellpp] [--oolldd] [--ccoommppaatt] [--nn] [--vv] [--pprroovviiddeerr _n_a_m_e]
-       [--pprroovviiddeerr--ppaatthh _p_a_t_h] [--pprrooppqquueerryy _p_r_o_p_q] [_d_i_r_e_c_t_o_r_y] ...
+SYNOPSIS
+       openssl rehash [-h] [-help] [-old] [-compat] [-n] [-v] [-provider name]
+       [-provider-path path] [-propquery propq] [directory] ...
 
-       cc__rreehhaasshh [--hh] [--hheellpp] [--oolldd] [--nn] [--vv] [--pprroovviiddeerr _n_a_m_e] [--pprroovviiddeerr--ppaatthh
-       _p_a_t_h] [--pprrooppqquueerryy _p_r_o_p_q] [_d_i_r_e_c_t_o_r_y] ...
+       c_rehash [-h] [-help] [-old] [-n] [-v] [-provider name] [-provider-path
+       path] [-propquery propq] [directory] ...
 
-DDEESSCCRRIIPPTTIIOONN
-       This command is generally equivalent to the external script cc__rreehhaasshh,
+DESCRIPTION
+       This command is generally equivalent to the external script c_rehash,
        except for minor differences noted below.
 
-       ooppeennssssll rreehhaasshh scans directories and calculates a hash value of each
-       _._p_e_m, _._c_r_t, _._c_e_r, or _._c_r_l file in the specified directory list and
+       openssl rehash scans directories and calculates a hash value of each
+       .pem, .crt, .cer, or .crl file in the specified directory list and
        creates symbolic links for each file, where the name of the link is the
        hash value.  (If the platform does not support symbolic links, a copy
        is made.)  This command is useful as many programs that use OpenSSL
@@ -26,82 +26,82 @@ DDEESSCCRRIIPPTTIIOONN
        certificates.
 
        If any directories are named on the command line, then those are
-       processed in turn. If not, then the SSSSLL__CCEERRTT__DDIIRR environment variable
+       processed in turn. If not, then the SSL_CERT_DIR environment variable
        is consulted; this should be a colon-separated list of directories,
-       like the Unix PPAATTHH variable.  If that is not set then the default
-       directory (installation-specific but often _/_u_s_r_/_l_o_c_a_l_/_s_s_l_/_c_e_r_t_s) is
+       like the Unix PATH variable.  If that is not set then the default
+       directory (installation-specific but often /usr/local/ssl/certs) is
        processed.
 
        In order for a directory to be processed, the user must have write
        permissions on that directory, otherwise an error will be generated.
 
-       The links created are of the form _H_H_H_H_H_H_H_H_._D, where each _H is a
-       hexadecimal character and _D is a single decimal digit.  When a
+       The links created are of the form HHHHHHHH.D, where each H is a
+       hexadecimal character and D is a single decimal digit.  When a
        directory is processed, all links in it that have a name in that syntax
        are first removed, even if they are being used for some other purpose.
-       To skip the removal step, use the --nn flag.  Hashes for CRL's look
-       similar except the letter rr appears after the period, like this:
-       _H_H_H_H_H_H_H_H_.rr_D.
+       To skip the removal step, use the -n flag.  Hashes for CRL's look
+       similar except the letter r appears after the period, like this:
+       HHHHHHHH.rD.
 
        Multiple objects may have the same hash; they will be indicated by
-       incrementing the _D value. Duplicates are found by comparing the full
+       incrementing the D value. Duplicates are found by comparing the full
        SHA-1 fingerprint. A warning will be displayed if a duplicate is found.
 
        A warning will also be displayed if there are files that cannot be
        parsed as either a certificate or a CRL or if more than one such object
        appears in the file.
 
-   SSccrriipptt CCoonnffiigguurraattiioonn
-       The cc__rreehhaasshh script uses the ooppeennssssll program to compute the hashes and
-       fingerprints. If not found in the user's PPAATTHH, then set the OOPPEENNSSSSLL
+   Script Configuration
+       The c_rehash script uses the openssl program to compute the hashes and
+       fingerprints. If not found in the user's PATH, then set the OPENSSL
        environment variable to the full pathname.  Any program can be used, it
        will be invoked as follows for either a certificate or CRL:
 
          $OPENSSL x509 -hash -fingerprint -noout -in FILENAME
          $OPENSSL crl -hash -fingerprint -noout -in FILENAME
 
-       where _F_I_L_E_N_A_M_E is the filename. It must output the hash of the file on
+       where FILENAME is the filename. It must output the hash of the file on
        the first line, and the fingerprint on the second, optionally prefixed
        with some text and an equals sign.
 
-OOPPTTIIOONNSS
-       --hheellpp --hh
+OPTIONS
+       -help -h
            Display a brief usage message.
 
-       --oolldd
+       -old
            Use old-style hashing (MD5, as opposed to SHA-1) for generating
            links to be used for releases before 1.0.0.  Note that current
            versions will not use the old style.
 
-       --nn  Do not remove existing links.  This is needed when keeping new and
+       -n  Do not remove existing links.  This is needed when keeping new and
            old-style links in the same directory.
 
-       --ccoommppaatt
+       -compat
            Generate links for both old-style (MD5) and new-style (SHA1)
            hashing.  This allows releases before 1.0.0 to use these links
            along-side newer releases.
 
-       --vv  Print messages about old links removed and new links created.  By
+       -v  Print messages about old links removed and new links created.  By
            default, this command only lists each directory as it is processed.
 
-       --pprroovviiddeerr _n_a_m_e
-       --pprroovviiddeerr--ppaatthh _p_a_t_h
-       --pprrooppqquueerryy _p_r_o_p_q
-           See "Provider Options" in ooppeennssssll(1), pprroovviiddeerr(7), and pprrooppeerrttyy(7).
+       -provider name
+       -provider-path path
+       -propquery propq
+           See "Provider Options" in openssl(1), provider(7), and property(7).
 
-EENNVVIIRROONNMMEENNTT
-       OOPPEENNSSSSLL
+ENVIRONMENT
+       OPENSSL
            The path to an executable to use to generate hashes and
            fingerprints (see above).
 
-       SSSSLL__CCEERRTT__DDIIRR
+       SSL_CERT_DIR
            Colon separated list of directories to operate on.  Ignored if
            directories are listed on the command line.
 
-SSEEEE AALLSSOO
-       ooppeennssssll(1), ooppeennssssll--ccrrll(1), ooppeennssssll--xx550099(1)
+SEE ALSO
+       openssl(1), openssl-crl(1), openssl-x509(1)
 
-CCOOPPYYRRIIGGHHTT
+COPYRIGHT
        Copyright 2015-2020 The OpenSSL Project Authors. All Rights Reserved.
 
        Licensed under the Apache License 2.0 (the "License").  You may not use
