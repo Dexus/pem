@@ -3,7 +3,8 @@
 # ko_fi: # Replace with a single Ko-fi username
 # tidelift: # Replace with a single Tidelift platform-name/package-name e.g., npm/babel
 # custom: https://www.josef-froehle.de/donate # Replace with a single custom sponsorship URL
+github: [Dexus,DeineAgenturUG]
 open_collective: dexus
 patreon: dexus
-tidelift: npm/pem
+#tidelift: npm/pem
 custom: https://github.josef-froehle.de/
