@@ -67,7 +67,7 @@
     "eslint-plugin-n": "14.0.0",
     "eslint-plugin-promise": "6.0.0",
     "jsdoc": "3.6.7",
-    "marked": "4.0.10",
+    "marked": "4.0.14",
     "mocha": "7.2.0",
     "nyc": "15.1.0"
   },
