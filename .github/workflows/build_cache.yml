@@ -51,7 +51,7 @@ jobs:
           printf "%s\0%s\0" "${parseLibVersion[0]}" "${parseLibVersion[1]}"
         done | xargs -0 -n 2 -P 1 bash -c "./openssl/\${1}_v\${2}/bin/openssl version" --
         tar cfJ all_versions.tar.xz openssl/
-    - uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v3
       with:
         name: openssl_build
         path: all_versions.tar.xz
