@@ -939,10 +939,10 @@ eslint-plugin-mocha@10.0.4:
     eslint-utils "^3.0.0"
     ramda "^0.28.0"
 
-eslint-plugin-n@15.1.0:
-  version "15.1.0"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-n/-/eslint-plugin-n-15.1.0.tgz#efb6648dda91bc00e1521f42e5c0208eeae82bb8"
-  integrity sha512-Tgx4Z58QXv2Ha7Qzp0u4wavnZNZ3AOievZMxrAxi7nvDbzD5B/JqOD80LHYcGHFZc2HD9jDmM/+KWMPov46a4A==
+eslint-plugin-n@15.2.0:
+  version "15.2.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-n/-/eslint-plugin-n-15.2.0.tgz#fd378274bdf1c3ca11af84e7a4b5cb524b63ae1c"
+  integrity sha512-lWLg++jGwC88GDGGBX3CMkk0GIWq0y41aH51lavWApOKcMQcYoL3Ayd0lEdtD3SnQtR+3qBvWQS3qGbR2BxRWg==
   dependencies:
     builtins "^4.0.0"
     eslint-plugin-es "^4.1.0"
