@@ -931,13 +931,13 @@ eslint-plugin-markdown@2.2.1:
   dependencies:
     mdast-util-from-markdown "^0.8.5"
 
-eslint-plugin-mocha@10.0.4:
-  version "10.0.4"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-mocha/-/eslint-plugin-mocha-10.0.4.tgz#b129a1aef8312e8ceaf1b35ff0367f93e917d90a"
-  integrity sha512-8wzAeepVY027oBHz/TmBmUr7vhVqoC1KTFeDybFLhbaWKx+aQ7fJJVuUsqcUy+L+G+XvgQBJY+cbAf7hl5DF7Q==
+eslint-plugin-mocha@10.1.0:
+  version "10.1.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-mocha/-/eslint-plugin-mocha-10.1.0.tgz#69325414f875be87fb2cb00b2ef33168d4eb7c8d"
+  integrity sha512-xLqqWUF17llsogVOC+8C6/jvQ+4IoOREbN7ZCHuOHuD6cT5cDD4h7f2LgsZuzMAiwswWE21tO7ExaknHVDrSkw==
   dependencies:
     eslint-utils "^3.0.0"
-    ramda "^0.28.0"
+    rambda "^7.1.0"
 
 eslint-plugin-n@15.2.0:
   version "15.2.0"
@@ -2228,10 +2228,10 @@ punycode@^2.1.0:
   resolved "https://registry.yarnpkg.com/punycode/-/punycode-2.1.1.tgz#b58b010ac40c22c5657616c8d2c2c02c7bf479ec"
   integrity sha512-XRsRjdf+j5ml+y/6GKHPZbrF/8p2Yga0JPtdqTIY2Xe5ohJPD9saDJJLPvp9+NSBprVvevdXZybnj2cv8OEd0A==
 
-ramda@^0.28.0:
-  version "0.28.0"
-  resolved "https://registry.yarnpkg.com/ramda/-/ramda-0.28.0.tgz#acd785690100337e8b063cab3470019be427cc97"
-  integrity sha512-9QnLuG/kPVgWvMQ4aODhsBUFKOUmnbUnsSXACv+NCQZcHbeb+v8Lodp8OVxtRULN1/xOyYLLaL6npE6dMq5QTA==
+rambda@^7.1.0:
+  version "7.2.1"
+  resolved "https://registry.yarnpkg.com/rambda/-/rambda-7.2.1.tgz#c533f6e2def4edcd59f967df938ace5dd6da56af"
+  integrity sha512-Wswj8ZvzdI3VhaGPkZAxaCTwuMmGtgWt7Zxsgyo4P+iTmVnkojvyWaOep5q3ZjMIecW0wtQa66GWxaKkZ24RAA==
 
 randombytes@^2.1.0:
   version "2.1.0"
