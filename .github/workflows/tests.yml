@@ -2,14 +2,9 @@ name: Test PEM module
 on:
   push:
     branches:
-    - master
-    - devel/*
-    paths:
-    - .github/workflows/tests.yml
-    - package.json
-    - lib/**.js
-    - bin/**.sh
-    - test/**.js
+      - '*'
+    pull_request:
+      - '*'
   workflow_dispatch:
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -18,101 +13,76 @@ env:
   TARGET: x86_64-unknown-linux-gnu
 jobs:
   build:
-    name: Build and Test
+    name: Build and Test PEM
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        node_js: ['14', '16']
-        OPENSSL_DIR: ['']
-        LIBRARY: ['']
-        VERSION: ['']
-        include:
-        - LIBRARY: openssl
-          VERSION: 0.9.8zh
-          OPENSSL_DIR: /openssl
-        - LIBRARY: openssl
-          VERSION: 1.0.1u
-          OPENSSL_DIR: /openssl
-        - LIBRARY: openssl
-          VERSION: 1.0.2u
-          OPENSSL_DIR: /openssl
-        - LIBRARY: openssl
-          VERSION: 1.1.0l
-          OPENSSL_DIR: /openssl
-        - LIBRARY: openssl
-          VERSION: 1.1.1l
-          OPENSSL_DIR: /openssl
-        - LIBRARY: openssl
-          VERSION: 3.0.1
-          OPENSSL_DIR: /openssl
-        - LIBRARY: libressl
-          VERSION: 2.4.5
-          OPENSSL_DIR: /openssl
-        - LIBRARY: libressl
-          VERSION: 2.5.5
-          OPENSSL_DIR: /openssl
-        - LIBRARY: libressl
-          VERSION: 2.6.5
-          OPENSSL_DIR: /openssl
-        - LIBRARY: libressl
-          VERSION: 2.7.5
-          OPENSSL_DIR: /openssl
-        - LIBRARY: libressl
-          VERSION: 2.8.3
-          OPENSSL_DIR: /openssl
-        - LIBRARY: libressl
-          VERSION: 2.9.2
-          OPENSSL_DIR: /openssl
-        - LIBRARY: libressl
-          VERSION: 3.0.2
-          OPENSSL_DIR: /openssl
-        - LIBRARY: libressl
-          VERSION: 3.1.5
-          OPENSSL_DIR: /openssl
-        - LIBRARY: libressl
-          VERSION: 3.2.7
-          OPENSSL_DIR: /openssl
-        - LIBRARY: libressl
-          VERSION: 3.3.5
-          OPENSSL_DIR: /openssl
-        - LIBRARY: libressl
-          VERSION: 3.4.2
-          OPENSSL_DIR: /openssl
+        node: [14, 16, 18]
+        library:
+          - name: openssl
+            version: 0.9.8zh
+          - name: openssl
+            version: 1.0.1u
+          - name: openssl
+            version: 1.0.2u
+          - name: openssl
+            version: 1.1.0l
+          - name: openssl
+            version: 1.1.1l
+          - name: openssl
+            version: 3.0.8
+          - name: openssl
+            version: 3.1.0
+          - name: libressl
+            version: 2.4.5
+          - name: libressl
+            version: 2.5.5
+          - name: libressl
+            version: 2.6.5
+          - name: libressl
+            version: 2.7.5
+          - name: libressl
+            version: 2.8.3
+          - name: libressl
+            version: 2.9.2
+          - name: libressl
+            version: 3.0.2
+          - name: libressl
+            version: 3.1.5
+          - name: libressl
+            version: 3.2.7
+          - name: libressl
+            version: 3.3.5
+          - name: libressl
+            version: 3.4.2
     steps:
     - uses: actions/checkout@v3
-    - run: sudo apt-get install -y haveged ca-certificates
-    - name: Setup node
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node_js }}
-        cache: yarn
     - run: |
+        sudo apt-get install -y haveged ca-certificates
         sudo haveged -w 2048
-        mkdir openssl
-    - name: Download OpenSSL Artifacts
-      uses: greenbone/actions/artifacts-download-trigger@v1
-      with:
-        workflow: build_cache.yml
-        gh-token: ${{ secrets.BOT_PIPELINE_TOKEN }}
-        download-artifacts: true
-        wait-for-completion-interval: 60s
-        wait-for-completion-timeout: 45m
-        name: openssl_build
-        path: ./openssl/
-    - name: Set ENV
+        mkdir -p openssl
+    - name: Compile ${{ matrix.library.name }} ${{ matrix.library.version }}
       shell: bash
       run: |
+        set +e
         set -x
-        ls -lah ./openssl
-        tar xf ./openssl/all_versions.tar.xz --strip-components=1 -C ./openssl
-        echo "LIBRARY=$(echo ${LIBRARY})" >> $GITHUB_ENV
-        echo "VERSION=$(echo ${VERSION})" >> $GITHUB_ENV
+        echo $PWD
+        openssl version
+        ./bin/build-openssl.sh
       env:
-        LIBRARY: ${{ matrix.LIBRARY }}
-        VERSION: ${{ matrix.VERSION }}
+        LIBRARY: ${{ matrix.library.name }}
+        VERSION: ${{ matrix.library.version }}
+    - name: Use Node.js ${{ matrix.node }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node }}
+        cache: yarn
     - name: Run Tests
       shell: bash
       run: |
         yarn install
         yarn run test
+      env:
+        LIBRARY: ${{ matrix.library.name }}
+        VERSION: ${{ matrix.library.version }}
