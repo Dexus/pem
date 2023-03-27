@@ -52,13 +52,4 @@ describe('openssl.js tests', function () {
     })
   })
 
-
-  describe('#.spawn()', function () {
-    it.skip('error case [openssl return code 2]', function (done) {
-      // TODO; couldn't figure an example out
-      done()
-    })
-    // TODO; I expect some more cases in here or code cleanup required
-  })
-
 })
