@@ -70,9 +70,5 @@ describe('helper.js tests', function () {
         done()
       })
     })
-    it.skip('other error than ENOENT occured', function (done) {
-      // TODO
-      done()
-    })
   })
 })
