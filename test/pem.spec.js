@@ -737,7 +737,6 @@ describe('General Tests', function () {
       context('pkcs12 -export -out "$pfx" -inkey "$key" -in "$cert" -certfile "$ca_bundle" -passout "pass:"', function () {
         it('verify right order of chains; read PKCS12', function (done) {
           let pkcs12_5_file_pfx = fs.readFileSync('./test/fixtures/rsa_pkcs12_5_keyStore.p12')
-          let pkcs12_5_file_key = fs.readFileSync('./test/fixtures/rsa_pkcs12_5_key.pem').toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
           let pkcs12_5_file_key_rsa = fs.readFileSync('./test/fixtures/rsa_pkcs12_5_key_RSA.pem').toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
           let pkcs12_4_file_cert = fs.readFileSync('./test/fixtures/rsa_pkcs12_4_cert.pem').toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
           let pkcs12_5_file_cert = fs.readFileSync('./test/fixtures/rsa_pkcs12_5_cert.pem').toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
@@ -759,11 +758,7 @@ describe('General Tests', function () {
               expect(keystore.ca[0]).to.equal(pkcs12_4_file_cert)
               expect(keystore.ca[1]).to.equal(geotrust_primary_ca_cert)
               expect(keystore.cert).to.equal(pkcs12_5_file_cert)
-              if (hlp.openssl.get('Vendor') === "OPENSSL" && hlp.openssl.get('VendorVersionMajor') >= 3) {
-                expect(keystore.key).to.equal(pkcs12_5_file_key)
-              } else {
-                expect(keystore.key).to.equal(pkcs12_5_file_key_rsa)
-              }
+              expect(keystore.key).to.equal(pkcs12_5_file_key_rsa)
               done()
             })
         })
@@ -771,7 +766,6 @@ describe('General Tests', function () {
       context('pkcs12 -export -out "pfx" -inkey "$key" -in "$cert + $ca_bundle" -passout "pass:"', function () {
         it('verify right order of chains; read PKCS12', function (done) {
           let pkcs12_5_file_pfx = fs.readFileSync('./test/fixtures/rsa_pkcs12_5_keyStore2.p12')
-          let pkcs12_5_file_key = fs.readFileSync('./test/fixtures/rsa_pkcs12_5_key.pem').toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
           let pkcs12_5_file_key_rsa = fs.readFileSync('./test/fixtures/rsa_pkcs12_5_key_RSA.pem').toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
           let pkcs12_4_file_cert = fs.readFileSync('./test/fixtures/rsa_pkcs12_4_cert.pem').toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
           let pkcs12_5_file_cert = fs.readFileSync('./test/fixtures/rsa_pkcs12_5_cert.pem').toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
@@ -793,11 +787,7 @@ describe('General Tests', function () {
               expect(keystore.ca[0]).to.equal(pkcs12_4_file_cert)
               expect(keystore.ca[1]).to.equal(geotrust_primary_ca_cert)
               expect(keystore.cert).to.equal(pkcs12_5_file_cert)
-              if (hlp.openssl.get('Vendor') === "OPENSSL" && hlp.openssl.get('VendorVersionMajor') >= 3) {
-                expect(keystore.key).to.equal(pkcs12_5_file_key)
-              } else {
-                expect(keystore.key).to.equal(pkcs12_5_file_key_rsa)
-              }
+              expect(keystore.key).to.equal(pkcs12_5_file_key_rsa)
               done()
             })
         })
