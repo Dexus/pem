@@ -1175,6 +1175,7 @@ module.exports.deleteTempFiles = function (files, callback) {
 var helper = __nccwpck_require__(649)
 var {debug} = __nccwpck_require__(762)
 var cpspawn = (__nccwpck_require__(81).spawn)
+var spawnSync = (__nccwpck_require__(81).spawnSync)
 var pathlib = __nccwpck_require__(17)
 var fs = __nccwpck_require__(147)
 var osTmpdir = __nccwpck_require__(284)
@@ -1435,8 +1436,10 @@ function testOpenSSLPath(pathBin, callback) {
 }
 
 /* Once PEM is imported, the openSslVersion is set with this function. */
-spawn(['version'], false, function (err, code, stdout, stderr) {
-  var text = String(stdout) + '\n' + String(stderr) + '\n' + String(err)
+function setVersion() {
+  var pathBin = get('pathOpenSSL') || process.env.OPENSSL_BIN || 'openssl'
+  var output = spawnSync(pathBin, ['version'])
+  var text = String(output.stdout) + '\n' + String(output.stderr) + '\n' + String(output.error)
   let version = versionRegEx.exec(text)
   if (version === null || version.length <= 7) return
   set('openSslVersion', (version[1]).toUpperCase())
@@ -1447,7 +1450,9 @@ spawn(['version'], false, function (err, code, stdout, stderr) {
   set('VendorVersionMinor', version[5])
   set('VendorVersionPatch', version[6])
   set('VendorVersionBuildChar', typeof version[7] === 'undefined' ? '' : version[7])
-})
+};
+
+setVersion();
 
 module.exports = {
   exec: exec,
