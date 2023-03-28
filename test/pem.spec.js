@@ -1,6 +1,7 @@
 'use strict'
 
 var pem = require('../lib/pem')
+var openssl = require('../lib/openssl.js')
 var fs = require('fs')
 var hlp = require('./pem.helper.js')
 const {debug} = require('../lib/debug.js')
@@ -51,8 +52,12 @@ describe('General Tests', function () {
     it('Create 1024bit dhparam key', function (done) {
       this.timeout(600000)// 10 minutes
       pem.createDhparam(1024, function (error, data) {
+        var maxKeySize = 250;
+        if (openssl.get('Vendor') === "OPENSSL" && openssl.get('VendorVersionMajor') >= 3 && openssl.get('VendorVersionMinor') >= 1) {
+          maxKeySize = 256;
+        }
         hlp.checkError(error)
-        hlp.checkDhparam(data, 240, 250)
+        hlp.checkDhparam(data, 240, maxKeySize)
         hlp.checkTmpEmpty()
         done()
       })
