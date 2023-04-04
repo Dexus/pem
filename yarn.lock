@@ -979,13 +979,13 @@ eslint-plugin-es@^4.1.0:
     eslint-utils "^2.0.0"
     regexpp "^3.0.0"
 
-eslint-plugin-eslint-plugin@4.1.0:
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-eslint-plugin/-/eslint-plugin-eslint-plugin-4.1.0.tgz#40ae944d79e845dc9d4a85328eea3c5bf4ae0f7d"
-  integrity sha512-QJVw+WYXJuG2469gx5G929bz7crfxySDlK1i569FkuT6dpeHDeP7MmDrKaswCx17snG25LRFD6wmVX+AO5x7Qg==
+eslint-plugin-eslint-plugin@5.0.8:
+  version "5.0.8"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-eslint-plugin/-/eslint-plugin-eslint-plugin-5.0.8.tgz#b0a04e874a52176f129270b8773a4635ce5be14f"
+  integrity sha512-bxPMZ3L/+5YypErWQMKUI9XdkLpgqOOO0CgbtHjk5Zxzcg4EVsWYPy8duvGSLxSyR60LBIoXNzVMueEZ3/j0AQ==
   dependencies:
     eslint-utils "^3.0.0"
-    estraverse "^5.2.0"
+    estraverse "^5.3.0"
 
 eslint-plugin-import@2.26.0:
   version "2.26.0"
@@ -1154,7 +1154,7 @@ esrecurse@^4.3.0:
   dependencies:
     estraverse "^5.2.0"
 
-estraverse@^5.1.0, estraverse@^5.2.0:
+estraverse@^5.1.0, estraverse@^5.2.0, estraverse@^5.3.0:
   version "5.3.0"
   resolved "https://registry.yarnpkg.com/estraverse/-/estraverse-5.3.0.tgz#2eea5290702f26ab8fe5370370ff86c965d21123"
   integrity sha512-MMdARuVEQziNTeJD8DgMqmhwR11BRQ/cBP+pLtYdSTnf3MIO8fFeiINEbX36ZdNlfU/7A9f3gUw49B3oQsvwBA==
