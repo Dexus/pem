@@ -107,9 +107,19 @@ function createPrivateKey(keyBitsize, options, callback) {
   keyBitsize = Number(keyBitsize) || 2048
 
   var params = ['genrsa']
+
+  if (openssl.get('Vendor') === 'OPENSSL' &amp;&amp; openssl.get('VendorVersionMajor') >= 3) {
+    params.push('-traditional')
+  }
+
   var delTempPWFiles = []
 
   if (options &amp;&amp; options.cipher &amp;&amp; (Number(helper.ciphers.indexOf(options.cipher)) !== -1) &amp;&amp; options.password) {
+    debug('helper.createPasswordFile', {
+      cipher: options.cipher,
+      password: options.password,
+      passType: 'out'
+    })
     helper.createPasswordFile({
       cipher: options.cipher,
       password: options.password,
@@ -248,6 +258,8 @@ function createCSR(options, callback) {
     options = undefined
   }
 
+  let delTempPWFiles = []
+
   options = options || {}
 
   // http://stackoverflow.com/questions/14089872/why-does-node-js-accept-ip-addresses-in-certificates-only-for-san-not-for-cn
@@ -260,11 +272,15 @@ function createCSR(options, callback) {
   }
 
   if (!options.clientKey) {
-    createPrivateKey(options.keyBitsize || 2048, function (error, keyData) {
+    if (options &amp;&amp; (options.password || options.clientKeyPassword)) {
+      options.password = options.password || options.clientKeyPassword || ''
+    }
+    createPrivateKey(options.keyBitsize || 2048, options, function (error, keyData) {
       if (error) {
         return callback(error)
       }
       options.clientKey = keyData.key
+
       createCSR(options, callback)
     })
     return
@@ -288,6 +304,14 @@ function createCSR(options, callback) {
 
   var tmpfiles = [options.clientKey]
   var config = null
+
+  if (options &amp;&amp; (options.password || options.clientKeyPassword)) {
+    helper.createPasswordFile({
+      cipher: '',
+      password: options.password || options.clientKeyPassword,
+      passType: 'in'
+    }, params, delTempPWFiles)
+  }
 
   if (options.altNames &amp;&amp; Array.isArray(options.altNames) &amp;&amp; options.altNames.length) {
     params.push('-extensions')
@@ -315,7 +339,7 @@ function createCSR(options, callback) {
     config = options.config
   }
 
-  var delTempPWFiles = []
+
   if (options.clientKeyPassword) {
     helper.createPasswordFile({
       cipher: '',
@@ -393,7 +417,10 @@ function createCertificate(options, callback) {
     if (options.selfSigned) {
       options.serviceKey = options.clientKey
     } else {
-      createPrivateKey(options.keyBitsize || 2048, function (error, keyData) {
+      createPrivateKey(options.keyBitsize || 2048, {
+        cipher: options.cipher,
+        password: options.clientKeyPassword || ''
+      }, function (error, keyData) {
         if (error) {
           return callback(error)
         }
@@ -882,6 +909,11 @@ function readPkcs12(bufferOrPath, options, callback) {
     args[2] = '--TMPFILE--'
   }
 
+  if (openssl.get('Vendor') === "OPENSSL" &amp;&amp; openssl.get('VendorVersionMajor') >= 3) {
+    args.push('-legacy')
+    args.push('-traditional')
+  }
+
   if (options.clientKeyPassword) {
     helper.createPasswordFile({
       cipher: '',
@@ -906,9 +938,21 @@ function readPkcs12(bufferOrPath, options, callback) {
         keybundle.ca = certs
         keybundle.key = readFromString(stdout, KEY_START, KEY_END).pop()
 
+        debug("readPkcs12.execBinary - PRIVATE KEY - ?: ", keybundle.key)
         if (keybundle.key) {
+          var args = ['rsa'];
+          if (openssl.get('Vendor') === "OPENSSL" &amp;&amp; openssl.get('VendorVersionMajor') >= 3) {
+            args.push('-traditional')
+          }
+          args.push('-in');
+          args.push('--TMPFILE--');
+
           // convert to RSA key
-          return openssl.exec(['rsa', '-in', '--TMPFILE--'], '(RSA |ENCRYPTED |)PRIVATE KEY', [keybundle.key], function (err, key) {
+          return openssl.exec(args, '(RSA |)PRIVATE KEY', [keybundle.key], function (err, key) {
+            if (err) {
+              debug("readPkcs12.execBinary - PRIVATE KEY convert - error: ", err)
+            }
+            //debug("readPkcs12.execBinary - PRIVATE KEY", key)
             keybundle.key = key
 
             return callback(err, keybundle)
@@ -917,8 +961,28 @@ function readPkcs12(bufferOrPath, options, callback) {
 
         if (options.clientKeyPassword) {
           keybundle.key = readFromString(stdout, ENCRYPTED_KEY_START, ENCRYPTED_KEY_END).pop()
+          debug("readPkcs12.execBinary - ENCRYPTED PRIVATE KEY - ?: ", keybundle.key)
+          /*return openssl.exec(['rsa', '-in', '--TMPFILE--'], 'RSA PRIVATE KEY', [keybundle.key], function (err, key) {
+            if (err) {
+              debug("readPkcs12.execBinary - ENCRYPTED PRIVATE KEY - error: ", err)
+            }
+            debug("readPkcs12.execBinary - ENCRYPTED PRIVATE KEY", key)
+            keybundle.key = key
+
+            return callback(err, keybundle)
+          })*/
         } else {
           keybundle.key = readFromString(stdout, RSA_KEY_START, RSA_KEY_END).pop()
+          debug("readPkcs12.execBinary - RSA PRIVATE KEY - ?: ", keybundle.key)
+          /*return openssl.exec(['rsa', '-in', '--TMPFILE--'], 'RSA PRIVATE KEY', [keybundle.key], function (err, key) {
+            if (err) {
+              debug("readPkcs12.execBinary - RSA PRIVATE KEY - error: ", err)
+            }
+            debug("readPkcs12.execBinary - RSA PRIVATE KEY", key)
+            keybundle.key = key
+
+            return callback(err, keybundle)
+          })*/
         }
       }
 
@@ -1422,11 +1486,11 @@ function generateCSRSubject(options) {
       if (typeof csrData[key] === 'object' &amp;&amp; csrData[key].length >= 1) {
         var tmpStr = ''
         csrData[key].map(function (o) {
-          tmpStr += '/' + key + '=' + o.replace(/[^\w .*\-,@']+/g, ' ').trim()
+          tmpStr += '/' + key + '=' + o.replace(/[^\w\s-!$%^&amp;*()_+|~=`{}[\]:/;&lt;>?,.@#]+/g, ' ').replace('/', '\\/').replace('+', '\\+').trim()
         })
         return tmpStr
       } else {
-        return '/' + key + '=' + csrData[key].replace(/[^\w .*\-,@']+/g, ' ').trim()
+        return '/' + key + '=' + csrData[key].replace(/[^\w\s-!$%^&amp;*()_+|~=`{}[\]:/;&lt;>?,.@#]+/g, ' ').replace('/', '\\/').replace('+', '\\+').trim()
       }
     }
   })
@@ -1505,7 +1569,7 @@ module.exports.promisified = {
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.7</a> on Thu Jan 20 2022 19:28:43 GMT+0000 (Coordinated Universal Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.10</a> on Tue Apr 04 2023 06:34:35 GMT+0000 (Coordinated Universal Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>

@@ -127,9 +127,19 @@
   keyBitsize = <span class="hljs-title class_">Number</span>(keyBitsize) || <span class="hljs-number">2048</span>
 
   <span class="hljs-keyword">var</span> params = [<span class="hljs-string">&#x27;genrsa&#x27;</span>]
+
+  <span class="hljs-keyword">if</span> (openssl.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;Vendor&#x27;</span>) === <span class="hljs-string">&#x27;OPENSSL&#x27;</span> &amp;&amp; openssl.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;VendorVersionMajor&#x27;</span>) &gt;= <span class="hljs-number">3</span>) {
+    params.<span class="hljs-title function_">push</span>(<span class="hljs-string">&#x27;-traditional&#x27;</span>)
+  }
+
   <span class="hljs-keyword">var</span> delTempPWFiles = []
 
   <span class="hljs-keyword">if</span> (options &amp;&amp; options.<span class="hljs-property">cipher</span> &amp;&amp; (<span class="hljs-title class_">Number</span>(helper.<span class="hljs-property">ciphers</span>.<span class="hljs-title function_">indexOf</span>(options.<span class="hljs-property">cipher</span>)) !== -<span class="hljs-number">1</span>) &amp;&amp; options.<span class="hljs-property">password</span>) {
+    <span class="hljs-title function_">debug</span>(<span class="hljs-string">&#x27;helper.createPasswordFile&#x27;</span>, {
+      <span class="hljs-attr">cipher</span>: options.<span class="hljs-property">cipher</span>,
+      <span class="hljs-attr">password</span>: options.<span class="hljs-property">password</span>,
+      <span class="hljs-attr">passType</span>: <span class="hljs-string">&#x27;out&#x27;</span>
+    })
     helper.<span class="hljs-title function_">createPasswordFile</span>({
       <span class="hljs-attr">cipher</span>: options.<span class="hljs-property">cipher</span>,
       <span class="hljs-attr">password</span>: options.<span class="hljs-property">password</span>,
@@ -268,6 +278,8 @@
     options = <span class="hljs-literal">undefined</span>
   }
 
+  <span class="hljs-keyword">let</span> delTempPWFiles = []
+
   options = options || {}</pre></div></div>
             
         </li>
@@ -292,11 +304,15 @@
   }
 
   <span class="hljs-keyword">if</span> (!options.<span class="hljs-property">clientKey</span>) {
-    <span class="hljs-title function_">createPrivateKey</span>(options.<span class="hljs-property">keyBitsize</span> || <span class="hljs-number">2048</span>, <span class="hljs-keyword">function</span> (<span class="hljs-params">error, keyData</span>) {
+    <span class="hljs-keyword">if</span> (options &amp;&amp; (options.<span class="hljs-property">password</span> || options.<span class="hljs-property">clientKeyPassword</span>)) {
+      options.<span class="hljs-property">password</span> = options.<span class="hljs-property">password</span> || options.<span class="hljs-property">clientKeyPassword</span> || <span class="hljs-string">&#x27;&#x27;</span>
+    }
+    <span class="hljs-title function_">createPrivateKey</span>(options.<span class="hljs-property">keyBitsize</span> || <span class="hljs-number">2048</span>, options, <span class="hljs-keyword">function</span> (<span class="hljs-params">error, keyData</span>) {
       <span class="hljs-keyword">if</span> (error) {
         <span class="hljs-keyword">return</span> <span class="hljs-title function_">callback</span>(error)
       }
       options.<span class="hljs-property">clientKey</span> = keyData.<span class="hljs-property">key</span>
+
       <span class="hljs-title function_">createCSR</span>(options, callback)
     })
     <span class="hljs-keyword">return</span>
@@ -320,6 +336,14 @@
 
   <span class="hljs-keyword">var</span> tmpfiles = [options.<span class="hljs-property">clientKey</span>]
   <span class="hljs-keyword">var</span> config = <span class="hljs-literal">null</span>
+
+  <span class="hljs-keyword">if</span> (options &amp;&amp; (options.<span class="hljs-property">password</span> || options.<span class="hljs-property">clientKeyPassword</span>)) {
+    helper.<span class="hljs-title function_">createPasswordFile</span>({
+      <span class="hljs-attr">cipher</span>: <span class="hljs-string">&#x27;&#x27;</span>,
+      <span class="hljs-attr">password</span>: options.<span class="hljs-property">password</span> || options.<span class="hljs-property">clientKeyPassword</span>,
+      <span class="hljs-attr">passType</span>: <span class="hljs-string">&#x27;in&#x27;</span>
+    }, params, delTempPWFiles)
+  }
 
   <span class="hljs-keyword">if</span> (options.<span class="hljs-property">altNames</span> &amp;&amp; <span class="hljs-title class_">Array</span>.<span class="hljs-title function_">isArray</span>(options.<span class="hljs-property">altNames</span>) &amp;&amp; options.<span class="hljs-property">altNames</span>.<span class="hljs-property">length</span>) {
     params.<span class="hljs-title function_">push</span>(<span class="hljs-string">&#x27;-extensions&#x27;</span>)
@@ -347,7 +371,7 @@
     config = options.<span class="hljs-property">config</span>
   }
 
-  <span class="hljs-keyword">var</span> delTempPWFiles = []
+
   <span class="hljs-keyword">if</span> (options.<span class="hljs-property">clientKeyPassword</span>) {
     helper.<span class="hljs-title function_">createPasswordFile</span>({
       <span class="hljs-attr">cipher</span>: <span class="hljs-string">&#x27;&#x27;</span>,
@@ -425,7 +449,10 @@
     <span class="hljs-keyword">if</span> (options.<span class="hljs-property">selfSigned</span>) {
       options.<span class="hljs-property">serviceKey</span> = options.<span class="hljs-property">clientKey</span>
     } <span class="hljs-keyword">else</span> {
-      <span class="hljs-title function_">createPrivateKey</span>(options.<span class="hljs-property">keyBitsize</span> || <span class="hljs-number">2048</span>, <span class="hljs-keyword">function</span> (<span class="hljs-params">error, keyData</span>) {
+      <span class="hljs-title function_">createPrivateKey</span>(options.<span class="hljs-property">keyBitsize</span> || <span class="hljs-number">2048</span>, {
+        <span class="hljs-attr">cipher</span>: options.<span class="hljs-property">cipher</span>,
+        <span class="hljs-attr">password</span>: options.<span class="hljs-property">clientKeyPassword</span> || <span class="hljs-string">&#x27;&#x27;</span>
+      }, <span class="hljs-keyword">function</span> (<span class="hljs-params">error, keyData</span>) {
         <span class="hljs-keyword">if</span> (error) {
           <span class="hljs-keyword">return</span> <span class="hljs-title function_">callback</span>(error)
         }
@@ -979,6 +1006,11 @@ create password file for the password “-password”</p>
     args[<span class="hljs-number">2</span>] = <span class="hljs-string">&#x27;--TMPFILE--&#x27;</span>
   }
 
+  <span class="hljs-keyword">if</span> (openssl.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;Vendor&#x27;</span>) === <span class="hljs-string">&quot;OPENSSL&quot;</span> &amp;&amp; openssl.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;VendorVersionMajor&#x27;</span>) &gt;= <span class="hljs-number">3</span>) {
+    args.<span class="hljs-title function_">push</span>(<span class="hljs-string">&#x27;-legacy&#x27;</span>)
+    args.<span class="hljs-title function_">push</span>(<span class="hljs-string">&#x27;-traditional&#x27;</span>)
+  }
+
   <span class="hljs-keyword">if</span> (options.<span class="hljs-property">clientKeyPassword</span>) {
     helper.<span class="hljs-title function_">createPasswordFile</span>({
       <span class="hljs-attr">cipher</span>: <span class="hljs-string">&#x27;&#x27;</span>,
@@ -1003,7 +1035,14 @@ create password file for the password “-password”</p>
         keybundle.<span class="hljs-property">ca</span> = certs
         keybundle.<span class="hljs-property">key</span> = <span class="hljs-title function_">readFromString</span>(stdout, <span class="hljs-variable constant_">KEY_START</span>, <span class="hljs-variable constant_">KEY_END</span>).<span class="hljs-title function_">pop</span>()
 
-        <span class="hljs-keyword">if</span> (keybundle.<span class="hljs-property">key</span>) {</pre></div></div>
+        <span class="hljs-title function_">debug</span>(<span class="hljs-string">&quot;readPkcs12.execBinary - PRIVATE KEY - ?: &quot;</span>, keybundle.<span class="hljs-property">key</span>)
+        <span class="hljs-keyword">if</span> (keybundle.<span class="hljs-property">key</span>) {
+          <span class="hljs-keyword">var</span> args = [<span class="hljs-string">&#x27;rsa&#x27;</span>];
+          <span class="hljs-keyword">if</span> (openssl.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;Vendor&#x27;</span>) === <span class="hljs-string">&quot;OPENSSL&quot;</span> &amp;&amp; openssl.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;VendorVersionMajor&#x27;</span>) &gt;= <span class="hljs-number">3</span>) {
+            args.<span class="hljs-title function_">push</span>(<span class="hljs-string">&#x27;-traditional&#x27;</span>)
+          }
+          args.<span class="hljs-title function_">push</span>(<span class="hljs-string">&#x27;-in&#x27;</span>);
+          args.<span class="hljs-title function_">push</span>(<span class="hljs-string">&#x27;--TMPFILE--&#x27;</span>);</pre></div></div>
             
         </li>
         
@@ -1018,8 +1057,25 @@ create password file for the password “-password”</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>          <span class="hljs-keyword">return</span> openssl.<span class="hljs-title function_">exec</span>([<span class="hljs-string">&#x27;rsa&#x27;</span>, <span class="hljs-string">&#x27;-in&#x27;</span>, <span class="hljs-string">&#x27;--TMPFILE--&#x27;</span>], <span class="hljs-string">&#x27;(RSA |ENCRYPTED |)PRIVATE KEY&#x27;</span>, [keybundle.<span class="hljs-property">key</span>], <span class="hljs-keyword">function</span> (<span class="hljs-params">err, key</span>) {
-            keybundle.<span class="hljs-property">key</span> = key
+            <div class="content"><div class='highlight'><pre>          <span class="hljs-keyword">return</span> openssl.<span class="hljs-title function_">exec</span>(args, <span class="hljs-string">&#x27;(RSA |)PRIVATE KEY&#x27;</span>, [keybundle.<span class="hljs-property">key</span>], <span class="hljs-keyword">function</span> (<span class="hljs-params">err, key</span>) {
+            <span class="hljs-keyword">if</span> (err) {
+              <span class="hljs-title function_">debug</span>(<span class="hljs-string">&quot;readPkcs12.execBinary - PRIVATE KEY convert - error: &quot;</span>, err)
+            }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="sswrap ">
+                <a class="ss" href="#section-9">&#x00a7;</a>
+              </div>
+              <p>debug(“readPkcs12.execBinary - PRIVATE KEY”, key)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            keybundle.<span class="hljs-property">key</span> = key
 
             <span class="hljs-keyword">return</span> <span class="hljs-title function_">callback</span>(err, keybundle)
           })
@@ -1027,8 +1083,28 @@ create password file for the password “-password”</p>
 
         <span class="hljs-keyword">if</span> (options.<span class="hljs-property">clientKeyPassword</span>) {
           keybundle.<span class="hljs-property">key</span> = <span class="hljs-title function_">readFromString</span>(stdout, <span class="hljs-variable constant_">ENCRYPTED_KEY_START</span>, <span class="hljs-variable constant_">ENCRYPTED_KEY_END</span>).<span class="hljs-title function_">pop</span>()
+          <span class="hljs-title function_">debug</span>(<span class="hljs-string">&quot;readPkcs12.execBinary - ENCRYPTED PRIVATE KEY - ?: &quot;</span>, keybundle.<span class="hljs-property">key</span>)
+          <span class="hljs-comment">/*return openssl.exec([&#x27;rsa&#x27;, &#x27;-in&#x27;, &#x27;--TMPFILE--&#x27;], &#x27;RSA PRIVATE KEY&#x27;, [keybundle.key], function (err, key) {
+            if (err) {
+              debug(&quot;readPkcs12.execBinary - ENCRYPTED PRIVATE KEY - error: &quot;, err)
+            }
+            debug(&quot;readPkcs12.execBinary - ENCRYPTED PRIVATE KEY&quot;, key)
+            keybundle.key = key
+
+            return callback(err, keybundle)
+          })*/</span>
         } <span class="hljs-keyword">else</span> {
           keybundle.<span class="hljs-property">key</span> = <span class="hljs-title function_">readFromString</span>(stdout, <span class="hljs-variable constant_">RSA_KEY_START</span>, <span class="hljs-variable constant_">RSA_KEY_END</span>).<span class="hljs-title function_">pop</span>()
+          <span class="hljs-title function_">debug</span>(<span class="hljs-string">&quot;readPkcs12.execBinary - RSA PRIVATE KEY - ?: &quot;</span>, keybundle.<span class="hljs-property">key</span>)
+          <span class="hljs-comment">/*return openssl.exec([&#x27;rsa&#x27;, &#x27;-in&#x27;, &#x27;--TMPFILE--&#x27;], &#x27;RSA PRIVATE KEY&#x27;, [keybundle.key], function (err, key) {
+            if (err) {
+              debug(&quot;readPkcs12.execBinary - RSA PRIVATE KEY - error: &quot;, err)
+            }
+            debug(&quot;readPkcs12.execBinary - RSA PRIVATE KEY&quot;, key)
+            keybundle.key = key
+
+            return callback(err, keybundle)
+          })*/</span>
         }
       }
 
@@ -1190,11 +1266,11 @@ create password file for the password “-password”</p>
         </li>
         
         
-        <li id="section-9">
+        <li id="section-10">
             <div class="annotation">
               
               <div class="sswrap ">
-                <a class="ss" href="#section-9">&#x00a7;</a>
+                <a class="ss" href="#section-10">&#x00a7;</a>
               </div>
               <p>ca certificates</p>
 
@@ -1208,11 +1284,11 @@ create password file for the password “-password”</p>
         </li>
         
         
-        <li id="section-10">
+        <li id="section-11">
             <div class="annotation">
               
               <div class="sswrap ">
-                <a class="ss" href="#section-10">&#x00a7;</a>
+                <a class="ss" href="#section-11">&#x00a7;</a>
               </div>
               <p>extracting the very first - leaf - cert in chain</p>
 
@@ -1234,11 +1310,11 @@ create password file for the password “-password”</p>
         </li>
         
         
-        <li id="section-11">
+        <li id="section-12">
             <div class="annotation">
               
               <div class="sswrap ">
-                <a class="ss" href="#section-11">&#x00a7;</a>
+                <a class="ss" href="#section-12">&#x00a7;</a>
               </div>
               <p>OPENSSL 3.x don’t use stdout to print the error</p>
 
@@ -1275,11 +1351,11 @@ create password file for the password “-password”</p>
         </li>
         
         
-        <li id="section-12">
+        <li id="section-13">
             <div class="annotation">
               
               <div class="sswrap ">
-                <a class="ss" href="#section-12">&#x00a7;</a>
+                <a class="ss" href="#section-13">&#x00a7;</a>
               </div>
               <p>END: OPENSSL 3.x don’t use stdout to print the error</p>
 
@@ -1309,11 +1385,11 @@ create password file for the password “-password”</p>
         </li>
         
         
-        <li id="section-13">
+        <li id="section-14">
             <div class="annotation">
               
               <div class="sswrap ">
-                <a class="ss" href="#section-13">&#x00a7;</a>
+                <a class="ss" href="#section-14">&#x00a7;</a>
               </div>
               <p>HELPER FUNCTIONS</p>
 
@@ -1324,11 +1400,11 @@ create password file for the password “-password”</p>
         </li>
         
         
-        <li id="section-14">
+        <li id="section-15">
             <div class="annotation">
               
               <div class="sswrap ">
-                <a class="ss" href="#section-14">&#x00a7;</a>
+                <a class="ss" href="#section-15">&#x00a7;</a>
               </div>
               <p>try catch : if something will fail in parsing it won’t crash the calling code</p>
 
@@ -1349,11 +1425,11 @@ create password file for the password “-password”</p>
         </li>
         
         
-        <li id="section-15">
+        <li id="section-16">
             <div class="annotation">
               
               <div class="sswrap ">
-                <a class="ss" href="#section-15">&#x00a7;</a>
+                <a class="ss" href="#section-16">&#x00a7;</a>
               </div>
               <p>serial</p>
 
@@ -1379,11 +1455,11 @@ create password file for the password “-password”</p>
         </li>
         
         
-        <li id="section-16">
+        <li id="section-17">
             <div class="annotation">
               
               <div class="sswrap ">
-                <a class="ss" href="#section-16">&#x00a7;</a>
+                <a class="ss" href="#section-17">&#x00a7;</a>
               </div>
               <p>country</p>
 
@@ -1395,11 +1471,11 @@ create password file for the password “-password”</p>
         </li>
         
         
-        <li id="section-17">
+        <li id="section-18">
             <div class="annotation">
               
               <div class="sswrap ">
-                <a class="ss" href="#section-17">&#x00a7;</a>
+                <a class="ss" href="#section-18">&#x00a7;</a>
               </div>
               <p>state</p>
 
@@ -1411,11 +1487,11 @@ create password file for the password “-password”</p>
         </li>
         
         
-        <li id="section-18">
+        <li id="section-19">
             <div class="annotation">
               
               <div class="sswrap ">
-                <a class="ss" href="#section-18">&#x00a7;</a>
+                <a class="ss" href="#section-19">&#x00a7;</a>
               </div>
               <p>locality</p>
 
@@ -1427,11 +1503,11 @@ create password file for the password “-password”</p>
         </li>
         
         
-        <li id="section-19">
+        <li id="section-20">
             <div class="annotation">
               
               <div class="sswrap ">
-                <a class="ss" href="#section-19">&#x00a7;</a>
+                <a class="ss" href="#section-20">&#x00a7;</a>
               </div>
               <p>organization</p>
 
@@ -1451,11 +1527,11 @@ create password file for the password “-password”</p>
         </li>
         
         
-        <li id="section-20">
+        <li id="section-21">
             <div class="annotation">
               
               <div class="sswrap ">
-                <a class="ss" href="#section-20">&#x00a7;</a>
+                <a class="ss" href="#section-21">&#x00a7;</a>
               </div>
               <p>unit</p>
 
@@ -1475,11 +1551,11 @@ create password file for the password “-password”</p>
         </li>
         
         
-        <li id="section-21">
+        <li id="section-22">
             <div class="annotation">
               
               <div class="sswrap ">
-                <a class="ss" href="#section-21">&#x00a7;</a>
+                <a class="ss" href="#section-22">&#x00a7;</a>
               </div>
               <p>common name</p>
 
@@ -1499,11 +1575,11 @@ create password file for the password “-password”</p>
         </li>
         
         
-        <li id="section-22">
+        <li id="section-23">
             <div class="annotation">
               
               <div class="sswrap ">
-                <a class="ss" href="#section-22">&#x00a7;</a>
+                <a class="ss" href="#section-23">&#x00a7;</a>
               </div>
               <p>email</p>
 
@@ -1523,11 +1599,11 @@ create password file for the password “-password”</p>
         </li>
         
         
-        <li id="section-23">
+        <li id="section-24">
             <div class="annotation">
               
               <div class="sswrap ">
-                <a class="ss" href="#section-23">&#x00a7;</a>
+                <a class="ss" href="#section-24">&#x00a7;</a>
               </div>
               <p>DC name</p>
 
@@ -1559,11 +1635,11 @@ create password file for the password “-password”</p>
         </li>
         
         
-        <li id="section-24">
+        <li id="section-25">
             <div class="annotation">
               
               <div class="sswrap ">
-                <a class="ss" href="#section-24">&#x00a7;</a>
+                <a class="ss" href="#section-25">&#x00a7;</a>
               </div>
               <p>country</p>
 
@@ -1575,11 +1651,11 @@ create password file for the password “-password”</p>
         </li>
         
         
-        <li id="section-25">
+        <li id="section-26">
             <div class="annotation">
               
               <div class="sswrap ">
-                <a class="ss" href="#section-25">&#x00a7;</a>
+                <a class="ss" href="#section-26">&#x00a7;</a>
               </div>
               <p>state</p>
 
@@ -1591,11 +1667,11 @@ create password file for the password “-password”</p>
         </li>
         
         
-        <li id="section-26">
+        <li id="section-27">
             <div class="annotation">
               
               <div class="sswrap ">
-                <a class="ss" href="#section-26">&#x00a7;</a>
+                <a class="ss" href="#section-27">&#x00a7;</a>
               </div>
               <p>locality</p>
 
@@ -1607,11 +1683,11 @@ create password file for the password “-password”</p>
         </li>
         
         
-        <li id="section-27">
+        <li id="section-28">
             <div class="annotation">
               
               <div class="sswrap ">
-                <a class="ss" href="#section-27">&#x00a7;</a>
+                <a class="ss" href="#section-28">&#x00a7;</a>
               </div>
               <p>organization</p>
 
@@ -1631,11 +1707,11 @@ create password file for the password “-password”</p>
         </li>
         
         
-        <li id="section-28">
+        <li id="section-29">
             <div class="annotation">
               
               <div class="sswrap ">
-                <a class="ss" href="#section-28">&#x00a7;</a>
+                <a class="ss" href="#section-29">&#x00a7;</a>
               </div>
               <p>unit</p>
 
@@ -1656,11 +1732,11 @@ create password file for the password “-password”</p>
         </li>
         
         
-        <li id="section-29">
+        <li id="section-30">
             <div class="annotation">
               
               <div class="sswrap ">
-                <a class="ss" href="#section-29">&#x00a7;</a>
+                <a class="ss" href="#section-30">&#x00a7;</a>
               </div>
               <p>common name</p>
 
@@ -1681,11 +1757,11 @@ create password file for the password “-password”</p>
         </li>
         
         
-        <li id="section-30">
+        <li id="section-31">
             <div class="annotation">
               
               <div class="sswrap ">
-                <a class="ss" href="#section-30">&#x00a7;</a>
+                <a class="ss" href="#section-31">&#x00a7;</a>
               </div>
               <p>DC name</p>
 
@@ -1707,11 +1783,11 @@ create password file for the password “-password”</p>
         </li>
         
         
-        <li id="section-31">
+        <li id="section-32">
             <div class="annotation">
               
               <div class="sswrap ">
-                <a class="ss" href="#section-31">&#x00a7;</a>
+                <a class="ss" href="#section-32">&#x00a7;</a>
               </div>
               <p>SAN</p>
 
@@ -1724,11 +1800,11 @@ create password file for the password “-password”</p>
         </li>
         
         
-        <li id="section-32">
+        <li id="section-33">
             <div class="annotation">
               
               <div class="sswrap ">
-                <a class="ss" href="#section-32">&#x00a7;</a>
+                <a class="ss" href="#section-33">&#x00a7;</a>
               </div>
               <p>hostnames</p>
 
@@ -1740,11 +1816,11 @@ create password file for the password “-password”</p>
         </li>
         
         
-        <li id="section-33">
+        <li id="section-34">
             <div class="annotation">
               
               <div class="sswrap ">
-                <a class="ss" href="#section-33">&#x00a7;</a>
+                <a class="ss" href="#section-34">&#x00a7;</a>
               </div>
               <p>IP-Addresses IPv4 &amp; IPv6</p>
 
@@ -1756,11 +1832,11 @@ create password file for the password “-password”</p>
         </li>
         
         
-        <li id="section-34">
+        <li id="section-35">
             <div class="annotation">
               
               <div class="sswrap ">
-                <a class="ss" href="#section-34">&#x00a7;</a>
+                <a class="ss" href="#section-35">&#x00a7;</a>
               </div>
               <p>Email Addresses</p>
 
@@ -1773,11 +1849,11 @@ create password file for the password “-password”</p>
         </li>
         
         
-        <li id="section-35">
+        <li id="section-36">
             <div class="annotation">
               
               <div class="sswrap ">
-                <a class="ss" href="#section-35">&#x00a7;</a>
+                <a class="ss" href="#section-36">&#x00a7;</a>
               </div>
               <p>Validity</p>
 
@@ -1798,11 +1874,11 @@ create password file for the password “-password”</p>
         </li>
         
         
-        <li id="section-36">
+        <li id="section-37">
             <div class="annotation">
               
               <div class="sswrap ">
-                <a class="ss" href="#section-36">&#x00a7;</a>
+                <a class="ss" href="#section-37">&#x00a7;</a>
               </div>
               <p>Validity end</p>
 
@@ -1811,11 +1887,11 @@ create password file for the password “-password”</p>
         </li>
         
         
-        <li id="section-37">
+        <li id="section-38">
             <div class="annotation">
               
               <div class="sswrap ">
-                <a class="ss" href="#section-37">&#x00a7;</a>
+                <a class="ss" href="#section-38">&#x00a7;</a>
               </div>
               <p>Signature Algorithm</p>
 
@@ -1828,11 +1904,11 @@ create password file for the password “-password”</p>
         </li>
         
         
-        <li id="section-38">
+        <li id="section-39">
             <div class="annotation">
               
               <div class="sswrap ">
-                <a class="ss" href="#section-38">&#x00a7;</a>
+                <a class="ss" href="#section-39">&#x00a7;</a>
               </div>
               <p>Public Key</p>
 
@@ -1845,11 +1921,11 @@ create password file for the password “-password”</p>
         </li>
         
         
-        <li id="section-39">
+        <li id="section-40">
             <div class="annotation">
               
               <div class="sswrap ">
-                <a class="ss" href="#section-39">&#x00a7;</a>
+                <a class="ss" href="#section-40">&#x00a7;</a>
               </div>
               <p>Public Key Algorithm</p>
 
@@ -1909,11 +1985,11 @@ create password file for the password “-password”</p>
       <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> csrData[key] === <span class="hljs-string">&#x27;object&#x27;</span> &amp;&amp; csrData[key].<span class="hljs-property">length</span> &gt;= <span class="hljs-number">1</span>) {
         <span class="hljs-keyword">var</span> tmpStr = <span class="hljs-string">&#x27;&#x27;</span>
         csrData[key].<span class="hljs-title function_">map</span>(<span class="hljs-keyword">function</span> (<span class="hljs-params">o</span>) {
-          tmpStr += <span class="hljs-string">&#x27;/&#x27;</span> + key + <span class="hljs-string">&#x27;=&#x27;</span> + o.<span class="hljs-title function_">replace</span>(<span class="hljs-regexp">/[^\w .*\-,@&#x27;]+/g</span>, <span class="hljs-string">&#x27; &#x27;</span>).<span class="hljs-title function_">trim</span>()
+          tmpStr += <span class="hljs-string">&#x27;/&#x27;</span> + key + <span class="hljs-string">&#x27;=&#x27;</span> + o.<span class="hljs-title function_">replace</span>(<span class="hljs-regexp">/[^\w\s-!$%^&amp;*()_+|~=`{}[\]:/;&lt;&gt;?,.@#]+/g</span>, <span class="hljs-string">&#x27; &#x27;</span>).<span class="hljs-title function_">replace</span>(<span class="hljs-string">&#x27;/&#x27;</span>, <span class="hljs-string">&#x27;\\/&#x27;</span>).<span class="hljs-title function_">replace</span>(<span class="hljs-string">&#x27;+&#x27;</span>, <span class="hljs-string">&#x27;\\+&#x27;</span>).<span class="hljs-title function_">trim</span>()
         })
         <span class="hljs-keyword">return</span> tmpStr
       } <span class="hljs-keyword">else</span> {
-        <span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;/&#x27;</span> + key + <span class="hljs-string">&#x27;=&#x27;</span> + csrData[key].<span class="hljs-title function_">replace</span>(<span class="hljs-regexp">/[^\w .*\-,@&#x27;]+/g</span>, <span class="hljs-string">&#x27; &#x27;</span>).<span class="hljs-title function_">trim</span>()
+        <span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;/&#x27;</span> + key + <span class="hljs-string">&#x27;=&#x27;</span> + csrData[key].<span class="hljs-title function_">replace</span>(<span class="hljs-regexp">/[^\w\s-!$%^&amp;*()_+|~=`{}[\]:/;&lt;&gt;?,.@#]+/g</span>, <span class="hljs-string">&#x27; &#x27;</span>).<span class="hljs-title function_">replace</span>(<span class="hljs-string">&#x27;/&#x27;</span>, <span class="hljs-string">&#x27;\\/&#x27;</span>).<span class="hljs-title function_">replace</span>(<span class="hljs-string">&#x27;+&#x27;</span>, <span class="hljs-string">&#x27;\\+&#x27;</span>).<span class="hljs-title function_">trim</span>()
       }
     }
   })
@@ -1955,11 +2031,11 @@ create password file for the password “-password”</p>
         </li>
         
         
-        <li id="section-40">
+        <li id="section-41">
             <div class="annotation">
               
               <div class="sswrap ">
-                <a class="ss" href="#section-40">&#x00a7;</a>
+                <a class="ss" href="#section-41">&#x00a7;</a>
               </div>
               <p>promisify not tested yet</p>
 
