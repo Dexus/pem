@@ -61,6 +61,7 @@
             <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> helper = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;./helper.js&#x27;</span>)
 <span class="hljs-keyword">var</span> {debug} = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;./debug.js&#x27;</span>)
 <span class="hljs-keyword">var</span> cpspawn = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;child_process&#x27;</span>).<span class="hljs-property">spawn</span>
+<span class="hljs-keyword">var</span> spawnSync = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;child_process&#x27;</span>).<span class="hljs-property">spawnSync</span>
 <span class="hljs-keyword">var</span> pathlib = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;path&#x27;</span>)
 <span class="hljs-keyword">var</span> fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;fs&#x27;</span>)
 <span class="hljs-keyword">var</span> osTmpdir = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;os-tmpdir&#x27;</span>)
@@ -70,6 +71,15 @@
 <span class="hljs-keyword">var</span> tempDir = process.<span class="hljs-property">env</span>.<span class="hljs-property">PEMJS_TMPDIR</span> || <span class="hljs-title function_">osTmpdir</span>()
 
 <span class="hljs-keyword">const</span> versionRegEx = <span class="hljs-keyword">new</span> <span class="hljs-title class_">RegExp</span>(<span class="hljs-string">&#x27;^(OpenSSL|LibreSSL) (((\\d+).(\\d+)).(\\d+))([a-z]+)?&#x27;</span>)
+
+<span class="hljs-keyword">if</span> (<span class="hljs-string">&quot;CI&quot;</span> <span class="hljs-keyword">in</span> process.<span class="hljs-property">env</span> &amp;&amp; process.<span class="hljs-property">env</span>.<span class="hljs-property">CI</span> === <span class="hljs-string">&#x27;true&#x27;</span>) {
+  <span class="hljs-keyword">if</span> (<span class="hljs-string">&quot;LIBRARY&quot;</span> <span class="hljs-keyword">in</span> process.<span class="hljs-property">env</span> &amp;&amp; <span class="hljs-string">&quot;VERSION&quot;</span> <span class="hljs-keyword">in</span> process.<span class="hljs-property">env</span> &amp;&amp; process.<span class="hljs-property">env</span>.<span class="hljs-property">LIBRARY</span> != <span class="hljs-string">&quot;&quot;</span> &amp;&amp; process.<span class="hljs-property">env</span>.<span class="hljs-property">VERSION</span> != <span class="hljs-string">&quot;&quot;</span>) {
+    <span class="hljs-keyword">const</span> filePathOpenSSL=<span class="hljs-string">`./openssl/<span class="hljs-subst">${process.env.LIBRARY}</span>_v<span class="hljs-subst">${process.env.VERSION}</span>/bin/openssl`</span>
+    <span class="hljs-keyword">if</span> (fs.<span class="hljs-title function_">existsSync</span>(filePathOpenSSL)) {
+      process.<span class="hljs-property">env</span>.<span class="hljs-property">OPENSSL_BIN</span> = filePathOpenSSL
+    }
+  }
+}
 
 <span class="hljs-comment">/**
  * pem openssl module
@@ -337,8 +347,10 @@ making this fail periodically.</p>
 }
 
 <span class="hljs-comment">/* Once PEM is imported, the openSslVersion is set with this function. */</span>
-<span class="hljs-title function_">spawn</span>([<span class="hljs-string">&#x27;version&#x27;</span>], <span class="hljs-literal">false</span>, <span class="hljs-keyword">function</span> (<span class="hljs-params">err, code, stdout, stderr</span>) {
-  <span class="hljs-keyword">var</span> text = <span class="hljs-title class_">String</span>(stdout) + <span class="hljs-string">&#x27;\n&#x27;</span> + <span class="hljs-title class_">String</span>(stderr) + <span class="hljs-string">&#x27;\n&#x27;</span> + <span class="hljs-title class_">String</span>(err)
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">setVersion</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">var</span> pathBin = <span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;pathOpenSSL&#x27;</span>) || process.<span class="hljs-property">env</span>.<span class="hljs-property">OPENSSL_BIN</span> || <span class="hljs-string">&#x27;openssl&#x27;</span>
+  <span class="hljs-keyword">var</span> output = <span class="hljs-title function_">spawnSync</span>(pathBin, [<span class="hljs-string">&#x27;version&#x27;</span>])
+  <span class="hljs-keyword">var</span> text = <span class="hljs-title class_">String</span>(output.<span class="hljs-property">stdout</span>) + <span class="hljs-string">&#x27;\n&#x27;</span> + <span class="hljs-title class_">String</span>(output.<span class="hljs-property">stderr</span>) + <span class="hljs-string">&#x27;\n&#x27;</span> + <span class="hljs-title class_">String</span>(output.<span class="hljs-property">error</span>)
   <span class="hljs-keyword">let</span> version = versionRegEx.<span class="hljs-title function_">exec</span>(text)
   <span class="hljs-keyword">if</span> (version === <span class="hljs-literal">null</span> || version.<span class="hljs-property">length</span> &lt;= <span class="hljs-number">7</span>) <span class="hljs-keyword">return</span>
   <span class="hljs-title function_">set</span>(<span class="hljs-string">&#x27;openSslVersion&#x27;</span>, (version[<span class="hljs-number">1</span>]).<span class="hljs-title function_">toUpperCase</span>())
@@ -349,7 +361,9 @@ making this fail periodically.</p>
   <span class="hljs-title function_">set</span>(<span class="hljs-string">&#x27;VendorVersionMinor&#x27;</span>, version[<span class="hljs-number">5</span>])
   <span class="hljs-title function_">set</span>(<span class="hljs-string">&#x27;VendorVersionPatch&#x27;</span>, version[<span class="hljs-number">6</span>])
   <span class="hljs-title function_">set</span>(<span class="hljs-string">&#x27;VendorVersionBuildChar&#x27;</span>, <span class="hljs-keyword">typeof</span> version[<span class="hljs-number">7</span>] === <span class="hljs-string">&#x27;undefined&#x27;</span> ? <span class="hljs-string">&#x27;&#x27;</span> : version[<span class="hljs-number">7</span>])
-})
+};
+
+<span class="hljs-title function_">setVersion</span>();
 
 <span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span> = {
   <span class="hljs-attr">exec</span>: exec,
