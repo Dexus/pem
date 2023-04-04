@@ -57,7 +57,7 @@
     "cross-env": "7.0.3",
     "dirty-chai": "2.0.1",
     "docco": "0.9.1",
-    "eslint": "8.14.0",
+    "eslint": "8.37.0",
     "eslint-plugin-chai-friendly": "0.7.2",
     "eslint-plugin-eslint-plugin": "4.1.0",
     "eslint-plugin-import": "2.26.0",
