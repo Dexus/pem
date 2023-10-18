@@ -52,7 +52,7 @@
     "@deineagenturug/docdash": "0.4.2",
     "@types/chai": "4.3.1",
     "@types/dirty-chai": "2.0.2",
-    "@vercel/ncc": "0.33.4",
+    "@vercel/ncc": "0.38.1",
     "auto-changelog": "2.4.0",
     "chai": "4.3.6",
     "cross-env": "7.0.3",
