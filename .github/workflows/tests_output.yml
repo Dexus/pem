@@ -3,6 +3,7 @@ on:
   workflow_dispatch:
 env:
   TARGET: x86_64-unknown-linux-gnu
+  DEBUG: true
 jobs:
   build:
     name: RuN!!!!

@@ -10,7 +10,7 @@ chai.use(dirtyChai)
 
 process.env.PEMJS_TMPDIR = './tmp'
 debug("ENVs:", process.env)
-if ((process.env.TRAVIS === 'true' || process.env.CI === 'true') && "OPENSSL_DIR" in process.env && !("OPENSSL_BIN" in process.env)) {
+if ((process.env.TRAVIS === 'true' || process.env.DEBUG === 'true') && "OPENSSL_DIR" in process.env && !("OPENSSL_BIN" in process.env)) {
   process.env.OPENSSL_BIN = process.env.GITHUB_WORKSPACE+'/openssl/bin/openssl'
 }
 
