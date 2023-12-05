@@ -370,10 +370,10 @@
   resolved "https://registry.yarnpkg.com/@types/chai/-/chai-4.3.1.tgz#e2c6e73e0bdeb2521d00756d099218e9f5d90a04"
   integrity sha512-/zPMqDkzSZ8t3VtxOa4KPq7uzzW978M9Tvh+j7GHKuo6k6GTLxPJ4J5gE5cjfJ26pnXst0N5Hax8Sr0T2Mi9zQ==
 
-"@types/dirty-chai@2.0.2":
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/@types/dirty-chai/-/dirty-chai-2.0.2.tgz#eeac4802329a41ed7815ac0c1a6360335bf77d0c"
-  integrity sha512-BruwIN/UQEU0ePghxEX+OyjngpOfOUKJQh3cmfeq2h2Su/g001iljVi3+Y2y2EFp3IPgjf4sMrRU33Hxv1FUqw==
+"@types/dirty-chai@2.0.4":
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/@types/dirty-chai/-/dirty-chai-2.0.4.tgz#266a95f81cfa5572b1486cd2d562162e614d8226"
+  integrity sha512-2OHVsA7YO9X7xE4sMbtUx2EeC4FC7OZ7rk7H329bgoO8QwDa3eb6iFgd73N39Q/mJscwg9vGIwrMrTCkXjOdWw==
   dependencies:
     "@types/chai" "*"
     "@types/chai-as-promised" "*"
