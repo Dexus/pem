@@ -50,11 +50,11 @@
   },
   "devDependencies": {
     "@deineagenturug/docdash": "0.4.2",
-    "@types/chai": "4.3.1",
+    "@types/chai": "4.3.11",
     "@types/dirty-chai": "2.0.2",
     "@vercel/ncc": "0.33.4",
     "auto-changelog": "2.4.0",
-    "chai": "4.3.6",
+    "chai": "4.3.10",
     "cross-env": "7.0.3",
     "dirty-chai": "2.0.1",
     "docco": "0.9.1",
