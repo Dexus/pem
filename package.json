@@ -51,7 +51,7 @@
   "devDependencies": {
     "@deineagenturug/docdash": "0.4.2",
     "@types/chai": "4.3.1",
-    "@types/dirty-chai": "2.0.2",
+    "@types/dirty-chai": "2.0.4",
     "@vercel/ncc": "0.33.4",
     "auto-changelog": "2.4.0",
     "chai": "4.3.6",
