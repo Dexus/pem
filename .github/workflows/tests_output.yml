@@ -66,13 +66,13 @@ jobs:
           VERSION: 3.4.2
           OPENSSL_DIR: /openssl
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - run: sudo apt-get install -y haveged ca-certificates
     - run: |
         sudo haveged -w 2048
         mkdir openssl
     - name: Cache OpenSSL Binary
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: ./openssl/
         key: ${{ runner.os }}-build-openssl-output-v1-${{ matrix.LIBRARY }}-${{ matrix.VERSION
@@ -81,9 +81,9 @@ jobs:
       run: |
         set +e -x
         if [[ "$OPENSSL_DIR" != "" ]]; then "./bin/test_build_openssl.sh" ; fi
-        if [[ "$CI" == 'true' ]] && [[ -f "./openssl/bin/openssl" ]]; then 
+        if [[ "$CI" == 'true' ]] && [[ -f "./openssl/bin/openssl" ]]; then
           ./openssl/bin/openssl version
-        else 
+        else
           openssl version
         fi
       env:

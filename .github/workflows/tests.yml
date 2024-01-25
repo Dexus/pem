@@ -18,7 +18,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node: [14, 16, 18]
+        node: [18, 20]
         library:
           - name: openssl
             version: 0.9.8zh
@@ -57,7 +57,7 @@ jobs:
           - name: libressl
             version: 3.4.2
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - run: |
         sudo apt-get install -y haveged ca-certificates
         sudo haveged -w 2048
