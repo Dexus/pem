@@ -72,7 +72,7 @@
 
 <span class="hljs-keyword">const</span> versionRegEx = <span class="hljs-keyword">new</span> <span class="hljs-title class_">RegExp</span>(<span class="hljs-string">&#x27;^(OpenSSL|LibreSSL) (((\\d+).(\\d+)).(\\d+))([a-z]+)?&#x27;</span>)
 
-<span class="hljs-keyword">if</span> (<span class="hljs-string">&quot;CI&quot;</span> <span class="hljs-keyword">in</span> process.<span class="hljs-property">env</span> &amp;&amp; process.<span class="hljs-property">env</span>.<span class="hljs-property">CI</span> === <span class="hljs-string">&#x27;true&#x27;</span>) {
+<span class="hljs-keyword">if</span> (<span class="hljs-string">&quot;DEBUG&quot;</span> <span class="hljs-keyword">in</span> process.<span class="hljs-property">env</span> &amp;&amp; process.<span class="hljs-property">env</span>.<span class="hljs-property">DEBUG</span> === <span class="hljs-string">&#x27;true&#x27;</span>) {
   <span class="hljs-keyword">if</span> (<span class="hljs-string">&quot;LIBRARY&quot;</span> <span class="hljs-keyword">in</span> process.<span class="hljs-property">env</span> &amp;&amp; <span class="hljs-string">&quot;VERSION&quot;</span> <span class="hljs-keyword">in</span> process.<span class="hljs-property">env</span> &amp;&amp; process.<span class="hljs-property">env</span>.<span class="hljs-property">LIBRARY</span> != <span class="hljs-string">&quot;&quot;</span> &amp;&amp; process.<span class="hljs-property">env</span>.<span class="hljs-property">VERSION</span> != <span class="hljs-string">&quot;&quot;</span>) {
     <span class="hljs-keyword">const</span> filePathOpenSSL=<span class="hljs-string">`./openssl/<span class="hljs-subst">${process.env.LIBRARY}</span>_v<span class="hljs-subst">${process.env.VERSION}</span>/bin/openssl`</span>
     <span class="hljs-keyword">if</span> (fs.<span class="hljs-title function_">existsSync</span>(filePathOpenSSL)) {
@@ -338,12 +338,11 @@ making this fail periodically.</p>
  * <span class="hljs-doctag">@param</span> {<span class="hljs-type">Function</span>} callback Callback function with an error object
  */</span>
 <span class="hljs-keyword">function</span> <span class="hljs-title function_">testOpenSSLPath</span>(<span class="hljs-params">pathBin, callback</span>) {
-  <span class="hljs-title function_">which</span>(pathBin, <span class="hljs-keyword">function</span> (<span class="hljs-params">error</span>) {
-    <span class="hljs-keyword">if</span> (error) {
-      <span class="hljs-keyword">return</span> <span class="hljs-title function_">callback</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&#x27;Could not find openssl on your system on this path: &#x27;</span> + pathBin))
-    }
-    <span class="hljs-title function_">callback</span>()
-  })
+  <span class="hljs-keyword">const</span> resolved = which.<span class="hljs-title function_">sync</span>(pathBin, { <span class="hljs-attr">nothrow</span>: <span class="hljs-literal">true</span> });
+  <span class="hljs-keyword">if</span> (!resolved) {
+    <span class="hljs-keyword">return</span> <span class="hljs-title function_">callback</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&#x27;Could not find openssl on your system on this path: &#x27;</span> + pathBin))
+  }
+  <span class="hljs-title function_">callback</span>()
 }
 
 <span class="hljs-comment">/* Once PEM is imported, the openSslVersion is set with this function. */</span>
@@ -361,7 +360,7 @@ making this fail periodically.</p>
   <span class="hljs-title function_">set</span>(<span class="hljs-string">&#x27;VendorVersionMinor&#x27;</span>, version[<span class="hljs-number">5</span>])
   <span class="hljs-title function_">set</span>(<span class="hljs-string">&#x27;VendorVersionPatch&#x27;</span>, version[<span class="hljs-number">6</span>])
   <span class="hljs-title function_">set</span>(<span class="hljs-string">&#x27;VendorVersionBuildChar&#x27;</span>, <span class="hljs-keyword">typeof</span> version[<span class="hljs-number">7</span>] === <span class="hljs-string">&#x27;undefined&#x27;</span> ? <span class="hljs-string">&#x27;&#x27;</span> : version[<span class="hljs-number">7</span>])
-};
+}
 
 <span class="hljs-title function_">setVersion</span>();
 
