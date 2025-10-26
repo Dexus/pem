@@ -41,6 +41,23 @@ describe('General Tests', function () {
     })
   })
 
+  describe('Promise interface', function () {
+    it('supports async/await without callbacks', async function () {
+      const keyData = await pem.createPrivateKey()
+      hlp.checkPrivateKey(keyData, 850, 1900)
+
+      const publicKey = await pem.getPublicKey(keyData.key)
+      hlp.checkPublicKey(publicKey)
+      hlp.checkTmpEmpty()
+    })
+
+    it('keeps the deprecated promisified helper working', async function () {
+      const keyData = await pem.promisified.createPrivateKey()
+      hlp.checkPrivateKey(keyData, 850, 1900)
+      hlp.checkTmpEmpty()
+    })
+  })
+
   describe('#.createDhparam tests', function () {
     it('Create default sized dhparam key', function (done) {
       pem.createDhparam(function (error, data) {
