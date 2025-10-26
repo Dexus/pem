@@ -4,6 +4,7 @@ var pem = require('../lib/pem')
 var openssl = require('../lib/openssl.js')
 var fs = require('fs')
 var hlp = require('./pem.helper.js')
+const {createHash} = require('node:crypto')
 const {debug} = require('../lib/debug.js')
 var chai = require('chai')
 var dirtyChai = require('dirty-chai')
@@ -458,13 +459,19 @@ describe('General Tests', function () {
       })
 
       it('get its modulus [md5 hashed]', function (done) {
-        pem.getModulus(cert.certificate, null, 'md5',
-          function (error, data) {
-            hlp.checkError(error)
+        pem.getModulus(cert.certificate, function (error, rawData) {
+          hlp.checkError(error)
+          hlp.checkModulus(rawData)
+          const expectedHash = createHash('md5').update(rawData.modulus, 'utf8').digest('hex')
+          hlp.checkTmpEmpty()
+          pem.getModulus(cert.certificate, null, 'md5', function (hashError, data) {
+            hlp.checkError(hashError)
             hlp.checkModulus(data, 'md5')
+            expect(data.modulus).to.equal(expectedHash)
             hlp.checkTmpEmpty()
             done()
           })
+        })
       })
 
       it('read its data', function (done) {
@@ -536,13 +543,19 @@ describe('General Tests', function () {
       })
 
       it('get its modulus [md5 hashed]', function (done) {
-        pem.getModulus(cert.certificate, null, 'md5',
-          function (error, data) {
-            hlp.checkError(error)
+        pem.getModulus(cert.certificate, function (error, rawData) {
+          hlp.checkError(error)
+          hlp.checkModulus(rawData)
+          const expectedHash = createHash('md5').update(rawData.modulus, 'utf8').digest('hex')
+          hlp.checkTmpEmpty()
+          pem.getModulus(cert.certificate, null, 'md5', function (hashError, data) {
+            hlp.checkError(hashError)
             hlp.checkModulus(data, 'md5')
+            expect(data.modulus).to.equal(expectedHash)
             hlp.checkTmpEmpty()
             done()
           })
+        })
       })
 
       it('read its data', function (done) {
