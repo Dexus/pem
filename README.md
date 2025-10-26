@@ -20,6 +20,13 @@ or use yarn
 :warning: Please make sure you have `openssl` or `libressl` already installed on your system/container, without
 them `pem` will not work.
 
+## TypeScript
+
+TypeScript declaration files are bundled with the package via `types/pem.d.ts`. The public API, including the legacy `promisified` helpers and the `CA` utility, now has precise typings.
+
+Run `yarn test:types` to execute the lightweight [tsd](https://github.com/SamVerschueren/tsd) assertions that guard the definitions.
+
+
 ## Examples
 
 Here are some examples for creating an SSL key/cert on the fly, and running an HTTPS server on port 443. 443 is the
