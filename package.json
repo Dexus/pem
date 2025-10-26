@@ -44,7 +44,6 @@
   },
   "dependencies": {
     "md5": "^2.3.0",
-    "os-tmpdir": "^1.0.2",
     "which": "^4.0.0"
   },
   "devDependencies": {
