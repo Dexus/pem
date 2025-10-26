@@ -43,7 +43,6 @@
     ]
   },
   "dependencies": {
-    "md5": "^2.3.0",
     "which": "^4.0.0"
   },
   "devDependencies": {
