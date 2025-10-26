@@ -44,11 +44,11 @@ var cpspawn = require('child_process').spawn
 var spawnSync = require('child_process').spawnSync
 var pathlib = require('path')
 var fs = require('fs')
-var osTmpdir = require('os-tmpdir')
+const {tmpdir} = require('node:os')
 var crypto = require('crypto')
 var which = require('which')
 var settings = {}
-var tempDir = process.env.PEMJS_TMPDIR || osTmpdir()
+var tempDir = process.env.PEMJS_TMPDIR || tmpdir()
 
 const versionRegEx = new RegExp('^(OpenSSL|LibreSSL) (((\\d+).(\\d+)).(\\d+))([a-z]+)?')
 

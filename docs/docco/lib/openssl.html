@@ -64,11 +64,11 @@
 <span class="hljs-keyword">var</span> spawnSync = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;child_process&#x27;</span>).<span class="hljs-property">spawnSync</span>
 <span class="hljs-keyword">var</span> pathlib = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;path&#x27;</span>)
 <span class="hljs-keyword">var</span> fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;fs&#x27;</span>)
-<span class="hljs-keyword">var</span> osTmpdir = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;os-tmpdir&#x27;</span>)
+<span class="hljs-keyword">const</span> {tmpdir} = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;node:os&#x27;</span>)
 <span class="hljs-keyword">var</span> crypto = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;crypto&#x27;</span>)
 <span class="hljs-keyword">var</span> which = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;which&#x27;</span>)
 <span class="hljs-keyword">var</span> settings = {}
-<span class="hljs-keyword">var</span> tempDir = process.<span class="hljs-property">env</span>.<span class="hljs-property">PEMJS_TMPDIR</span> || <span class="hljs-title function_">osTmpdir</span>()
+<span class="hljs-keyword">var</span> tempDir = process.<span class="hljs-property">env</span>.<span class="hljs-property">PEMJS_TMPDIR</span> || <span class="hljs-title function_">tmpdir</span>()
 
 <span class="hljs-keyword">const</span> versionRegEx = <span class="hljs-keyword">new</span> <span class="hljs-title class_">RegExp</span>(<span class="hljs-string">&#x27;^(OpenSSL|LibreSSL) (((\\d+).(\\d+)).(\\d+))([a-z]+)?&#x27;</span>)
 
