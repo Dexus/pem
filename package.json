@@ -18,7 +18,8 @@
   "main": "./dist/index.js",
   "files": [
     "dist",
-    "lib"
+    "lib",
+    "types"
   ],
   "type": "commonjs",
   "scripts": {
@@ -30,7 +31,8 @@
     "coverage": "cross-env NODE_ENV=development nyc ./node_modules/.bin/_mocha --recursive --bail --inline-diffs --reporter spec --check-leaks --use_strict $(find . -type f -name '*.spec.js'  ! -path './nyc_output/*' ! -path './coverage/*' ! -path './node_modules/*')",
     "lint": "eslint --fix --config=./.eslintrc.js lib/*.js *.md *.json lib/*.js test/*.js test/*.spec.js",
     "test": "yarn run lint && yarn run coverage",
-    "test:opensslv3.0.1": "yarn run build > openssl_v3.0.1.log && yarn run test >> openssl_v3.0.1.log"
+    "test:opensslv3.0.1": "yarn run build > openssl_v3.0.1.log && yarn run test >> openssl_v3.0.1.log",
+    "test:types": "tsd"
   },
   "nyc": {
     "reporter": [
@@ -67,9 +69,12 @@
     "jsdoc": "3.6.11",
     "marked": "4.3.0",
     "mocha": "^10.2.0",
-    "nyc": "15.1.0"
+    "nyc": "15.1.0",
+    "tsd": "0.31.1"
   },
   "engines": {
     "node": ">=14.0.0"
-  }
+  },
+  "types": "types/pem.d.ts",
+  "packageManager": "yarn@4.9.4"
 }
