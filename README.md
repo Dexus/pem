@@ -26,6 +26,10 @@ Here are some examples for creating an SSL key/cert on the fly, and running an H
 standard HTTPS port, but requires root permissions on most systems. To get around this, you could use a higher port
 number, like 4300, and use https://localhost:4300 to access your server.
 
+> **Promise support:** Every asynchronous function in `pem` still accepts a Node-style callback and now returns a
+> `Promise` when no callback is provided. The legacy `pem.promisified` helper is deprecated; use the primary exports
+> directly for both callback and promise flows.
+
 ### Basic https
 
 ```javascript
@@ -62,8 +66,33 @@ pem.createCertificate({ days: 1, selfSigned: true }, function (err, keys) {
 })
 ```
 
+### Basic https with async/await
+
+```javascript
+const https = require('https')
+const pem = require('pem')
+
+async function main() {
+  const keys = await pem.createCertificate({ days: 1, selfSigned: true })
+
+  const server = https.createServer({ key: keys.clientKey, cert: keys.certificate }, (req, res) => {
+    res.end('o hai!')
+  })
+
+  server.listen(443)
+}
+
+main().catch((err) => {
+  console.error(err)
+  process.exit(1)
+})
+```
+
 ## API
 Please have a look into the [API documentation](https://dexus.github.io/pem/jsdoc/).
+
+All asynchronous functions document below support both callback and promise styles. Invoke them without a callback to
+receive a `Promise` that resolves to the same value that would be passed to the callback.
 
 _we had to clean up a bit_
 <!--
