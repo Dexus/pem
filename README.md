@@ -309,6 +309,46 @@ Where
 * **callback** is a callback function with an error object and a boolean as arguments
 -->
 
+### Issue certificates with an existing Certificate Authority
+
+Use the `CA` helper when you already have a certificate authority key pair and want to issue new certificates without rebuilding the PKI state on your own.
+
+```javascript
+const fs = require('fs')
+const pem = require('pem')
+
+async function main () {
+  const ca = new pem.CA({
+    key: fs.readFileSync('intermediate-ca-key.pem'),
+    certificate: fs.readFileSync('intermediate-ca-cert.pem'),
+    chain: [fs.readFileSync('root-ca-cert.pem')]
+  })
+
+  const certificate = await ca.issueCertificate({
+    commonName: 'service.internal',
+    altNames: ['service.internal', '10.0.0.5']
+  })
+
+  console.log(certificate.certificate)
+}
+
+main().catch(console.error)
+```
+
+Where
+
+* **key** is a PEM encoded private key for your certificate authority (required)
+* **certificate** is the PEM encoded certificate matching `key` (required)
+* **chain** is an optional array of PEM encoded certificates that should accompany issued certificates (for example a root certificate)
+* **keyPassword**/**password** is an optional passphrase used to decrypt an encrypted private key
+* **defaultDays** sets a default validity window (in days) that is applied when no custom dates are provided (defaults to `7`)
+
+`issueCertificate` accepts the same options that `createCertificate` does for CSR generation (for example `commonName`, `altNames`, or a custom `config`). When no `csr` is supplied a fresh CSR and key pair are created automatically and included in the response.
+
+By default issued certificates are valid starting "now" and expire after `defaultDays`. You can override this by supplying `startDate`, `endDate`, or `days`. Dates can be JavaScript `Date` objects, timestamps, ISO strings, or ASN.1 date strings (e.g. `20240101000000Z`).
+
+The returned object contains the issued certificate, the CSR that was used, any generated private key, the CA certificate and chain, the serial number used for issuance, and the resolved validity window.
+
 ### Custom extensions config file
 
 You can specify custom OpenSSL extensions using the `config` or `extFile` options for `createCertificate` (or using `csrConfigFile` with `createCSR`).
