@@ -7,6 +7,8 @@ var dirtyChai = require('dirty-chai')
 var expect = chai.expect
 chai.use(dirtyChai)
 
+const fipsEnabled = require('node:crypto').getFips()
+
 // NOTE: we cover here only the test cases left in coverage report
 describe('openssl.js tests', function () {
   this.timeout(300000)// 5 minutes
@@ -18,8 +20,8 @@ describe('openssl.js tests', function () {
         'dhparam',
         '-outform',
         'PEM',
-        1024
-      ], 'DH PARAMETERS 1024', function (error) {
+        (fipsEnabled ? 2048 : 1024)
+      ], 'DH PARAMETERS ' + (fipsEnabled ? 2048 : 1024), function (error) {
         hlp.checkError(error, true)
         done()
       })
@@ -43,7 +45,7 @@ describe('openssl.js tests', function () {
         'dhparam',
         '-outform',
         'PEM',
-        1024
+        (fipsEnabled ? 2048 : 1024)
       ], function (error, result) {
         hlp.checkError(error)
         expect(result).to.be.ok()
