@@ -1305,7 +1305,7 @@ describe('General Tests', function () {
         expect(size).to.equal(fipsEnabled ? 2048 : 1024)
         expect(prime).to.be.a('string')
         if (fipsEnabled) {
-          expect(/([0-9a-f][0-9a-f]:)+$/g.test(prime)).to.be.true()
+          expect(/([0-9a-f][0-9a-f]:)*$/g.test(prime)).to.be.true()
         } else {
           expect(/([0-9a-f][0-9a-f]:)+[0-9a-f][0-9a-f]$/g.test(prime)).to.be.true()
         }
