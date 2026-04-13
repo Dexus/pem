@@ -797,7 +797,7 @@ describe('General Tests', function () {
       context('pkcs12 -export -out "$pfx" -inkey "$key" -in "$cert" -certfile "$ca_bundle" -passout "pass:"', function () {
         it('verify right order of chains; read PKCS12', function (done) {
           let pkcs12_5_file_pfx = fs.readFileSync('./test/fixtures/rsa_pkcs12_5_keyStore' + (fipsEnabled ? '' : '_legacy') + '.p12')
-          let pkcs12_5_file_key_rsa = fs.readFileSync('./test/fixtures/rsa_pkcs12_5_key_RSA' + (fipsEnabled ? '' : '_traditional') + '.pem').toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
+          let pkcs12_5_file_key_rsa = fs.readFileSync('./test/fixtures/rsa_pkcs12_5_key_RSA_traditional.pem').toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
           let pkcs12_4_file_cert = fs.readFileSync('./test/fixtures/rsa_pkcs12_4_cert.pem').toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
           let pkcs12_5_file_cert = fs.readFileSync('./test/fixtures/rsa_pkcs12_5_cert.pem').toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
           let geotrust_primary_ca_cert = fs.readFileSync('./test/fixtures/GeoTrust_Primary_CA.pem').toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
@@ -828,7 +828,7 @@ describe('General Tests', function () {
       context('pkcs12 -export -out "pfx" -inkey "$key" -in "$cert + $ca_bundle" -passout "pass:"', function () {
         it('verify right order of chains; read PKCS12', function (done) {
           let pkcs12_5_file_pfx = fs.readFileSync('./test/fixtures/rsa_pkcs12_5_keyStore2' + (fipsEnabled ? '' : '_legacy') + '.p12')
-          let pkcs12_5_file_key_rsa = fs.readFileSync('./test/fixtures/rsa_pkcs12_5_key_RSA' + (fipsEnabled ? '' : '_traditional') + '.pem').toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
+          let pkcs12_5_file_key_rsa = fs.readFileSync('./test/fixtures/rsa_pkcs12_5_key_RSA_traditional.pem').toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
           let pkcs12_4_file_cert = fs.readFileSync('./test/fixtures/rsa_pkcs12_4_cert.pem').toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
           let pkcs12_5_file_cert = fs.readFileSync('./test/fixtures/rsa_pkcs12_5_cert.pem').toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
           let geotrust_primary_ca_cert = fs.readFileSync('./test/fixtures/GeoTrust_Primary_CA.pem').toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
