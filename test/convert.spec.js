@@ -10,6 +10,8 @@ const {debug} = require('../lib/debug.js')
 var expect = chai.expect
 chai.use(dirtyChai)
 
+const fipsEnabled = require('node:crypto').getFips()
+
 describe('convert.js tests', function () {
   after(function (done) {
     var tmpfiles
@@ -61,8 +63,8 @@ describe('convert.js tests', function () {
     })
     it('#.PEM2PFX()', function (done) {
       var pathIN = {
-        cert: './test/fixtures/test.crt',
-        key: './test/fixtures/testnopw.key'
+        cert: './test/fixtures/test' + (fipsEnabled ? '' : '_des') +'.crt',
+        key: './test/fixtures/testnopw' + (fipsEnabled ? '' : '_des') + '.key'
       }
       // password is required to encrypt the .pfx file; enforced by openssl
       pem.convert.PEM2PFX(pathIN, './test/fixtures/tmp.pfx', 'password', function (error, result) {
@@ -79,7 +81,7 @@ describe('convert.js tests', function () {
       })
     })
     it('#.P7B2PFX() [error in 1st step]', function (done) {
-      pem.convert.P7B2PFX({ cert: './test/fixtures/test.p7b', key: './test/fixtures/test.key', ca: './test/fixtures/GeoTrust_Primary_CA.pem' }, './test/fixtures/tmp.pfx', 'password', function (error, result) {
+      pem.convert.P7B2PFX({ cert: './test/fixtures/test' + (fipsEnabled ? '' : '_des') + '.p7b', key: './test/fixtures/test' + (fipsEnabled ? '' : '_des') + '.key', ca: './test/fixtures/GeoTrust_Primary_CA.pem' }, './test/fixtures/tmp.pfx', 'password', function (error, result) {
         debug("TEST pem.convert.PEM2DER",{error, result} )
         hlp.checkError(error, true)
         done()
@@ -89,7 +91,7 @@ describe('convert.js tests', function () {
       pem.config({
         pathOpenSSL: process.env.OPENSSL_BIN || 'openssl'
       })
-      pem.convert.P7B2PFX({ cert: './test/fixtures/test.p7b', key: './test/fixtures/test404.key', ca: './test/fixtures/ca404.pem' }, './test/fixtures/tmp.pfx', 'password', function (error, result) {
+      pem.convert.P7B2PFX({ cert: './test/fixtures/test' + (fipsEnabled ? '' : '_des') + '.p7b', key: './test/fixtures/test404.key', ca: './test/fixtures/ca404.pem' }, './test/fixtures/tmp.pfx', 'password', function (error, result) {
         debug("TEST pem.convert.PEM2DER",{error, result} )
         hlp.checkError(error, true)
         done()
@@ -180,8 +182,8 @@ describe('convert.js tests', function () {
 
     it('#.PEM2PFX() [no password protected key file]', function (done) {
       var pathIN = {
-        cert: './test/fixtures/test.crt',
-        key: './test/fixtures/testnopw.key'
+        cert: './test/fixtures/test' + (fipsEnabled ? '' : '_des') +'.crt',
+        key: './test/fixtures/testnopw' + (fipsEnabled ? '' : '_des') + '.key'
       }
       // password is required to encrypt the .pfx file; enforced by openssl
       pem.convert.PEM2PFX(pathIN, './test/fixtures/tmp.pfx', 'password', function (error, result) {
@@ -193,8 +195,8 @@ describe('convert.js tests', function () {
 
     it('#.PEM2PFX() [password protected key file]', function (done) {
       var pathIN = {
-        cert: './test/fixtures/test.crt',
-        key: './test/fixtures/test.key'
+        cert: './test/fixtures/test' + (fipsEnabled ? '' : '_des') +'.crt',
+        key: './test/fixtures/test' + (fipsEnabled ? '' : '_des') + '.key'
       }
       pem.convert.PEM2PFX(pathIN, './test/fixtures/tmp.pfx', 'password', function (error, result) {
         hlp.checkError(error)
@@ -205,8 +207,8 @@ describe('convert.js tests', function () {
 
     it('#.PEM2PFX() [providing CA cert; no array format]', function (done) {
       var pathIN = {
-        cert: './test/fixtures/test.crt',
-        key: './test/fixtures/test.key',
+        cert: './test/fixtures/test' + (fipsEnabled ? '' : '_des') +'.crt',
+        key: './test/fixtures/test' + (fipsEnabled ? '' : '_des') + '.key',
         ca: './test/fixtures/GeoTrust_Primary_CA.pem'
       }
       pem.convert.PEM2PFX(pathIN, './test/fixtures/tmp.pfx', 'password', function (error, result) {
@@ -218,8 +220,8 @@ describe('convert.js tests', function () {
 
     it('#.PEM2PFX() [providing CA cert; array format]', function (done) {
       var pathIN = {
-        cert: './test/fixtures/test.crt',
-        key: './test/fixtures/test.key',
+        cert: './test/fixtures/test' + (fipsEnabled ? '' : '_des') +'.crt',
+        key: './test/fixtures/test' + (fipsEnabled ? '' : '_des') + '.key',
         ca: ['./test/fixtures/GeoTrust_Primary_CA.pem']
       }
       pem.convert.PEM2PFX(pathIN, './test/fixtures/tmp.pfx', 'password', function (error, result) {
@@ -238,7 +240,7 @@ describe('convert.js tests', function () {
     })
 
     it('#.P7B2PFX() [providing ca cert; no array format]', function (done) {
-      pem.convert.P7B2PFX({ cert: './test/fixtures/test.p7b', key: './test/fixtures/test.key', ca: './test/fixtures/GeoTrust_Primary_CA.pem' }, './test/fixtures/tmp.pfx', 'password', function (error, result) {
+      pem.convert.P7B2PFX({ cert: './test/fixtures/test' + (fipsEnabled ? '' : '_des') + '.p7b', key: './test/fixtures/test' + (fipsEnabled ? '' : '_des') + '.key', ca: './test/fixtures/GeoTrust_Primary_CA.pem' }, './test/fixtures/tmp.pfx', 'password', function (error, result) {
         hlp.checkError(error)
         expect(result).to.be.true()
         done()
@@ -246,7 +248,7 @@ describe('convert.js tests', function () {
     })
 
     it('#.P7B2PFX() [providing ca cert; array format]', function (done) {
-      pem.convert.P7B2PFX({ cert: './test/fixtures/test.p7b', key: './test/fixtures/test.key', ca: ['./test/fixtures/GeoTrust_Primary_CA.pem'] }, './test/fixtures/tmp.pfx', 'password', function (error, result) {
+      pem.convert.P7B2PFX({ cert: './test/fixtures/test' + (fipsEnabled ? '' : '_des') + '.p7b', key: './test/fixtures/test' + (fipsEnabled ? '' : '_des') + '.key', ca: ['./test/fixtures/GeoTrust_Primary_CA.pem'] }, './test/fixtures/tmp.pfx', 'password', function (error, result) {
         hlp.checkError(error)
         expect(result).to.be.true()
         done()
@@ -254,7 +256,7 @@ describe('convert.js tests', function () {
     })
 
     it('#.P7B2PFX() [not providing ca cert]', function (done) {
-      pem.convert.P7B2PFX({ cert: './test/fixtures/test.p7b', key: './test/fixtures/test.key' }, './test/fixtures/tmp.pfx', 'password', function (error, result) {
+      pem.convert.P7B2PFX({ cert: './test/fixtures/test' + (fipsEnabled ? '' : '_des') + '.p7b', key: './test/fixtures/test' + (fipsEnabled ? '' : '_des') + '.key' }, './test/fixtures/tmp.pfx', 'password', function (error, result) {
         hlp.checkError(error)
         expect(result).to.be.true()
         done()

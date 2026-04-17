@@ -16,7 +16,8 @@ describe('CertificateAuthority', function () {
     rootCA = await pem.createCertificate({
       commonName: 'Test Root CA',
       selfSigned: true,
-      days: 365
+      days: 365,
+      CA: true
     })
 
     var intermediateConfig = [

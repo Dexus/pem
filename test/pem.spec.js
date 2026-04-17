@@ -4,12 +4,14 @@ var pem = require('../lib/pem')
 var openssl = require('../lib/openssl.js')
 var fs = require('fs')
 var hlp = require('./pem.helper.js')
-const {createHash} = require('node:crypto')
+const {createHash, getFips} = require('node:crypto')
 const {debug} = require('../lib/debug.js')
 var chai = require('chai')
 var dirtyChai = require('dirty-chai')
 var expect = chai.expect
 chai.use(dirtyChai)
+
+const fipsEnabled = getFips()
 
 describe('General Tests', function () {
   this.timeout(300000)// 5 minutes
@@ -62,12 +64,19 @@ describe('General Tests', function () {
     it('Create default sized dhparam key', function (done) {
       pem.createDhparam(function (error, data) {
         hlp.checkError(error)
-        hlp.checkDhparam(data, 150, 160)
+        if (!fipsEnabled) {
+          hlp.checkDhparam(data, 150, 160)
+        } else {
+          hlp.checkDhparam(data, 420, 430)
+        }
         hlp.checkTmpEmpty()
         done()
       })
     })
     it('Create 1024bit dhparam key', function (done) {
+      if(fipsEnabled) {
+        this.skip("1024bit DH parameters are not allowed in FIPS mode")
+      }
       this.timeout(600000)// 10 minutes
       pem.createDhparam(1024, function (error, data) {
         var maxKeySize = 250;
@@ -86,7 +95,11 @@ describe('General Tests', function () {
     it('Create default ecparam key', function (done) {
       pem.createEcparam(function (error, data) {
         hlp.checkError(error)
-        hlp.checkEcparam(data, 430, 530)
+        if (!fipsEnabled) {
+          hlp.checkEcparam(data, 430, 530)  // Default is secp256k1 in non-FIPS mode
+        } else {
+          hlp.checkEcparam(data, 430, 570)  // Default is prime256v1 in FIPS mode
+        }
         hlp.checkTmpEmpty()
         done()
       })
@@ -100,6 +113,9 @@ describe('General Tests', function () {
       })
     })
     it('Create prime256v1 ecparam key', function (done) {
+      if(fipsEnabled) {
+        this.skip("prime256v1 is the default curve in FIPS mode, so this test is redundant")
+      }
       pem.createEcparam('prime256v1', function (error, data) {
         hlp.checkError(error)
         hlp.checkEcparam(data, 430, 570)
@@ -476,6 +492,9 @@ describe('General Tests', function () {
       })
 
       it('get its modulus [md5 hashed]', function (done) {
+        if(fipsEnabled) {
+          this.skip("MD5 hashing is not allowed in FIPS mode")
+        }
         pem.getModulus(cert.certificate, function (error, rawData) {
           hlp.checkError(error)
           hlp.checkModulus(rawData)
@@ -560,6 +579,9 @@ describe('General Tests', function () {
       })
 
       it('get its modulus [md5 hashed]', function (done) {
+        if(fipsEnabled) {
+          this.skip("MD5 hashing is not allowed in FIPS mode")
+        }
         pem.getModulus(cert.certificate, function (error, rawData) {
           hlp.checkError(error)
           hlp.checkModulus(rawData)
@@ -623,7 +645,8 @@ describe('General Tests', function () {
       var ca
       it('create ca certificate', function (done) {
         pem.createCertificate({
-            commonName: 'CA Certificate'
+            commonName: 'CA Certificate',
+            CA: true
           },
           function (error, data) {
             hlp.checkError(error)
@@ -738,7 +761,7 @@ describe('General Tests', function () {
               expect(valid).to.be.true()
 
               pem.createPkcs12(data.clientKey,
-                data.certificate, '', {
+                data.certificate, (fipsEnabled ? 'password' : ''), {
                   certFiles: [ca.certificate]
                 },
                 function (error, d) {
@@ -746,7 +769,9 @@ describe('General Tests', function () {
                   expect(d).to.be.ok()
                   hlp.checkTmpEmpty()
 
-                  pem.readPkcs12(d.pkcs12,
+                  pem.readPkcs12(d.pkcs12, {
+                      p12Password: (fipsEnabled ? 'password' : '')
+                    },
                     function (error, keystore) {
                       debug("verify signing chain; create and read PKCS12 - pem.readPkcs12", {
                         error: error,
@@ -771,12 +796,14 @@ describe('General Tests', function () {
       })
       context('pkcs12 -export -out "$pfx" -inkey "$key" -in "$cert" -certfile "$ca_bundle" -passout "pass:"', function () {
         it('verify right order of chains; read PKCS12', function (done) {
-          let pkcs12_5_file_pfx = fs.readFileSync('./test/fixtures/rsa_pkcs12_5_keyStore.p12')
-          let pkcs12_5_file_key_rsa = fs.readFileSync('./test/fixtures/rsa_pkcs12_5_key_RSA.pem').toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
+          let pkcs12_5_file_pfx = fs.readFileSync('./test/fixtures/rsa_pkcs12_5_keyStore' + (fipsEnabled ? '' : '_legacy') + '.p12')
+          let pkcs12_5_file_key_rsa = fs.readFileSync('./test/fixtures/rsa_pkcs12_5_key_RSA_traditional.pem').toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
           let pkcs12_4_file_cert = fs.readFileSync('./test/fixtures/rsa_pkcs12_4_cert.pem').toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
           let pkcs12_5_file_cert = fs.readFileSync('./test/fixtures/rsa_pkcs12_5_cert.pem').toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
           let geotrust_primary_ca_cert = fs.readFileSync('./test/fixtures/GeoTrust_Primary_CA.pem').toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
-          pem.readPkcs12(pkcs12_5_file_pfx,
+          pem.readPkcs12(pkcs12_5_file_pfx, {
+              p12Password: (fipsEnabled ? 'password' : '')
+            },
             function (error, keystore) {
               debug("verify right order of chains; read PKCS12 - pem.readPkcs12", {
                 error: error,
@@ -800,12 +827,14 @@ describe('General Tests', function () {
       })
       context('pkcs12 -export -out "pfx" -inkey "$key" -in "$cert + $ca_bundle" -passout "pass:"', function () {
         it('verify right order of chains; read PKCS12', function (done) {
-          let pkcs12_5_file_pfx = fs.readFileSync('./test/fixtures/rsa_pkcs12_5_keyStore2.p12')
-          let pkcs12_5_file_key_rsa = fs.readFileSync('./test/fixtures/rsa_pkcs12_5_key_RSA.pem').toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
+          let pkcs12_5_file_pfx = fs.readFileSync('./test/fixtures/rsa_pkcs12_5_keyStore2' + (fipsEnabled ? '' : '_legacy') + '.p12')
+          let pkcs12_5_file_key_rsa = fs.readFileSync('./test/fixtures/rsa_pkcs12_5_key_RSA_traditional.pem').toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
           let pkcs12_4_file_cert = fs.readFileSync('./test/fixtures/rsa_pkcs12_4_cert.pem').toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
           let pkcs12_5_file_cert = fs.readFileSync('./test/fixtures/rsa_pkcs12_5_cert.pem').toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
           let geotrust_primary_ca_cert = fs.readFileSync('./test/fixtures/GeoTrust_Primary_CA.pem').toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
-          pem.readPkcs12(pkcs12_5_file_pfx,
+          pem.readPkcs12(pkcs12_5_file_pfx, {
+              p12Password: (fipsEnabled ? 'password' : '')
+            },
             function (error, keystore) {
               debug("verify right order of chains; read PKCS12 - pem.readPkcs12", {
                 error: error,
@@ -1219,16 +1248,16 @@ describe('General Tests', function () {
   })
 
   describe('#.checkCertificate tests', function () {
-    it('Check certificate file @ ./test/fixtures/test.key', function (done) {
-      var d = fs.readFileSync('./test/fixtures/test.key').toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
+    it('Check certificate file @ ./test/fixtures/test' + (fipsEnabled ? '' : '_des') + '.key', function (done) {
+      var d = fs.readFileSync('./test/fixtures/test' + (fipsEnabled ? '' : '_des') + '.key').toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
       pem.checkCertificate(d, 'password', function (error, result) {
         hlp.checkError(error)
         expect(result).to.be.ok()
         done()
       })
     })
-    it('Check certificate file @ ./test/fixtures/test.crt', function (done) {
-      var d = fs.readFileSync('./test/fixtures/test.crt').toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
+    it('Check certificate file @ ./test/fixtures/test' + (fipsEnabled ? '' : '_des') + '.crt', function (done) {
+      var d = fs.readFileSync('./test/fixtures/test' + (fipsEnabled ? '' : '_des') + '.crt').toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
       pem.checkCertificate(d, function (error, result) {
         hlp.checkError(error)
         expect(result).to.be.ok()
@@ -1247,13 +1276,13 @@ describe('General Tests', function () {
 
   describe('#.getModulus tests', function () {
     it('Check matching modulus of  key and cert file', function (done) {
-      var f = fs.readFileSync('./test/fixtures/test.crt').toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
+      var f = fs.readFileSync('./test/fixtures/test' + (fipsEnabled ? '' : '_des') + '.crt').toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
       pem.getModulus(f, function (error, data1) {
         hlp.checkError(error)
         hlp.checkModulus(data1)
         hlp.checkTmpEmpty()
 
-        f = fs.readFileSync('./test/fixtures/test.key').toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
+        f = fs.readFileSync('./test/fixtures/test' + (fipsEnabled ? '' : '_des') + '.key').toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
         pem.getModulus(f, 'password', function (error, data2) {
           hlp.checkError(error)
           hlp.checkModulus(data2)
@@ -1267,13 +1296,13 @@ describe('General Tests', function () {
 
   describe('#.getDhparamInfo tests', function () {
     it('Get DH param info', function (done) {
-      var dh = fs.readFileSync('./test/fixtures/test.dh').toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
+      var dh = fs.readFileSync('./test/fixtures/test' + (fipsEnabled ? '' : '_1024_bit') + '.dh').toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
       pem.getDhparamInfo(dh, function (error, data) {
         hlp.checkError(error)
         var size = (data && data.size) || 0
         var prime = ((data && data.prime) || '').toString()
         expect(size).to.be.a('number')
-        expect(size).to.equal(1024)
+        expect(size).to.equal(fipsEnabled ? 2048 : 1024)
         expect(prime).to.be.a('string')
         expect(/([0-9a-f][0-9a-f]:)+[0-9a-f][0-9a-f]$/g.test(prime)).to.be.true()
         hlp.checkTmpEmpty()
@@ -1296,7 +1325,7 @@ describe('General Tests', function () {
 
   describe('#.checkPkcs12 tests', function () {
     it('Check PKCS12 keystore', function (done) {
-      var pkcs12 = fs.readFileSync('./test/fixtures/idsrv3test.pfx')
+      var pkcs12 = fs.readFileSync('./test/fixtures/idsrv3test' + (fipsEnabled ? '' : '_legacy') + '.pfx')
       pem.checkPkcs12(pkcs12, 'idsrv3test', function (error, result) {
         hlp.checkError(error)
         expect(result).to.be.ok()
