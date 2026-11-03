@@ -13,6 +13,13 @@ debug("ENVs:", process.env)
 if ((process.env.TRAVIS === 'true' || process.env.DEBUG === 'true') && "OPENSSL_DIR" in process.env && !("OPENSSL_BIN" in process.env)) {
   process.env.OPENSSL_BIN = process.env.GITHUB_WORKSPACE+'/openssl/bin/openssl'
 }
+// Opt-in FIPS mode for the whole suite (PEM_TEST_FIPS=true): switch Node's
+// crypto to the FIPS provider before any spec reads crypto.getFips(), so
+// the FIPS-specific fixtures, flags and skips take effect. The OpenSSL CLI
+// subprocesses are put into FIPS mode separately via OPENSSL_CONF.
+if (process.env.PEM_TEST_FIPS === 'true') {
+  require('node:crypto').setFips(true)
+}
 
 function checkTmpEmpty() {
   expect(fs.readdirSync(process.env.PEMJS_TMPDIR)).to.be.empty()
