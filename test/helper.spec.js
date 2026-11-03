@@ -52,6 +52,24 @@ describe('helper.js tests', function () {
         done()
       })
     })
+
+    it('writes the password file readable only by the owner', function (done) {
+      var tmpfiles = []
+      var params = ['rsa', '-in', 'unused']
+      helper.createPasswordFile(
+        { cipher: '', password: 'topsecret', passType: 'in' },
+        params,
+        tmpfiles
+      )
+      expect(tmpfiles).to.have.lengthOf(1)
+      var mode = fs.statSync(tmpfiles[0]).mode & 0o777
+      helper.deleteTempFiles(tmpfiles, function (fsErr) {
+        hlp.checkError(fsErr)
+        // passwords are secrets: other local users must not read them
+        expect(mode).to.equal(0o600)
+        done()
+      })
+    })
   })
 
   describe('#.deleteTempFiles()', function () {
