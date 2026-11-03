@@ -478,6 +478,27 @@ describe('General Tests', function () {
       })
     })
 
+    it('writes DNS altNames without a trailing dot', function (done) {
+      pem.createCSR({
+        commonName: 'example.com',
+        altNames: ['dot.example.', 'LOCALHOST.']
+      }, function (error, data) {
+        hlp.checkError(error)
+        hlp.checkCSR(data)
+        hlp.checkTmpEmpty()
+
+        pem.readCertificateInfo(data.csr, function (error, info) {
+          hlp.checkError(error)
+          // RFC 5280 dNSName values carry no trailing label separator; the
+          // dot is stripped when the SAN config is written so strict
+          // verifiers (LibreSSL >= 3.5) accept the CSR.
+          expect(info.san.dns).to.deep.equal(['dot.example', 'LOCALHOST'])
+          hlp.checkTmpEmpty()
+          done()
+        })
+      })
+    })
+
     it('rejects altNames with newline injected OpenSSL config', function (done) {
       pem.createCSR({
         altNames: ['example.com\nDNS.2 = attacker-controlled.example']
