@@ -10,9 +10,9 @@ chai.use(dirtyChai)
 
 process.env.PEMJS_TMPDIR = './tmp'
 debug("ENVs:", process.env)
-if ((process.env.TRAVIS === 'true' || process.env.DEBUG === 'true') && "OPENSSL_DIR" in process.env && !("OPENSSL_BIN" in process.env)) {
-  process.env.OPENSSL_BIN = process.env.GITHUB_WORKSPACE+'/openssl/bin/openssl'
-}
+// Which openssl binary is used is decided by lib/openssl.js (DEBUG=true plus
+// LIBRARY/VERSION pointing at an existing ./openssl/${LIBRARY}_v${VERSION}
+// build) or by an explicit OPENSSL_BIN; no binary detection happens here.
 // Opt-in FIPS mode for the whole suite (PEM_TEST_FIPS=true): switch Node's
 // crypto to the FIPS provider before any spec reads crypto.getFips(), so
 // the FIPS-specific fixtures, flags and skips take effect. The OpenSSL CLI
