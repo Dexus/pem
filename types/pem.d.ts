@@ -199,11 +199,14 @@ declare namespace pem {
     defaultDays?: number
   }
 
-  class CA {
-    constructor(options: CertificateAuthorityOptions)
+  interface CA {
     issueCertificate(options?: IssueCertificateOptions): Promise<IssuedCertificate>
     issueCertificate(callback: Callback<IssuedCertificate>): void
     issueCertificate(options: IssueCertificateOptions, callback: Callback<IssuedCertificate>): void
+  }
+
+  interface CAConstructor {
+    new (options: CertificateAuthorityOptions): CA
   }
 
   interface Promisified {
@@ -295,7 +298,7 @@ declare namespace pem {
     config(options: Record<string, string | number | boolean>): void
 
     convert: ConvertModule
-    CA: typeof CA
+    CA: CAConstructor
     promisified: Promisified
   }
 }

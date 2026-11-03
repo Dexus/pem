@@ -29,7 +29,7 @@
     "build": "ncc build -m -s lib/pem.js -o dist",
     "changelog": "auto-changelog -p --output HISTORY.md",
     "coverage": "cross-env NODE_ENV=development nyc ./node_modules/.bin/_mocha --recursive --bail --inline-diffs --reporter spec --check-leaks --use_strict $(find . -type f -name '*.spec.js'  ! -path './nyc_output/*' ! -path './coverage/*' ! -path './node_modules/*')",
-    "lint": "eslint --fix --config=./.eslintrc.js lib/*.js *.md *.json lib/*.js test/*.js test/*.spec.js",
+    "lint": "eslint --fix lib/*.js *.md *.json test/*.js test/*.spec.js",
     "test": "yarn run lint && yarn run coverage",
     "test:opensslv3.0.1": "yarn run build > openssl_v3.0.1.log && yarn run test >> openssl_v3.0.1.log",
     "test:types": "tsd"
@@ -45,35 +45,39 @@
     ]
   },
   "dependencies": {
-    "which": "^4.0.0"
+    "which": "^5.0.0"
   },
   "devDependencies": {
     "@deineagenturug/docdash": "0.4.2",
-    "@types/chai": "4.3.11",
-    "@types/dirty-chai": "2.0.4",
-    "@vercel/ncc": "0.38.1",
-    "auto-changelog": "2.4.0",
-    "chai": "4.4.1",
+    "@eslint/eslintrc": "3.3.7",
+    "@eslint/js": "9.39.5",
+    "@types/chai": "4.3.20",
+    "@types/dirty-chai": "2.0.5",
+    "@types/node": "26.6.6",
+    "@vercel/ncc": "0.45.0",
+    "auto-changelog": "2.7.0",
+    "chai": "4.5.0",
     "cross-env": "7.0.3",
     "dirty-chai": "2.0.1",
-    "docco": "0.9.1",
-    "eslint": "8.56.0",
-    "eslint-plugin-chai-friendly": "0.7.4",
-    "eslint-plugin-eslint-plugin": "4.4.1",
-    "eslint-plugin-import": "2.29.1",
-    "eslint-plugin-json": "3.1.0",
-    "eslint-plugin-markdown": "2.2.1",
-    "eslint-plugin-mocha": "^10.2.0",
-    "eslint-plugin-n": "15.7.0",
-    "eslint-plugin-promise": "6.1.1",
+    "docco": "0.9.2",
+    "eslint": "9.39.5",
+    "eslint-plugin-chai-friendly": "1.2.1",
+    "eslint-plugin-eslint-plugin": "6.5.0",
+    "eslint-plugin-import": "2.32.0",
+    "eslint-plugin-json": "5.0.0",
+    "eslint-plugin-markdown": "5.1.0",
+    "eslint-plugin-mocha": "^11.3.0",
+    "eslint-plugin-n": "17.24.0",
+    "eslint-plugin-promise": "7.3.0",
+    "globals": "17.14.0",
     "jsdoc": "3.6.11",
     "marked": "4.3.0",
-    "mocha": "^10.2.0",
-    "nyc": "15.1.0",
-    "tsd": "0.31.1"
+    "mocha": "^11.8.0",
+    "nyc": "17.1.0",
+    "tsd": "0.33.0"
   },
   "engines": {
-    "node": ">=14.0.0"
+    "node": ">=18.18.0"
   },
   "types": "types/pem.d.ts",
   "packageManager": "yarn@4.9.4"

@@ -66,11 +66,16 @@
  * <span class="hljs-doctag">@module</span> <span class="hljs-variable">pem</span>
  */</span>
 <span class="hljs-keyword">const</span> {debug} = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;./debug.js&#x27;</span>)
-<span class="hljs-keyword">const</span> {promisify} = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;node:util&#x27;</span>)
+<span class="hljs-keyword">const</span> {createHash} = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;node:crypto&#x27;</span>)
 <span class="hljs-keyword">var</span> net = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;net&#x27;</span>)
 <span class="hljs-keyword">var</span> helper = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;./helper.js&#x27;</span>)
 <span class="hljs-keyword">var</span> openssl = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;./openssl.js&#x27;</span>)
-<span class="hljs-keyword">const</span> hash_md5 = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;md5&quot;</span>)
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">hash_md5</span> = (<span class="hljs-params">value</span>) =&gt; {
+  <span class="hljs-keyword">if</span> (<span class="hljs-title class_">Buffer</span>.<span class="hljs-title function_">isBuffer</span>(value)) {
+    <span class="hljs-keyword">return</span> <span class="hljs-title function_">createHash</span>(<span class="hljs-string">&#x27;md5&#x27;</span>).<span class="hljs-title function_">update</span>(value).<span class="hljs-title function_">digest</span>(<span class="hljs-string">&#x27;hex&#x27;</span>)
+  }
+  <span class="hljs-keyword">return</span> <span class="hljs-title function_">createHash</span>(<span class="hljs-string">&#x27;md5&#x27;</span>).<span class="hljs-title function_">update</span>(<span class="hljs-title class_">String</span>(value), <span class="hljs-string">&#x27;utf8&#x27;</span>).<span class="hljs-title function_">digest</span>(<span class="hljs-string">&#x27;hex&#x27;</span>)
+}
 
 <span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span>.<span class="hljs-property">createPrivateKey</span> = createPrivateKey
 <span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span>.<span class="hljs-property">createDhparam</span> = createDhparam
@@ -95,6 +100,12 @@
  */</span>
 <span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span>.<span class="hljs-property">convert</span> = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;./convert.js&#x27;</span>)
 
+<span class="hljs-comment">/**
+ * Certificate authority helper
+ * <span class="hljs-doctag">@type</span> {<span class="hljs-type">module:ca</span>}
+ */</span>
+<span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span>.<span class="hljs-property">CA</span> = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;./ca.js&#x27;</span>)
+
 <span class="hljs-keyword">var</span> <span class="hljs-variable constant_">KEY_START</span> = <span class="hljs-string">&#x27;-----BEGIN PRIVATE KEY-----&#x27;</span>
 <span class="hljs-keyword">var</span> <span class="hljs-variable constant_">KEY_END</span> = <span class="hljs-string">&#x27;-----END PRIVATE KEY-----&#x27;</span>
 <span class="hljs-keyword">var</span> <span class="hljs-variable constant_">RSA_KEY_START</span> = <span class="hljs-string">&#x27;-----BEGIN RSA PRIVATE KEY-----&#x27;</span>
@@ -113,6 +124,7 @@
  * <span class="hljs-doctag">@param</span> {<span class="hljs-type">String</span>} [options.cipher] string of the cipher for the encryption - needed with password
  * <span class="hljs-doctag">@param</span> {<span class="hljs-type">String</span>} [options.password] string of the cipher password for the encryption needed with cipher
  * <span class="hljs-doctag">@param</span> {<span class="hljs-type">Function</span>} callback Callback function with an error object and {key}
+ * <span class="hljs-doctag">@returns</span> {<span class="hljs-type">Promise&lt;{key: String</span>}&gt;} Resolves with the generated key when no callback is provided.
  */</span>
 <span class="hljs-keyword">function</span> <span class="hljs-title function_">createPrivateKey</span>(<span class="hljs-params">keyBitsize, options, callback</span>) {
   <span class="hljs-keyword">if</span> (!callback &amp;&amp; !options &amp;&amp; <span class="hljs-keyword">typeof</span> keyBitsize === <span class="hljs-string">&#x27;function&#x27;</span>) {
@@ -122,6 +134,17 @@
   } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (!callback &amp;&amp; keyBitsize &amp;&amp; <span class="hljs-keyword">typeof</span> options === <span class="hljs-string">&#x27;function&#x27;</span>) {
     callback = options
     options = {}
+  }
+
+  <span class="hljs-keyword">if</span> (!callback) {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Promise</span>(<span class="hljs-keyword">function</span> (<span class="hljs-params">resolve, reject</span>) {
+      <span class="hljs-title function_">createPrivateKey</span>(keyBitsize, options, <span class="hljs-keyword">function</span> (<span class="hljs-params">err, result</span>) {
+        <span class="hljs-keyword">if</span> (err) {
+          <span class="hljs-keyword">return</span> <span class="hljs-title function_">reject</span>(err)
+        }
+        <span class="hljs-title function_">resolve</span>(result)
+      })
+    })
   }
 
   keyBitsize = <span class="hljs-title class_">Number</span>(keyBitsize) || <span class="hljs-number">2048</span>
@@ -179,11 +202,23 @@
  * <span class="hljs-doctag">@static</span>
  * <span class="hljs-doctag">@param</span> {<span class="hljs-type">Number</span>} [keyBitsize=512] Size of the key, defaults to 512bit
  * <span class="hljs-doctag">@param</span> {<span class="hljs-type">Function</span>} callback Callback function with an error object and {dhparam}
+ * <span class="hljs-doctag">@returns</span> {<span class="hljs-type">Promise&lt;{dhparam: String</span>}&gt;} Resolves with the generated parameters when no callback is provided.
  */</span>
 <span class="hljs-keyword">function</span> <span class="hljs-title function_">createDhparam</span>(<span class="hljs-params">keyBitsize, callback</span>) {
   <span class="hljs-keyword">if</span> (!callback &amp;&amp; <span class="hljs-keyword">typeof</span> keyBitsize === <span class="hljs-string">&#x27;function&#x27;</span>) {
     callback = keyBitsize
     keyBitsize = <span class="hljs-literal">undefined</span>
+  }
+
+  <span class="hljs-keyword">if</span> (!callback) {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Promise</span>(<span class="hljs-keyword">function</span> (<span class="hljs-params">resolve, reject</span>) {
+      <span class="hljs-title function_">createDhparam</span>(keyBitsize, <span class="hljs-keyword">function</span> (<span class="hljs-params">err, result</span>) {
+        <span class="hljs-keyword">if</span> (err) {
+          <span class="hljs-keyword">return</span> <span class="hljs-title function_">reject</span>(err)
+        }
+        <span class="hljs-title function_">resolve</span>(result)
+      })
+    })
   }
 
   keyBitsize = <span class="hljs-title class_">Number</span>(keyBitsize) || <span class="hljs-number">512</span>
@@ -211,6 +246,7 @@
  * <span class="hljs-doctag">@param</span> {<span class="hljs-type">String</span>} [paramEnc=explicit] Encoding of the elliptic curve parameters, defaults to explicit
  * <span class="hljs-doctag">@param</span> {<span class="hljs-type">Boolean</span>} [noOut=false] This option inhibits the output of the encoded version of the parameters.
  * <span class="hljs-doctag">@param</span> {<span class="hljs-type">Function</span>} callback Callback function with an error object and {ecparam}
+ * <span class="hljs-doctag">@returns</span> {<span class="hljs-type">Promise&lt;{ecparam: String</span>}&gt;} Resolves with the generated parameters when no callback is provided.
  */</span>
 <span class="hljs-keyword">function</span> <span class="hljs-title function_">createEcparam</span>(<span class="hljs-params">keyName, paramEnc, noOut, callback</span>) {
   <span class="hljs-keyword">if</span> (!callback &amp;&amp; <span class="hljs-keyword">typeof</span> noOut === <span class="hljs-string">&#x27;undefined&#x27;</span> &amp;&amp; !paramEnc &amp;&amp; <span class="hljs-keyword">typeof</span> keyName === <span class="hljs-string">&#x27;function&#x27;</span>) {
@@ -222,6 +258,17 @@
   } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (!callback &amp;&amp; <span class="hljs-keyword">typeof</span> noOut === <span class="hljs-string">&#x27;function&#x27;</span> &amp;&amp; keyName &amp;&amp; paramEnc) {
     callback = noOut
     noOut = <span class="hljs-literal">undefined</span>
+  }
+
+  <span class="hljs-keyword">if</span> (!callback) {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Promise</span>(<span class="hljs-keyword">function</span> (<span class="hljs-params">resolve, reject</span>) {
+      <span class="hljs-title function_">createEcparam</span>(keyName, paramEnc, noOut, <span class="hljs-keyword">function</span> (<span class="hljs-params">err, result</span>) {
+        <span class="hljs-keyword">if</span> (err) {
+          <span class="hljs-keyword">return</span> <span class="hljs-title function_">reject</span>(err)
+        }
+        <span class="hljs-title function_">resolve</span>(result)
+      })
+    })
   }
 
   keyName = keyName || <span class="hljs-string">&#x27;secp256k1&#x27;</span>
@@ -271,11 +318,23 @@
  * <span class="hljs-doctag">@param</span> {<span class="hljs-type">String</span>} [options.csrConfigFile] CSR config file
  * <span class="hljs-doctag">@param</span> {<span class="hljs-type">Array</span>}  [options.altNames] is a list of subjectAltNames in the subjectAltName field
  * <span class="hljs-doctag">@param</span> {<span class="hljs-type">Function</span>} callback Callback function with an error object and {csr, clientKey}
+ * <span class="hljs-doctag">@returns</span> {<span class="hljs-type">Promise&lt;{csr: String, clientKey: String, config: (String|null)</span>}&gt;} Resolves with the CSR details when no callback is provided.
  */</span>
 <span class="hljs-keyword">function</span> <span class="hljs-title function_">createCSR</span>(<span class="hljs-params">options, callback</span>) {
   <span class="hljs-keyword">if</span> (!callback &amp;&amp; <span class="hljs-keyword">typeof</span> options === <span class="hljs-string">&#x27;function&#x27;</span>) {
     callback = options
     options = <span class="hljs-literal">undefined</span>
+  }
+
+  <span class="hljs-keyword">if</span> (!callback) {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Promise</span>(<span class="hljs-keyword">function</span> (<span class="hljs-params">resolve, reject</span>) {
+      <span class="hljs-title function_">createCSR</span>(options, <span class="hljs-keyword">function</span> (<span class="hljs-params">err, result</span>) {
+        <span class="hljs-keyword">if</span> (err) {
+          <span class="hljs-keyword">return</span> <span class="hljs-title function_">reject</span>(err)
+        }
+        <span class="hljs-title function_">resolve</span>(result)
+      })
+    })
   }
 
   <span class="hljs-keyword">let</span> delTempPWFiles = []
@@ -419,11 +478,23 @@
  * <span class="hljs-doctag">@param</span> {<span class="hljs-type">String</span>} [options.csrConfigFile] CSR config file - only used if no options.csr is provided
  * <span class="hljs-doctag">@param</span> {<span class="hljs-type">Array</span>}  [options.altNames] is a list of subjectAltNames in the subjectAltName field - only used if no options.csr is provided
  * <span class="hljs-doctag">@param</span> {<span class="hljs-type">Function</span>} callback Callback function with an error object and {certificate, csr, clientKey, serviceKey}
+ * <span class="hljs-doctag">@returns</span> {<span class="hljs-type">Promise&lt;{certificate: String, csr: String, clientKey: String, serviceKey: String</span>}&gt;} Resolves with the certificate data when no callback is provided.
  */</span>
 <span class="hljs-keyword">function</span> <span class="hljs-title function_">createCertificate</span>(<span class="hljs-params">options, callback</span>) {
   <span class="hljs-keyword">if</span> (!callback &amp;&amp; <span class="hljs-keyword">typeof</span> options === <span class="hljs-string">&#x27;function&#x27;</span>) {
     callback = options
     options = <span class="hljs-literal">undefined</span>
+  }
+
+  <span class="hljs-keyword">if</span> (!callback) {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Promise</span>(<span class="hljs-keyword">function</span> (<span class="hljs-params">resolve, reject</span>) {
+      <span class="hljs-title function_">createCertificate</span>(options, <span class="hljs-keyword">function</span> (<span class="hljs-params">err, result</span>) {
+        <span class="hljs-keyword">if</span> (err) {
+          <span class="hljs-keyword">return</span> <span class="hljs-title function_">reject</span>(err)
+        }
+        <span class="hljs-title function_">resolve</span>(result)
+      })
+    })
   }
 
   options = options || {}
@@ -615,11 +686,23 @@ the ACSII table).</p>
  * <span class="hljs-doctag">@static</span>
  * <span class="hljs-doctag">@param</span> {<span class="hljs-type">String</span>} certificate PEM encoded private key, CSR or certificate
  * <span class="hljs-doctag">@param</span> {<span class="hljs-type">Function</span>} callback Callback function with an error object and {publicKey}
+ * <span class="hljs-doctag">@returns</span> {<span class="hljs-type">Promise&lt;{publicKey: String</span>}&gt;} Resolves with the extracted public key when no callback is provided.
  */</span>
 <span class="hljs-keyword">function</span> <span class="hljs-title function_">getPublicKey</span>(<span class="hljs-params">certificate, callback</span>) {
   <span class="hljs-keyword">if</span> (!callback &amp;&amp; <span class="hljs-keyword">typeof</span> certificate === <span class="hljs-string">&#x27;function&#x27;</span>) {
     callback = certificate
     certificate = <span class="hljs-literal">undefined</span>
+  }
+
+  <span class="hljs-keyword">if</span> (!callback) {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Promise</span>(<span class="hljs-keyword">function</span> (<span class="hljs-params">resolve, reject</span>) {
+      <span class="hljs-title function_">getPublicKey</span>(certificate, <span class="hljs-keyword">function</span> (<span class="hljs-params">err, result</span>) {
+        <span class="hljs-keyword">if</span> (err) {
+          <span class="hljs-keyword">return</span> <span class="hljs-title function_">reject</span>(err)
+        }
+        <span class="hljs-title function_">resolve</span>(result)
+      })
+    })
   }
 
   certificate = (certificate || <span class="hljs-string">&#x27;&#x27;</span>).<span class="hljs-title function_">toString</span>()
@@ -663,11 +746,23 @@ the ACSII table).</p>
  * <span class="hljs-doctag">@static</span>
  * <span class="hljs-doctag">@param</span> {<span class="hljs-type">String</span>} certificate PEM encoded CSR or certificate
  * <span class="hljs-doctag">@param</span> {<span class="hljs-type">Function</span>} callback Callback function with an error object and {country, state, locality, organization, organizationUnit, commonName, emailAddress}
+ * <span class="hljs-doctag">@returns</span> {<span class="hljs-type">Promise&lt;Object&gt;</span>} Resolves with the parsed certificate information when no callback is provided.
  */</span>
 <span class="hljs-keyword">function</span> <span class="hljs-title function_">readCertificateInfo</span>(<span class="hljs-params">certificate, callback</span>) {
   <span class="hljs-keyword">if</span> (!callback &amp;&amp; <span class="hljs-keyword">typeof</span> certificate === <span class="hljs-string">&#x27;function&#x27;</span>) {
     callback = certificate
     certificate = <span class="hljs-literal">undefined</span>
+  }
+
+  <span class="hljs-keyword">if</span> (!callback) {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Promise</span>(<span class="hljs-keyword">function</span> (<span class="hljs-params">resolve, reject</span>) {
+      <span class="hljs-title function_">readCertificateInfo</span>(certificate, <span class="hljs-keyword">function</span> (<span class="hljs-params">err, result</span>) {
+        <span class="hljs-keyword">if</span> (err) {
+          <span class="hljs-keyword">return</span> <span class="hljs-title function_">reject</span>(err)
+        }
+        <span class="hljs-title function_">resolve</span>(result)
+      })
+    })
   }
 
   certificate = (certificate || <span class="hljs-string">&#x27;&#x27;</span>).<span class="hljs-title function_">toString</span>()
@@ -698,6 +793,7 @@ the ACSII table).</p>
  * <span class="hljs-doctag">@param</span> {<span class="hljs-type">String</span>} [password] password for the certificate
  * <span class="hljs-doctag">@param</span> {<span class="hljs-type">String</span>} [hash] hash function to use (up to now `md5` supported) (default: none)
  * <span class="hljs-doctag">@param</span> {<span class="hljs-type">Function</span>} callback Callback function with an error object and {modulus}
+ * <span class="hljs-doctag">@returns</span> {<span class="hljs-type">Promise&lt;{modulus: String</span>}&gt;} Resolves with the modulus information when no callback is provided.
  */</span>
 <span class="hljs-keyword">function</span> <span class="hljs-title function_">getModulus</span>(<span class="hljs-params">certificate, password, hash, callback</span>) {
   <span class="hljs-keyword">if</span> (!callback &amp;&amp; !hash &amp;&amp; <span class="hljs-keyword">typeof</span> password === <span class="hljs-string">&#x27;function&#x27;</span>) {
@@ -721,7 +817,18 @@ the ACSII table).</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  }</pre></div></div>
+            <div class="content"><div class='highlight'><pre>  }
+
+  <span class="hljs-keyword">if</span> (!callback) {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Promise</span>(<span class="hljs-keyword">function</span> (<span class="hljs-params">resolve, reject</span>) {
+      <span class="hljs-title function_">getModulus</span>(certificate, password, hash, <span class="hljs-keyword">function</span> (<span class="hljs-params">err, result</span>) {
+        <span class="hljs-keyword">if</span> (err) {
+          <span class="hljs-keyword">return</span> <span class="hljs-title function_">reject</span>(err)
+        }
+        <span class="hljs-title function_">resolve</span>(result)
+      })
+    })
+  }</pre></div></div>
             
         </li>
         
@@ -798,8 +905,20 @@ of pem.</p>
  * <span class="hljs-doctag">@static</span>
  * <span class="hljs-doctag">@param</span> {<span class="hljs-type">String</span>} dh parameters PEM encoded
  * <span class="hljs-doctag">@param</span> {<span class="hljs-type">Function</span>} callback Callback function with an error object and {size, prime}
+ * <span class="hljs-doctag">@returns</span> {<span class="hljs-type">Promise&lt;{size: Number, prime: String</span>}&gt;} Resolves with DH parameter details when no callback is provided.
  */</span>
 <span class="hljs-keyword">function</span> <span class="hljs-title function_">getDhparamInfo</span>(<span class="hljs-params">dh, callback</span>) {
+  <span class="hljs-keyword">if</span> (!callback) {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Promise</span>(<span class="hljs-keyword">function</span> (<span class="hljs-params">resolve, reject</span>) {
+      <span class="hljs-title function_">getDhparamInfo</span>(dh, <span class="hljs-keyword">function</span> (<span class="hljs-params">err, result</span>) {
+        <span class="hljs-keyword">if</span> (err) {
+          <span class="hljs-keyword">return</span> <span class="hljs-title function_">reject</span>(err)
+        }
+        <span class="hljs-title function_">resolve</span>(result)
+      })
+    })
+  }
+
   dh = (<span class="hljs-title class_">Buffer</span>.<span class="hljs-title function_">isBuffer</span>(dh) &amp;&amp; dh.<span class="hljs-title function_">toString</span>()) || dh
 
   <span class="hljs-keyword">var</span> params = [
@@ -859,11 +978,23 @@ of pem.</p>
  * <span class="hljs-doctag">@param</span> {<span class="hljs-type">String</span>} certificate PEM encoded certificate
  * <span class="hljs-doctag">@param</span> {<span class="hljs-type">String</span>} [hash] hash function to use (either `md5`, `sha1` or `sha256`, defaults to `sha1`)
  * <span class="hljs-doctag">@param</span> {<span class="hljs-type">Function</span>} callback Callback function with an error object and {fingerprint}
+ * <span class="hljs-doctag">@returns</span> {<span class="hljs-type">Promise&lt;{fingerprint: String</span>}&gt;} Resolves with the fingerprint when no callback is provided.
  */</span>
 <span class="hljs-keyword">function</span> <span class="hljs-title function_">getFingerprint</span>(<span class="hljs-params">certificate, hash, callback</span>) {
   <span class="hljs-keyword">if</span> (!callback &amp;&amp; <span class="hljs-keyword">typeof</span> hash === <span class="hljs-string">&#x27;function&#x27;</span>) {
     callback = hash
     hash = <span class="hljs-literal">undefined</span>
+  }
+
+  <span class="hljs-keyword">if</span> (!callback) {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Promise</span>(<span class="hljs-keyword">function</span> (<span class="hljs-params">resolve, reject</span>) {
+      <span class="hljs-title function_">getFingerprint</span>(certificate, hash, <span class="hljs-keyword">function</span> (<span class="hljs-params">err, result</span>) {
+        <span class="hljs-keyword">if</span> (err) {
+          <span class="hljs-keyword">return</span> <span class="hljs-title function_">reject</span>(err)
+        }
+        <span class="hljs-title function_">resolve</span>(result)
+      })
+    })
   }
 
   hash = hash || <span class="hljs-string">&#x27;sha1&#x27;</span>
@@ -901,12 +1032,26 @@ of pem.</p>
  * <span class="hljs-doctag">@param</span> {<span class="hljs-type">String</span>} password Password of the result PKCS12 file
  * <span class="hljs-doctag">@param</span> {<span class="hljs-type">Object</span>} [options] object of cipher and optional client key password {cipher:&#x27;aes128&#x27;, clientKeyPassword: &#x27;xxxx&#x27;, certFiles: [&#x27;file1&#x27;,&#x27;file2&#x27;]}
  * <span class="hljs-doctag">@param</span> {<span class="hljs-type">Function</span>} callback Callback function with an error object and {pkcs12}
+ * <span class="hljs-doctag">@returns</span> {<span class="hljs-type">Promise&lt;{pkcs12: Buffer</span>}&gt;} Resolves with the PKCS#12 bundle when no callback is provided.
  */</span>
 <span class="hljs-keyword">function</span> <span class="hljs-title function_">createPkcs12</span>(<span class="hljs-params">key, certificate, password, options, callback</span>) {
   <span class="hljs-keyword">if</span> (!callback &amp;&amp; <span class="hljs-keyword">typeof</span> options === <span class="hljs-string">&#x27;function&#x27;</span>) {
     callback = options
     options = {}
   }
+
+  <span class="hljs-keyword">if</span> (!callback) {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Promise</span>(<span class="hljs-keyword">function</span> (<span class="hljs-params">resolve, reject</span>) {
+      <span class="hljs-title function_">createPkcs12</span>(key, certificate, password, options, <span class="hljs-keyword">function</span> (<span class="hljs-params">err, result</span>) {
+        <span class="hljs-keyword">if</span> (err) {
+          <span class="hljs-keyword">return</span> <span class="hljs-title function_">reject</span>(err)
+        }
+        <span class="hljs-title function_">resolve</span>(result)
+      })
+    })
+  }
+
+  options = options || {}
 
   <span class="hljs-keyword">var</span> params = [<span class="hljs-string">&#x27;pkcs12&#x27;</span>, <span class="hljs-string">&#x27;-export&#x27;</span>]
   <span class="hljs-keyword">var</span> delTempPWFiles = []
@@ -986,12 +1131,26 @@ create password file for the password “-password”</p>
  * <span class="hljs-doctag">@param</span>  {<span class="hljs-type">Buffer|String</span>}   bufferOrPath Buffer or path to file
  * <span class="hljs-doctag">@param</span>  {<span class="hljs-type">Object</span>}   [options]      openssl options
  * <span class="hljs-doctag">@param</span>  {<span class="hljs-type">Function</span>} callback     Called with error object and sslcert bundle object
+ * <span class="hljs-doctag">@returns</span> {<span class="hljs-type">Promise&lt;{cert: String, ca: Array, key: String</span>}&gt;} Resolves with the parsed PKCS#12 bundle when no callback is provided.
  */</span>
 <span class="hljs-keyword">function</span> <span class="hljs-title function_">readPkcs12</span>(<span class="hljs-params">bufferOrPath, options, callback</span>) {
   <span class="hljs-keyword">if</span> (!callback &amp;&amp; <span class="hljs-keyword">typeof</span> options === <span class="hljs-string">&#x27;function&#x27;</span>) {
     callback = options
     options = {}
   }
+
+  <span class="hljs-keyword">if</span> (!callback) {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Promise</span>(<span class="hljs-keyword">function</span> (<span class="hljs-params">resolve, reject</span>) {
+      <span class="hljs-title function_">readPkcs12</span>(bufferOrPath, options, <span class="hljs-keyword">function</span> (<span class="hljs-params">err, result</span>) {
+        <span class="hljs-keyword">if</span> (err) {
+          <span class="hljs-keyword">return</span> <span class="hljs-title function_">reject</span>(err)
+        }
+        <span class="hljs-title function_">resolve</span>(result)
+      })
+    })
+  }
+
+  options = options || {}
 
   options.<span class="hljs-property">p12Password</span> = options.<span class="hljs-property">p12Password</span> || <span class="hljs-string">&#x27;&#x27;</span>
 
@@ -1123,6 +1282,7 @@ create password file for the password “-password”</p>
  * <span class="hljs-doctag">@param</span> {<span class="hljs-type">String</span>} certificate PEM encoded certificate
  * <span class="hljs-doctag">@param</span> {<span class="hljs-type">String</span>} [passphrase] password for the certificate
  * <span class="hljs-doctag">@param</span> {<span class="hljs-type">Function</span>} callback Callback function with an error object and a boolean valid
+ * <span class="hljs-doctag">@returns</span> {<span class="hljs-type">Promise&lt;Boolean&gt;</span>} Resolves with the validity result when no callback is provided.
  */</span>
 <span class="hljs-keyword">function</span> <span class="hljs-title function_">checkCertificate</span>(<span class="hljs-params">certificate, passphrase, callback</span>) {
   <span class="hljs-keyword">var</span> params
@@ -1131,6 +1291,17 @@ create password file for the password “-password”</p>
   <span class="hljs-keyword">if</span> (!callback &amp;&amp; <span class="hljs-keyword">typeof</span> passphrase === <span class="hljs-string">&#x27;function&#x27;</span>) {
     callback = passphrase
     passphrase = <span class="hljs-literal">undefined</span>
+  }
+
+  <span class="hljs-keyword">if</span> (!callback) {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Promise</span>(<span class="hljs-keyword">function</span> (<span class="hljs-params">resolve, reject</span>) {
+      <span class="hljs-title function_">checkCertificate</span>(certificate, passphrase, <span class="hljs-keyword">function</span> (<span class="hljs-params">err, result</span>) {
+        <span class="hljs-keyword">if</span> (err) {
+          <span class="hljs-keyword">return</span> <span class="hljs-title function_">reject</span>(err)
+        }
+        <span class="hljs-title function_">resolve</span>(result)
+      })
+    })
   }
   certificate = (certificate || <span class="hljs-string">&#x27;&#x27;</span>).<span class="hljs-title function_">toString</span>()
 
@@ -1159,13 +1330,13 @@ create password file for the password “-password”</p>
           <span class="hljs-keyword">break</span>
       }
       <span class="hljs-keyword">if</span> (!result) {
+        <span class="hljs-keyword">if</span> (err &amp;&amp; err.<span class="hljs-title function_">toString</span>().<span class="hljs-title function_">trim</span>() !== <span class="hljs-string">&#x27;verify OK&#x27;</span>) {
+          <span class="hljs-keyword">return</span> <span class="hljs-title function_">callback</span>(err)
+        }
         <span class="hljs-keyword">if</span> (openssl.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;Vendor&#x27;</span>) === <span class="hljs-string">&quot;OPENSSL&quot;</span> &amp;&amp; openssl.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;VendorVersionMajor&#x27;</span>) &gt;= <span class="hljs-number">3</span>) {
           <span class="hljs-keyword">if</span> (!(stderr &amp;&amp; stderr.<span class="hljs-title function_">toString</span>().<span class="hljs-title function_">trim</span>().<span class="hljs-title function_">endsWith</span>(<span class="hljs-string">&#x27;verify OK&#x27;</span>))) {
             <span class="hljs-keyword">return</span> <span class="hljs-title function_">callback</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(stderr.<span class="hljs-title function_">toString</span>()))
           }
-        }
-        <span class="hljs-keyword">if</span> (err &amp;&amp; err.<span class="hljs-title function_">toString</span>().<span class="hljs-title function_">trim</span>() !== <span class="hljs-string">&#x27;verify OK&#x27;</span>) {
-          <span class="hljs-keyword">return</span> <span class="hljs-title function_">callback</span>(err)
         }
       }
       <span class="hljs-title function_">callback</span>(<span class="hljs-literal">null</span>, result)
@@ -1183,11 +1354,23 @@ create password file for the password “-password”</p>
  * <span class="hljs-doctag">@param</span> {<span class="hljs-type">Buffer|String</span>} bufferOrPath PKCS#12 certificate
  * <span class="hljs-doctag">@param</span> {<span class="hljs-type">String</span>} [passphrase] optional passphrase which will be used to open the keystore
  * <span class="hljs-doctag">@param</span> {<span class="hljs-type">Function</span>} callback Callback function with an error object and a boolean valid
+ * <span class="hljs-doctag">@returns</span> {<span class="hljs-type">Promise&lt;Boolean&gt;</span>} Resolves with the validity result when no callback is provided.
  */</span>
 <span class="hljs-keyword">function</span> <span class="hljs-title function_">checkPkcs12</span>(<span class="hljs-params">bufferOrPath, passphrase, callback</span>) {
   <span class="hljs-keyword">if</span> (!callback &amp;&amp; <span class="hljs-keyword">typeof</span> passphrase === <span class="hljs-string">&#x27;function&#x27;</span>) {
     callback = passphrase
     passphrase = <span class="hljs-string">&#x27;&#x27;</span>
+  }
+
+  <span class="hljs-keyword">if</span> (!callback) {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Promise</span>(<span class="hljs-keyword">function</span> (<span class="hljs-params">resolve, reject</span>) {
+      <span class="hljs-title function_">checkPkcs12</span>(bufferOrPath, passphrase, <span class="hljs-keyword">function</span> (<span class="hljs-params">err, result</span>) {
+        <span class="hljs-keyword">if</span> (err) {
+          <span class="hljs-keyword">return</span> <span class="hljs-title function_">reject</span>(err)
+        }
+        <span class="hljs-title function_">resolve</span>(result)
+      })
+    })
   }
 
   <span class="hljs-keyword">var</span> tmpfiles = []
@@ -1243,11 +1426,23 @@ create password file for the password “-password”</p>
  * certificate. Example array: [Leaf, Int CA 1, ... , Int CA N, Root CA].
  * <span class="hljs-doctag">@param</span> {<span class="hljs-type">String|Array</span>} ca [List] of CA certificates
  * <span class="hljs-doctag">@param</span> {<span class="hljs-type">Function</span>} callback Callback function with an error object and a boolean valid
+ * <span class="hljs-doctag">@returns</span> {<span class="hljs-type">Promise&lt;Boolean&gt;</span>} Resolves with the verification result when no callback is provided.
  */</span>
 <span class="hljs-keyword">function</span> <span class="hljs-title function_">verifySigningChain</span>(<span class="hljs-params">certificate, ca, callback</span>) {
   <span class="hljs-keyword">if</span> (!callback &amp;&amp; <span class="hljs-keyword">typeof</span> ca === <span class="hljs-string">&#x27;function&#x27;</span>) {
     callback = ca
     ca = <span class="hljs-literal">undefined</span>
+  }
+
+  <span class="hljs-keyword">if</span> (!callback) {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Promise</span>(<span class="hljs-keyword">function</span> (<span class="hljs-params">resolve, reject</span>) {
+      <span class="hljs-title function_">verifySigningChain</span>(certificate, ca, <span class="hljs-keyword">function</span> (<span class="hljs-params">err, result</span>) {
+        <span class="hljs-keyword">if</span> (err) {
+          <span class="hljs-keyword">return</span> <span class="hljs-title function_">reject</span>(err)
+        }
+        <span class="hljs-title function_">resolve</span>(result)
+      })
+    })
   }
   <span class="hljs-keyword">if</span> (!<span class="hljs-title class_">Array</span>.<span class="hljs-title function_">isArray</span>(certificate)) {
     certificate = <span class="hljs-title function_">readFromString</span>(certificate, <span class="hljs-variable constant_">CERT_START</span>, <span class="hljs-variable constant_">CERT_END</span>)
@@ -2045,29 +2240,40 @@ create password file for the password “-password”</p>
  * Verifies the signing chain of the passed certificate
  * <span class="hljs-doctag">@namespace</span>
  * <span class="hljs-doctag">@name</span> <span class="hljs-variable">promisified</span>
+ * <span class="hljs-doctag">@deprecated</span> Direct function exports now support promises when no callback is provided.
  * <span class="hljs-doctag">@property</span> {<span class="hljs-type">function</span>}  createPrivateKey               <span class="hljs-doctag">@see</span> <span class="hljs-variable">createPrivateKey</span>
  * <span class="hljs-doctag">@property</span> {<span class="hljs-type">function</span>}  <span class="hljs-variable">createDhparam</span>       - The default number of players.
  * <span class="hljs-doctag">@property</span> {<span class="hljs-type">function</span>}  <span class="hljs-variable">createEcparam</span>         - The default level for the party.
  * <span class="hljs-doctag">@property</span> {<span class="hljs-type">function</span>}  <span class="hljs-variable">createCSR</span>      - The default treasure.
  * <span class="hljs-doctag">@property</span> {<span class="hljs-type">function</span>}  <span class="hljs-variable">createCertificate</span> - How much gold the party starts with.
  */</span>
-<span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span>.<span class="hljs-property">promisified</span> = {
-  <span class="hljs-attr">createPrivateKey</span>: <span class="hljs-title function_">promisify</span>(createPrivateKey),
-  <span class="hljs-attr">createDhparam</span>: <span class="hljs-title function_">promisify</span>(createDhparam),
-  <span class="hljs-attr">createEcparam</span>: <span class="hljs-title function_">promisify</span>(createEcparam),
-  <span class="hljs-attr">createCSR</span>: <span class="hljs-title function_">promisify</span>(createCSR),
-  <span class="hljs-attr">createCertificate</span>: <span class="hljs-title function_">promisify</span>(createCertificate),
-  <span class="hljs-attr">readCertificateInfo</span>: <span class="hljs-title function_">promisify</span>(readCertificateInfo),
-  <span class="hljs-attr">getPublicKey</span>: <span class="hljs-title function_">promisify</span>(getPublicKey),
-  <span class="hljs-attr">getFingerprint</span>: <span class="hljs-title function_">promisify</span>(getFingerprint),
-  <span class="hljs-attr">getModulus</span>: <span class="hljs-title function_">promisify</span>(getModulus),
-  <span class="hljs-attr">getDhparamInfo</span>: <span class="hljs-title function_">promisify</span>(getDhparamInfo),
-  <span class="hljs-attr">createPkcs12</span>: <span class="hljs-title function_">promisify</span>(createPkcs12),
-  <span class="hljs-attr">readPkcs12</span>: <span class="hljs-title function_">promisify</span>(readPkcs12),
-  <span class="hljs-attr">verifySigningChain</span>: <span class="hljs-title function_">promisify</span>(verifySigningChain),
-  <span class="hljs-attr">checkCertificate</span>: <span class="hljs-title function_">promisify</span>(checkCertificate),
-  <span class="hljs-attr">checkPkcs12</span>: <span class="hljs-title function_">promisify</span>(checkPkcs12)
-}</pre></div></div>
+<span class="hljs-keyword">var</span> promisifiedMethods = [
+  <span class="hljs-string">&#x27;createPrivateKey&#x27;</span>,
+  <span class="hljs-string">&#x27;createDhparam&#x27;</span>,
+  <span class="hljs-string">&#x27;createEcparam&#x27;</span>,
+  <span class="hljs-string">&#x27;createCSR&#x27;</span>,
+  <span class="hljs-string">&#x27;createCertificate&#x27;</span>,
+  <span class="hljs-string">&#x27;readCertificateInfo&#x27;</span>,
+  <span class="hljs-string">&#x27;getPublicKey&#x27;</span>,
+  <span class="hljs-string">&#x27;getFingerprint&#x27;</span>,
+  <span class="hljs-string">&#x27;getModulus&#x27;</span>,
+  <span class="hljs-string">&#x27;getDhparamInfo&#x27;</span>,
+  <span class="hljs-string">&#x27;createPkcs12&#x27;</span>,
+  <span class="hljs-string">&#x27;readPkcs12&#x27;</span>,
+  <span class="hljs-string">&#x27;verifySigningChain&#x27;</span>,
+  <span class="hljs-string">&#x27;checkCertificate&#x27;</span>,
+  <span class="hljs-string">&#x27;checkPkcs12&#x27;</span>
+]
+<span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span>.<span class="hljs-property">promisified</span> = promisifiedMethods.<span class="hljs-title function_">reduce</span>(<span class="hljs-keyword">function</span> (<span class="hljs-params">acc, method</span>) {
+  acc[method] = <span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) {
+    <span class="hljs-keyword">var</span> args = <span class="hljs-title class_">Array</span>.<span class="hljs-property"><span class="hljs-keyword">prototype</span></span>.<span class="hljs-property">slice</span>.<span class="hljs-title function_">call</span>(<span class="hljs-variable language_">arguments</span>)
+    <span class="hljs-keyword">if</span> (args.<span class="hljs-property">length</span> &amp;&amp; <span class="hljs-keyword">typeof</span> args[args.<span class="hljs-property">length</span> - <span class="hljs-number">1</span>] === <span class="hljs-string">&#x27;function&#x27;</span>) {
+      args = args.<span class="hljs-title function_">slice</span>(<span class="hljs-number">0</span>, -<span class="hljs-number">1</span>)
+    }
+    <span class="hljs-keyword">return</span> <span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span>[method].<span class="hljs-title function_">apply</span>(<span class="hljs-literal">null</span>, args)
+  }
+  <span class="hljs-keyword">return</span> acc
+}, {})</pre></div></div>
             
         </li>
         

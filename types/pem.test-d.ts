@@ -1,5 +1,5 @@
 import {expectType} from 'tsd'
-import pem = require('pem')
+import pem = require('./pem')
 
 expectType<Promise<pem.PrivateKeyResult>>(pem.createPrivateKey())
 
@@ -38,7 +38,5 @@ expectType<Promise<pem.ReadPkcs12Result>>(pem.promisified.readPkcs12('bundle.p12
 expectType<Promise<pem.CreateDhparamResult>>(pem.promisified.createDhparam())
 
 pem.convert.PEM2DER('input.pem', 'output.der', (err, success) => {
-  if (success) {
-    expectType<boolean>(success)
-  }
+  expectType<boolean>(success)
 })
