@@ -55,6 +55,34 @@ describe('openssl.js tests', function () {
     })
   })
 
+  describe('#.atLeastVersion()', function () {
+    var saved
+    beforeEach(function () {
+      saved = {}
+      ;['Vendor', 'VendorVersionMajor', 'VendorVersionMinor'].forEach(function (key) {
+        saved[key] = openssl.get(key)
+      })
+    })
+    afterEach(function () {
+      Object.keys(saved).forEach(function (key) {
+        openssl.set(key, saved[key])
+      })
+    })
+    it('compares major.minor against the detected CLI version', function () {
+      openssl.set('VendorVersionMajor', '3')
+      openssl.set('VendorVersionMinor', '2')
+      expect(openssl.atLeastVersion(3, 4)).to.be.false()
+      openssl.set('VendorVersionMinor', '4')
+      expect(openssl.atLeastVersion(3, 4)).to.be.true()
+      openssl.set('VendorVersionMinor', '9')
+      expect(openssl.atLeastVersion(3, 4)).to.be.true()
+      openssl.set('VendorVersionMajor', '4')
+      openssl.set('VendorVersionMinor', '0')
+      expect(openssl.atLeastVersion(3, 4)).to.be.true()
+      expect(openssl.atLeastVersion(4, 1)).to.be.false()
+    })
+  })
+
   describe('#.spawnWrapper() tmpfile permissions', function () {
     it('writes private key tmpfiles readable only by the owner', function (done) {
       var key = fs.readFileSync('./test/fixtures/cn_openssl.key')
