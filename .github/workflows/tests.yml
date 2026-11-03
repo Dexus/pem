@@ -129,10 +129,19 @@ jobs:
         export LD_LIBRARY_PATH="${LIB_DIR}"
         # ... and via GITHUB_ENV for all later steps
         echo "LD_LIBRARY_PATH=${LIB_DIR}" >> "${GITHUB_ENV}"
+        # fipsmodule.cnf does not record a module-path, and Node.js bundles its
+        # own libcrypto with a different build prefix, so Node can only locate
+        # fips.so through OPENSSL_MODULES.
+        echo "OPENSSL_MODULES=${LIB_DIR}" >> "${GITHUB_ENV}"
         "${OPENSSL_BIN}" fipsinstall -out "${GITHUB_WORKSPACE}/fipsmodule.cnf" -module "${FIPS_SO}"
+        # Node.js reads the nodejs_conf section from OpenSSL config files
+        # (not openssl_conf, which the OpenSSL CLI reads), so both keys are
+        # set to the same section to serve Node.js and the openssl CLI from
+        # one configuration file.
         cat > "${GITHUB_WORKSPACE}/fips.cnf" <<EOF
         config_diagnostics = 1
         openssl_conf = openssl_init
+        nodejs_conf = openssl_init
 
         .include ${GITHUB_WORKSPACE}/fipsmodule.cnf
 
@@ -151,6 +160,7 @@ jobs:
         default_properties = fips=yes
         EOF
         # Smoke: MD5 must be rejected and SHA-256 must work under FIPS properties
+        export OPENSSL_CONF="${GITHUB_WORKSPACE}/fips.cnf" OPENSSL_MODULES="${LIB_DIR}"
         echo test | "${OPENSSL_BIN}" dgst -md5 >/dev/null 2>&1 && { echo "MD5 unexpectedly allowed in FIPS mode"; exit 1; }
         echo test | "${OPENSSL_BIN}" dgst -sha256 >/dev/null
     - name: Use Node.js ${{ matrix.node }}
@@ -168,4 +178,5 @@ jobs:
         VERSION: ${{ matrix.openssl.version }}
         OPENSSL_BIN: ${{ github.workspace }}/openssl/openssl_v${{ matrix.openssl.version }}/bin/openssl
         OPENSSL_CONF: ${{ github.workspace }}/fips.cnf
+        OPENSSL_MODULES: ${{ env.OPENSSL_MODULES }}
         PEM_TEST_FIPS: 'true'
