@@ -101,7 +101,7 @@ jobs:
       shell: bash
       run: tar -czf openssl/"${{ matrix.library.name }}_v${{ matrix.library.version }}.tgz" -C openssl "${{ matrix.library.name }}_v${{ matrix.library.version }}"
     - name: Upload binary
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: ${{ matrix.library.name }}_v${{ matrix.library.version }}
         path: openssl/${{ matrix.library.name }}_v${{ matrix.library.version }}.tgz
@@ -171,7 +171,7 @@ jobs:
         sudo apt-get install -y haveged ca-certificates
         sudo haveged -w 2048
     - name: Download ${{ matrix.library.name }} ${{ matrix.library.version }}
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       with:
         name: ${{ matrix.library.name }}_v${{ matrix.library.version }}
         path: openssl
@@ -233,7 +233,7 @@ jobs:
       shell: bash
       run: tar -czf openssl/"openssl_v${{ matrix.openssl.version }}.tgz" -C openssl "openssl_v${{ matrix.openssl.version }}"
     - name: Upload FIPS build
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: openssl_fips_v${{ matrix.openssl.version }}
         path: openssl/openssl_v${{ matrix.openssl.version }}.tgz
@@ -255,7 +255,7 @@ jobs:
         sudo apt-get install -y haveged ca-certificates
         sudo haveged -w 2048
     - name: Download FIPS-capable OpenSSL
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       with:
         name: openssl_fips_v${{ matrix.openssl.version }}
         path: openssl
