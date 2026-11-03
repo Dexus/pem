@@ -12,6 +12,9 @@ concurrency:
 env:
   TARGET: x86_64-unknown-linux-gnu
   DEBUG: true
+# Jobs only check out code and run tests; keep the GITHUB_TOKEN minimal.
+permissions:
+  contents: read
 jobs:
   build:
     name: Build and Test PEM
