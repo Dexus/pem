@@ -442,6 +442,90 @@ describe('General Tests', function () {
     })
   })
 
+  describe('#.createCSR altNames validation tests (GHSA-wqj4-7wgq-gcjw, GHSA-vcpq-2rxr-mvmp)', function () {
+    it('accepts valid DNS names and IP addresses in altNames', function (done) {
+      pem.createCSR({
+        altNames: ['example.com', '*.example.com', 'localhost', 'LOCALHOST.', 'a-b.example', '10.0.0.5', '2001:db8::1']
+      }, function (error, data) {
+        hlp.checkError(error)
+        hlp.checkCSR(data)
+        hlp.checkTmpEmpty()
+
+        pem.readCertificateInfo(data.csr, function (error, info) {
+          hlp.checkError(error)
+          expect(info.san).to.be.an('object')
+          expect(info.san.dns).to.include('example.com', '*.example.com', 'localhost', 'a-b.example')
+          expect(info.san.ip).to.include('10.0.0.5')
+          hlp.checkTmpEmpty()
+          done()
+        })
+      })
+    })
+
+    it('rejects altNames with newline injected OpenSSL config', function (done) {
+      pem.createCSR({
+        altNames: ['example.com\nDNS.2 = attacker-controlled.example']
+      }, function (error) {
+        hlp.checkError(error, true)
+        hlp.checkTmpEmpty()
+        done()
+      })
+    })
+
+    it('rejects altNames with $ENV:: variable references', function (done) {
+      process.env.SUPER_SECRET = 'pwned-marker-12345'
+      pem.createCSR({
+        altNames: ['$ENV::SUPER_SECRET']
+      }, function (error) {
+        hlp.checkError(error, true)
+        hlp.checkTmpEmpty()
+        done()
+      })
+    })
+
+    it('rejects a single invalid entry among otherwise valid altNames', function (done) {
+      pem.createCSR({
+        altNames: ['ok.example', 'bad\nname']
+      }, function (error) {
+        hlp.checkError(error, true)
+        hlp.checkTmpEmpty()
+        done()
+      })
+    })
+
+    ;[
+      'example.com\r\nsubjectAltName = DNS:evil.example',
+      'a$b.example',
+      'not a hostname',
+      '.example.com',
+      'example..com',
+      '',
+      42,
+      null
+    ].forEach(function (altName) {
+      it('rejects invalid altName ' + JSON.stringify(altName), function (done) {
+        pem.createCSR({
+          altNames: [altName]
+        }, function (error) {
+          hlp.checkError(error, true)
+          hlp.checkTmpEmpty()
+          done()
+        })
+      })
+    })
+
+    it('createCertificate rejects invalid altNames as well', function (done) {
+      pem.createCertificate({
+        altNames: ['example.com\nDNS.2 = evil.example'],
+        selfSigned: true
+      }, function (error) {
+        hlp.checkError(error, true)
+        hlp.checkTmpEmpty()
+        done()
+      })
+    })
+  })
+
   describe('#.createCertificate tests', function () {
     describe('Default certificate', function () {
       var cert
