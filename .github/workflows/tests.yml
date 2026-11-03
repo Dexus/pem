@@ -2,9 +2,10 @@ name: Test PEM module
 on:
   push:
     branches:
-      - '*'
-    pull_request:
-      - '*'
+      - '**'
+  pull_request:
+    branches:
+      - '**'
   workflow_dispatch:
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -143,15 +144,21 @@ jobs:
         OPENSSL_DIR="${GITHUB_WORKSPACE}/openssl/openssl_v${OPENSSL_VERSION}"
         OPENSSL_BIN="${OPENSSL_DIR}/bin/openssl"
         FIPS_SO="$(find "${OPENSSL_DIR}" -name fips.so | head -1)"
-        LIB_DIR="$(dirname "${FIPS_SO}")"
+        # fips.so lives in lib*/ossl-modules, while the shared libcrypto.so.3
+        # and libssl.so.3 the openssl binary links against live one level up.
+        # LD_LIBRARY_PATH must point at the shared-library directory, or the
+        # loader falls back to the runner's older system OpenSSL; the provider
+        # directory stays separate for OPENSSL_MODULES.
+        MODULES_DIR="$(dirname "${FIPS_SO}")"
+        SHLIB_DIR="$(dirname "${MODULES_DIR}")"
         # export for this step's smoke tests ...
-        export LD_LIBRARY_PATH="${LIB_DIR}"
+        export LD_LIBRARY_PATH="${SHLIB_DIR}"
         # ... and via GITHUB_ENV for all later steps
-        echo "LD_LIBRARY_PATH=${LIB_DIR}" >> "${GITHUB_ENV}"
+        echo "LD_LIBRARY_PATH=${SHLIB_DIR}" >> "${GITHUB_ENV}"
         # fipsmodule.cnf does not record a module-path, and Node.js bundles its
         # own libcrypto with a different build prefix, so Node can only locate
         # fips.so through OPENSSL_MODULES.
-        echo "OPENSSL_MODULES=${LIB_DIR}" >> "${GITHUB_ENV}"
+        echo "OPENSSL_MODULES=${MODULES_DIR}" >> "${GITHUB_ENV}"
         "${OPENSSL_BIN}" fipsinstall -out "${GITHUB_WORKSPACE}/fipsmodule.cnf" -module "${FIPS_SO}"
         # Node.js reads the nodejs_conf section from OpenSSL config files
         # (not openssl_conf, which the OpenSSL CLI reads), so both keys are
@@ -179,7 +186,7 @@ jobs:
         default_properties = fips=yes
         EOF
         # Smoke: MD5 must be rejected and SHA-256 must work under FIPS properties
-        export OPENSSL_CONF="${GITHUB_WORKSPACE}/fips.cnf" OPENSSL_MODULES="${LIB_DIR}"
+        export OPENSSL_CONF="${GITHUB_WORKSPACE}/fips.cnf" OPENSSL_MODULES="${MODULES_DIR}"
         echo test | "${OPENSSL_BIN}" dgst -md5 >/dev/null 2>&1 && { echo "MD5 unexpectedly allowed in FIPS mode"; exit 1; }
         echo test | "${OPENSSL_BIN}" dgst -sha256 >/dev/null
     - name: Use Node.js ${{ matrix.node }}
