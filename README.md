@@ -20,9 +20,9 @@ or use yarn
 :warning: Please make sure you have `openssl` or `libressl` already installed on your system/container, without
 them `pem` will not work.
 
-**Supported library versions:** OpenSSL 1.1.1 or newer (including the 3.x release lines) and
-LibreSSL 3.0 or newer. The CI matrix tests the latest patch release of every supported release
-line; OpenSSL ≤ 1.1.0 and LibreSSL 2.x are no longer tested and may not work.
+**Supported library versions:** OpenSSL 1.1.1 or newer (including the 3.x and 4.x release
+lines) and LibreSSL 3.0 or newer. The CI matrix tests the latest patch release of every
+supported release line; OpenSSL ≤ 1.1.0 and LibreSSL 2.x are no longer tested and may not work.
 
 ## TypeScript
 
