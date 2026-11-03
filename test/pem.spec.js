@@ -792,6 +792,51 @@ describe('General Tests', function () {
           done()
         })
       })
+
+      it('does not leak password files when rejecting hostile CSR SANs', function (done) {
+        var os = require('os')
+        var pathlib = require('path')
+        // lib/helper.js and lib/openssl.js resolve their temp dir once at
+        // require time, which may be before pem.helper.js sets PEMJS_TMPDIR,
+        // so watch every candidate location for newly created 40-hex files
+        var candidateDirs = [os.tmpdir()]
+        if (process.env.PEMJS_TMPDIR) {
+          candidateDirs.push(pathlib.resolve(process.env.PEMJS_TMPDIR))
+        }
+        var hexName = /^[0-9a-f]{40}$/
+        function snapshotTempFiles() {
+          var files = {}
+          candidateDirs.forEach(function (dir) {
+            try {
+              fs.readdirSync(dir).forEach(function (name) {
+                if (hexName.test(name)) {
+                  files[pathlib.join(dir, name)] = true
+                }
+              })
+            } catch (err) {
+              // directory missing or unreadable - nothing to snapshot
+              debug('snapshotTempFiles', {dir: dir, error: err})
+            }
+          })
+          return files
+        }
+
+        var filesBefore = snapshotTempFiles()
+        pem.createCertificate({
+          csr: loadFixture('hostile_san_env.csr'),
+          copyExtensions: true,
+          serviceKeyPassword: 'leaked-password-check'
+        }, function (error) {
+          hlp.checkError(error, true)
+          var filesAfter = snapshotTempFiles()
+          var leaked = Object.keys(filesAfter).filter(function (file) {
+            return !filesBefore[file]
+          })
+          expect(leaked).to.deep.equal([])
+          hlp.checkTmpEmpty()
+          done()
+        })
+      })
     })
 
     describe('CA certificate', function () {
