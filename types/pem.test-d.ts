@@ -10,7 +10,7 @@ pem.createPrivateKey(2048, (err, result) => {
 })
 
 expectType<Promise<pem.CSRResult>>(pem.createCSR({ commonName: 'example.com' }))
-expectType<Promise<pem.CertificateCreationResult>>(pem.createCertificate({ selfSigned: true }))
+expectType<Promise<pem.CertificateCreationResult>>(pem.createCertificate({ selfSigned: true, copyExtensions: true }))
 
 pem.getFingerprint('-----BEGIN CERTIFICATE-----\n...', (err, result) => {
   if (result) {
@@ -27,6 +27,7 @@ const ca = new pem.CA({
 })
 
 expectType<Promise<pem.IssuedCertificate>>(ca.issueCertificate({ commonName: 'example.com' }))
+expectType<Promise<pem.IssuedCertificate>>(ca.issueCertificate({ commonName: 'example.com', copyExtensions: true }))
 
 ca.issueCertificate((err, issued) => {
   if (issued) {

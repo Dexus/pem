@@ -26,6 +26,15 @@ TypeScript declaration files are bundled with the package via `types/pem.d.ts`. 
 
 Run `yarn test:types` to execute the lightweight [tsd](https://github.com/SamVerschueren/tsd) assertions that guard the definitions.
 
+## Breaking changes in 2.0.0
+
+2.0.0 hardens `pem` against configuration injection and denial of service. Two behavior changes are breaking:
+
+  * **altNames are validated.** Every entry in the `altNames` option of `createCSR` (and therefore `createCertificate` and the `CA` utility) must be a valid DNS hostname (RFC 1123, optionally wildcarded like `*.example.com`, optional trailing dot) or an IP address. Anything else — including OpenSSL config syntax such as `$ENV::VAR` references or embedded newlines — is rejected with an error instead of being written into the generated OpenSSL config file.
+  * **CSR extensions are no longer copied into issued certificates by default.** Previously the SANs of a submitted CSR were silently transferred to the certificate `createCertificate` issued and `issueCertificate` signed, so an untrusted CSR could vouch for hostnames it does not own. Pass the new `copyExtensions: true` option to restore the old behavior for CSRs you trust. Even then, every SAN value is validated and the CA utility keeps its own `basicConstraints`/`keyUsage`/`extendedKeyUsage` floor, so a CSR can never promote itself to a CA certificate.
+
+If you relied on the old behavior, audit where your CSRs come from before enabling `copyExtensions`.
+
 
 ## Examples
 
@@ -161,7 +170,7 @@ Possible options are the following
   * **organization** is a CSR organization field
   * **organizationUnit** is a CSR organizational unit field
   * **commonName** is a CSR common name field (defaults to `localhost`)
-  * **altNames** is a list (`Array`) of subjectAltNames in the subjectAltName field (optional)
+  * **altNames** is a list (`Array`) of subjectAltNames in the subjectAltName field (optional). Since 2.0.0 every entry must be a valid DNS hostname or IP address; invalid entries are rejected with an error
   * **emailAddress** is a CSR email address field
   * **csrConfigFile** is a CSR config file
 
@@ -190,6 +199,7 @@ In addition, possible options are the following
   * **days** is the certificate expire time in days
   * **extFile** extension config file - **without** `-extensions v3_req`
   * **config** extension config file - **with** `-extensions v3_req`
+  * **copyExtensions** copy the SAN entries of a submitted `csr` into the issued certificate (defaults to `false` since 2.0.0). Only enable this for CSRs you trust; copied DNS/IP/email values are validated and issuance fails on invalid ones. `config`/`extFile` take precedence when provided
 
 ### Export a public key
 
@@ -351,6 +361,8 @@ Where
 * **defaultDays** sets a default validity window (in days) that is applied when no custom dates are provided (defaults to `7`)
 
 `issueCertificate` accepts the same options that `createCertificate` does for CSR generation (for example `commonName`, `altNames`, or a custom `config`). When no `csr` is supplied a fresh CSR and key pair are created automatically and included in the response.
+
+Extensions from a submitted `csr` are **not** copied into the issued certificate unless you pass `copyExtensions: true` (since 2.0.0). Copying extensions from a CSR is an explicit trust decision: the `basicConstraints`, `keyUsage` and `extendedKeyUsage` values the CA controls itself always supersede what the CSR requests, so a CSR can never obtain CA privileges through copying.
 
 By default issued certificates are valid starting "now" and expire after `defaultDays`. You can override this by supplying `startDate`, `endDate`, or `days`. Dates can be JavaScript `Date` objects, timestamps, ISO strings, or ASN.1 date strings (e.g. `20240101000000Z`).
 
