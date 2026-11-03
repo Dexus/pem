@@ -13,17 +13,19 @@ concurrency:
 env:
   TARGET: x86_64-unknown-linux-gnu
   DEBUG: true
-# Jobs only check out code and run tests; keep the GITHUB_TOKEN minimal.
+# Jobs only check out code, compile or run tests, and exchange binaries as
+# run artifacts; keep the GITHUB_TOKEN minimal.
 permissions:
   contents: read
 jobs:
+  # Compile every supported library once; the test jobs below download the
+  # binaries as artifacts instead of rebuilding them per Node version.
   build:
-    name: Build and Test PEM
+    name: Build ${{ matrix.library.name }} ${{ matrix.library.version }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        node: [22, 24, 26]
         library:
           # Supported floors: OpenSSL >= 1.1.1 (first release with
           # `pkey -check`), LibreSSL >= 3.0 (first with EC parameter
@@ -79,10 +81,6 @@ jobs:
             version: 4.4.0
     steps:
     - uses: actions/checkout@v7
-    - run: |
-        sudo apt-get install -y haveged ca-certificates
-        sudo haveged -w 2048
-        mkdir -p openssl
     - name: Compile ${{ matrix.library.name }} ${{ matrix.library.version }}
       shell: bash
       run: |
@@ -94,6 +92,91 @@ jobs:
       env:
         LIBRARY: ${{ matrix.library.name }}
         VERSION: ${{ matrix.library.version }}
+    - name: Verify the compiled binary runs
+      shell: bash
+      run: |
+        set -e
+        openssl/"${{ matrix.library.name }}_v${{ matrix.library.version }}"/bin/openssl version
+    - name: Upload binary
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ matrix.library.name }}_v${{ matrix.library.version }}
+        path: openssl/${{ matrix.library.name }}_v${{ matrix.library.version }}/
+        retention-days: 1
+
+  test:
+    name: Test PEM (Node ${{ matrix.node }}, ${{ matrix.library.name }} ${{ matrix.library.version }})
+    needs: build
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [22, 24, 26]
+        library:
+          # Must mirror the build job matrix above.
+          - name: openssl
+            version: 1.1.1w
+          - name: openssl
+            version: 3.0.22
+          - name: openssl
+            version: 3.1.8
+          - name: openssl
+            version: 3.2.6
+          - name: openssl
+            version: 3.3.7
+          - name: openssl
+            version: 3.4.8
+          - name: openssl
+            version: 3.5.9
+          - name: openssl
+            version: 4.0.3
+          - name: openssl
+            version: 4.1.0
+          - name: libressl
+            version: 3.0.2
+          - name: libressl
+            version: 3.1.5
+          - name: libressl
+            version: 3.2.7
+          - name: libressl
+            version: 3.3.6
+          - name: libressl
+            version: 3.4.3
+          - name: libressl
+            version: 3.5.4
+          - name: libressl
+            version: 3.6.3
+          - name: libressl
+            version: 3.7.3
+          - name: libressl
+            version: 3.8.4
+          - name: libressl
+            version: 3.9.2
+          - name: libressl
+            version: 4.0.1
+          - name: libressl
+            version: 4.1.2
+          - name: libressl
+            version: 4.2.3
+          - name: libressl
+            version: 4.3.4
+          - name: libressl
+            version: 4.4.0
+    steps:
+    - uses: actions/checkout@v7
+    - run: |
+        sudo apt-get install -y haveged ca-certificates
+        sudo haveged -w 2048
+    - name: Download ${{ matrix.library.name }} ${{ matrix.library.version }}
+      uses: actions/download-artifact@v4
+      with:
+        name: ${{ matrix.library.name }}_v${{ matrix.library.version }}
+        path: openssl
+    - name: Verify the downloaded binary runs
+      shell: bash
+      run: |
+        set -e
+        openssl/"${{ matrix.library.name }}_v${{ matrix.library.version }}"/bin/openssl version
     - name: Use Node.js ${{ matrix.node }}
       uses: actions/setup-node@v7
       with:
@@ -108,8 +191,48 @@ jobs:
         LIBRARY: ${{ matrix.library.name }}
         VERSION: ${{ matrix.library.version }}
 
+  # The FIPS-capable build is a separate shared build (enable-fips), so it
+  # cannot reuse the static artifacts above.
+  build-fips:
+    name: Build FIPS-capable OpenSSL ${{ matrix.openssl.version }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        openssl:
+          - version: 3.5.9
+    steps:
+    - uses: actions/checkout@v7
+    - name: Compile FIPS-capable OpenSSL ${{ matrix.openssl.version }}
+      shell: bash
+      run: |
+        set +e
+        set -x
+        openssl version
+        ./bin/build-openssl.sh
+      env:
+        LIBRARY: openssl
+        VERSION: ${{ matrix.openssl.version }}
+        FIPS: 'true'
+    - name: Verify the compiled binary runs
+      shell: bash
+      run: |
+        set -e
+        # The shared binary must run against its own libraries, so point
+        # LD_LIBRARY_PATH at the directory holding libcrypto.so.3 (the parent
+        # of the fips.so directory) like the FIPS test job does.
+        MODULES_DIR="$(find openssl/openssl_v${{ matrix.openssl.version }} -name fips.so -printf '%h\n' | head -1)"
+        LD_LIBRARY_PATH="$(dirname "${MODULES_DIR}")" openssl/openssl_v${{ matrix.openssl.version }}/bin/openssl version
+    - name: Upload FIPS build
+      uses: actions/upload-artifact@v4
+      with:
+        name: openssl_fips_v${{ matrix.openssl.version }}
+        path: openssl/openssl_v${{ matrix.openssl.version }}/
+        retention-days: 1
+
   fips:
     name: Test PEM in FIPS mode (Node ${{ matrix.node }}, OpenSSL ${{ matrix.openssl.version }})
+    needs: build-fips
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -122,18 +245,11 @@ jobs:
     - run: |
         sudo apt-get install -y haveged ca-certificates
         sudo haveged -w 2048
-        mkdir -p openssl
-    - name: Compile FIPS-capable OpenSSL ${{ matrix.openssl.version }}
-      shell: bash
-      run: |
-        set +e
-        set -x
-        openssl version
-        ./bin/build-openssl.sh
-      env:
-        LIBRARY: openssl
-        VERSION: ${{ matrix.openssl.version }}
-        FIPS: 'true'
+    - name: Download FIPS-capable OpenSSL
+      uses: actions/download-artifact@v4
+      with:
+        name: openssl_fips_v${{ matrix.openssl.version }}
+        path: openssl
     - name: Install and activate the FIPS provider
       shell: bash
       env:
