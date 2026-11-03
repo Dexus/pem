@@ -87,3 +87,85 @@ jobs:
       env:
         LIBRARY: ${{ matrix.library.name }}
         VERSION: ${{ matrix.library.version }}
+
+  fips:
+    name: Test PEM in FIPS mode (Node ${{ matrix.node }}, OpenSSL ${{ matrix.openssl.version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [22, 24, 26]
+        openssl:
+          - version: 3.5.9
+    steps:
+    - uses: actions/checkout@v7
+    - run: |
+        sudo apt-get install -y haveged ca-certificates
+        sudo haveged -w 2048
+        mkdir -p openssl
+    - name: Compile FIPS-capable OpenSSL ${{ matrix.openssl.version }}
+      shell: bash
+      run: |
+        set +e
+        set -x
+        openssl version
+        ./bin/build-openssl.sh
+      env:
+        LIBRARY: openssl
+        VERSION: ${{ matrix.openssl.version }}
+        FIPS: 'true'
+    - name: Install and activate the FIPS provider
+      shell: bash
+      env:
+        OPENSSL_VERSION: ${{ matrix.openssl.version }}
+      run: |
+        set -e
+        set -x
+        OPENSSL_DIR="${GITHUB_WORKSPACE}/openssl/openssl_v${OPENSSL_VERSION}"
+        OPENSSL_BIN="${OPENSSL_DIR}/bin/openssl"
+        FIPS_SO="$(find "${OPENSSL_DIR}" -name fips.so | head -1)"
+        LIB_DIR="$(dirname "${FIPS_SO}")"
+        # export for this step's smoke tests ...
+        export LD_LIBRARY_PATH="${LIB_DIR}"
+        # ... and via GITHUB_ENV for all later steps
+        echo "LD_LIBRARY_PATH=${LIB_DIR}" >> "${GITHUB_ENV}"
+        "${OPENSSL_BIN}" fipsinstall -out "${GITHUB_WORKSPACE}/fipsmodule.cnf" -module "${FIPS_SO}"
+        cat > "${GITHUB_WORKSPACE}/fips.cnf" <<EOF
+        config_diagnostics = 1
+        openssl_conf = openssl_init
+
+        .include ${GITHUB_WORKSPACE}/fipsmodule.cnf
+
+        [openssl_init]
+        providers = provider_sect
+        alg_section = algorithm_sect
+
+        [provider_sect]
+        fips = fips_sect
+        base = base_sect
+
+        [base_sect]
+        activate = 1
+
+        [algorithm_sect]
+        default_properties = fips=yes
+        EOF
+        # Smoke: MD5 must be rejected and SHA-256 must work under FIPS properties
+        echo test | "${OPENSSL_BIN}" dgst -md5 >/dev/null 2>&1 && { echo "MD5 unexpectedly allowed in FIPS mode"; exit 1; }
+        echo test | "${OPENSSL_BIN}" dgst -sha256 >/dev/null
+    - name: Use Node.js ${{ matrix.node }}
+      uses: actions/setup-node@v7
+      with:
+        node-version: ${{ matrix.node }}
+        cache: yarn
+    - name: Run Tests in FIPS mode
+      shell: bash
+      run: |
+        yarn install
+        yarn run test
+      env:
+        LIBRARY: openssl
+        VERSION: ${{ matrix.openssl.version }}
+        OPENSSL_BIN: ${{ github.workspace }}/openssl/openssl_v${{ matrix.openssl.version }}/bin/openssl
+        OPENSSL_CONF: ${{ github.workspace }}/fips.cnf
+        PEM_TEST_FIPS: 'true'

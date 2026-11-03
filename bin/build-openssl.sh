@@ -75,7 +75,14 @@ fi
 
 case "${LIBRARY}" in
 "openssl")
-  ./Configure --prefix="${OPENSSL_DIR}" --openssldir="${OPENSSL_DIR}/ssl" no-shared ${OS_COMPILER} -fPIC -g ${OS_FLAGS} -static
+  if [ "${FIPS:-false}" = "true" ]; then
+    # The FIPS provider is a loadable module (fips.so); a -static build
+    # produces no modules at all, so configure a shared-capable build
+    # with the FIPS provider enabled.
+    ./Configure --prefix="${OPENSSL_DIR}" --openssldir="${OPENSSL_DIR}/ssl" enable-fips ${OS_COMPILER} -fPIC -g ${OS_FLAGS}
+  else
+    ./Configure --prefix="${OPENSSL_DIR}" --openssldir="${OPENSSL_DIR}/ssl" no-shared ${OS_COMPILER} -fPIC -g ${OS_FLAGS} -static
+  fi
   ;;
 "libressl")
   ./configure --prefix="${OPENSSL_DIR}" --disable-shared --with-pic
@@ -84,6 +91,11 @@ esac
 
 make -j$(nproc)
 make install_sw
+if [ "${LIBRARY}" = "openssl" ] && [ "${FIPS:-false}" = "true" ]; then
+  # install_sw does not install the provider modules; the FIPS provider
+  # (fips.so) comes from its own install target.
+  make install_fips
+fi
 
 case "${LIBRARY}" in
 "openssl")
