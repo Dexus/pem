@@ -23,6 +23,7 @@ describe('helper.js tests', function () {
         done()
       })
     })
+
     it('invalid options [no password and passType option]', function (done) {
       var tmpfiles = []
       var bufferOrPath = fs.readFileSync('./test/fixtures/idsrv3test.pfx')
@@ -36,6 +37,7 @@ describe('helper.js tests', function () {
         done()
       })
     })
+
     it('mustPass option', function (done) {
       var tmpfiles = []
       var bufferOrPath = fs.readFileSync('./test/fixtures/idsrv3test.pfx')
@@ -58,12 +60,14 @@ describe('helper.js tests', function () {
         done()
       })
     })
+
     it('files argument invalid type', function (done) {
       helper.deleteTempFiles(true, function (fsErr) {
         hlp.checkError(fsErr, true)
         done()
       })
     })
+
     it('files argument array contains non-string value', function (done) {
       helper.deleteTempFiles([true], function (fsErr) {
         hlp.checkError(fsErr)

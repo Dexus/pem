@@ -13,10 +13,26 @@ describe('CertificateAuthority', function () {
   var intermediateCA
 
   before(async function () {
+    // Newer OpenSSL releases (>= 3.5) enforce RFC 5280 when verifying
+    // chains, so the root must actually carry the CA basic constraints.
+    const rootConfig = [
+      '[req]',
+      'req_extensions = v3_req',
+      'distinguished_name = req_distinguished_name',
+      '[req_distinguished_name]',
+      'commonName = Common Name',
+      'commonName_max = 64',
+      '[v3_req]',
+      'basicConstraints = critical,CA:TRUE',
+      'keyUsage = critical,keyCertSign,cRLSign',
+      'subjectKeyIdentifier = hash'
+    ].join('\n')
+
     rootCA = await pem.createCertificate({
       commonName: 'Test Root CA',
       selfSigned: true,
-      days: 365
+      days: 365,
+      config: rootConfig
     })
 
     var intermediateConfig = [

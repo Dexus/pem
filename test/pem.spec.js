@@ -67,6 +67,7 @@ describe('General Tests', function () {
         done()
       })
     })
+
     it('Create 1024bit dhparam key', function (done) {
       this.timeout(600000)// 10 minutes
       pem.createDhparam(1024, function (error, data) {
@@ -91,6 +92,7 @@ describe('General Tests', function () {
         done()
       })
     })
+
     it('Create secp521k1 ecparam key', function (done) {
       pem.createEcparam('secp521r1', function (error, data) {
         hlp.checkError(error)
@@ -99,6 +101,7 @@ describe('General Tests', function () {
         done()
       })
     })
+
     it('Create prime256v1 ecparam key', function (done) {
       pem.createEcparam('prime256v1', function (error, data) {
         hlp.checkError(error)
@@ -107,6 +110,7 @@ describe('General Tests', function () {
         done()
       })
     })
+
     it('Create prime256v1 ecparam key with named_curve param encoding', function (done) {
       pem.createEcparam('prime256v1', 'named_curve', function (error, data) {
         hlp.checkError(error)
@@ -115,6 +119,7 @@ describe('General Tests', function () {
         done()
       })
     })
+
     it('Create prime256v1 ecparam key with noOut set to true', function (done) {
       pem.createEcparam('prime256v1', 'named_curve', true, function (error, data) {
         hlp.checkError(error)
@@ -123,6 +128,7 @@ describe('General Tests', function () {
         done()
       })
     })
+
     it('Create prime256v1 ecparam key with noOut set to false', function (done) {
       pem.createEcparam('prime256v1', 'named_curve', false, function (error, data) {
         hlp.checkError(error)
@@ -136,6 +142,7 @@ describe('General Tests', function () {
   describe('#.createPrivateKey tests', function () {
     describe('default sized private key', function () {
       var pkey
+
       it('create private key', function (done) {
         pem.createPrivateKey(function (error, data) {
           hlp.checkError(error)
@@ -185,6 +192,7 @@ describe('General Tests', function () {
 
     describe('2048bit Private key', function () {
       var pwkey
+
       it('create private key', function (done) {
         pem.createPrivateKey(2048, function (error, data) {
           hlp.checkError(error)
@@ -437,6 +445,7 @@ describe('General Tests', function () {
   describe('#.createCertificate tests', function () {
     describe('Default certificate', function () {
       var cert
+
       it('Create default certificate', function (done) {
         pem.createCertificate(function (error, data) {
           hlp.checkError(error)
@@ -529,6 +538,7 @@ describe('General Tests', function () {
 
     describe('SAN certificate', function () {
       var cert
+
       it('Create default certificate', function (done) {
         var d = fs.readFileSync('./test/fixtures/ru_openssl.csr').toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
         pem.createCertificate({csr: d}, function (error, data) {
@@ -621,9 +631,24 @@ describe('General Tests', function () {
 
     describe('CA certificate', function () {
       var ca
+
       it('create ca certificate', function (done) {
+        // Newer OpenSSL releases (>= 3.5) enforce RFC 5280 when verifying
+        // chains, so the CA certificate must carry the CA basic constraints.
         pem.createCertificate({
-            commonName: 'CA Certificate'
+            commonName: 'CA Certificate',
+            config: [
+              '[req]',
+              'req_extensions = v3_req',
+              'distinguished_name = req_distinguished_name',
+              '[req_distinguished_name]',
+              'commonName = Common Name',
+              'commonName_max = 64',
+              '[v3_req]',
+              'basicConstraints = critical,CA:TRUE',
+              'keyUsage = critical,keyCertSign,cRLSign',
+              'subjectKeyIdentifier = hash'
+            ].join('\n')
           },
           function (error, data) {
             hlp.checkError(error)
@@ -633,6 +658,7 @@ describe('General Tests', function () {
             done()
           })
       })
+
       it('create certificate with text serial "demo-serial"', function (done) {
         pem.createCertificate({
             serviceKey: ca.serviceKey,
@@ -655,6 +681,7 @@ describe('General Tests', function () {
             })
           })
       })
+
       it('create certificate with hex serial "0x1234567890abcdef"', function (done) {
         pem.createCertificate({
             serviceKey: ca.serviceKey,
@@ -677,6 +704,7 @@ describe('General Tests', function () {
             })
           })
       })
+
       it('create certificate with hex serial "1234567890abcdef"', function (done) {
         pem.createCertificate({
             serviceKey: ca.serviceKey,
@@ -699,6 +727,7 @@ describe('General Tests', function () {
             })
           })
       })
+
       it('create certificate with number serial "1234567890"', function (done) {
         pem.createCertificate({
             serviceKey: ca.serviceKey,
@@ -721,6 +750,7 @@ describe('General Tests', function () {
             })
           })
       })
+
       it('verify signing chain; create and read PKCS12', function (done) {
         pem.createCertificate({
           serviceKey: ca.serviceKey,
@@ -769,6 +799,7 @@ describe('General Tests', function () {
             })
         })
       })
+
       context('pkcs12 -export -out "$pfx" -inkey "$key" -in "$cert" -certfile "$ca_bundle" -passout "pass:"', function () {
         it('verify right order of chains; read PKCS12', function (done) {
           let pkcs12_5_file_pfx = fs.readFileSync('./test/fixtures/rsa_pkcs12_5_keyStore.p12')
@@ -798,6 +829,7 @@ describe('General Tests', function () {
             })
         })
       })
+
       context('pkcs12 -export -out "pfx" -inkey "$key" -in "$cert + $ca_bundle" -passout "pass:"', function () {
         it('verify right order of chains; read PKCS12', function (done) {
           let pkcs12_5_file_pfx = fs.readFileSync('./test/fixtures/rsa_pkcs12_5_keyStore2.p12')
@@ -827,6 +859,7 @@ describe('General Tests', function () {
             })
         })
       })
+
       it('Create Certificate without CSR and use Password for PKey', function (done) {
         pem.createCertificate({
           cipher: 'aes256',
@@ -840,6 +873,7 @@ describe('General Tests', function () {
           done()
         })
       })
+
       it('Fail to verify invalid sigining chain', function (done) {
         pem.createCertificate({
           serviceKey: ca.serviceKey,
@@ -863,6 +897,7 @@ describe('General Tests', function () {
             })
         })
       })
+
       it('Verify google.com certificate without provided CA certificates', function (done) {
         var certificate = fs.readFileSync('./test/fixtures/google.com-old.pem').toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
         pem.verifySigningChain(certificate, function (error, valid) {
@@ -875,6 +910,7 @@ describe('General Tests', function () {
           done()
         })
       })
+
       it('Verify deep sigining chain', function (done) {
         pem.createCertificate({
           commonName: 'Intermediate CA Certificate',
@@ -931,6 +967,7 @@ describe('General Tests', function () {
           })
         })
       })
+
       it('Verify same Root CA trust', function (done) {
         // Verify TLS cert [Leaf, Int CA 2, Root CA] is valid
         // to the trust store [Int CA 1, Root CA] since it has
@@ -1018,6 +1055,7 @@ describe('General Tests', function () {
         done()
       })
     })
+
     it('Create and verify wildcard certificate', function (done) {
       var certInfo = {
         commonName: '*.node.ee'
@@ -1036,6 +1074,7 @@ describe('General Tests', function () {
         })
       })
     })
+
     it('Read edited cert data from certificate', function (done) {
       var certInfo = {
         issuer: {
@@ -1227,6 +1266,7 @@ describe('General Tests', function () {
         done()
       })
     })
+
     it('Check certificate file @ ./test/fixtures/test.crt', function (done) {
       var d = fs.readFileSync('./test/fixtures/test.crt').toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
       pem.checkCertificate(d, function (error, result) {
@@ -1235,6 +1275,7 @@ describe('General Tests', function () {
         done()
       })
     })
+
     it('Check certificate file @ ./test/fixtures/test.csr', function (done) {
       var d = fs.readFileSync('./test/fixtures/test.csr').toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
       pem.checkCertificate(d, function (error, result) {
