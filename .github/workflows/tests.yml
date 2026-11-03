@@ -21,32 +21,24 @@ jobs:
       matrix:
         node: [22, 24, 26]
         library:
+          # Supported floors: OpenSSL >= 1.1.1 (first release with
+          # `pkey -check`), LibreSSL >= 3.0 (first with EC parameter
+          # generation via `genpkey -genparam`). Every entry below is the
+          # latest patch of its release line, so each line is covered.
           - name: openssl
-            version: 0.9.8zh
+            version: 1.1.1w
           - name: openssl
-            version: 1.0.1u
+            version: 3.0.22
           - name: openssl
-            version: 1.0.2u
+            version: 3.1.8
           - name: openssl
-            version: 1.1.0l
+            version: 3.2.6
           - name: openssl
-            version: 1.1.1l
+            version: 3.3.7
           - name: openssl
-            version: 3.0.8
+            version: 3.4.8
           - name: openssl
-            version: 3.1.0
-          - name: libressl
-            version: 2.4.5
-          - name: libressl
-            version: 2.5.5
-          - name: libressl
-            version: 2.6.5
-          - name: libressl
-            version: 2.7.5
-          - name: libressl
-            version: 2.8.3
-          - name: libressl
-            version: 2.9.2
+            version: 3.5.9
           - name: libressl
             version: 3.0.2
           - name: libressl
@@ -54,9 +46,29 @@ jobs:
           - name: libressl
             version: 3.2.7
           - name: libressl
-            version: 3.3.5
+            version: 3.3.6
           - name: libressl
-            version: 3.4.2
+            version: 3.4.3
+          - name: libressl
+            version: 3.5.4
+          - name: libressl
+            version: 3.6.3
+          - name: libressl
+            version: 3.7.3
+          - name: libressl
+            version: 3.8.4
+          - name: libressl
+            version: 3.9.2
+          - name: libressl
+            version: 4.0.1
+          - name: libressl
+            version: 4.1.2
+          - name: libressl
+            version: 4.2.3
+          - name: libressl
+            version: 4.3.4
+          - name: libressl
+            version: 4.4.0
     steps:
     - uses: actions/checkout@v7
     - run: |
