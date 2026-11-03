@@ -1568,6 +1568,20 @@ describe('General Tests', function () {
         done()
       })
     })
+
+    it('rejects EC parameters instead of misreading them as DH', function (done) {
+      pem.createEcparam('prime256v1', 'explicit', function (error, data) {
+        hlp.checkError(error)
+        pem.getDhparamInfo(data.ecparam, function (error2) {
+          // EC parameter text ("EC-Parameters: (256 bit)") must not satisfy
+          // the DH size match, and the version INTEGER at the start of the
+          // EC ASN.1 structure must not be reported as the DH prime.
+          expect(error2, 'EC parameters must not be parsed as DH').to.be.ok()
+          hlp.checkTmpEmpty()
+          done()
+        })
+      })
+    })
   })
 
   describe('#.readPkcs12 tests', function () {
