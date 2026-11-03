@@ -1345,4 +1345,41 @@ describe('General Tests', function () {
       })
     })
   })
+
+  describe('ReDoS regression tests (GHSA-qjfp-29fv-wmf8)', function () {
+    this.timeout(60000)
+
+    it('parses hostile certificate text without catastrophic backtracking', function (done) {
+      pem.config({
+        pathOpenSSL: require('path').join(__dirname, 'fixtures', 'mock-openssl-redos.js')
+      })
+      var startedAt = Date.now()
+      pem.readCertificateInfo('-----BEGIN CERTIFICATE-----\nZm9v\n-----END CERTIFICATE-----\n', function (error, data) {
+        var elapsed = Date.now() - startedAt
+        pem.config({
+          pathOpenSSL: process.env.OPENSSL_BIN || 'openssl'
+        })
+        hlp.checkError(error)
+        expect(data).to.be.an('object')
+        expect(elapsed).to.be.below(5000)
+        hlp.checkTmpEmpty()
+        done()
+      })
+    })
+
+    it('parses certificate requests with empty issuer blocks without crashing', function (done) {
+      pem.config({
+        pathOpenSSL: require('path').join(__dirname, 'fixtures', 'mock-openssl-redos.js')
+      })
+      pem.readCertificateInfo('-----BEGIN CERTIFICATE REQUEST-----\nZm9v\n-----END CERTIFICATE REQUEST-----\n', function (error, data) {
+        pem.config({
+          pathOpenSSL: process.env.OPENSSL_BIN || 'openssl'
+        })
+        hlp.checkError(error)
+        expect(data).to.be.an('object')
+        hlp.checkTmpEmpty()
+        done()
+      })
+    })
+  })
 })
