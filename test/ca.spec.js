@@ -2,9 +2,23 @@
 
 var chai = require('chai')
 var expect = chai.expect
+var fs = require('fs')
+var path = require('path')
+var {spawnSync} = require('child_process')
 var pem = require('../lib/pem.js')
 
 var DAY_MS = 24 * 60 * 60 * 1000
+
+function loadCsrFixture(name) {
+  return fs.readFileSync(path.join(__dirname, 'fixtures', name)).toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
+}
+
+function certificateText(certificate) {
+  return spawnSync(process.env.OPENSSL_BIN || 'openssl', ['x509', '-noout', '-text'], {
+    input: certificate,
+    encoding: 'utf8'
+  }).stdout
+}
 
 describe('CertificateAuthority', function () {
   this.timeout(60000)
@@ -147,5 +161,93 @@ describe('CertificateAuthority', function () {
     } catch (err) {
       expect(err).to.be.an('error')
     }
+  })
+
+  it('fails when issuing with an invalid altName', async function () {
+    var ca = new pem.CA({
+      key: rootCA.serviceKey,
+      certificate: rootCA.certificate
+    })
+
+    try {
+      await ca.issueCertificate({
+        commonName: 'altname-injection.example',
+        altNames: ['ok.example\nDNS.2 = evil.example']
+      })
+      throw new Error('Expected issuing certificate to fail for an invalid altName')
+    } catch (err) {
+      expect(err).to.be.an('error')
+    }
+  })
+
+  it('does not copy SANs from submitted CSRs by default', async function () {
+    var ca = new pem.CA({
+      key: rootCA.serviceKey,
+      certificate: rootCA.certificate
+    })
+
+    var result = await ca.issueCertificate({
+      csr: loadCsrFixture('hostile_san.csr')
+    })
+
+    var info = await pem.readCertificateInfo(result.certificate)
+    expect(info.san).to.equal(undefined)
+  })
+
+  it('never propagates $ENV:: references from submitted CSRs by default', async function () {
+    process.env.SUPER_SECRET = 'pwned-marker-12345'
+    var ca = new pem.CA({
+      key: rootCA.serviceKey,
+      certificate: rootCA.certificate
+    })
+
+    var result = await ca.issueCertificate({
+      csr: loadCsrFixture('hostile_san_env.csr')
+    })
+
+    expect(result.certificate).to.not.have.string('pwned-marker-12345')
+
+    var info = await pem.readCertificateInfo(result.certificate)
+    expect(info.san).to.equal(undefined)
+  })
+
+  it('never promotes CSR basicConstraints that request CA privileges', async function () {
+    var ca = new pem.CA({
+      key: rootCA.serviceKey,
+      certificate: rootCA.certificate
+    })
+
+    var result = await ca.issueCertificate({
+      csr: loadCsrFixture('hostile_ca_csr.csr')
+    })
+
+    var text = certificateText(result.certificate)
+    expect(text).to.have.string('CA:FALSE')
+    expect(text).to.not.have.string('CA:TRUE')
+  })
+
+  it('copies CSR extensions only when copyExtensions is requested', async function () {
+    var ca = new pem.CA({
+      key: rootCA.serviceKey,
+      certificate: rootCA.certificate
+    })
+
+    var sanResult = await ca.issueCertificate({
+      csr: loadCsrFixture('hostile_san.csr'),
+      copyExtensions: true
+    })
+    var sanInfo = await pem.readCertificateInfo(sanResult.certificate)
+    expect(sanInfo.san).to.be.an('object')
+    expect(sanInfo.san.dns).to.include('app.legit.example', '*.victim-bank.com')
+
+    var caResult = await ca.issueCertificate({
+      csr: loadCsrFixture('hostile_ca_csr.csr'),
+      copyExtensions: true
+    })
+    var text = certificateText(caResult.certificate)
+    // copying is limited to extensions the CA does not control itself:
+    // the pem_ca_extensions floor (CA:FALSE) always supersedes CSR requests
+    expect(text).to.have.string('CA:FALSE')
+    expect(text).to.not.have.string('CA:TRUE')
   })
 })
