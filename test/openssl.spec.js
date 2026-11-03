@@ -1,5 +1,6 @@
 'use strict'
 const {debug} = require('../lib/debug.js')
+var fs = require('fs')
 var openssl = require('../lib/openssl.js')
 var hlp = require('./pem.helper.js')
 var chai = require('chai')
@@ -49,6 +50,29 @@ describe('openssl.js tests', function () {
       ], function (error, result) {
         hlp.checkError(error)
         expect(result).to.be.ok()
+        done()
+      })
+    })
+  })
+
+  describe('#.spawnWrapper() tmpfile permissions', function () {
+    it('writes private key tmpfiles readable only by the owner', function (done) {
+      var key = fs.readFileSync('./test/fixtures/cn_openssl.key')
+      var params = ['pkey', '-in', '--TMPFILE--']
+      var writes = []
+      var origWrite = fs.writeFileSync
+      fs.writeFileSync = function (path, contents, options) {
+        writes.push({ path: path, mode: options && options.mode })
+        return origWrite.call(fs, path, contents, options)
+      }
+      openssl.spawnWrapper(params, [key], function (error) {
+        fs.writeFileSync = origWrite
+        hlp.checkError(error)
+        // private key material must not land world-readable in the tmpdir
+        expect(writes).to.have.lengthOf(1)
+        expect(writes[0].path).to.equal(params[2])
+        expect(writes[0].mode & 0o777).to.equal(0o600)
+        expect(fs.existsSync(writes[0].path)).to.be.false()
         done()
       })
     })
