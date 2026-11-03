@@ -625,7 +625,8 @@ describe('General Tests', function () {
 
       it('Create default certificate', function (done) {
         var d = fs.readFileSync('./test/fixtures/ru_openssl.csr').toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
-        pem.createCertificate({csr: d}, function (error, data) {
+        // copyExtensions is required since 2.0.0 to keep SANs from the CSR
+        pem.createCertificate({csr: d, copyExtensions: true}, function (error, data) {
           hlp.checkError(error)
           hlp.checkCertificate(data)
           hlp.checkTmpEmpty()
@@ -707,6 +708,86 @@ describe('General Tests', function () {
             },
             state: ''
           })
+          hlp.checkTmpEmpty()
+          done()
+        })
+      })
+    })
+
+    describe('CSR extension copying (GHSA-445w-cp49-3x4p)', function () {
+      function loadFixture(name) {
+        return fs.readFileSync('./test/fixtures/' + name).toString().replace(/(?:\r\n|\r|\n)/g, "\n").trim()
+      }
+
+      it('does not copy SANs from a submitted CSR by default', function (done) {
+        pem.createCertificate({csr: loadFixture('ru_openssl.csr')}, function (error, data) {
+          hlp.checkError(error)
+          hlp.checkCertificate(data)
+          hlp.checkTmpEmpty()
+
+          pem.readCertificateInfo(data.certificate, function (error, info) {
+            hlp.checkError(error)
+            expect(info.san).to.be.undefined()
+            hlp.checkTmpEmpty()
+            done()
+          })
+        })
+      })
+
+      it('never propagates $ENV:: references from a CSR by default', function (done) {
+        process.env.SUPER_SECRET = 'pwned-marker-12345'
+        pem.createCertificate({csr: loadFixture('hostile_san_env.csr')}, function (error, data) {
+          hlp.checkError(error)
+          expect(data.certificate).to.not.have.string('pwned-marker-12345')
+          hlp.checkTmpEmpty()
+
+          pem.readCertificateInfo(data.certificate, function (error, info) {
+            hlp.checkError(error)
+            expect(info.san).to.be.undefined()
+            hlp.checkTmpEmpty()
+            done()
+          })
+        })
+      })
+
+      it('rejects hostile $ENV:: SANs even with copyExtensions', function (done) {
+        process.env.SUPER_SECRET = 'pwned-marker-12345'
+        pem.createCertificate({
+          csr: loadFixture('hostile_san_env.csr'),
+          copyExtensions: true
+        }, function (error) {
+          hlp.checkError(error, true)
+          hlp.checkTmpEmpty()
+          done()
+        })
+      })
+
+      it('copies valid email SANs with copyExtensions', function (done) {
+        pem.createCertificate({
+          csr: loadFixture('san_email.csr'),
+          copyExtensions: true
+        }, function (error, data) {
+          hlp.checkError(error)
+          hlp.checkTmpEmpty()
+
+          pem.readCertificateInfo(data.certificate, function (error, info) {
+            hlp.checkError(error)
+            expect(info.san).to.be.an('object')
+            expect(info.san.email).to.include('admin@legit.example')
+            expect(info.san.dns).to.include('extra.example')
+            hlp.checkTmpEmpty()
+            done()
+          })
+        })
+      })
+
+      it('rejects hostile $ENV:: email SANs even with copyExtensions', function (done) {
+        process.env.SUPER_SECRET2 = 'pwned-email-marker-67890'
+        pem.createCertificate({
+          csr: loadFixture('hostile_san_email.csr'),
+          copyExtensions: true
+        }, function (error) {
+          hlp.checkError(error, true)
           hlp.checkTmpEmpty()
           done()
         })
