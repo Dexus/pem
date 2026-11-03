@@ -903,6 +903,32 @@ describe('General Tests', function () {
           })
       })
 
+      it('create ca certificate with altNames keeps the CA extensions', function (done) {
+        // altNames must not displace the CA extensions: subjectAltName and
+        // basicConstraints/keyUsage/subjectKeyIdentifier belong together in
+        // one v3_req section
+        pem.createCertificate({
+            commonName: 'CA with altNames',
+            CA: true,
+            altNames: ['example.com']
+          },
+          function (error, data) {
+            hlp.checkError(error)
+            hlp.checkCertificate(data)
+            openssl.execBinary(['x509', '-in', '--TMPFILE--', '-noout', '-text'], [data.certificate], function (error2, text) {
+              hlp.checkError(error2)
+              var info = String(text)
+              expect(info).to.match(/CA:TRUE/)
+              expect(info).to.match(/Certificate Sign/)
+              expect(info).to.match(/CRL Sign/)
+              expect(info).to.match(/Subject Key Identifier/)
+              expect(info).to.match(/DNS:example\.com/)
+              hlp.checkTmpEmpty()
+              done()
+            })
+          })
+      })
+
       it('create certificate with text serial "demo-serial"', function (done) {
         pem.createCertificate({
             serviceKey: ca.serviceKey,
