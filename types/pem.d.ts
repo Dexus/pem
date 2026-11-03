@@ -61,6 +61,11 @@ declare namespace pem {
     days?: number
     extFile?: string
     cipher?: string
+    /**
+     * Copy SAN entries from the submitted CSR into the issued certificate.
+     * Disabled by default since 2.0.0; only enable for trusted CSRs.
+     */
+    copyExtensions?: boolean
   }
 
   interface CertificateCreationResult {
