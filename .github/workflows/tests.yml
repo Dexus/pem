@@ -42,6 +42,10 @@ jobs:
             version: 3.4.8
           - name: openssl
             version: 3.5.9
+          - name: openssl
+            version: 4.0.3
+          - name: openssl
+            version: 4.1.0
           - name: libressl
             version: 3.0.2
           - name: libressl

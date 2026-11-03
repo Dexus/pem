@@ -81,7 +81,9 @@ describe('General Tests', function () {
       this.timeout(600000)// 10 minutes
       pem.createDhparam(1024, function (error, data) {
         var maxKeySize = 250;
-        if (openssl.get('Vendor') === "OPENSSL" && openssl.get('VendorVersionMajor') >= 3 && openssl.get('VendorVersionMinor') >= 1) {
+        // atLeastVersion (not a bare minor check): the whole 4.x line also
+        // emits the longer DH parameter form introduced in 3.1
+        if (openssl.get('Vendor') === "OPENSSL" && openssl.atLeastVersion(3, 1)) {
           maxKeySize = 256;
         }
         hlp.checkError(error)
