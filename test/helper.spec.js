@@ -5,6 +5,7 @@ var helper = require('../lib/helper.js')
 var hlp = require('./pem.helper.js')
 var chai = require('chai')
 var dirtyChai = require('dirty-chai')
+var expect = chai.expect
 chai.use(dirtyChai)
 
 // NOTE: we cover here only the test cases left in coverage report
@@ -74,5 +75,43 @@ describe('helper.js tests', function () {
         done()
       })
     })
+  })
+})
+
+// Which openssl binary the suite runs against is owned by lib/openssl.js
+// (DEBUG=true + LIBRARY + VERSION + existing ./openssl/${LIBRARY}_v${VERSION}
+// layout). test/pem.helper.js must not set OPENSSL_BIN itself: its former
+// OPENSSL_DIR-based block computed a stale, never-valid path. These tests
+// reload test/pem.helper.js with a controlled environment to guard against
+// that logic coming back.
+describe('pem.helper.js env handling', function () {
+  var ENV_KEYS = ['TRAVIS', 'DEBUG', 'OPENSSL_DIR', 'OPENSSL_BIN', 'GITHUB_WORKSPACE']
+  var savedEnv = {}
+
+  beforeEach(function () {
+    ENV_KEYS.forEach(function (key) {
+      savedEnv[key] = process.env[key]
+    })
+  })
+
+  afterEach(function () {
+    ENV_KEYS.forEach(function (key) {
+      if (typeof savedEnv[key] === 'undefined') {
+        delete process.env[key]
+      } else {
+        process.env[key] = savedEnv[key]
+      }
+    })
+    delete require.cache[require.resolve('./pem.helper.js')]
+  })
+
+  it('does not derive OPENSSL_BIN from OPENSSL_DIR', function () {
+    process.env.TRAVIS = 'true'
+    process.env.OPENSSL_DIR = '/usr/local/openssl'
+    delete process.env.OPENSSL_BIN
+    delete process.env.GITHUB_WORKSPACE
+    delete require.cache[require.resolve('./pem.helper.js')]
+    require('./pem.helper.js')
+    expect(process.env).to.not.have.property('OPENSSL_BIN')
   })
 })
