@@ -97,11 +97,14 @@ jobs:
       run: |
         set -e
         openssl/"${{ matrix.library.name }}_v${{ matrix.library.version }}"/bin/openssl version
+    - name: Pack the compiled tree
+      shell: bash
+      run: tar -czf openssl/"${{ matrix.library.name }}_v${{ matrix.library.version }}.tgz" -C openssl "${{ matrix.library.name }}_v${{ matrix.library.version }}"
     - name: Upload binary
       uses: actions/upload-artifact@v4
       with:
         name: ${{ matrix.library.name }}_v${{ matrix.library.version }}
-        path: openssl/${{ matrix.library.name }}_v${{ matrix.library.version }}/
+        path: openssl/${{ matrix.library.name }}_v${{ matrix.library.version }}.tgz
         retention-days: 1
 
   test:
@@ -172,6 +175,9 @@ jobs:
       with:
         name: ${{ matrix.library.name }}_v${{ matrix.library.version }}
         path: openssl
+    - name: Unpack ${{ matrix.library.name }} ${{ matrix.library.version }}
+      shell: bash
+      run: tar -xzf openssl/"${{ matrix.library.name }}_v${{ matrix.library.version }}.tgz" -C openssl
     - name: Verify the downloaded binary runs
       shell: bash
       run: |
@@ -223,11 +229,14 @@ jobs:
         # of the fips.so directory) like the FIPS test job does.
         MODULES_DIR="$(find openssl/openssl_v${{ matrix.openssl.version }} -name fips.so -printf '%h\n' | head -1)"
         LD_LIBRARY_PATH="$(dirname "${MODULES_DIR}")" openssl/openssl_v${{ matrix.openssl.version }}/bin/openssl version
+    - name: Pack the compiled FIPS tree
+      shell: bash
+      run: tar -czf openssl/"openssl_v${{ matrix.openssl.version }}.tgz" -C openssl "openssl_v${{ matrix.openssl.version }}"
     - name: Upload FIPS build
       uses: actions/upload-artifact@v4
       with:
         name: openssl_fips_v${{ matrix.openssl.version }}
-        path: openssl/openssl_v${{ matrix.openssl.version }}/
+        path: openssl/openssl_v${{ matrix.openssl.version }}.tgz
         retention-days: 1
 
   fips:
@@ -250,6 +259,9 @@ jobs:
       with:
         name: openssl_fips_v${{ matrix.openssl.version }}
         path: openssl
+    - name: Unpack FIPS-capable OpenSSL
+      shell: bash
+      run: tar -xzf openssl/"openssl_v${{ matrix.openssl.version }}.tgz" -C openssl
     - name: Install and activate the FIPS provider
       shell: bash
       env:
