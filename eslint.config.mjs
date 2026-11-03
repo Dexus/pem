@@ -1,4 +1,3 @@
-import { FlatCompat } from '@eslint/eslintrc'
 import js from '@eslint/js'
 import { fileURLToPath } from 'node:url'
 import globals from 'globals'
@@ -9,22 +8,22 @@ import nPlugin from 'eslint-plugin-n'
 import promisePlugin from 'eslint-plugin-promise'
 import eslintPluginPlugin from 'eslint-plugin-eslint-plugin'
 import chaiFriendly from 'eslint-plugin-chai-friendly'
-
-const compat = new FlatCompat({
-  baseDirectory: fileURLToPath(new URL('.', import.meta.url))
-})
+import importPlugin from 'eslint-plugin-import'
 
 export default [
   {
     ignores: ['coverage/**', 'nyc_output/**', 'dist/**', 'docs/**']
   },
   js.configs.recommended,
-  ...compat.config({
-    extends: [
-      'plugin:import/recommended',
-      'plugin:import/typescript'
-    ]
-  }),
+  {
+    plugins: {
+      import: importPlugin
+    },
+    languageOptions: {
+      parserOptions: importPlugin.configs.recommended.parserOptions
+    },
+    rules: importPlugin.configs.recommended.rules
+  },
   {
     languageOptions: {
       ecmaVersion: 'latest',
@@ -37,7 +36,7 @@ export default [
   },
   nPlugin.configs['flat/recommended'],
   promisePlugin.configs['flat/recommended'],
-  eslintPluginPlugin.configs['flat/recommended'],
+  eslintPluginPlugin.configs.recommended,
   mochaPlugin.configs.recommended,
   chaiFriendly.configs.recommendedFlat,
   ...markdown.configs.recommended,
