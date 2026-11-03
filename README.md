@@ -20,6 +20,10 @@ or use yarn
 :warning: Please make sure you have `openssl` or `libressl` already installed on your system/container, without
 them `pem` will not work.
 
+**Supported library versions:** OpenSSL 1.1.1 or newer (including the 3.x release lines) and
+LibreSSL 3.0 or newer. The CI matrix tests the latest patch release of every supported release
+line; OpenSSL ≤ 1.1.0 and LibreSSL 2.x are no longer tested and may not work.
+
 ## TypeScript
 
 TypeScript declaration files are bundled with the package via `types/pem.d.ts`. The public API, including the legacy `promisified` helpers and the `CA` utility, now has precise typings.
@@ -30,7 +34,7 @@ Run `yarn test:types` to execute the lightweight [tsd](https://github.com/SamVer
 
 2.0.0 hardens `pem` against configuration injection and denial of service. Two behavior changes are breaking:
 
-  * **altNames are validated.** Every entry in the `altNames` option of `createCSR` (and therefore `createCertificate` and the `CA` utility) must be a valid DNS hostname (RFC 1123, optionally wildcarded like `*.example.com`, optional trailing dot) or an IP address. Anything else — including OpenSSL config syntax such as `$ENV::VAR` references or embedded newlines — is rejected with an error instead of being written into the generated OpenSSL config file.
+  * **altNames are validated.** Every entry in the `altNames` option of `createCSR` (and therefore `createCertificate` and the `CA` utility) must be a valid DNS hostname (RFC 1123, optionally wildcarded like `*.example.com`, optional trailing dot) or an IP address. Anything else — including OpenSSL config syntax such as `$ENV::VAR` references or embedded newlines — is rejected with an error instead of being written into the generated OpenSSL config file. A trailing dot in a DNS entry is accepted but stripped in the generated configuration: RFC 5280 dNSName values carry no trailing label separator, and strict verifiers (LibreSSL ≥ 3.5) reject one.
   * **CSR extensions are no longer copied into issued certificates by default.** Previously the SANs of a submitted CSR were silently transferred to the certificate `createCertificate` issued and `issueCertificate` signed, so an untrusted CSR could vouch for hostnames it does not own. Pass the new `copyExtensions: true` option to restore the old behavior for CSRs you trust. Even then, every SAN value is validated and the CA utility keeps its own `basicConstraints`/`keyUsage`/`extendedKeyUsage` floor, so a CSR can never promote itself to a CA certificate.
 
 If you relied on the old behavior, audit where your CSRs come from before enabling `copyExtensions`.
