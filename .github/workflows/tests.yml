@@ -19,7 +19,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node: [18, 20]
+        node: [22, 24, 26]
         library:
           - name: openssl
             version: 0.9.8zh
@@ -58,7 +58,7 @@ jobs:
           - name: libressl
             version: 3.4.2
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v7
     - run: |
         sudo apt-get install -y haveged ca-certificates
         sudo haveged -w 2048
@@ -75,7 +75,7 @@ jobs:
         LIBRARY: ${{ matrix.library.name }}
         VERSION: ${{ matrix.library.version }}
     - name: Use Node.js ${{ matrix.node }}
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v7
       with:
         node-version: ${{ matrix.node }}
         cache: yarn
