@@ -45,7 +45,7 @@
     ]
   },
   "dependencies": {
-    "which": "^6.0.1"
+    "which": "^7.0.0"
   },
   "devDependencies": {
     "@deineagenturug/docdash": "0.4.2",
