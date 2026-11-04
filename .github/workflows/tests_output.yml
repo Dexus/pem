@@ -1,93 +1,96 @@
 name: Test Different Outputs
+# Manual runs only: compiles every supported library with the current build
+# script and publishes the binaries as tarball artifacts for inspection.
 on:
   workflow_dispatch:
+# Jobs only check out code, compile, and publish binaries as run artifacts;
+# keep the GITHUB_TOKEN minimal.
+permissions:
+  contents: read
 env:
   TARGET: x86_64-unknown-linux-gnu
   DEBUG: true
 jobs:
   build:
-    name: RuN!!!!
+    name: Build ${{ matrix.library.name }} ${{ matrix.library.version }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        OPENSSL_DIR: ['']
-        LIBRARY: ['']
-        VERSION: ['']
-        include:
-        - LIBRARY: openssl
-          VERSION: 0.9.8zh
-          OPENSSL_DIR: /openssl
-        - LIBRARY: openssl
-          VERSION: 1.0.1u
-          OPENSSL_DIR: /openssl
-        - LIBRARY: openssl
-          VERSION: 1.0.2u
-          OPENSSL_DIR: /openssl
-        - LIBRARY: openssl
-          VERSION: 1.1.0l
-          OPENSSL_DIR: /openssl
-        - LIBRARY: openssl
-          VERSION: 1.1.1l
-          OPENSSL_DIR: /openssl
-        - LIBRARY: openssl
-          VERSION: 3.0.1
-          OPENSSL_DIR: /openssl
-        - LIBRARY: libressl
-          VERSION: 2.4.5
-          OPENSSL_DIR: /openssl
-        - LIBRARY: libressl
-          VERSION: 2.5.5
-          OPENSSL_DIR: /openssl
-        - LIBRARY: libressl
-          VERSION: 2.6.5
-          OPENSSL_DIR: /openssl
-        - LIBRARY: libressl
-          VERSION: 2.7.5
-          OPENSSL_DIR: /openssl
-        - LIBRARY: libressl
-          VERSION: 2.8.3
-          OPENSSL_DIR: /openssl
-        - LIBRARY: libressl
-          VERSION: 2.9.2
-          OPENSSL_DIR: /openssl
-        - LIBRARY: libressl
-          VERSION: 3.0.2
-          OPENSSL_DIR: /openssl
-        - LIBRARY: libressl
-          VERSION: 3.1.5
-          OPENSSL_DIR: /openssl
-        - LIBRARY: libressl
-          VERSION: 3.2.7
-          OPENSSL_DIR: /openssl
-        - LIBRARY: libressl
-          VERSION: 3.3.5
-          OPENSSL_DIR: /openssl
-        - LIBRARY: libressl
-          VERSION: 3.4.2
-          OPENSSL_DIR: /openssl
+        library:
+          # Must mirror the library matrix in tests.yml: latest patch release
+          # of every supported line (OpenSSL >= 1.1.1, LibreSSL >= 3.0).
+          - name: openssl
+            version: 1.1.1w
+          - name: openssl
+            version: 3.0.22
+          - name: openssl
+            version: 3.1.8
+          - name: openssl
+            version: 3.2.6
+          - name: openssl
+            version: 3.3.7
+          - name: openssl
+            version: 3.4.8
+          - name: openssl
+            version: 3.5.9
+          - name: openssl
+            version: 4.0.3
+          - name: openssl
+            version: 4.1.0
+          - name: libressl
+            version: 3.0.2
+          - name: libressl
+            version: 3.1.5
+          - name: libressl
+            version: 3.2.7
+          - name: libressl
+            version: 3.3.6
+          - name: libressl
+            version: 3.4.3
+          - name: libressl
+            version: 3.5.4
+          - name: libressl
+            version: 3.6.3
+          - name: libressl
+            version: 3.7.3
+          - name: libressl
+            version: 3.8.4
+          - name: libressl
+            version: 3.9.2
+          - name: libressl
+            version: 4.0.1
+          - name: libressl
+            version: 4.1.2
+          - name: libressl
+            version: 4.2.3
+          - name: libressl
+            version: 4.3.4
+          - name: libressl
+            version: 4.4.0
     steps:
     - uses: actions/checkout@v7
-    - run: sudo apt-get install -y haveged ca-certificates
-    - run: |
-        sudo haveged -w 2048
-        mkdir openssl
-    - name: Cache OpenSSL Binary
-      uses: actions/cache@v6
-      with:
-        path: ./openssl/
-        key: ${{ runner.os }}-build-openssl-output-v1-${{ matrix.LIBRARY }}-${{ matrix.VERSION
-          }}
-    - name: Build and run command
+    - name: Compile ${{ matrix.library.name }} ${{ matrix.library.version }}
+      shell: bash
       run: |
-        set +e -x
-        if [[ "$OPENSSL_DIR" != "" ]]; then "./bin/test_build_openssl.sh" ; fi
-        if [[ "$CI" == 'true' ]] && [[ -f "./openssl/bin/openssl" ]]; then
-          ./openssl/bin/openssl version
-        else
-          openssl version
-        fi
+        set +e
+        set -x
+        echo $PWD
+        openssl version
+        ./bin/build-openssl.sh
       env:
-        OPENSSL_DIR: ${{ matrix.OPENSSL_DIR }}
-        LIBRARY: ${{ matrix.LIBRARY }}
-        VERSION: ${{ matrix.VERSION }}
+        LIBRARY: ${{ matrix.library.name }}
+        VERSION: ${{ matrix.library.version }}
+    - name: Verify the compiled binary runs
+      shell: bash
+      run: |
+        set -e
+        openssl/"${{ matrix.library.name }}_v${{ matrix.library.version }}"/bin/openssl version
+    - name: Pack the compiled tree
+      shell: bash
+      run: tar -czf openssl/"${{ matrix.library.name }}_v${{ matrix.library.version }}.tgz" -C openssl "${{ matrix.library.name }}_v${{ matrix.library.version }}"
+    - name: Upload binary
+      uses: actions/upload-artifact@v7
+      with:
+        name: ${{ matrix.library.name }}_v${{ matrix.library.version }}
+        path: openssl/${{ matrix.library.name }}_v${{ matrix.library.version }}.tgz
