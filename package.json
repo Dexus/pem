@@ -16,10 +16,21 @@
     "url": "https://github.com/Dexus/pem.git"
   },
   "main": "./dist/index.js",
+  "exports": {
+    ".": {
+      "types": "./types/pem.d.ts",
+      "import": "./index.mjs",
+      "require": "./dist/index.js"
+    },
+    "./lib/*.js": "./lib/*.js",
+    "./lib/*": "./lib/*.js",
+    "./package.json": "./package.json"
+  },
   "files": [
     "dist",
     "lib",
-    "types"
+    "types",
+    "index.mjs"
   ],
   "type": "commonjs",
   "scripts": {
@@ -30,7 +41,7 @@
     "build:lib": "tsc -p .",
     "changelog": "auto-changelog -p --commit-limit false --output HISTORY.md",
     "coverage": "cross-env NODE_ENV=development nyc ./node_modules/.bin/mocha --recursive --bail --inline-diffs --reporter spec --check-leaks --use_strict $(find . -type f -name '*.spec.js'  ! -path './nyc_output/*' ! -path './coverage/*' ! -path './node_modules/*')",
-    "lint": "eslint --fix lib/*.ts *.md *.json test/*.js test/*.spec.js",
+    "lint": "eslint --fix lib/*.ts *.md *.json test/*.js test/*.spec.js index.mjs",
     "prepack": "yarn run build:lib",
     "test": "yarn run build:lib && yarn run lint && yarn run coverage",
     "test:opensslv3.0.1": "yarn run build > openssl_v3.0.1.log && yarn run test >> openssl_v3.0.1.log",
