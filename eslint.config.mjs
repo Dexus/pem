@@ -74,7 +74,15 @@ export default [
     files: ['lib/**/*.ts'],
     rules: {
       'import/no-unresolved': 'off',
-      'n/no-missing-require': 'off'
+      'n/no-missing-require': 'off',
+      // Conversions keep node builtins as import-equals / verbatim require() for identical CJS emit.
+      '@typescript-eslint/no-require-imports': 'off',
+      // Behavior-identical conversions need `any` where the JS coerces arbitrary inputs; casts are banned.
+      '@typescript-eslint/no-explicit-any': 'off',
+      // var is preserved verbatim by design (R11); --fix must not rewrite it.
+      'no-var': 'off',
+      // Same design rule as no-var: master's declarations stay as written.
+      'prefer-const': 'off'
     }
   }
 ]
