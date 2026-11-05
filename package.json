@@ -54,7 +54,7 @@
     "@types/node": "26.6.6",
     "@vercel/ncc": "0.45.0",
     "auto-changelog": "2.7.0",
-    "chai": "4.5.0",
+    "chai": "6.3.0",
     "cross-env": "10.1.0",
     "dirty-chai": "2.0.1",
     "docco": "0.9.2",
