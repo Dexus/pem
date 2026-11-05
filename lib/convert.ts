@@ -1,5 +1,8 @@
 'use strict'
 
+// TS-module marker (R16): without an import/export statement tsc treats this file as a global script whose top-level bindings leak and collide across lib files. The emitted __esModule property is discarded when module.exports = convert below replaces the exports object.
+export {}
+
 var openssl = require('./openssl')
 var helper = require('./helper')
 var {debug} = require('./debug')
