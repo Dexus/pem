@@ -30,6 +30,20 @@ TypeScript declaration files are bundled with the package via `types/pem.d.ts`. 
 
 Run `yarn test:types` to execute the lightweight [tsd](https://github.com/SamVerschueren/tsd) assertions that guard the definitions.
 
+## ESM
+
+`pem` ships dual CommonJS + ESM entries. In ES modules, both the default and
+every public function are importable:
+
+```js
+/* eslint-disable import/no-unresolved, @typescript-eslint/no-unused-vars -- documented example, 'pem' is this package */
+import pem from 'pem' // everything, like require('pem')
+import { createCertificate, createCSR, convert, promisified } from 'pem'
+```
+
+Both entry points share one runtime instance, so configuration done through
+one (`pem.config({...})`) is visible to the other.
+
 ## Breaking changes in 2.0.0
 
 2.0.0 hardens `pem` against configuration injection and denial of service. Two behavior changes are breaking:
