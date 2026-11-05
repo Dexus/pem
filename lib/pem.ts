@@ -1,16 +1,97 @@
 'use strict'
 
+type PrivateKeyCallback = (err?: Error | string | null, result?: { key: string }) => void
+type DhparamCallback = (err?: Error | string | null, result?: { dhparam: string }) => void
+type EcparamCallback = (err?: Error | string | null, result?: { ecparam: string }) => void
+type CSRCallback = (err?: Error | string | null, result?: { csr: string; clientKey: string; config: string | null }) => void
+type CertificateCallback = (err?: Error | string | null, result?: { certificate: string; csr: string; clientKey: string; serviceKey: string }) => void
+type ReadCertificateInfoCallback = (err?: Error | string | null, data?: CertificateInfoValues) => void
+type GetPublicKeyCallback = (err?: Error | string | null, result?: { publicKey: string }) => void
+type GetFingerprintCallback = (err?: Error | string | null, result?: { fingerprint: string }) => void
+type GetModulusCallback = (err?: Error | string | null, result?: { modulus: string }) => void
+type GetDhparamInfoCallback = (err?: Error | string | null, result?: { size?: number; group?: string; prime?: string }) => void
+type CreatePkcs12Callback = (err?: Error | string | null, result?: { pkcs12: Buffer }) => void
+type ReadPkcs12Callback = (err?: Error | string | null, bundle?: { cert?: string; ca?: string[]; key?: string }) => void
+type VerifySigningChainCallback = (err?: Error | string | null, valid?: boolean | string) => void
+type CheckCertificateCallback = (err?: Error | string | null, valid?: boolean) => void
+type CheckPkcs12Callback = (err?: Error | string | null, valid?: boolean) => void
+
+interface CreatePrivateKeyOptions {
+  cipher?: string
+  password?: string
+}
+
+interface CreateCSROptions {
+  clientKey?: string
+  clientKeyPassword?: string
+  keyBitsize?: number
+  hash?: string
+  country?: string
+  state?: string
+  locality?: string
+  organization?: string | string[]
+  organizationUnit?: string | string[]
+  commonName?: string
+  altNames?: string[]
+  emailAddress?: string
+  csrConfigFile?: string
+  config?: string | null
+  password?: string
+  dc?: string | string[]
+  DC?: string | string[]
+  C?: string
+  ST?: string
+  L?: string
+  O?: string | string[]
+  OU?: string | string[]
+  CN?: string
+  CA?: boolean
+}
+
+interface CreateCertificateOptions extends CreateCSROptions {
+  csr?: string
+  serviceCertificate?: string
+  serviceKey?: string
+  serviceKeyPassword?: string
+  selfSigned?: boolean
+  serial?: string | number | Buffer
+  serialFile?: string
+  days?: number
+  extFile?: string
+  cipher?: string
+  copyExtensions?: boolean
+}
+
+interface CreatePkcs12Options {
+  cipher?: string
+  clientKeyPassword?: string
+  certFiles?: string[]
+}
+
+interface ReadPkcs12Options {
+  p12Password?: string
+  clientKeyPassword?: string
+}
+
+// widened honestly from what fetchCertificateData actually stores (SAN fields
+// carry string[] or '', dynamic subject keys carry string|string[]) — the
+// public types/pem.d.ts stays untouched
+interface CertificateInfoValues {
+  issuer: { [key: string]: any }
+  [key: string]: any
+}
+
 /**
  * pem module
  *
  * @module pem
  */
-const {debug} = require('./debug.js')
+const {debug} = require('./debug')
 const {createHash, getFips} = require('node:crypto')
 var net = require('net')
-var helper = require('./helper.js')
-var openssl = require('./openssl.js')
-const hash_md5 = (value) => {
+var helper = require('./helper')
+var openssl = require('./openssl')
+const hash_md5 = (value: string | Buffer) => {
   if (Buffer.isBuffer(value)) {
     return createHash('md5').update(value).digest('hex')
   }
@@ -38,13 +119,13 @@ module.exports.config = config
  * quick access the convert module
  * @type {module:convert}
  */
-module.exports.convert = require('./convert.js')
+module.exports.convert = require('./convert')
 
 /**
  * Certificate authority helper
  * @type {module:ca}
  */
-module.exports.CA = require('./ca.js')
+module.exports.CA = require('./ca')
 
 var KEY_START = '-----BEGIN PRIVATE KEY-----'
 var KEY_END = '-----END PRIVATE KEY-----'
@@ -55,7 +136,9 @@ var ENCRYPTED_KEY_END = '-----END ENCRYPTED PRIVATE KEY-----'
 var CERT_START = '-----BEGIN CERTIFICATE-----'
 var CERT_END = '-----END CERTIFICATE-----'
 
-function convertKeyToTraditional(key, algorithm, searchString, options, callback) {
+function convertKeyToTraditional(key: string, algorithm: string, searchString: string, options: CreatePrivateKeyOptions | PrivateKeyCallback | undefined, callback: PrivateKeyCallback): void
+function convertKeyToTraditional(key: string, algorithm: string, searchString: string, callback: PrivateKeyCallback): void
+function convertKeyToTraditional(key: string, algorithm: string, searchString: string, options: any, callback?: any) {
   if (!callback && typeof options === 'function') {
     callback = options
     options = {}
@@ -72,7 +155,7 @@ function convertKeyToTraditional(key, algorithm, searchString, options, callback
     })
   }
 
-  function done(err) {
+  function done(err?: Error | string | null) {
     if (err) {
       return callback(err)
     }
@@ -89,7 +172,7 @@ function convertKeyToTraditional(key, algorithm, searchString, options, callback
 
       params.push('-in')
       params.push('--TMPFILE--')
-      var delTempPWFiles = []
+      var delTempPWFiles: string[] = []
       if (options && options.cipher && (helper.ciphers.indexOf(options.cipher) !== -1) && options.password) {
         debug('helper.createPasswordFile', {
           cipher: '',
@@ -116,9 +199,9 @@ function convertKeyToTraditional(key, algorithm, searchString, options, callback
 
       debug('version', openssl.get('openSslVersion'))
 
-      openssl.exec(params, searchString, [key], function (sslErr, traditional_key) {
+      openssl.exec(params, searchString, [key], function (sslErr: Error | null, traditional_key: string) {
 
-        helper.deleteTempFiles(delTempPWFiles, function (fsErr) {
+        helper.deleteTempFiles(delTempPWFiles, function (fsErr: NodeJS.ErrnoException | null) {
           debug('convertKeyToTraditional', {
             sslErr: sslErr,
             fsErr: fsErr,
@@ -148,7 +231,7 @@ function convertKeyToTraditional(key, algorithm, searchString, options, callback
  * @param {Function} callback Callback function with an error object and {key}
  * @returns {Promise<{key: String}>} Resolves with the generated key when no callback is provided.
  */
-function createPrivateKey(keyBitsize, options, callback) {
+function createPrivateKey(keyBitsize: number | PrivateKeyCallback | undefined, options: CreatePrivateKeyOptions | PrivateKeyCallback | undefined, callback: PrivateKeyCallback) {
   if (!callback && !options && typeof keyBitsize === 'function') {
     callback = keyBitsize
     keyBitsize = undefined
@@ -173,17 +256,17 @@ function createPrivateKey(keyBitsize, options, callback) {
 
   var params = ['genpkey', '-algorithm', 'RSA']
 
-  var delTempPWFiles = []
+  var delTempPWFiles: string[] = []
 
-  if (options && options.cipher && (helper.ciphers.indexOf(options.cipher) !== -1) && options.password) {
+  if (options && (options as CreatePrivateKeyOptions).cipher && (helper.ciphers.indexOf((options as CreatePrivateKeyOptions).cipher as string) !== -1) && (options as CreatePrivateKeyOptions).password) {
     debug('helper.createPasswordFile', {
-      cipher: options.cipher,
-      password: options.password,
+      cipher: (options as CreatePrivateKeyOptions).cipher,
+      password: (options as CreatePrivateKeyOptions).password,
       passType: 'out'
     })
     helper.createPasswordFile({
-      cipher: options.cipher,
-      password: options.password,
+      cipher: (options as CreatePrivateKeyOptions).cipher,
+      password: (options as CreatePrivateKeyOptions).password,
       passType: 'out'
     }, params, delTempPWFiles)
   }
@@ -193,8 +276,8 @@ function createPrivateKey(keyBitsize, options, callback) {
 
   debug('version', openssl.get('openSslVersion'))
 
-  openssl.exec(params, '(RSA |ENCRYPTED |)PRIVATE KEY', function (sslErr, key) {
-    function done(err) {
+  openssl.exec(params, '(RSA |ENCRYPTED |)PRIVATE KEY', function (sslErr: Error | null, key: string) {
+    function done(err?: Error | string | null) {
       if (err) {
         return callback(err)
       }
@@ -203,7 +286,7 @@ function createPrivateKey(keyBitsize, options, callback) {
       })
     }
 
-    helper.deleteTempFiles(delTempPWFiles, function (fsErr) {
+    helper.deleteTempFiles(delTempPWFiles, function (fsErr: NodeJS.ErrnoException | null) {
       debug('createPrivateKey', {
         sslErr: sslErr,
         fsErr: fsErr,
@@ -212,7 +295,7 @@ function createPrivateKey(keyBitsize, options, callback) {
       })
       convertKeyToTraditional(key, 'rsa', '(RSA |ENCRYPTED |)PRIVATE KEY', options, function (convertErr, keyData) {
         if (!convertErr) {
-          key = keyData.key
+          key = (keyData as { key: string }).key
         }
         done(sslErr || fsErr || convertErr)
       })
@@ -228,7 +311,7 @@ function createPrivateKey(keyBitsize, options, callback) {
  * @param {Function} callback Callback function with an error object and {dhparam}
  * @returns {Promise<{dhparam: String}>} Resolves with the generated parameters when no callback is provided.
  */
-function createDhparam(keyBitsize, callback) {
+function createDhparam(keyBitsize: number | DhparamCallback | undefined, callback: DhparamCallback) {
   if (!callback && typeof keyBitsize === 'function') {
     callback = keyBitsize
     keyBitsize = undefined
@@ -257,7 +340,7 @@ function createDhparam(keyBitsize, callback) {
     `dh_paramgen_prime_len:${keyBitsize}`
   ]
 
-  openssl.exec(params, 'DH PARAMETERS', function (error, dhparam) {
+  openssl.exec(params, 'DH PARAMETERS', function (error: Error | null, dhparam: string) {
     if (error) {
       return callback(error)
     }
@@ -276,7 +359,7 @@ function createDhparam(keyBitsize, callback) {
  * @param {Function} callback Callback function with an error object and {ecparam}
  * @returns {Promise<{ecparam: String}>} Resolves with the generated parameters when no callback is provided.
  */
-function createEcparam(keyName, paramEnc, noOut, callback) {
+function createEcparam(keyName: string | EcparamCallback | undefined, paramEnc: string | EcparamCallback | undefined, noOut: boolean | EcparamCallback | undefined, callback: EcparamCallback) {
   if (!callback && typeof noOut === 'undefined' && !paramEnc && typeof keyName === 'function') {
     callback = keyName
     keyName = undefined
@@ -319,7 +402,7 @@ function createEcparam(keyName, paramEnc, noOut, callback) {
     searchString = '(EC |)PRIVATE KEY'
   }
 
-  openssl.exec(params, searchString, function (error, ecparam) {
+  openssl.exec(params, searchString, function (error: Error | null, ecparam: string) {
     if (error) {
       return callback(error)
     }
@@ -329,7 +412,7 @@ function createEcparam(keyName, paramEnc, noOut, callback) {
           return callback(error)
         }
         return callback(null, {
-          ecparam: keyData.key
+          ecparam: (keyData as { key: string }).key
         })
       })
     }
@@ -339,7 +422,7 @@ function createEcparam(keyName, paramEnc, noOut, callback) {
         '--TMPFILE--'
       ]
       searchString = '(EC |)PRIVATE KEY'
-      openssl.exec(params, searchString, [ecparam], function (error, eckey) {
+      openssl.exec(params, searchString, [ecparam], function (error: Error | null, eckey: string) {
         if (error) {
           return callback(error)
         }
@@ -348,7 +431,7 @@ function createEcparam(keyName, paramEnc, noOut, callback) {
             return callback(error)
           }
           return callback(null, {
-            ecparam: ecparam + '\n' + keyData.key
+            ecparam: ecparam + '\n' + (keyData as { key: string }).key
           })
         })
       })
@@ -377,7 +460,7 @@ function createEcparam(keyName, paramEnc, noOut, callback) {
  * @param {Function} callback Callback function with an error object and {csr, clientKey}
  * @returns {Promise<{csr: String, clientKey: String, config: (String|null)}>} Resolves with the CSR details when no callback is provided.
  */
-function createCSR(options, callback) {
+function createCSR(options: CreateCSROptions | CSRCallback | undefined, callback: CSRCallback) {
   if (!callback && typeof options === 'function') {
     callback = options
     options = undefined
@@ -394,9 +477,9 @@ function createCSR(options, callback) {
     })
   }
 
-  let delTempPWFiles = []
+  let delTempPWFiles: string[] = []
 
-  options = options || {}
+  options = (options || {}) as CreateCSROptions
 
   // http://stackoverflow.com/questions/14089872/why-does-node-js-accept-ip-addresses-in-certificates-only-for-san-not-for-cn
   if (options.commonName && (net.isIPv4(options.commonName) || net.isIPv6(options.commonName))) {
@@ -427,7 +510,7 @@ function createCSR(options, callback) {
       if (error) {
         return callback(error)
       }
-      options.clientKey = keyData.key
+      (options as CreateCSROptions).clientKey = (keyData as { key: string }).key
 
       createCSR(options, callback)
     })
@@ -451,7 +534,7 @@ function createCSR(options, callback) {
   params.push('--TMPFILE--')
 
   var tmpfiles = [options.clientKey]
-  var config = null
+  var config: string | null = null
 
   if (options && (options.password || options.clientKeyPassword)) {
     helper.createPasswordFile({
@@ -466,7 +549,7 @@ function createCSR(options, callback) {
     params.push('v3_req')
     params.push('-config')
     params.push('--TMPFILE--')
-    var altNamesRep = []
+    var altNamesRep: string[] = []
     for (var i = 0; i < options.altNames.length; i++) {
       var altName = options.altNames[i]
       var altType = net.isIP(altName) ? 'IP' : 'DNS'
@@ -527,19 +610,19 @@ function createCSR(options, callback) {
     }, params, delTempPWFiles)
   }
 
-  openssl.exec(params, 'CERTIFICATE REQUEST', tmpfiles, function (sslErr, data) {
-    function done(err) {
+  openssl.exec(params, 'CERTIFICATE REQUEST', tmpfiles, function (sslErr: Error | null, data: string) {
+    function done(err: Error | string | null) {
       if (err) {
         return callback(err)
       }
       callback(null, {
         csr: data,
         config: config,
-        clientKey: options.clientKey
+        clientKey: (options as CreateCSROptions).clientKey as string
       })
     }
 
-    helper.deleteTempFiles(delTempPWFiles, function (fsErr) {
+    helper.deleteTempFiles(delTempPWFiles, function (fsErr: NodeJS.ErrnoException | null) {
       done(sslErr || fsErr)
     })
   })
@@ -568,7 +651,7 @@ function createCSR(options, callback) {
  * @param {Function} callback Callback function with an error object and {certificate, csr, clientKey, serviceKey}
  * @returns {Promise<{certificate: String, csr: String, clientKey: String, serviceKey: String}>} Resolves with the certificate data when no callback is provided.
  */
-function createCertificate(options, callback) {
+function createCertificate(options: CreateCertificateOptions | CertificateCallback | undefined, callback: CertificateCallback) {
   if (!callback && typeof options === 'function') {
     callback = options
     options = undefined
@@ -585,16 +668,16 @@ function createCertificate(options, callback) {
     })
   }
 
-  options = options || {}
+  options = (options || {}) as CreateCertificateOptions
 
   if (!options.csr) {
     createCSR(options, function (error, keyData) {
       if (error) {
         return callback(error)
       }
-      options.csr = keyData.csr
-      options.config = keyData.config
-      options.clientKey = keyData.clientKey
+      (options as CreateCertificateOptions).csr = (keyData as { csr: string; clientKey: string; config: string | null }).csr
+      ;(options as CreateCertificateOptions).config = (keyData as { csr: string; clientKey: string; config: string | null }).config
+      ;(options as CreateCertificateOptions).clientKey = (keyData as { csr: string; clientKey: string; config: string | null }).clientKey
       createCertificate(options, callback)
     })
     return
@@ -615,7 +698,7 @@ function createCertificate(options, callback) {
         if (error) {
           return callback(error)
         }
-        options.serviceKey = keyData.key
+        (options as CreateCertificateOptions).serviceKey = (keyData as { key: string }).key
         createCertificate(options, callback)
       })
       return
@@ -632,9 +715,9 @@ function createCertificate(options, callback) {
     // validate every value against the allowlist BEFORE any temporary
     // password files are created below, so rejecting a hostile CSR can
     // never leave those files behind (GHSA-445w-cp49-3x4p)
-    var altNamesRep = []
+    var altNamesRep: string[] = []
     if (options.copyExtensions && !options.config && !options.extFile) {
-      var invalidSan = null
+      var invalidSan: string | null = null
       var san = (data2 && data2.san) || {}
       var dnsEntries = Array.isArray(san.dns) ? san.dns : []
       var ipEntries = Array.isArray(san.ip) ? san.ip : []
@@ -678,7 +761,7 @@ function createCertificate(options, callback) {
       '--TMPFILE--'
     ]
     var tmpfiles = [options.csr]
-    var delTempPWFiles = []
+    var delTempPWFiles: string[] = []
 
     if (options.serviceCertificate) {
       params.push('-CA')
@@ -695,15 +778,15 @@ function createCertificate(options, callback) {
           // eg: 0x00 is a valid serial number and can not be represented in a
           // human readable format (atleast one that can be directly mapped to
           // the ACSII table).
-          params.push('0x' + ('0000000000000000000000000000000000000000' + options.serial.toString(16)).slice(-40))
+          params.push('0x' + ('0000000000000000000000000000000000000000' + (options.serial as number).toString(16)).slice(-40))
         } else {
           if (helper.isHex(options.serial)) {
-            if (options.serial.startsWith('0x')) {
-              options.serial = options.serial.substring(2, options.serial.length)
+            if ((options.serial as string).startsWith('0x')) {
+              options.serial = (options.serial as string).substring(2, (options.serial as string).length)
             }
             params.push('0x' + ('0000000000000000000000000000000000000000' + options.serial).slice(-40))
           } else {
-            params.push('0x' + ('0000000000000000000000000000000000000000' + helper.toHex(options.serial)).slice(-40))
+            params.push('0x' + ('0000000000000000000000000000000000000000' + helper.toHex(options.serial as string)).slice(-40))
           }
         }
       } else {
@@ -718,7 +801,7 @@ function createCertificate(options, callback) {
           cipher: '',
           password: options.serviceKeyPassword,
           passType: 'in'
-        }, params, delTempPWFiles)
+        }, params as string[], delTempPWFiles)
       }
       tmpfiles.push(options.serviceCertificate)
       tmpfiles.push(options.serviceKey)
@@ -730,7 +813,7 @@ function createCertificate(options, callback) {
           cipher: '',
           password: options.serviceKeyPassword,
           passType: 'in'
-        }, params, delTempPWFiles)
+        }, params as string[], delTempPWFiles)
       }
       tmpfiles.push(options.serviceKey)
     }
@@ -762,24 +845,24 @@ function createCertificate(options, callback) {
         cipher: '',
         password: options.clientKeyPassword,
         passType: 'in'
-      }, params, delTempPWFiles)
+      }, params as string[], delTempPWFiles)
     }
 
-    openssl.exec(params, 'CERTIFICATE', tmpfiles, function (sslErr, data) {
-      function done(err) {
+    openssl.exec(params, 'CERTIFICATE', tmpfiles, function (sslErr: Error | null, data: string) {
+      function done(err: Error | string | null) {
         if (err) {
           return callback(err)
         }
         var response = {
-          csr: options.csr,
-          clientKey: options.clientKey,
+          csr: (options as CreateCertificateOptions).csr as string,
+          clientKey: (options as CreateCertificateOptions).clientKey as string,
           certificate: data,
-          serviceKey: options.serviceKey
+          serviceKey: (options as CreateCertificateOptions).serviceKey as string
         }
         return callback(null, response)
       }
 
-      helper.deleteTempFiles(delTempPWFiles, function (fsErr) {
+      helper.deleteTempFiles(delTempPWFiles, function (fsErr: NodeJS.ErrnoException | null) {
         done(sslErr || fsErr)
       })
     })
@@ -793,7 +876,7 @@ function createCertificate(options, callback) {
  * @param {Function} callback Callback function with an error object and {publicKey}
  * @returns {Promise<{publicKey: String}>} Resolves with the extracted public key when no callback is provided.
  */
-function getPublicKey(certificate, callback) {
+function getPublicKey(certificate: string | Buffer | GetPublicKeyCallback | undefined, callback: GetPublicKeyCallback) {
   if (!callback && typeof certificate === 'function') {
     callback = certificate
     certificate = undefined
@@ -836,7 +919,7 @@ function getPublicKey(certificate, callback) {
     ]
   }
 
-  openssl.exec(params, 'PUBLIC KEY', certificate, function (error, key) {
+  openssl.exec(params, 'PUBLIC KEY', certificate, function (error: Error | null, key: string) {
     if (error) {
       return callback(error)
     }
@@ -853,7 +936,7 @@ function getPublicKey(certificate, callback) {
  * @param {Function} callback Callback function with an error object and {country, state, locality, organization, organizationUnit, commonName, emailAddress}
  * @returns {Promise<Object>} Resolves with the parsed certificate information when no callback is provided.
  */
-function readCertificateInfo(certificate, callback) {
+function readCertificateInfo(certificate: string | Buffer | ReadCertificateInfoCallback | undefined, callback: ReadCertificateInfoCallback) {
   if (!callback && typeof certificate === 'function') {
     callback = certificate
     certificate = undefined
@@ -881,7 +964,7 @@ function readCertificateInfo(certificate, callback) {
     '-in',
     '--TMPFILE--'
   ]
-  openssl.spawnWrapper(params, certificate, function (err, code, stdout, stderr) {
+  openssl.spawnWrapper(params, certificate, function (err: Error | null, code: number | null, stdout: string, stderr: string) {
     if (err) {
       return callback(err)
     } else if (stderr) {
@@ -900,7 +983,7 @@ function readCertificateInfo(certificate, callback) {
  * @param {Function} callback Callback function with an error object and {modulus}
  * @returns {Promise<{modulus: String}>} Resolves with the modulus information when no callback is provided.
  */
-function getModulus(certificate, password, hash, callback) {
+function getModulus(certificate: string | Buffer, password: string | GetModulusCallback | undefined, hash: string | false | GetModulusCallback | undefined, callback: GetModulusCallback) {
   if (!callback && !hash && typeof password === 'function') {
     callback = password
     password = undefined
@@ -929,7 +1012,7 @@ function getModulus(certificate, password, hash, callback) {
     hash = false
   }
 
-  certificate = (Buffer.isBuffer(certificate) && certificate.toString()) || certificate
+  certificate = ((Buffer.isBuffer(certificate) && certificate.toString()) || certificate) as string
 
   let type
   if (certificate.match(/BEGIN(\sNEW)? CERTIFICATE REQUEST/)) {
@@ -955,17 +1038,17 @@ function getModulus(certificate, password, hash, callback) {
       break
   }
 
-  let delTempPWFiles = []
+  let delTempPWFiles: string[] = []
   if (password) {
-    helper.createPasswordFile({cipher: '', password: password, passType: 'in'}, params, delTempPWFiles)
+    helper.createPasswordFile({cipher: '', password: password as string, passType: 'in'}, params, delTempPWFiles)
   }
 
-  openssl.spawnWrapper(params, certificate, function (sslErr, code, stdout, stderr) {
-    function done(err) {
+  openssl.spawnWrapper(params, certificate, function (sslErr: Error | null, code: number | null, stdout: string, stderr: string) {
+    function done(err: Error | string | null) {
       if (err) {
         return callback(err)
       }
-      var match
+      var match: RegExpMatchArray | null
       switch (params[0]) {
         case 'pkey':
           match = stdout.match(/Modulus:\s+([\s\S]+?)(?=\n[a-zA-Z0-9]+:|$)/i)
@@ -991,7 +1074,7 @@ function getModulus(certificate, password, hash, callback) {
       }
     }
 
-    helper.deleteTempFiles(delTempPWFiles, function (fsErr) {
+    helper.deleteTempFiles(delTempPWFiles, function (fsErr: NodeJS.ErrnoException | null) {
       done(sslErr || fsErr || stderr)
     })
   })
@@ -1004,7 +1087,7 @@ function getModulus(certificate, password, hash, callback) {
  * @param {Function} callback Callback function with an error object and {size, prime}
  * @returns {Promise<{size: Number, prime: String}>} Resolves with DH parameter details when no callback is provided.
  */
-function getDhparamInfo(dh, callback) {
+function getDhparamInfo(dh: string | Buffer, callback: GetDhparamInfoCallback) {
   if (!callback) {
     return new Promise(function (resolve, reject) {
       getDhparamInfo(dh, function (err, result) {
@@ -1016,7 +1099,7 @@ function getDhparamInfo(dh, callback) {
     })
   }
 
-  dh = (Buffer.isBuffer(dh) && dh.toString()) || dh
+  dh = ((Buffer.isBuffer(dh) && dh.toString()) || dh) as string
 
   var params = [
     'pkeyparam',
@@ -1025,19 +1108,19 @@ function getDhparamInfo(dh, callback) {
     '--TMPFILE--'
   ]
 
-  openssl.spawnWrapper(params, dh, function (err, code, stdout, stderr) {
+  openssl.spawnWrapper(params, dh, function (err: Error | null, code: number | null, stdout: string, stderr: string) {
     if (err) {
       return callback(err)
     } else if (stderr) {
       return callback(stderr)
     }
 
-    var result = {}
+    var result: { size?: number; group?: string; prime?: string } = {}
     // Match the DH marker specifically: EC parameters print
     // "EC-Parameters: (N bit)" / "ECDSA-Parameters: (N bit)" instead, and
     // their ASN.1 starts with a version INTEGER that must not be mistaken
     // for the DH prime below.
-    var match = stdout.match(/DH Parameters: \((\d+) bit\)/)
+    var match: RegExpMatchArray | null = stdout.match(/DH Parameters: \((\d+) bit\)/)
 
     if (match) {
       result.size = Number(match[1])
@@ -1059,7 +1142,7 @@ function getDhparamInfo(dh, callback) {
       '--TMPFILE--'
     ]
 
-    openssl.spawnWrapper(params, dh, function (err, code, stdout, stderr) {
+    openssl.spawnWrapper(params, dh, function (err: Error | null, code: number | null, stdout: string, stderr: string) {
       if (err) {
         return callback(err)
       } else if (stderr) {
@@ -1086,7 +1169,7 @@ function getDhparamInfo(dh, callback) {
  * @static
  * @param {Object} options
  */
-function config(options) {
+function config(options: Record<string, unknown>) {
   Object.keys(options).forEach(function (k) {
     openssl.set(k, options[k])
   })
@@ -1100,7 +1183,7 @@ function config(options) {
  * @param {Function} callback Callback function with an error object and {fingerprint}
  * @returns {Promise<{fingerprint: String}>} Resolves with the fingerprint when no callback is provided.
  */
-function getFingerprint(certificate, hash, callback) {
+function getFingerprint(certificate: string | Buffer, hash: string | GetFingerprintCallback | undefined, callback: GetFingerprintCallback) {
   if (!callback && typeof hash === 'function') {
     callback = hash
     hash = undefined
@@ -1127,7 +1210,7 @@ function getFingerprint(certificate, hash, callback) {
     '-' + hash
   ]
 
-  openssl.spawnWrapper(params, certificate, function (err, code, stdout, stderr) {
+  openssl.spawnWrapper(params, certificate, function (err: Error | null, code: number | null, stdout: string, stderr: string) {
     if (err) {
       return callback(err)
     } else if (stderr) {
@@ -1154,7 +1237,7 @@ function getFingerprint(certificate, hash, callback) {
  * @param {Function} callback Callback function with an error object and {pkcs12}
  * @returns {Promise<{pkcs12: Buffer}>} Resolves with the PKCS#12 bundle when no callback is provided.
  */
-function createPkcs12(key, certificate, password, options, callback) {
+function createPkcs12(key: string, certificate: string, password: string, options: CreatePkcs12Options | CreatePkcs12Callback | undefined, callback: CreatePkcs12Callback) {
   if (!callback && typeof options === 'function') {
     callback = options
     options = {}
@@ -1171,10 +1254,10 @@ function createPkcs12(key, certificate, password, options, callback) {
     })
   }
 
-  options = options || {}
+  options = (options || {}) as CreatePkcs12Options
 
   var params = ['pkcs12', '-export']
-  var delTempPWFiles = []
+  var delTempPWFiles: string[] = []
 
   if (options.cipher && options.clientKeyPassword) {
     // NOTICE: The password field is needed! self if it is empty.
@@ -1210,8 +1293,8 @@ function createPkcs12(key, certificate, password, options, callback) {
     params.push('-pbmac1_pbkdf2')
   }
 
-  openssl.execBinary(params, tmpfiles, function (sslErr, pkcs12) {
-    function done(err) {
+  openssl.execBinary(params, tmpfiles, function (sslErr: Error | null, pkcs12: Buffer) {
+    function done(err: Error | string | null) {
       if (err) {
         return callback(err)
       }
@@ -1220,7 +1303,7 @@ function createPkcs12(key, certificate, password, options, callback) {
       })
     }
 
-    helper.deleteTempFiles(delTempPWFiles, function (fsErr) {
+    helper.deleteTempFiles(delTempPWFiles, function (fsErr: NodeJS.ErrnoException | null) {
       done(sslErr || fsErr)
     })
   })
@@ -1234,7 +1317,7 @@ function createPkcs12(key, certificate, password, options, callback) {
  * @param  {Function} callback     Called with error object and sslcert bundle object
  * @returns {Promise<{cert: String, ca: Array, key: String}>} Resolves with the parsed PKCS#12 bundle when no callback is provided.
  */
-function readPkcs12(bufferOrPath, options, callback) {
+function readPkcs12(bufferOrPath: Buffer | string, options: ReadPkcs12Options | ReadPkcs12Callback | undefined, callback: ReadPkcs12Callback) {
   if (!callback && typeof options === 'function') {
     callback = options
     options = {}
@@ -1251,15 +1334,15 @@ function readPkcs12(bufferOrPath, options, callback) {
     })
   }
 
-  options = options || {}
+  options = (options || {}) as ReadPkcs12Options
 
   options.p12Password = options.p12Password || ''
 
-  var tmpfiles = []
-  var delTempPWFiles = []
+  var tmpfiles: (Buffer)[] = []
+  var delTempPWFiles: string[] = []
   var args = ['pkcs12', '-in', bufferOrPath]
 
-  helper.createPasswordFile({cipher: '', password: options.p12Password, passType: 'in'}, args, delTempPWFiles)
+  helper.createPasswordFile({cipher: '', password: options.p12Password, passType: 'in'}, args as string[], delTempPWFiles)
 
   if (Buffer.isBuffer(bufferOrPath)) {
     tmpfiles = [bufferOrPath]
@@ -1279,14 +1362,14 @@ function readPkcs12(bufferOrPath, options, callback) {
       cipher: '',
       password: options.clientKeyPassword,
       passType: 'out'
-    }, args, delTempPWFiles)
+    }, args as string[], delTempPWFiles)
   } else {
     args.push('-nodes')
   }
 
-  openssl.execBinary(args, tmpfiles, function (sslErr, stdout) {
-    function done(err) {
-      var keybundle = {}
+  openssl.execBinary(args, tmpfiles, function (sslErr: Error | null, stdout: string) {
+    function done(err: (Error & { code?: string }) | null) {
+      var keybundle: { cert?: string; ca?: string[]; key?: string } = {}
 
       if (err && err.message.indexOf('No such file or directory') !== -1) {
         err.code = 'ENOENT'
@@ -1314,7 +1397,7 @@ function readPkcs12(bufferOrPath, options, callback) {
           })
         }
 
-        if (options.clientKeyPassword) {
+        if ((options as ReadPkcs12Options).clientKeyPassword) {
           keybundle.key = readFromString(stdout, ENCRYPTED_KEY_START, ENCRYPTED_KEY_END).pop()
           debug("readPkcs12.execBinary - ENCRYPTED PRIVATE KEY - ?: ", keybundle.key)
           /*return openssl.exec(['rsa', '-in', '--TMPFILE--'], 'RSA PRIVATE KEY', [keybundle.key], function (err, key) {
@@ -1344,7 +1427,7 @@ function readPkcs12(bufferOrPath, options, callback) {
       return callback(err, keybundle)
     }
 
-    helper.deleteTempFiles(delTempPWFiles, function (fsErr) {
+    helper.deleteTempFiles(delTempPWFiles, function (fsErr: NodeJS.ErrnoException | null) {
       done(sslErr || fsErr)
     })
   })
@@ -1358,9 +1441,9 @@ function readPkcs12(bufferOrPath, options, callback) {
  * @param {Function} callback Callback function with an error object and a boolean valid
  * @returns {Promise<Boolean>} Resolves with the validity result when no callback is provided.
  */
-function checkCertificate(certificate, passphrase, callback) {
-  var params
-  var delTempPWFiles = []
+function checkCertificate(certificate: string | Buffer | CheckCertificateCallback | undefined, passphrase: string | CheckCertificateCallback | undefined, callback: CheckCertificateCallback) {
+  var params: string[]
+  var delTempPWFiles: string[] = []
 
   if (!callback && typeof passphrase === 'function') {
     callback = passphrase
@@ -1387,14 +1470,14 @@ function checkCertificate(certificate, passphrase, callback) {
     params = ['x509', '-text', '-noout', '-in', '--TMPFILE--']
   }
   if (passphrase) {
-    helper.createPasswordFile({cipher: '', password: passphrase, passType: 'in'}, params, delTempPWFiles)
+    helper.createPasswordFile({cipher: '', password: passphrase as string, passType: 'in'}, params, delTempPWFiles)
   }
 
-  openssl.spawnWrapper(params, certificate, function (sslErr, code, stdout, stderr) {
-    function done(err) {
+  openssl.spawnWrapper(params, certificate, function (sslErr: Error | null, code: number | null, stdout: string, stderr: string) {
+    function done(err: Error | string | null) {
 
       stdout = stdout && stdout.trim()
-      var result
+      var result: boolean
       switch (params[0]) {
         case 'pkey':
           result = /^Key is valid$/i.test(stdout)
@@ -1419,7 +1502,7 @@ function checkCertificate(certificate, passphrase, callback) {
       callback(null, result)
     }
 
-    helper.deleteTempFiles(delTempPWFiles, function (fsErr) {
+    helper.deleteTempFiles(delTempPWFiles, function (fsErr: NodeJS.ErrnoException | null) {
       done(sslErr || fsErr || stderr)
     })
   })
@@ -1433,7 +1516,7 @@ function checkCertificate(certificate, passphrase, callback) {
  * @param {Function} callback Callback function with an error object and a boolean valid
  * @returns {Promise<Boolean>} Resolves with the validity result when no callback is provided.
  */
-function checkPkcs12(bufferOrPath, passphrase, callback) {
+function checkPkcs12(bufferOrPath: Buffer | string, passphrase: string | CheckPkcs12Callback | undefined, callback: CheckPkcs12Callback) {
   if (!callback && typeof passphrase === 'function') {
     callback = passphrase
     passphrase = ''
@@ -1450,11 +1533,11 @@ function checkPkcs12(bufferOrPath, passphrase, callback) {
     })
   }
 
-  var tmpfiles = []
-  var delTempPWFiles = []
+  var tmpfiles: Buffer[] = []
+  var delTempPWFiles: string[] = []
   var args = ['pkcs12', '-info', '-in', bufferOrPath, '-noout', '-maciter', '-nodes']
 
-  helper.createPasswordFile({cipher: '', password: passphrase, passType: 'in'}, args, delTempPWFiles)
+  helper.createPasswordFile({cipher: '', password: passphrase as string, passType: 'in'}, args as string[], delTempPWFiles)
 
   if (Buffer.isBuffer(bufferOrPath)) {
     tmpfiles = [bufferOrPath]
@@ -1465,7 +1548,7 @@ function checkPkcs12(bufferOrPath, passphrase, callback) {
     args.splice(2, 0, '-legacy');
   }
 
-  openssl.spawnWrapper(args, tmpfiles, function (sslErr, code, stdout, stderr) {
+  openssl.spawnWrapper(args, tmpfiles, function (sslErr: Error | null, code: number | null, stdout: string, stderr: string) {
     debug('checkPkcs12 error', {
       err: sslErr,
       code: code,
@@ -1474,14 +1557,14 @@ function checkPkcs12(bufferOrPath, passphrase, callback) {
       stderr: stderr
     })
 
-    function done(err) {
+    function done(err: Error | string | null) {
       if (err) {
         return callback(err)
       }
       callback(null, (/MAC verified OK/im.test(stderr) || (!(/MAC verified OK/im.test(stderr)) && !(/Mac verify error/im.test(stderr)))))
     }
 
-    helper.deleteTempFiles(delTempPWFiles, function (fsErr) {
+    helper.deleteTempFiles(delTempPWFiles, function (fsErr: NodeJS.ErrnoException | null) {
       debug('checkPkcs12 clean-up error', {
         sslErr: sslErr,
         fsErr: fsErr,
@@ -1505,7 +1588,7 @@ function checkPkcs12(bufferOrPath, passphrase, callback) {
  * @param {Function} callback Callback function with an error object and a boolean valid
  * @returns {Promise<Boolean>} Resolves with the verification result when no callback is provided.
  */
-function verifySigningChain(certificate, ca, callback) {
+function verifySigningChain(certificate: string | string[] | Buffer, ca: string | string[] | Buffer | VerifySigningChainCallback | undefined, callback: VerifySigningChainCallback) {
   if (!callback && typeof ca === 'function') {
     callback = ca
     ca = undefined
@@ -1522,22 +1605,22 @@ function verifySigningChain(certificate, ca, callback) {
     })
   }
   if (!Array.isArray(certificate)) {
-    certificate = readFromString(certificate, CERT_START, CERT_END)
+    certificate = readFromString(certificate as string, CERT_START, CERT_END)
   }
   if (!Array.isArray(ca) && ca !== undefined) {
     if (ca !== '') {
-      ca = [ca]
+      ca = [ca] as string[]
     }
   }
 
   var params = ['verify']
-  var files = []
+  var files: string[] = []
 
   if (ca !== undefined) {
     // ca certificates
     params.push('-CAfile')
     params.push('--TMPFILE--')
-    files.push(ca.join('\n'))
+    files.push((ca as string[]).join('\n'))
   }
   // extracting the very first - leaf - cert in chain
   var leaf = certificate.shift()
@@ -1549,9 +1632,9 @@ function verifySigningChain(certificate, ca, callback) {
   }
 
   params.push('--TMPFILE--')
-  files.push(leaf)
+  files.push(leaf as string)
 
-  openssl.spawnWrapper(params, files, function (err, code, stdout, stderr) {
+  openssl.spawnWrapper(params, files, function (err: Error | null, code: number | null, stdout: string, stderr: string) {
     // OPENSSL 3.x don't use stdout to print the error
     debug('Vendor', openssl.get('Vendor'))
     debug('VendorVersionMajor', openssl.get('VendorVersionMajor'))
@@ -1603,19 +1686,19 @@ function verifySigningChain(certificate, ca, callback) {
 }
 
 // HELPER FUNCTIONS
-function fetchCertificateData(certData, callback) {
+function fetchCertificateData(certData: string | Buffer, callback: ReadCertificateInfoCallback) {
   // try catch : if something will fail in parsing it won't crash the calling code
   try {
     certData = (certData || '').toString()
 
-    var serial, subject, tmp, issuer
-    var certValues = {
+    var serial: RegExpMatchArray | null, subject: string | RegExpMatchArray | null, tmp: any, issuer: string | RegExpMatchArray | null
+    var certValues: CertificateInfoValues = {
       issuer: {}
     }
-    var validity = {}
-    var san
+    var validity: { start?: number; end?: number } = {}
+    var san: string | RegExpMatchArray | null
 
-    var ky, i
+    var ky: string, i: number
 
     // serial
     if ((serial = certData.match(/\s*Serial Number:\r?\n?[ \t]*([^\r\n]*)\r?\n[ \t]*/)) && serial.length > 1) {
@@ -1649,61 +1732,61 @@ function fetchCertificateData(certData, callback) {
 
       // organization
       tmp = matchAll(subject, /\sO\s=\s([^\r\n].*)/g)
-      certValues.organization = tmp ? (tmp.length > 1 ? tmp.sort(function (t, n) {
+      certValues.organization = tmp ? (tmp.length > 1 ? tmp.sort(function (t: RegExpMatchArray, n: RegExpMatchArray) {
         var e = t[1].toUpperCase()
         var r = n[1].toUpperCase()
         return r > e ? -1 : e > r ? 1 : 0
-      }).sort(function (t, n) {
+      }).sort(function (t: RegExpMatchArray, n: RegExpMatchArray) {
         return t[1].length - n[1].length
-      }).map(function (t) {
+      }).map(function (t: RegExpMatchArray) {
         return t[1]
       }) : tmp[0][1]) : ''
 
       // unit
       tmp = matchAll(subject, /\sOU\s=\s([^\r\n].*)/g)
-      certValues.organizationUnit = tmp ? (tmp.length > 1 ? tmp.sort(function (t, n) {
+      certValues.organizationUnit = tmp ? (tmp.length > 1 ? tmp.sort(function (t: RegExpMatchArray, n: RegExpMatchArray) {
         var e = t[1].toUpperCase()
         var r = n[1].toUpperCase()
         return r > e ? -1 : e > r ? 1 : 0
-      }).sort(function (t, n) {
+      }).sort(function (t: RegExpMatchArray, n: RegExpMatchArray) {
         return t[1].length - n[1].length
-      }).map(function (t) {
+      }).map(function (t: RegExpMatchArray) {
         return t[1]
       }) : tmp[0][1]) : ''
 
       // common name
       tmp = matchAll(subject, /\sCN\s=\s([^\r\n].*)/g)
-      certValues.commonName = tmp ? (tmp.length > 1 ? tmp.sort(function (t, n) {
+      certValues.commonName = tmp ? (tmp.length > 1 ? tmp.sort(function (t: RegExpMatchArray, n: RegExpMatchArray) {
         var e = t[1].toUpperCase()
         var r = n[1].toUpperCase()
         return r > e ? -1 : e > r ? 1 : 0
-      }).sort(function (t, n) {
+      }).sort(function (t: RegExpMatchArray, n: RegExpMatchArray) {
         return t[1].length - n[1].length
-      }).map(function (t) {
+      }).map(function (t: RegExpMatchArray) {
         return t[1]
       }) : tmp[0][1]) : ''
 
       // email
       tmp = matchAll(subject, /emailAddress\s=\s([^\r\n].*)/g)
-      certValues.emailAddress = tmp ? (tmp.length > 1 ? tmp.sort(function (t, n) {
+      certValues.emailAddress = tmp ? (tmp.length > 1 ? tmp.sort(function (t: RegExpMatchArray, n: RegExpMatchArray) {
         var e = t[1].toUpperCase()
         var r = n[1].toUpperCase()
         return r > e ? -1 : e > r ? 1 : 0
-      }).sort(function (t, n) {
+      }).sort(function (t: RegExpMatchArray, n: RegExpMatchArray) {
         return t[1].length - n[1].length
-      }).map(function (t) {
+      }).map(function (t: RegExpMatchArray) {
         return t[1]
       }) : tmp[0][1]) : ''
 
       // DC name
       tmp = matchAll(subject, /\sDC\s=\s([^\r\n].*)/g)
-      certValues.dc = tmp ? (tmp.length > 1 ? tmp.sort(function (t, n) {
+      certValues.dc = tmp ? (tmp.length > 1 ? tmp.sort(function (t: RegExpMatchArray, n: RegExpMatchArray) {
         var e = t[1].toUpperCase()
         var r = n[1].toUpperCase()
         return r > e ? -1 : e > r ? 1 : 0
-      }).sort(function (t, n) {
+      }).sort(function (t: RegExpMatchArray, n: RegExpMatchArray) {
         return t[1].length - n[1].length
-      }).map(function (t) {
+      }).map(function (t: RegExpMatchArray) {
         return t[1]
       }) : tmp[0][1]) : ''
     }
@@ -1735,52 +1818,52 @@ function fetchCertificateData(certData, callback) {
 
       // organization
       tmp = matchAll(issuer, /\sO\s=\s([^\r\n].*)/g)
-      certValues.issuer.organization = tmp ? (tmp.length > 1 ? tmp.sort(function (t, n) {
+      certValues.issuer.organization = tmp ? (tmp.length > 1 ? tmp.sort(function (t: RegExpMatchArray, n: RegExpMatchArray) {
         var e = t[1].toUpperCase()
         var r = n[1].toUpperCase()
         return r > e ? -1 : e > r ? 1 : 0
-      }).sort(function (t, n) {
+      }).sort(function (t: RegExpMatchArray, n: RegExpMatchArray) {
         return t[1].length - n[1].length
-      }).map(function (t) {
+      }).map(function (t: RegExpMatchArray) {
         return t[1]
       }) : tmp[0][1]) : ''
 
       // unit
       tmp = matchAll(issuer, /\sOU\s=\s([^\r\n].*)/g)
-      certValues.issuer.organizationUnit = tmp ? (tmp.length > 1 ? tmp.sort(function (t, n) {
+      certValues.issuer.organizationUnit = tmp ? (tmp.length > 1 ? tmp.sort(function (t: RegExpMatchArray, n: RegExpMatchArray) {
         var e = t[1].toUpperCase()
         var
           r = n[1].toUpperCase()
         return r > e ? -1 : e > r ? 1 : 0
-      }).sort(function (t, n) {
+      }).sort(function (t: RegExpMatchArray, n: RegExpMatchArray) {
         return t[1].length - n[1].length
-      }).map(function (t) {
+      }).map(function (t: RegExpMatchArray) {
         return t[1]
       }) : tmp[0][1]) : ''
 
       // common name
       tmp = matchAll(issuer, /\sCN\s=\s([^\r\n].*)/g)
-      certValues.issuer.commonName = tmp ? (tmp.length > 1 ? tmp.sort(function (t, n) {
+      certValues.issuer.commonName = tmp ? (tmp.length > 1 ? tmp.sort(function (t: RegExpMatchArray, n: RegExpMatchArray) {
         var e = t[1].toUpperCase()
         var
           r = n[1].toUpperCase()
         return r > e ? -1 : e > r ? 1 : 0
-      }).sort(function (t, n) {
+      }).sort(function (t: RegExpMatchArray, n: RegExpMatchArray) {
         return t[1].length - n[1].length
-      }).map(function (t) {
+      }).map(function (t: RegExpMatchArray) {
         return t[1]
       }) : tmp[0][1]) : ''
 
       // DC name
       tmp = matchAll(issuer, /\sDC\s=\s([^\r\n].*)/g)
-      certValues.issuer.dc = tmp ? (tmp.length > 1 ? tmp.sort(function (t, n) {
+      certValues.issuer.dc = tmp ? (tmp.length > 1 ? tmp.sort(function (t: RegExpMatchArray, n: RegExpMatchArray) {
         var e = t[1].toUpperCase()
         var
           r = n[1].toUpperCase()
         return r > e ? -1 : e > r ? 1 : 0
-      }).sort(function (t, n) {
+      }).sort(function (t: RegExpMatchArray, n: RegExpMatchArray) {
         return t[1].length - n[1].length
-      }).map(function (t) {
+      }).map(function (t: RegExpMatchArray) {
         return t[1]
       }) : tmp[0][1]) : ''
     }
@@ -1834,14 +1917,15 @@ function fetchCertificateData(certData, callback) {
 
     callback(null, certValues)
   } catch (err) {
-    callback(err)
+    callback(err as Error)
   }
 }
 
-function matchAll(str, regexp) {
-  var matches = []
-  str.replace(regexp, function () {
-    var arr = ([]).slice.call(arguments, 0)
+function matchAll(str: string, regexp: RegExp): RegExpMatchArray[] | null {
+  var matches: any[] = []
+  str.replace(regexp, function (): any {
+    // eslint-disable-next-line prefer-rest-params -- U5 idiom (e): master's `arguments` use stays verbatim; rest params would change the replacer's runtime shape
+    var arr: any = ([]).slice.call(arguments, 0)
     var extras = arr.splice(-2)
     arr.index = extras[0]
     arr.input = extras[1]
@@ -1850,15 +1934,15 @@ function matchAll(str, regexp) {
   return matches.length ? matches : null
 }
 
-function pregMatchAll(regex, haystack) {
+function pregMatchAll(regex: string, haystack: string): string[] {
   var globalRegex = new RegExp(regex, 'g')
   var globalMatch = haystack.match(globalRegex) || []
-  var matchArray = []
-  var nonGlobalRegex, nonGlobalMatch
+  var matchArray: string[] = []
+  var nonGlobalRegex: RegExp, nonGlobalMatch: RegExpMatchArray | null
   for (var i = 0; i < globalMatch.length; i++) {
     nonGlobalRegex = new RegExp(regex)
     nonGlobalMatch = globalMatch[i].match(nonGlobalRegex)
-    matchArray.push(nonGlobalMatch[1])
+    matchArray.push((nonGlobalMatch as RegExpMatchArray)[1])
   }
   return matchArray
 }
@@ -1867,22 +1951,25 @@ var DNS_LABEL_PATTERN = '[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?'
 var DNS_NAME_REGEX = new RegExp('^(?:\\*\\.)?' + DNS_LABEL_PATTERN + '(?:\\.' + DNS_LABEL_PATTERN + ')*\\.?$')
 var DNS_EMAIL_REGEX = new RegExp('^[A-Za-z0-9.!#$%&\'*+/=?^_`{|}~-]+@' + DNS_LABEL_PATTERN + '(?:\\.' + DNS_LABEL_PATTERN + ')*$')
 
-function isValidDNSName(value) {
+function isValidDNSName(value: unknown) {
   return typeof value === 'string' && value.length <= 253 && DNS_NAME_REGEX.test(value)
 }
 
-function isValidSANEmail(value) {
+function isValidSANEmail(value: unknown) {
   return typeof value === 'string' && value.length <= 254 && DNS_EMAIL_REGEX.test(value)
 }
 
-function isValidAltName(value) {
+function isValidAltName(value: unknown) {
   return typeof value === 'string' && (net.isIP(value) > 0 || isValidDNSName(value))
 }
 
-function generateCSRSubject(options) {
+function generateCSRSubject(options: CreateCSROptions) {
   options = options || {}
 
-  var csrData = {
+  // csrData values are string | string[] | undefined from the option fields;
+  // typed any because the else-branch below assumes the non-object shape
+  // (master's latent TypeError on empty arrays is preserved verbatim)
+  var csrData: Record<string, any> = {
     C: options.country || options.C,
     ST: options.state || options.ST,
     L: options.locality || options.L,
@@ -1897,7 +1984,7 @@ function generateCSRSubject(options) {
     if (csrData[key]) {
       if (typeof csrData[key] === 'object' && csrData[key].length >= 1) {
         var tmpStr = ''
-        csrData[key].map(function (o) {
+        csrData[key].map(function (o: string) {
           tmpStr += '/' + key + '=' + o.replace(/[^\w\s-!$%^&*()_+|~=`{}[\]:/;<>?,.@#]+/g, ' ').replace('/', '\\/').replace('+', '\\+').trim()
         })
         return tmpStr
@@ -1910,12 +1997,12 @@ function generateCSRSubject(options) {
   return csrBuilder.join('')
 }
 
-function readFromString(string, start, end) {
+function readFromString(string: string, start: string, end: string): string[] {
   if (Buffer.isBuffer(string)) {
     string = string.toString('utf8')
   }
 
-  var output = []
+  var output: string[] = []
 
   if (!string) {
     return output
@@ -1970,9 +2057,10 @@ var promisifiedMethods = [
   'checkCertificate',
   'checkPkcs12'
 ]
-module.exports.promisified = promisifiedMethods.reduce(function (acc, method) {
+module.exports.promisified = promisifiedMethods.reduce(function (acc: Record<string, (...args: any[]) => Promise<unknown>>, method: string) {
   acc[method] = function () {
-    var args = Array.prototype.slice.call(arguments)
+    // eslint-disable-next-line prefer-rest-params -- brief: the promisifiedMethods.reduce block stays verbatim; rest params would change the wrapper's runtime shape
+    var args: any[] = Array.prototype.slice.call(arguments)
     if (args.length && typeof args[args.length - 1] === 'function') {
       args = args.slice(0, -1)
     }
