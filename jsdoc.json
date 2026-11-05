@@ -10,23 +10,10 @@
     "plugins": ["plugins/markdown"],
     "templates": {
       "cleverLinks": true,
-      "monospaceLinks": true,
-      "outputSourceFiles": true,
-      "outputSourcePath": true,
-      "dateFormat": "MMMM Do YYYY, HH:mm Z",
-      "systemName": "pem",
-      "footer": "",
-      "copyright": "Copyright (c) 2012 Andris Reinman; 2016 Josef Fröhle",
-      "navType": "vertical",
-      "linenums": true,
-      "collapseSymbols": false,
-      "inverseNav": true,
-      "highlightTutorialCode": true,
-      "protocol": "html://",
-      "syntaxTheme": "dark"
+      "monospaceLinks": true
     },
     "markdown": {
-      "parser": "gfm",
+      "parser": "markdownit",
       "hardwrap": true
     },
     "opts": {
@@ -35,10 +22,12 @@
       "destination": "docs/jsdoc/",
       "recurse": true,
       "readme": "./README.md",
-      "template": "node_modules/@deineagenturug/docdash"
+      "template": "node_modules/docdash"
     },
     "docdash": {
         "static": true,
-        "sort": true
+        "sort": true,
+        "nameInOutputPath": false,
+        "versionInOutputPath": false
     }
 }

@@ -66,7 +66,7 @@
  * <span class="hljs-doctag">@module</span> <span class="hljs-variable">pem</span>
  */</span>
 <span class="hljs-keyword">const</span> {debug} = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;./debug.js&#x27;</span>)
-<span class="hljs-keyword">const</span> {createHash} = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;node:crypto&#x27;</span>)
+<span class="hljs-keyword">const</span> {createHash, getFips} = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;node:crypto&#x27;</span>)
 <span class="hljs-keyword">var</span> net = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;net&#x27;</span>)
 <span class="hljs-keyword">var</span> helper = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;./helper.js&#x27;</span>)
 <span class="hljs-keyword">var</span> openssl = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;./openssl.js&#x27;</span>)
@@ -115,6 +115,88 @@
 <span class="hljs-keyword">var</span> <span class="hljs-variable constant_">CERT_START</span> = <span class="hljs-string">&#x27;-----BEGIN CERTIFICATE-----&#x27;</span>
 <span class="hljs-keyword">var</span> <span class="hljs-variable constant_">CERT_END</span> = <span class="hljs-string">&#x27;-----END CERTIFICATE-----&#x27;</span>
 
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">convertKeyToTraditional</span>(<span class="hljs-params">key, algorithm, searchString, options, callback</span>) {
+  <span class="hljs-keyword">if</span> (!callback &amp;&amp; <span class="hljs-keyword">typeof</span> options === <span class="hljs-string">&#x27;function&#x27;</span>) {
+    callback = options
+    options = {}
+  }
+
+  <span class="hljs-keyword">if</span> (!callback) {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Promise</span>(<span class="hljs-keyword">function</span> (<span class="hljs-params">resolve, reject</span>) {
+      <span class="hljs-title function_">convertKeyToTraditional</span>(key, algorithm, searchString, options, <span class="hljs-keyword">function</span> (<span class="hljs-params">err, result</span>) {
+        <span class="hljs-keyword">if</span> (err) {
+          <span class="hljs-keyword">return</span> <span class="hljs-title function_">reject</span>(err)
+        }
+        <span class="hljs-title function_">resolve</span>(result)
+      })
+    })
+  }
+
+  <span class="hljs-keyword">function</span> <span class="hljs-title function_">done</span>(<span class="hljs-params">err</span>) {
+    <span class="hljs-keyword">if</span> (err) {
+      <span class="hljs-keyword">return</span> <span class="hljs-title function_">callback</span>(err)
+    }
+    <span class="hljs-keyword">return</span> <span class="hljs-title function_">callback</span>(<span class="hljs-literal">null</span>, {
+      <span class="hljs-attr">key</span>: key
+    })
+  }
+  <span class="hljs-keyword">if</span> (key &amp;&amp; searchString) {
+    <span class="hljs-keyword">if</span> (!(<span class="hljs-title function_">getFips</span>() &amp;&amp; options &amp;&amp; options.<span class="hljs-property">cipher</span> &amp;&amp; (helper.<span class="hljs-property">ciphers</span>.<span class="hljs-title function_">indexOf</span>(options.<span class="hljs-property">cipher</span>) !== -<span class="hljs-number">1</span>))) {
+      <span class="hljs-keyword">var</span> params = [<span class="hljs-string">&#x27;pkey&#x27;</span>, <span class="hljs-string">&#x27;-traditional&#x27;</span>]
+      <span class="hljs-keyword">if</span> (openssl.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;Vendor&#x27;</span>) !== <span class="hljs-string">&quot;OPENSSL&quot;</span>) {
+        params = [algorithm]
+      }
+
+      params.<span class="hljs-title function_">push</span>(<span class="hljs-string">&#x27;-in&#x27;</span>)
+      params.<span class="hljs-title function_">push</span>(<span class="hljs-string">&#x27;--TMPFILE--&#x27;</span>)
+      <span class="hljs-keyword">var</span> delTempPWFiles = []
+      <span class="hljs-keyword">if</span> (options &amp;&amp; options.<span class="hljs-property">cipher</span> &amp;&amp; (helper.<span class="hljs-property">ciphers</span>.<span class="hljs-title function_">indexOf</span>(options.<span class="hljs-property">cipher</span>) !== -<span class="hljs-number">1</span>) &amp;&amp; options.<span class="hljs-property">password</span>) {
+        <span class="hljs-title function_">debug</span>(<span class="hljs-string">&#x27;helper.createPasswordFile&#x27;</span>, {
+          <span class="hljs-attr">cipher</span>: <span class="hljs-string">&#x27;&#x27;</span>,
+          <span class="hljs-attr">password</span>: options.<span class="hljs-property">password</span>,
+          <span class="hljs-attr">passType</span>: <span class="hljs-string">&#x27;in&#x27;</span>
+        })
+        helper.<span class="hljs-title function_">createPasswordFile</span>({
+          <span class="hljs-attr">cipher</span>: <span class="hljs-string">&#x27;&#x27;</span>,
+          <span class="hljs-attr">password</span>: options.<span class="hljs-property">password</span>,
+          <span class="hljs-attr">passType</span>: <span class="hljs-string">&#x27;in&#x27;</span>
+        }, params, delTempPWFiles)
+
+        <span class="hljs-title function_">debug</span>(<span class="hljs-string">&#x27;helper.createPasswordFile&#x27;</span>, {
+          <span class="hljs-attr">cipher</span>: options.<span class="hljs-property">cipher</span>,
+          <span class="hljs-attr">password</span>: options.<span class="hljs-property">password</span>,
+          <span class="hljs-attr">passType</span>: <span class="hljs-string">&#x27;out&#x27;</span>
+        })
+        helper.<span class="hljs-title function_">createPasswordFile</span>({
+          <span class="hljs-attr">cipher</span>: options.<span class="hljs-property">cipher</span>,
+          <span class="hljs-attr">password</span>: options.<span class="hljs-property">password</span>,
+          <span class="hljs-attr">passType</span>: <span class="hljs-string">&#x27;out&#x27;</span>
+        }, params, delTempPWFiles)
+      }
+
+      <span class="hljs-title function_">debug</span>(<span class="hljs-string">&#x27;version&#x27;</span>, openssl.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;openSslVersion&#x27;</span>))
+
+      openssl.<span class="hljs-title function_">exec</span>(params, searchString, [key], <span class="hljs-keyword">function</span> (<span class="hljs-params">sslErr, traditional_key</span>) {
+
+        helper.<span class="hljs-title function_">deleteTempFiles</span>(delTempPWFiles, <span class="hljs-keyword">function</span> (<span class="hljs-params">fsErr</span>) {
+          <span class="hljs-title function_">debug</span>(<span class="hljs-string">&#x27;convertKeyToTraditional&#x27;</span>, {
+            <span class="hljs-attr">sslErr</span>: sslErr,
+            <span class="hljs-attr">fsErr</span>: fsErr,
+            <span class="hljs-attr">key</span>: traditional_key,
+            <span class="hljs-attr">keyLength</span>: traditional_key &amp;&amp; traditional_key.<span class="hljs-property">length</span>
+          })
+          key = traditional_key
+          <span class="hljs-title function_">done</span>(sslErr || fsErr)
+        })
+      })
+    } <span class="hljs-keyword">else</span> {
+      <span class="hljs-title function_">done</span>()
+    }
+  } <span class="hljs-keyword">else</span> {
+    <span class="hljs-title function_">done</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&#x27;No key or search string provided for conversion&#x27;</span>))
+  }
+}
+
 <span class="hljs-comment">/**
  * Creates a private key
  *
@@ -149,15 +231,11 @@
 
   keyBitsize = <span class="hljs-title class_">Number</span>(keyBitsize) || <span class="hljs-number">2048</span>
 
-  <span class="hljs-keyword">var</span> params = [<span class="hljs-string">&#x27;genrsa&#x27;</span>]
-
-  <span class="hljs-keyword">if</span> (openssl.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;Vendor&#x27;</span>) === <span class="hljs-string">&#x27;OPENSSL&#x27;</span> &amp;&amp; openssl.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;VendorVersionMajor&#x27;</span>) &gt;= <span class="hljs-number">3</span>) {
-    params.<span class="hljs-title function_">push</span>(<span class="hljs-string">&#x27;-traditional&#x27;</span>)
-  }
+  <span class="hljs-keyword">var</span> params = [<span class="hljs-string">&#x27;genpkey&#x27;</span>, <span class="hljs-string">&#x27;-algorithm&#x27;</span>, <span class="hljs-string">&#x27;RSA&#x27;</span>]
 
   <span class="hljs-keyword">var</span> delTempPWFiles = []
 
-  <span class="hljs-keyword">if</span> (options &amp;&amp; options.<span class="hljs-property">cipher</span> &amp;&amp; (<span class="hljs-title class_">Number</span>(helper.<span class="hljs-property">ciphers</span>.<span class="hljs-title function_">indexOf</span>(options.<span class="hljs-property">cipher</span>)) !== -<span class="hljs-number">1</span>) &amp;&amp; options.<span class="hljs-property">password</span>) {
+  <span class="hljs-keyword">if</span> (options &amp;&amp; options.<span class="hljs-property">cipher</span> &amp;&amp; (helper.<span class="hljs-property">ciphers</span>.<span class="hljs-title function_">indexOf</span>(options.<span class="hljs-property">cipher</span>) !== -<span class="hljs-number">1</span>) &amp;&amp; options.<span class="hljs-property">password</span>) {
     <span class="hljs-title function_">debug</span>(<span class="hljs-string">&#x27;helper.createPasswordFile&#x27;</span>, {
       <span class="hljs-attr">cipher</span>: options.<span class="hljs-property">cipher</span>,
       <span class="hljs-attr">password</span>: options.<span class="hljs-property">password</span>,
@@ -170,7 +248,8 @@
     }, params, delTempPWFiles)
   }
 
-  params.<span class="hljs-title function_">push</span>(keyBitsize)
+  params.<span class="hljs-title function_">push</span>(<span class="hljs-string">&#x27;-pkeyopt&#x27;</span>)
+  params.<span class="hljs-title function_">push</span>(<span class="hljs-string">`rsa_keygen_bits:<span class="hljs-subst">${keyBitsize}</span>`</span>)
 
   <span class="hljs-title function_">debug</span>(<span class="hljs-string">&#x27;version&#x27;</span>, openssl.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;openSslVersion&#x27;</span>))
 
@@ -191,7 +270,12 @@
         <span class="hljs-attr">key</span>: key,
         <span class="hljs-attr">keyLength</span>: key &amp;&amp; key.<span class="hljs-property">length</span>
       })
-      <span class="hljs-title function_">done</span>(sslErr || fsErr)
+      <span class="hljs-title function_">convertKeyToTraditional</span>(key, <span class="hljs-string">&#x27;rsa&#x27;</span>, <span class="hljs-string">&#x27;(RSA |ENCRYPTED |)PRIVATE KEY&#x27;</span>, options, <span class="hljs-keyword">function</span> (<span class="hljs-params">convertErr, keyData</span>) {
+        <span class="hljs-keyword">if</span> (!convertErr) {
+          key = keyData.<span class="hljs-property">key</span>
+        }
+        <span class="hljs-title function_">done</span>(sslErr || fsErr || convertErr)
+      })
     })
   })
 }
@@ -200,7 +284,7 @@
  * Creates a dhparam key
  *
  * <span class="hljs-doctag">@static</span>
- * <span class="hljs-doctag">@param</span> {<span class="hljs-type">Number</span>} [keyBitsize=512] Size of the key, defaults to 512bit
+ * <span class="hljs-doctag">@param</span> {<span class="hljs-type">Number</span>} [keyBitsize=(getFips() ? 2048 : 512)] Size of the key, defaults to 512bit in non-FIPS mode, and to 2048bit in FIPS mode
  * <span class="hljs-doctag">@param</span> {<span class="hljs-type">Function</span>} callback Callback function with an error object and {dhparam}
  * <span class="hljs-doctag">@returns</span> {<span class="hljs-type">Promise&lt;{dhparam: String</span>}&gt;} Resolves with the generated parameters when no callback is provided.
  */</span>
@@ -221,12 +305,16 @@
     })
   }
 
-  keyBitsize = <span class="hljs-title class_">Number</span>(keyBitsize) || <span class="hljs-number">512</span>
+  keyBitsize = <span class="hljs-title class_">Number</span>(keyBitsize) || (<span class="hljs-title function_">getFips</span>() ? <span class="hljs-number">2048</span> : <span class="hljs-number">512</span>)
 
-  <span class="hljs-keyword">var</span> params = [<span class="hljs-string">&#x27;dhparam&#x27;</span>,
+  <span class="hljs-keyword">var</span> params = [<span class="hljs-string">&#x27;genpkey&#x27;</span>,
+    <span class="hljs-string">&#x27;-genparam&#x27;</span>,
+    <span class="hljs-string">&#x27;-algorithm&#x27;</span>,
+    <span class="hljs-string">&#x27;DH&#x27;</span>,
     <span class="hljs-string">&#x27;-outform&#x27;</span>,
     <span class="hljs-string">&#x27;PEM&#x27;</span>,
-    keyBitsize
+    <span class="hljs-string">&#x27;-pkeyopt&#x27;</span>,
+    <span class="hljs-string">`dh_paramgen_prime_len:<span class="hljs-subst">${keyBitsize}</span>`</span>
   ]
 
   openssl.<span class="hljs-title function_">exec</span>(params, <span class="hljs-string">&#x27;DH PARAMETERS&#x27;</span>, <span class="hljs-keyword">function</span> (<span class="hljs-params">error, dhparam</span>) {
@@ -242,7 +330,7 @@
 <span class="hljs-comment">/**
  * Creates a ecparam key
  * <span class="hljs-doctag">@static</span>
- * <span class="hljs-doctag">@param</span> {<span class="hljs-type">String</span>} [keyName=secp256k1] Name of the key, defaults to secp256k1
+ * <span class="hljs-doctag">@param</span> {<span class="hljs-type">String</span>} [keyName=(getFips() ? prime256v1 : secp256k1)] Name of the key, defaults to secp256k1 in non-FIPS mode, and to prime256v1 in FIPS mode
  * <span class="hljs-doctag">@param</span> {<span class="hljs-type">String</span>} [paramEnc=explicit] Encoding of the elliptic curve parameters, defaults to explicit
  * <span class="hljs-doctag">@param</span> {<span class="hljs-type">Boolean</span>} [noOut=false] This option inhibits the output of the encoded version of the parameters.
  * <span class="hljs-doctag">@param</span> {<span class="hljs-type">Function</span>} callback Callback function with an error object and {ecparam}
@@ -271,31 +359,60 @@
     })
   }
 
-  keyName = keyName || <span class="hljs-string">&#x27;secp256k1&#x27;</span>
+  keyName = keyName || (<span class="hljs-title function_">getFips</span>() ? <span class="hljs-string">&#x27;prime256v1&#x27;</span> : <span class="hljs-string">&#x27;secp256k1&#x27;</span>)
   paramEnc = paramEnc || <span class="hljs-string">&#x27;explicit&#x27;</span>
   noOut = noOut || <span class="hljs-literal">false</span>
 
-  <span class="hljs-keyword">var</span> params = [<span class="hljs-string">&#x27;ecparam&#x27;</span>,
-    <span class="hljs-string">&#x27;-name&#x27;</span>,
-    keyName,
-    <span class="hljs-string">&#x27;-genkey&#x27;</span>,
-    <span class="hljs-string">&#x27;-param_enc&#x27;</span>,
-    paramEnc
+  <span class="hljs-keyword">var</span> params = [<span class="hljs-string">&#x27;genpkey&#x27;</span>,
+    <span class="hljs-string">&#x27;-genparam&#x27;</span>,
+    <span class="hljs-string">&#x27;-algorithm&#x27;</span>,
+    <span class="hljs-string">&#x27;EC&#x27;</span>,
+    <span class="hljs-string">&#x27;-pkeyopt&#x27;</span>,
+    <span class="hljs-string">`ec_paramgen_curve:<span class="hljs-subst">${keyName}</span>`</span>,
+    <span class="hljs-string">&#x27;-pkeyopt&#x27;</span>,
+    <span class="hljs-string">`ec_param_enc:<span class="hljs-subst">${paramEnc}</span>`</span>
   ]
 
   <span class="hljs-keyword">var</span> searchString = <span class="hljs-string">&#x27;EC PARAMETERS&#x27;</span>
   <span class="hljs-keyword">if</span> (noOut) {
-    params.<span class="hljs-title function_">push</span>(<span class="hljs-string">&#x27;-noout&#x27;</span>)
-    searchString = <span class="hljs-string">&#x27;EC PRIVATE KEY&#x27;</span>
+    params = params.<span class="hljs-title function_">filter</span>(<span class="hljs-function"><span class="hljs-params">param</span> =&gt;</span> param !== <span class="hljs-string">&#x27;-genparam&#x27;</span>)
+    searchString = <span class="hljs-string">&#x27;(EC |)PRIVATE KEY&#x27;</span>
   }
 
   openssl.<span class="hljs-title function_">exec</span>(params, searchString, <span class="hljs-keyword">function</span> (<span class="hljs-params">error, ecparam</span>) {
     <span class="hljs-keyword">if</span> (error) {
       <span class="hljs-keyword">return</span> <span class="hljs-title function_">callback</span>(error)
     }
-    <span class="hljs-keyword">return</span> <span class="hljs-title function_">callback</span>(<span class="hljs-literal">null</span>, {
-      <span class="hljs-attr">ecparam</span>: ecparam
-    })
+    <span class="hljs-keyword">if</span> (noOut) {
+      <span class="hljs-title function_">convertKeyToTraditional</span>(ecparam, <span class="hljs-string">&#x27;ec&#x27;</span>, searchString, <span class="hljs-keyword">function</span> (<span class="hljs-params">error, keyData</span>) {
+        <span class="hljs-keyword">if</span> (error) {
+          <span class="hljs-keyword">return</span> <span class="hljs-title function_">callback</span>(error)
+        }
+        <span class="hljs-keyword">return</span> <span class="hljs-title function_">callback</span>(<span class="hljs-literal">null</span>, {
+          <span class="hljs-attr">ecparam</span>: keyData.<span class="hljs-property">key</span>
+        })
+      })
+    }
+    <span class="hljs-keyword">else</span> {
+      params = [<span class="hljs-string">&#x27;genpkey&#x27;</span>,
+        <span class="hljs-string">&#x27;-paramfile&#x27;</span>,
+        <span class="hljs-string">&#x27;--TMPFILE--&#x27;</span>
+      ]
+      searchString = <span class="hljs-string">&#x27;(EC |)PRIVATE KEY&#x27;</span>
+      openssl.<span class="hljs-title function_">exec</span>(params, searchString, [ecparam], <span class="hljs-keyword">function</span> (<span class="hljs-params">error, eckey</span>) {
+        <span class="hljs-keyword">if</span> (error) {
+          <span class="hljs-keyword">return</span> <span class="hljs-title function_">callback</span>(error)
+        }
+        <span class="hljs-title function_">convertKeyToTraditional</span>(eckey, <span class="hljs-string">&#x27;ec&#x27;</span>, searchString, <span class="hljs-keyword">function</span> (<span class="hljs-params">error, keyData</span>) {
+          <span class="hljs-keyword">if</span> (error) {
+            <span class="hljs-keyword">return</span> <span class="hljs-title function_">callback</span>(error)
+          }
+          <span class="hljs-keyword">return</span> <span class="hljs-title function_">callback</span>(<span class="hljs-literal">null</span>, {
+            <span class="hljs-attr">ecparam</span>: ecparam + <span class="hljs-string">&#x27;\n&#x27;</span> + keyData.<span class="hljs-property">key</span>
+          })
+        })
+      })
+    }
   })
 }
 
@@ -360,6 +477,30 @@
     } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (options.<span class="hljs-property">altNames</span>.<span class="hljs-title function_">indexOf</span>(options.<span class="hljs-property">commonName</span>) === -<span class="hljs-number">1</span>) {
       options.<span class="hljs-property">altNames</span> = options.<span class="hljs-property">altNames</span>.<span class="hljs-title function_">concat</span>([options.<span class="hljs-property">commonName</span>])
     }
+  }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="sswrap ">
+                <a class="ss" href="#section-3">&#x00a7;</a>
+              </div>
+              <p>altNames end up in a generated OpenSSL config file; reject anything that
+is not a plain hostname or IP so config syntax ($ENV::VAR, newlines,
+directives) can never cross over into the CSR (GHSA-wqj4-7wgq-gcjw,
+GHSA-vcpq-2rxr-mvmp)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">if</span> (options.<span class="hljs-property">altNames</span> &amp;&amp; <span class="hljs-title class_">Array</span>.<span class="hljs-title function_">isArray</span>(options.<span class="hljs-property">altNames</span>) &amp;&amp; options.<span class="hljs-property">altNames</span>.<span class="hljs-property">length</span>) {
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> altIndex = <span class="hljs-number">0</span>; altIndex &lt; options.<span class="hljs-property">altNames</span>.<span class="hljs-property">length</span>; altIndex++) {
+      <span class="hljs-keyword">if</span> (!<span class="hljs-title function_">isValidAltName</span>(options.<span class="hljs-property">altNames</span>[altIndex])) {
+        <span class="hljs-keyword">return</span> <span class="hljs-title function_">callback</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&#x27;Invalid altName at index &#x27;</span> + altIndex + <span class="hljs-string">&#x27;: only valid DNS hostnames and IP addresses are allowed&#x27;</span>))
+      }
+    }
   }
 
   <span class="hljs-keyword">if</span> (!options.<span class="hljs-property">clientKey</span>) {
@@ -411,23 +552,93 @@
     params.<span class="hljs-title function_">push</span>(<span class="hljs-string">&#x27;--TMPFILE--&#x27;</span>)
     <span class="hljs-keyword">var</span> altNamesRep = []
     <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; options.<span class="hljs-property">altNames</span>.<span class="hljs-property">length</span>; i++) {
-      altNamesRep.<span class="hljs-title function_">push</span>((net.<span class="hljs-title function_">isIP</span>(options.<span class="hljs-property">altNames</span>[i]) ? <span class="hljs-string">&#x27;IP&#x27;</span> : <span class="hljs-string">&#x27;DNS&#x27;</span>) + <span class="hljs-string">&#x27;.&#x27;</span> + (i + <span class="hljs-number">1</span>) + <span class="hljs-string">&#x27; = &#x27;</span> + options.<span class="hljs-property">altNames</span>[i])
+      <span class="hljs-keyword">var</span> altName = options.<span class="hljs-property">altNames</span>[i]
+      <span class="hljs-keyword">var</span> altType = net.<span class="hljs-title function_">isIP</span>(altName) ? <span class="hljs-string">&#x27;IP&#x27;</span> : <span class="hljs-string">&#x27;DNS&#x27;</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="sswrap ">
+                <a class="ss" href="#section-4">&#x00a7;</a>
+              </div>
+              <p>RFC 5280 dNSName values carry no trailing label separator; strip it
+so strict verifiers (e.g. LibreSSL &gt;= 3.5) accept the CSR.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">if</span> (altType === <span class="hljs-string">&#x27;DNS&#x27;</span>) {
+        altName = altName.<span class="hljs-title function_">replace</span>(<span class="hljs-regexp">/\.$/</span>, <span class="hljs-string">&#x27;&#x27;</span>)
+      }
+      altNamesRep.<span class="hljs-title function_">push</span>(altType + <span class="hljs-string">&#x27;.&#x27;</span> + (i + <span class="hljs-number">1</span>) + <span class="hljs-string">&#x27; = &#x27;</span> + altName)
     }
 
     tmpfiles.<span class="hljs-title function_">push</span>(config = [
       <span class="hljs-string">&#x27;[req]&#x27;</span>,
       <span class="hljs-string">&#x27;req_extensions = v3_req&#x27;</span>,
       <span class="hljs-string">&#x27;distinguished_name = req_distinguished_name&#x27;</span>,
-      <span class="hljs-string">&#x27;[v3_req]&#x27;</span>,
+      <span class="hljs-string">&#x27;[v3_req]&#x27;</span>,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="sswrap ">
+                <a class="ss" href="#section-5">&#x00a7;</a>
+              </div>
+              <p>CA extensions and subjectAltName are not mutually exclusive: a CA
+certificate with altNames needs both, so merge them into one
+v3_req section (previously altNames dropped the CA extensions,
+producing a certificate unusable for chain verification).</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">typeof</span> options.<span class="hljs-property">CA</span> === <span class="hljs-string">&#x27;boolean&#x27;</span> ? <span class="hljs-string">&#x27;basicConstraints = critical,CA:&#x27;</span> + options.<span class="hljs-property">CA</span> : <span class="hljs-literal">null</span>,
+      options.<span class="hljs-property">CA</span> === <span class="hljs-literal">true</span> ? <span class="hljs-string">&#x27;keyUsage = critical,keyCertSign,cRLSign&#x27;</span> : <span class="hljs-literal">null</span>,
+      options.<span class="hljs-property">CA</span> === <span class="hljs-literal">true</span> ? <span class="hljs-string">&#x27;subjectKeyIdentifier = hash&#x27;</span> : <span class="hljs-literal">null</span>,
       <span class="hljs-string">&#x27;subjectAltName = @alt_names&#x27;</span>,
       <span class="hljs-string">&#x27;[alt_names]&#x27;</span>,
       altNamesRep.<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27;\n&#x27;</span>),
       <span class="hljs-string">&#x27;[req_distinguished_name]&#x27;</span>,
       <span class="hljs-string">&#x27;commonName = Common Name&#x27;</span>,
       <span class="hljs-string">&#x27;commonName_max = 64&#x27;</span>
-    ].<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27;\n&#x27;</span>))
+    ].<span class="hljs-title function_">filter</span>(<span class="hljs-keyword">function</span> (<span class="hljs-params">line</span>) {
+      <span class="hljs-keyword">return</span> line !== <span class="hljs-literal">null</span>
+    }).<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27;\n&#x27;</span>))
   } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (options.<span class="hljs-property">config</span>) {
     config = options.<span class="hljs-property">config</span>
+  } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> options.<span class="hljs-property">CA</span> === <span class="hljs-string">&#x27;boolean&#x27;</span>) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="sswrap ">
+                <a class="ss" href="#section-6">&#x00a7;</a>
+              </div>
+              <p>Newer OpenSSL releases (&gt;= 3.5) enforce RFC 5280 when verifying
+chains, so a CA certificate must also carry keyUsage and a
+subjectKeyIdentifier alongside the basic constraints.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">var</span> caConfig = [
+      <span class="hljs-string">&#x27;[req]&#x27;</span>,
+      <span class="hljs-string">&#x27;req_extensions = v3_req&#x27;</span>,
+      <span class="hljs-string">&#x27;[v3_req]&#x27;</span>,
+      <span class="hljs-string">`basicConstraints = critical,CA:<span class="hljs-subst">${options.CA}</span>`</span>
+    ]
+    <span class="hljs-keyword">if</span> (options.<span class="hljs-property">CA</span>) {
+      caConfig.<span class="hljs-title function_">push</span>(<span class="hljs-string">&#x27;keyUsage = critical,keyCertSign,cRLSign&#x27;</span>)
+      caConfig.<span class="hljs-title function_">push</span>(<span class="hljs-string">&#x27;subjectKeyIdentifier = hash&#x27;</span>)
+    }
+    config = caConfig.<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27;\n&#x27;</span>)
   }
 
 
@@ -537,6 +748,73 @@
   <span class="hljs-title function_">readCertificateInfo</span>(options.<span class="hljs-property">csr</span>, <span class="hljs-keyword">function</span> (<span class="hljs-params">error2, data2</span>) {
     <span class="hljs-keyword">if</span> (error2) {
       <span class="hljs-keyword">return</span> <span class="hljs-title function_">callback</span>(error2)
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="sswrap ">
+                <a class="ss" href="#section-7">&#x00a7;</a>
+              </div>
+              <p>Extensions from the CSR are untrusted input: only re-emit them when
+explicitly requested (2.0.0 no longer copies them by default), and
+validate every value against the allowlist BEFORE any temporary
+password files are created below, so rejecting a hostile CSR can
+never leave those files behind (GHSA-445w-cp49-3x4p)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">var</span> altNamesRep = []
+    <span class="hljs-keyword">if</span> (options.<span class="hljs-property">copyExtensions</span> &amp;&amp; !options.<span class="hljs-property">config</span> &amp;&amp; !options.<span class="hljs-property">extFile</span>) {
+      <span class="hljs-keyword">var</span> invalidSan = <span class="hljs-literal">null</span>
+      <span class="hljs-keyword">var</span> san = (data2 &amp;&amp; data2.<span class="hljs-property">san</span>) || {}
+      <span class="hljs-keyword">var</span> dnsEntries = <span class="hljs-title class_">Array</span>.<span class="hljs-title function_">isArray</span>(san.<span class="hljs-property">dns</span>) ? san.<span class="hljs-property">dns</span> : []
+      <span class="hljs-keyword">var</span> ipEntries = <span class="hljs-title class_">Array</span>.<span class="hljs-title function_">isArray</span>(san.<span class="hljs-property">ip</span>) ? san.<span class="hljs-property">ip</span> : []
+      <span class="hljs-keyword">var</span> emailEntries = <span class="hljs-title class_">Array</span>.<span class="hljs-title function_">isArray</span>(san.<span class="hljs-property">email</span>) ? san.<span class="hljs-property">email</span> : []
+
+      <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; dnsEntries.<span class="hljs-property">length</span> &amp;&amp; !invalidSan; i++) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="sswrap ">
+                <a class="ss" href="#section-8">&#x00a7;</a>
+              </div>
+              <p>isValidDNSName accepts the root form (“example.com.”); strip the
+trailing label separator so the re-emitted SAN is RFC 5280 clean.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">if</span> (<span class="hljs-title function_">isValidDNSName</span>(dnsEntries[i])) {
+          altNamesRep.<span class="hljs-title function_">push</span>(<span class="hljs-string">&#x27;DNS&#x27;</span> + <span class="hljs-string">&#x27;.&#x27;</span> + (i + <span class="hljs-number">1</span>) + <span class="hljs-string">&#x27; = &#x27;</span> + dnsEntries[i].<span class="hljs-title function_">replace</span>(<span class="hljs-regexp">/\.$/</span>, <span class="hljs-string">&#x27;&#x27;</span>))
+        } <span class="hljs-keyword">else</span> {
+          invalidSan = <span class="hljs-string">&#x27;DNS.&#x27;</span> + (i + <span class="hljs-number">1</span>)
+        }
+      }
+      <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i2 = <span class="hljs-number">0</span>; i2 &lt; ipEntries.<span class="hljs-property">length</span> &amp;&amp; !invalidSan; i2++) {
+        <span class="hljs-keyword">if</span> (net.<span class="hljs-title function_">isIP</span>(ipEntries[i2]) &gt; <span class="hljs-number">0</span>) {
+          altNamesRep.<span class="hljs-title function_">push</span>(<span class="hljs-string">&#x27;IP&#x27;</span> + <span class="hljs-string">&#x27;.&#x27;</span> + (i2 + <span class="hljs-number">1</span>) + <span class="hljs-string">&#x27; = &#x27;</span> + ipEntries[i2])
+        } <span class="hljs-keyword">else</span> {
+          invalidSan = <span class="hljs-string">&#x27;IP.&#x27;</span> + (i2 + <span class="hljs-number">1</span>)
+        }
+      }
+      <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i3 = <span class="hljs-number">0</span>; i3 &lt; emailEntries.<span class="hljs-property">length</span> &amp;&amp; !invalidSan; i3++) {
+        <span class="hljs-keyword">if</span> (<span class="hljs-title function_">isValidSANEmail</span>(emailEntries[i3])) {
+          altNamesRep.<span class="hljs-title function_">push</span>(<span class="hljs-string">&#x27;email&#x27;</span> + <span class="hljs-string">&#x27;.&#x27;</span> + (i3 + <span class="hljs-number">1</span>) + <span class="hljs-string">&#x27; = &#x27;</span> + emailEntries[i3])
+        } <span class="hljs-keyword">else</span> {
+          invalidSan = <span class="hljs-string">&#x27;email.&#x27;</span> + (i3 + <span class="hljs-number">1</span>)
+        }
+      }
+
+      <span class="hljs-keyword">if</span> (invalidSan) {
+        <span class="hljs-keyword">return</span> <span class="hljs-title function_">callback</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&#x27;Refusing to copy subjectAltName from the CSR: invalid entry &#x27;</span> + invalidSan))
+      }
     }
 
     <span class="hljs-keyword">var</span> params = [<span class="hljs-string">&#x27;x509&#x27;</span>,
@@ -562,11 +840,11 @@
         </li>
         
         
-        <li id="section-3">
+        <li id="section-9">
             <div class="annotation">
               
               <div class="sswrap ">
-                <a class="ss" href="#section-3">&#x00a7;</a>
+                <a class="ss" href="#section-9">&#x00a7;</a>
               </div>
               <p>set the serial to the max lenth of 20 octets ()
 A certificate serial number is not decimal conforming. That is the
@@ -627,29 +905,17 @@ the ACSII table).</p>
     } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (options.<span class="hljs-property">extFile</span>) {
       params.<span class="hljs-title function_">push</span>(<span class="hljs-string">&#x27;-extfile&#x27;</span>)
       params.<span class="hljs-title function_">push</span>(options.<span class="hljs-property">extFile</span>)
-    } <span class="hljs-keyword">else</span> {
-      <span class="hljs-keyword">var</span> altNamesRep = []
-      <span class="hljs-keyword">if</span> (data2 &amp;&amp; data2.<span class="hljs-property">san</span>) {
-        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; data2.<span class="hljs-property">san</span>.<span class="hljs-property">dns</span>.<span class="hljs-property">length</span>; i++) {
-          altNamesRep.<span class="hljs-title function_">push</span>(<span class="hljs-string">&#x27;DNS&#x27;</span> + <span class="hljs-string">&#x27;.&#x27;</span> + (i + <span class="hljs-number">1</span>) + <span class="hljs-string">&#x27; = &#x27;</span> + data2.<span class="hljs-property">san</span>.<span class="hljs-property">dns</span>[i])
-        }
-        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i2 = <span class="hljs-number">0</span>; i2 &lt; data2.<span class="hljs-property">san</span>.<span class="hljs-property">ip</span>.<span class="hljs-property">length</span>; i2++) {
-          altNamesRep.<span class="hljs-title function_">push</span>(<span class="hljs-string">&#x27;IP&#x27;</span> + <span class="hljs-string">&#x27;.&#x27;</span> + (i2 + <span class="hljs-number">1</span>) + <span class="hljs-string">&#x27; = &#x27;</span> + data2.<span class="hljs-property">san</span>.<span class="hljs-property">ip</span>[i2])
-        }
-        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i3 = <span class="hljs-number">0</span>; i3 &lt; data2.<span class="hljs-property">san</span>.<span class="hljs-property">email</span>.<span class="hljs-property">length</span>; i3++) {
-          altNamesRep.<span class="hljs-title function_">push</span>(<span class="hljs-string">&#x27;email&#x27;</span> + <span class="hljs-string">&#x27;.&#x27;</span> + (i3 + <span class="hljs-number">1</span>) + <span class="hljs-string">&#x27; = &#x27;</span> + data2.<span class="hljs-property">san</span>.<span class="hljs-property">email</span>[i3])
-        }
-        params.<span class="hljs-title function_">push</span>(<span class="hljs-string">&#x27;-extensions&#x27;</span>)
-        params.<span class="hljs-title function_">push</span>(<span class="hljs-string">&#x27;v3_req&#x27;</span>)
-        params.<span class="hljs-title function_">push</span>(<span class="hljs-string">&#x27;-extfile&#x27;</span>)
-        params.<span class="hljs-title function_">push</span>(<span class="hljs-string">&#x27;--TMPFILE--&#x27;</span>)
-        tmpfiles.<span class="hljs-title function_">push</span>([
-          <span class="hljs-string">&#x27;[v3_req]&#x27;</span>,
-          <span class="hljs-string">&#x27;subjectAltName = @alt_names&#x27;</span>,
-          <span class="hljs-string">&#x27;[alt_names]&#x27;</span>,
-          altNamesRep.<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27;\n&#x27;</span>)
-        ].<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27;\n&#x27;</span>))
-      }
+    } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (altNamesRep.<span class="hljs-property">length</span>) {
+      params.<span class="hljs-title function_">push</span>(<span class="hljs-string">&#x27;-extensions&#x27;</span>)
+      params.<span class="hljs-title function_">push</span>(<span class="hljs-string">&#x27;v3_req&#x27;</span>)
+      params.<span class="hljs-title function_">push</span>(<span class="hljs-string">&#x27;-extfile&#x27;</span>)
+      params.<span class="hljs-title function_">push</span>(<span class="hljs-string">&#x27;--TMPFILE--&#x27;</span>)
+      tmpfiles.<span class="hljs-title function_">push</span>([
+        <span class="hljs-string">&#x27;[v3_req]&#x27;</span>,
+        <span class="hljs-string">&#x27;subjectAltName = @alt_names&#x27;</span>,
+        <span class="hljs-string">&#x27;[alt_names]&#x27;</span>,
+        altNamesRep.<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27;\n&#x27;</span>)
+      ].<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27;\n&#x27;</span>))
     }
 
     <span class="hljs-keyword">if</span> (options.<span class="hljs-property">clientKeyPassword</span>) {
@@ -717,7 +983,7 @@ the ACSII table).</p>
       <span class="hljs-string">&#x27;-noout&#x27;</span>
     ]
   } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (certificate.<span class="hljs-title function_">match</span>(<span class="hljs-regexp">/BEGIN RSA PRIVATE KEY/</span>) || certificate.<span class="hljs-title function_">match</span>(<span class="hljs-regexp">/BEGIN PRIVATE KEY/</span>)) {
-    params = [<span class="hljs-string">&#x27;rsa&#x27;</span>,
+    params = [<span class="hljs-string">&#x27;pkey&#x27;</span>,
       <span class="hljs-string">&#x27;-in&#x27;</span>,
       <span class="hljs-string">&#x27;--TMPFILE--&#x27;</span>,
       <span class="hljs-string">&#x27;-pubout&#x27;</span>
@@ -807,11 +1073,11 @@ the ACSII table).</p>
         </li>
         
         
-        <li id="section-4">
+        <li id="section-10">
             <div class="annotation">
               
               <div class="sswrap ">
-                <a class="ss" href="#section-4">&#x00a7;</a>
+                <a class="ss" href="#section-10">&#x00a7;</a>
               </div>
               <p>password will be falsy if not provided</p>
 
@@ -833,11 +1099,11 @@ the ACSII table).</p>
         </li>
         
         
-        <li id="section-5">
+        <li id="section-11">
             <div class="annotation">
               
               <div class="sswrap ">
-                <a class="ss" href="#section-5">&#x00a7;</a>
+                <a class="ss" href="#section-11">&#x00a7;</a>
               </div>
               <p>adding hash function to params, is not supported by openssl.
 process piping would be the right way (… | openssl md5)
@@ -855,18 +1121,27 @@ of pem.</p>
   <span class="hljs-keyword">let</span> type
   <span class="hljs-keyword">if</span> (certificate.<span class="hljs-title function_">match</span>(<span class="hljs-regexp">/BEGIN(\sNEW)? CERTIFICATE REQUEST/</span>)) {
     type = <span class="hljs-string">&#x27;req&#x27;</span>
-  } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (certificate.<span class="hljs-title function_">match</span>(<span class="hljs-regexp">/BEGIN RSA PRIVATE KEY/</span>) || certificate.<span class="hljs-title function_">match</span>(<span class="hljs-regexp">/BEGIN PRIVATE KEY/</span>)) {
-    type = <span class="hljs-string">&#x27;rsa&#x27;</span>
+  } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (certificate.<span class="hljs-title function_">match</span>(<span class="hljs-regexp">/BEGIN RSA PRIVATE KEY/</span>) || certificate.<span class="hljs-title function_">match</span>(<span class="hljs-regexp">/BEGIN PRIVATE KEY/</span>) || certificate.<span class="hljs-title function_">match</span>(<span class="hljs-regexp">/BEGIN ENCRYPTED PRIVATE KEY/</span>)) {
+    type = <span class="hljs-string">&#x27;pkey&#x27;</span>
   } <span class="hljs-keyword">else</span> {
     type = <span class="hljs-string">&#x27;x509&#x27;</span>
   }
   <span class="hljs-keyword">let</span> params = [
     type,
     <span class="hljs-string">&#x27;-noout&#x27;</span>,
-    <span class="hljs-string">&#x27;-modulus&#x27;</span>,
     <span class="hljs-string">&#x27;-in&#x27;</span>,
     <span class="hljs-string">&#x27;--TMPFILE--&#x27;</span>
   ]
+
+  <span class="hljs-keyword">switch</span> (params[<span class="hljs-number">0</span>]) {
+    <span class="hljs-keyword">case</span> <span class="hljs-string">&#x27;pkey&#x27;</span>:
+      params.<span class="hljs-title function_">push</span>(<span class="hljs-string">&#x27;-text_pub&#x27;</span>)
+      <span class="hljs-keyword">break</span>
+    <span class="hljs-attr">default</span>:
+      params.<span class="hljs-title function_">push</span>(<span class="hljs-string">&#x27;-modulus&#x27;</span>)
+      <span class="hljs-keyword">break</span>
+  }
+
   <span class="hljs-keyword">let</span> delTempPWFiles = []
   <span class="hljs-keyword">if</span> (password) {
     helper.<span class="hljs-title function_">createPasswordFile</span>({<span class="hljs-attr">cipher</span>: <span class="hljs-string">&#x27;&#x27;</span>, <span class="hljs-attr">password</span>: password, <span class="hljs-attr">passType</span>: <span class="hljs-string">&#x27;in&#x27;</span>}, params, delTempPWFiles)
@@ -877,8 +1152,17 @@ of pem.</p>
       <span class="hljs-keyword">if</span> (err) {
         <span class="hljs-keyword">return</span> <span class="hljs-title function_">callback</span>(err)
       }
-      <span class="hljs-keyword">var</span> match = stdout.<span class="hljs-title function_">match</span>(<span class="hljs-regexp">/Modulus=([0-9a-fA-F]+)$/m</span>)
+      <span class="hljs-keyword">var</span> match
+      <span class="hljs-keyword">switch</span> (params[<span class="hljs-number">0</span>]) {
+        <span class="hljs-keyword">case</span> <span class="hljs-string">&#x27;pkey&#x27;</span>:
+          match = stdout.<span class="hljs-title function_">match</span>(<span class="hljs-regexp">/Modulus:\s+([\s\S]+?)(?=\n[a-zA-Z0-9]+:|$)/i</span>)
+          <span class="hljs-keyword">break</span>
+        <span class="hljs-attr">default</span>:
+          match = stdout.<span class="hljs-title function_">match</span>(<span class="hljs-regexp">/Modulus=([0-9a-fA-F]+)$/m</span>)
+          <span class="hljs-keyword">break</span>
+      }
       <span class="hljs-keyword">if</span> (match) {
+        match[<span class="hljs-number">1</span>] = match[<span class="hljs-number">1</span>].<span class="hljs-title function_">replace</span>(<span class="hljs-regexp">/[\s:]+/g</span>, <span class="hljs-string">&#x27;&#x27;</span>).<span class="hljs-title function_">replace</span>(<span class="hljs-regexp">/^0+/</span>, <span class="hljs-string">&#x27;&#x27;</span>).<span class="hljs-title function_">toUpperCase</span>()
         <span class="hljs-keyword">if</span> (hash === <span class="hljs-string">&#x27;md5&#x27;</span>) {
           <span class="hljs-keyword">return</span> <span class="hljs-title function_">callback</span>(<span class="hljs-literal">null</span>, {
             <span class="hljs-attr">modulus</span>: <span class="hljs-title function_">hash_md5</span>(match[<span class="hljs-number">1</span>])
@@ -922,7 +1206,7 @@ of pem.</p>
   dh = (<span class="hljs-title class_">Buffer</span>.<span class="hljs-title function_">isBuffer</span>(dh) &amp;&amp; dh.<span class="hljs-title function_">toString</span>()) || dh
 
   <span class="hljs-keyword">var</span> params = [
-    <span class="hljs-string">&#x27;dhparam&#x27;</span>,
+    <span class="hljs-string">&#x27;pkeyparam&#x27;</span>,
     <span class="hljs-string">&#x27;-text&#x27;</span>,
     <span class="hljs-string">&#x27;-in&#x27;</span>,
     <span class="hljs-string">&#x27;--TMPFILE--&#x27;</span>
@@ -935,29 +1219,65 @@ of pem.</p>
       <span class="hljs-keyword">return</span> <span class="hljs-title function_">callback</span>(stderr)
     }
 
-    <span class="hljs-keyword">var</span> result = {}
-    <span class="hljs-keyword">var</span> match = stdout.<span class="hljs-title function_">match</span>(<span class="hljs-regexp">/Parameters: \((\d+) bit\)/</span>)
+    <span class="hljs-keyword">var</span> result = {}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="sswrap ">
+                <a class="ss" href="#section-12">&#x00a7;</a>
+              </div>
+              <p>Match the DH marker specifically: EC parameters print
+“EC-Parameters: (N bit)” / “ECDSA-Parameters: (N bit)” instead, and
+their ASN.1 starts with a version INTEGER that must not be mistaken
+for the DH prime below.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">var</span> match = stdout.<span class="hljs-title function_">match</span>(<span class="hljs-regexp">/DH Parameters: \((\d+) bit\)/</span>)
 
     <span class="hljs-keyword">if</span> (match) {
       result.<span class="hljs-property">size</span> = <span class="hljs-title class_">Number</span>(match[<span class="hljs-number">1</span>])
     }
 
-    <span class="hljs-keyword">var</span> prime = <span class="hljs-string">&#x27;&#x27;</span>
-    stdout.<span class="hljs-title function_">split</span>(<span class="hljs-string">&#x27;\n&#x27;</span>).<span class="hljs-title function_">forEach</span>(<span class="hljs-keyword">function</span> (<span class="hljs-params">line</span>) {
-      <span class="hljs-keyword">if</span> (<span class="hljs-regexp">/\s+([0-9a-f][0-9a-f]:)+[0-9a-f]?[0-9a-f]?/g</span>.<span class="hljs-title function_">test</span>(line)) {
-        prime += line.<span class="hljs-title function_">trim</span>()
+    match = stdout.<span class="hljs-title function_">match</span>(<span class="hljs-regexp">/GROUP: \((\d+) bit\)/</span>)
+
+    <span class="hljs-keyword">if</span> (match) {
+      result.<span class="hljs-property">group</span> = match[<span class="hljs-number">1</span>]
+    }
+
+    <span class="hljs-keyword">if</span> (!result.<span class="hljs-property">size</span> &amp;&amp; !result.<span class="hljs-property">group</span>) {
+      <span class="hljs-keyword">return</span> <span class="hljs-title function_">callback</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&#x27;No DH parameters found&#x27;</span>))
+    }
+
+    params = [
+      <span class="hljs-string">&#x27;asn1parse&#x27;</span>,
+      <span class="hljs-string">&#x27;-in&#x27;</span>,
+      <span class="hljs-string">&#x27;--TMPFILE--&#x27;</span>
+    ]
+
+    openssl.<span class="hljs-title function_">spawnWrapper</span>(params, dh, <span class="hljs-keyword">function</span> (<span class="hljs-params">err, code, stdout, stderr</span>) {
+      <span class="hljs-keyword">if</span> (err) {
+        <span class="hljs-keyword">return</span> <span class="hljs-title function_">callback</span>(err)
+      } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (stderr) {
+        <span class="hljs-keyword">return</span> <span class="hljs-title function_">callback</span>(stderr)
       }
+
+      match = stdout.<span class="hljs-title function_">match</span>(<span class="hljs-regexp">/INTEGER\s+:([0-9A-F]+)/i</span>)
+
+      <span class="hljs-keyword">if</span> (match) {
+        result.<span class="hljs-property">prime</span> = match[<span class="hljs-number">1</span>].<span class="hljs-title function_">trim</span>().<span class="hljs-title function_">toLowerCase</span>().<span class="hljs-title function_">replace</span>(<span class="hljs-regexp">/(.{2})(?!$)/g</span>, <span class="hljs-string">&#x27;$&amp;:&#x27;</span>)
+      }
+
+      <span class="hljs-keyword">if</span> (!result.<span class="hljs-property">size</span> &amp;&amp; !result.<span class="hljs-property">prime</span>) {
+        <span class="hljs-keyword">return</span> <span class="hljs-title function_">callback</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&#x27;No DH info found&#x27;</span>))
+      }
+
+      <span class="hljs-keyword">return</span> <span class="hljs-title function_">callback</span>(<span class="hljs-literal">null</span>, result)
     })
-
-    <span class="hljs-keyword">if</span> (prime) {
-      result.<span class="hljs-property">prime</span> = prime
-    }
-
-    <span class="hljs-keyword">if</span> (!match &amp;&amp; !prime) {
-      <span class="hljs-keyword">return</span> <span class="hljs-title function_">callback</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&#x27;No DH info found&#x27;</span>))
-    }
-
-    <span class="hljs-keyword">return</span> <span class="hljs-title function_">callback</span>(<span class="hljs-literal">null</span>, result)
   })
 }
 
@@ -1061,11 +1381,11 @@ of pem.</p>
         </li>
         
         
-        <li id="section-6">
+        <li id="section-13">
             <div class="annotation">
               
               <div class="sswrap ">
-                <a class="ss" href="#section-6">&#x00a7;</a>
+                <a class="ss" href="#section-13">&#x00a7;</a>
               </div>
               <p>NOTICE: The password field is needed! self if it is empty.
 create password file for the import “-passin”</p>
@@ -1082,11 +1402,11 @@ create password file for the import “-passin”</p>
         </li>
         
         
-        <li id="section-7">
+        <li id="section-14">
             <div class="annotation">
               
               <div class="sswrap ">
-                <a class="ss" href="#section-7">&#x00a7;</a>
+                <a class="ss" href="#section-14">&#x00a7;</a>
               </div>
               <p>NOTICE: The password field is needed! self if it is empty.
 create password file for the password “-password”</p>
@@ -1107,6 +1427,25 @@ create password file for the password “-password”</p>
 
     params.<span class="hljs-title function_">push</span>(<span class="hljs-string">&#x27;-certfile&#x27;</span>)
     params.<span class="hljs-title function_">push</span>(<span class="hljs-string">&#x27;--TMPFILE--&#x27;</span>)
+  }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="sswrap ">
+                <a class="ss" href="#section-15">&#x00a7;</a>
+              </div>
+              <p>In FIPS mode PKCS12KDF is unavailable, so the MAC must switch to
+PBMAC1+PBKDF2. The flag exists only since OpenSSL 3.4; passing it to
+3.0-3.3 aborts the command (“Unknown option or cipher”).</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">if</span> (openssl.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;Vendor&#x27;</span>) === <span class="hljs-string">&quot;OPENSSL&quot;</span> &amp;&amp; openssl.<span class="hljs-title function_">atLeastVersion</span>(<span class="hljs-number">3</span>, <span class="hljs-number">4</span>) &amp;&amp; <span class="hljs-title function_">getFips</span>()) {
+    params.<span class="hljs-title function_">push</span>(<span class="hljs-string">&#x27;-pbmac1_pbkdf2&#x27;</span>)
   }
 
   openssl.<span class="hljs-title function_">execBinary</span>(params, tmpfiles, <span class="hljs-keyword">function</span> (<span class="hljs-params">sslErr, pkcs12</span>) {
@@ -1163,9 +1502,24 @@ create password file for the password “-password”</p>
   <span class="hljs-keyword">if</span> (<span class="hljs-title class_">Buffer</span>.<span class="hljs-title function_">isBuffer</span>(bufferOrPath)) {
     tmpfiles = [bufferOrPath]
     args[<span class="hljs-number">2</span>] = <span class="hljs-string">&#x27;--TMPFILE--&#x27;</span>
-  }
+  }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-16">
+            <div class="annotation">
+              
+              <div class="sswrap ">
+                <a class="ss" href="#section-16">&#x00a7;</a>
+              </div>
+              <p>Non-FIPS OpenSSL 3.x needs -legacy for the RC2-based default formats.
+Reading needs no PBMAC1 flag in FIPS mode: the MAC is detected from the
+input, and the flag only exists since 3.4 anyway.</p>
 
-  <span class="hljs-keyword">if</span> (openssl.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;Vendor&#x27;</span>) === <span class="hljs-string">&quot;OPENSSL&quot;</span> &amp;&amp; openssl.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;VendorVersionMajor&#x27;</span>) &gt;= <span class="hljs-number">3</span>) {
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">if</span> (openssl.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;Vendor&#x27;</span>) === <span class="hljs-string">&quot;OPENSSL&quot;</span> &amp;&amp; openssl.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;VendorVersionMajor&#x27;</span>) &gt;= <span class="hljs-number">3</span> &amp;&amp; !<span class="hljs-title function_">getFips</span>()) {
     args.<span class="hljs-title function_">push</span>(<span class="hljs-string">&#x27;-legacy&#x27;</span>)
     args.<span class="hljs-title function_">push</span>(<span class="hljs-string">&#x27;-traditional&#x27;</span>)
   }
@@ -1195,28 +1549,22 @@ create password file for the password “-password”</p>
         keybundle.<span class="hljs-property">key</span> = <span class="hljs-title function_">readFromString</span>(stdout, <span class="hljs-variable constant_">KEY_START</span>, <span class="hljs-variable constant_">KEY_END</span>).<span class="hljs-title function_">pop</span>()
 
         <span class="hljs-title function_">debug</span>(<span class="hljs-string">&quot;readPkcs12.execBinary - PRIVATE KEY - ?: &quot;</span>, keybundle.<span class="hljs-property">key</span>)
-        <span class="hljs-keyword">if</span> (keybundle.<span class="hljs-property">key</span>) {
-          <span class="hljs-keyword">var</span> args = [<span class="hljs-string">&#x27;rsa&#x27;</span>];
-          <span class="hljs-keyword">if</span> (openssl.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;Vendor&#x27;</span>) === <span class="hljs-string">&quot;OPENSSL&quot;</span> &amp;&amp; openssl.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;VendorVersionMajor&#x27;</span>) &gt;= <span class="hljs-number">3</span>) {
-            args.<span class="hljs-title function_">push</span>(<span class="hljs-string">&#x27;-traditional&#x27;</span>)
-          }
-          args.<span class="hljs-title function_">push</span>(<span class="hljs-string">&#x27;-in&#x27;</span>);
-          args.<span class="hljs-title function_">push</span>(<span class="hljs-string">&#x27;--TMPFILE--&#x27;</span>);</pre></div></div>
+        <span class="hljs-keyword">if</span> (keybundle.<span class="hljs-property">key</span>) {</pre></div></div>
             
         </li>
         
         
-        <li id="section-8">
+        <li id="section-17">
             <div class="annotation">
               
               <div class="sswrap ">
-                <a class="ss" href="#section-8">&#x00a7;</a>
+                <a class="ss" href="#section-17">&#x00a7;</a>
               </div>
               <p>convert to RSA key</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>          <span class="hljs-keyword">return</span> openssl.<span class="hljs-title function_">exec</span>(args, <span class="hljs-string">&#x27;(RSA |)PRIVATE KEY&#x27;</span>, [keybundle.<span class="hljs-property">key</span>], <span class="hljs-keyword">function</span> (<span class="hljs-params">err, key</span>) {
+            <div class="content"><div class='highlight'><pre>          <span class="hljs-keyword">return</span> <span class="hljs-title function_">convertKeyToTraditional</span>(keybundle.<span class="hljs-property">key</span>, <span class="hljs-string">&#x27;rsa&#x27;</span>, <span class="hljs-string">&#x27;(RSA |)PRIVATE KEY&#x27;</span>, <span class="hljs-keyword">function</span> (<span class="hljs-params">err, key</span>) {
             <span class="hljs-keyword">if</span> (err) {
               <span class="hljs-title function_">debug</span>(<span class="hljs-string">&quot;readPkcs12.execBinary - PRIVATE KEY convert - error: &quot;</span>, err)
             }</pre></div></div>
@@ -1224,17 +1572,19 @@ create password file for the password “-password”</p>
         </li>
         
         
-        <li id="section-9">
+        <li id="section-18">
             <div class="annotation">
               
               <div class="sswrap ">
-                <a class="ss" href="#section-9">&#x00a7;</a>
+                <a class="ss" href="#section-18">&#x00a7;</a>
               </div>
               <p>debug(“readPkcs12.execBinary - PRIVATE KEY”, key)</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>            keybundle.<span class="hljs-property">key</span> = key
+            <div class="content"><div class='highlight'><pre>            <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (key &amp;&amp; key.<span class="hljs-property">key</span>) {
+              keybundle.<span class="hljs-property">key</span> = key.<span class="hljs-property">key</span>
+            }
 
             <span class="hljs-keyword">return</span> <span class="hljs-title function_">callback</span>(err, keybundle)
           })
@@ -1307,8 +1657,8 @@ create password file for the password “-password”</p>
 
   <span class="hljs-keyword">if</span> (certificate.<span class="hljs-title function_">match</span>(<span class="hljs-regexp">/BEGIN(\sNEW)? CERTIFICATE REQUEST/</span>)) {
     params = [<span class="hljs-string">&#x27;req&#x27;</span>, <span class="hljs-string">&#x27;-text&#x27;</span>, <span class="hljs-string">&#x27;-noout&#x27;</span>, <span class="hljs-string">&#x27;-verify&#x27;</span>, <span class="hljs-string">&#x27;-in&#x27;</span>, <span class="hljs-string">&#x27;--TMPFILE--&#x27;</span>]
-  } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (certificate.<span class="hljs-title function_">match</span>(<span class="hljs-regexp">/BEGIN RSA PRIVATE KEY/</span>) || certificate.<span class="hljs-title function_">match</span>(<span class="hljs-regexp">/BEGIN PRIVATE KEY/</span>)) {
-    params = [<span class="hljs-string">&#x27;rsa&#x27;</span>, <span class="hljs-string">&#x27;-noout&#x27;</span>, <span class="hljs-string">&#x27;-check&#x27;</span>, <span class="hljs-string">&#x27;-in&#x27;</span>, <span class="hljs-string">&#x27;--TMPFILE--&#x27;</span>]
+  } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (certificate.<span class="hljs-title function_">match</span>(<span class="hljs-regexp">/BEGIN RSA PRIVATE KEY/</span>) || certificate.<span class="hljs-title function_">match</span>(<span class="hljs-regexp">/BEGIN PRIVATE KEY/</span>) || certificate.<span class="hljs-title function_">match</span>(<span class="hljs-regexp">/BEGIN ENCRYPTED PRIVATE KEY/</span>)) {
+    params = [(openssl.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;Vendor&#x27;</span>) === <span class="hljs-string">&quot;OPENSSL&quot;</span>) ? <span class="hljs-string">&#x27;pkey&#x27;</span> : <span class="hljs-string">&#x27;rsa&#x27;</span>, <span class="hljs-string">&#x27;-noout&#x27;</span>, <span class="hljs-string">&#x27;-check&#x27;</span>, <span class="hljs-string">&#x27;-in&#x27;</span>, <span class="hljs-string">&#x27;--TMPFILE--&#x27;</span>]
   } <span class="hljs-keyword">else</span> {
     params = [<span class="hljs-string">&#x27;x509&#x27;</span>, <span class="hljs-string">&#x27;-text&#x27;</span>, <span class="hljs-string">&#x27;-noout&#x27;</span>, <span class="hljs-string">&#x27;-in&#x27;</span>, <span class="hljs-string">&#x27;--TMPFILE--&#x27;</span>]
   }
@@ -1322,6 +1672,9 @@ create password file for the password “-password”</p>
       stdout = stdout &amp;&amp; stdout.<span class="hljs-title function_">trim</span>()
       <span class="hljs-keyword">var</span> result
       <span class="hljs-keyword">switch</span> (params[<span class="hljs-number">0</span>]) {
+        <span class="hljs-keyword">case</span> <span class="hljs-string">&#x27;pkey&#x27;</span>:
+          result = <span class="hljs-regexp">/^Key is valid$/i</span>.<span class="hljs-title function_">test</span>(stdout)
+          <span class="hljs-keyword">break</span>
         <span class="hljs-keyword">case</span> <span class="hljs-string">&#x27;rsa&#x27;</span>:
           result = <span class="hljs-regexp">/^Rsa key ok$/i</span>.<span class="hljs-title function_">test</span>(stdout)
           <span class="hljs-keyword">break</span>
@@ -1384,7 +1737,7 @@ create password file for the password “-password”</p>
     args[<span class="hljs-number">3</span>] = <span class="hljs-string">&#x27;--TMPFILE--&#x27;</span>
   }
 
-  <span class="hljs-keyword">if</span> (openssl.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;Vendor&#x27;</span>) === <span class="hljs-string">&quot;OPENSSL&quot;</span> &amp;&amp; openssl.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;VendorVersionMajor&#x27;</span>) &gt;= <span class="hljs-number">3</span>) {
+  <span class="hljs-keyword">if</span> (openssl.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;Vendor&#x27;</span>) === <span class="hljs-string">&quot;OPENSSL&quot;</span> &amp;&amp; openssl.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;VendorVersionMajor&#x27;</span>) &gt;= <span class="hljs-number">3</span> &amp;&amp; !<span class="hljs-title function_">getFips</span>()) {
     args.<span class="hljs-title function_">splice</span>(<span class="hljs-number">2</span>, <span class="hljs-number">0</span>, <span class="hljs-string">&#x27;-legacy&#x27;</span>);
   }
 
@@ -1461,11 +1814,11 @@ create password file for the password “-password”</p>
         </li>
         
         
-        <li id="section-10">
+        <li id="section-19">
             <div class="annotation">
               
               <div class="sswrap ">
-                <a class="ss" href="#section-10">&#x00a7;</a>
+                <a class="ss" href="#section-19">&#x00a7;</a>
               </div>
               <p>ca certificates</p>
 
@@ -1479,11 +1832,11 @@ create password file for the password “-password”</p>
         </li>
         
         
-        <li id="section-11">
+        <li id="section-20">
             <div class="annotation">
               
               <div class="sswrap ">
-                <a class="ss" href="#section-11">&#x00a7;</a>
+                <a class="ss" href="#section-20">&#x00a7;</a>
               </div>
               <p>extracting the very first - leaf - cert in chain</p>
 
@@ -1505,11 +1858,11 @@ create password file for the password “-password”</p>
         </li>
         
         
-        <li id="section-12">
+        <li id="section-21">
             <div class="annotation">
               
               <div class="sswrap ">
-                <a class="ss" href="#section-12">&#x00a7;</a>
+                <a class="ss" href="#section-21">&#x00a7;</a>
               </div>
               <p>OPENSSL 3.x don’t use stdout to print the error</p>
 
@@ -1546,11 +1899,11 @@ create password file for the password “-password”</p>
         </li>
         
         
-        <li id="section-13">
+        <li id="section-22">
             <div class="annotation">
               
               <div class="sswrap ">
-                <a class="ss" href="#section-13">&#x00a7;</a>
+                <a class="ss" href="#section-22">&#x00a7;</a>
               </div>
               <p>END: OPENSSL 3.x don’t use stdout to print the error</p>
 
@@ -1580,11 +1933,11 @@ create password file for the password “-password”</p>
         </li>
         
         
-        <li id="section-14">
+        <li id="section-23">
             <div class="annotation">
               
               <div class="sswrap ">
-                <a class="ss" href="#section-14">&#x00a7;</a>
+                <a class="ss" href="#section-23">&#x00a7;</a>
               </div>
               <p>HELPER FUNCTIONS</p>
 
@@ -1595,11 +1948,11 @@ create password file for the password “-password”</p>
         </li>
         
         
-        <li id="section-15">
+        <li id="section-24">
             <div class="annotation">
               
               <div class="sswrap ">
-                <a class="ss" href="#section-15">&#x00a7;</a>
+                <a class="ss" href="#section-24">&#x00a7;</a>
               </div>
               <p>try catch : if something will fail in parsing it won’t crash the calling code</p>
 
@@ -1620,21 +1973,21 @@ create password file for the password “-password”</p>
         </li>
         
         
-        <li id="section-16">
+        <li id="section-25">
             <div class="annotation">
               
               <div class="sswrap ">
-                <a class="ss" href="#section-16">&#x00a7;</a>
+                <a class="ss" href="#section-25">&#x00a7;</a>
               </div>
               <p>serial</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> ((serial = certData.<span class="hljs-title function_">match</span>(<span class="hljs-regexp">/\s*Serial Number:\r?\n?\s*([^\r\n]*)\r?\n\s*\b/</span>)) &amp;&amp; serial.<span class="hljs-property">length</span> &gt; <span class="hljs-number">1</span>) {
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> ((serial = certData.<span class="hljs-title function_">match</span>(<span class="hljs-regexp">/\s*Serial Number:\r?\n?[ \t]*([^\r\n]*)\r?\n[ \t]*/</span>)) &amp;&amp; serial.<span class="hljs-property">length</span> &gt; <span class="hljs-number">1</span>) {
       certValues.<span class="hljs-property">serial</span> = serial[<span class="hljs-number">1</span>]
     }
 
-    <span class="hljs-keyword">if</span> ((subject = certData.<span class="hljs-title function_">match</span>(<span class="hljs-regexp">/\s*Subject:\r?\n(\s*(([a-zA-Z0-9.]+)\s=\s[^\r\n]+\r?\n))*\s*\b/</span>)) &amp;&amp; subject.<span class="hljs-property">length</span> &gt; <span class="hljs-number">1</span>) {
+    <span class="hljs-keyword">if</span> ((subject = certData.<span class="hljs-title function_">match</span>(<span class="hljs-regexp">/\s*Subject:\r?\n([ \t]*[a-zA-Z0-9.]+\s=\s[^\r\n]+\r?\n)*[ \t]*/</span>)) &amp;&amp; subject.<span class="hljs-property">length</span> &gt; <span class="hljs-number">1</span>) {
       subject = subject[<span class="hljs-number">0</span>]
       tmp = <span class="hljs-title function_">matchAll</span>(subject, <span class="hljs-regexp">/\s([a-zA-Z0-9.]+)\s=\s([^\r\n].*)/g</span>)
       <span class="hljs-keyword">if</span> (tmp) {
@@ -1650,11 +2003,11 @@ create password file for the password “-password”</p>
         </li>
         
         
-        <li id="section-17">
+        <li id="section-26">
             <div class="annotation">
               
               <div class="sswrap ">
-                <a class="ss" href="#section-17">&#x00a7;</a>
+                <a class="ss" href="#section-26">&#x00a7;</a>
               </div>
               <p>country</p>
 
@@ -1666,11 +2019,11 @@ create password file for the password “-password”</p>
         </li>
         
         
-        <li id="section-18">
+        <li id="section-27">
             <div class="annotation">
               
               <div class="sswrap ">
-                <a class="ss" href="#section-18">&#x00a7;</a>
+                <a class="ss" href="#section-27">&#x00a7;</a>
               </div>
               <p>state</p>
 
@@ -1682,11 +2035,11 @@ create password file for the password “-password”</p>
         </li>
         
         
-        <li id="section-19">
+        <li id="section-28">
             <div class="annotation">
               
               <div class="sswrap ">
-                <a class="ss" href="#section-19">&#x00a7;</a>
+                <a class="ss" href="#section-28">&#x00a7;</a>
               </div>
               <p>locality</p>
 
@@ -1698,11 +2051,11 @@ create password file for the password “-password”</p>
         </li>
         
         
-        <li id="section-20">
+        <li id="section-29">
             <div class="annotation">
               
               <div class="sswrap ">
-                <a class="ss" href="#section-20">&#x00a7;</a>
+                <a class="ss" href="#section-29">&#x00a7;</a>
               </div>
               <p>organization</p>
 
@@ -1722,11 +2075,11 @@ create password file for the password “-password”</p>
         </li>
         
         
-        <li id="section-21">
+        <li id="section-30">
             <div class="annotation">
               
               <div class="sswrap ">
-                <a class="ss" href="#section-21">&#x00a7;</a>
+                <a class="ss" href="#section-30">&#x00a7;</a>
               </div>
               <p>unit</p>
 
@@ -1746,11 +2099,11 @@ create password file for the password “-password”</p>
         </li>
         
         
-        <li id="section-22">
+        <li id="section-31">
             <div class="annotation">
               
               <div class="sswrap ">
-                <a class="ss" href="#section-22">&#x00a7;</a>
+                <a class="ss" href="#section-31">&#x00a7;</a>
               </div>
               <p>common name</p>
 
@@ -1770,11 +2123,11 @@ create password file for the password “-password”</p>
         </li>
         
         
-        <li id="section-23">
+        <li id="section-32">
             <div class="annotation">
               
               <div class="sswrap ">
-                <a class="ss" href="#section-23">&#x00a7;</a>
+                <a class="ss" href="#section-32">&#x00a7;</a>
               </div>
               <p>email</p>
 
@@ -1794,11 +2147,11 @@ create password file for the password “-password”</p>
         </li>
         
         
-        <li id="section-24">
+        <li id="section-33">
             <div class="annotation">
               
               <div class="sswrap ">
-                <a class="ss" href="#section-24">&#x00a7;</a>
+                <a class="ss" href="#section-33">&#x00a7;</a>
               </div>
               <p>DC name</p>
 
@@ -1816,25 +2169,27 @@ create password file for the password “-password”</p>
       }) : tmp[<span class="hljs-number">0</span>][<span class="hljs-number">1</span>]) : <span class="hljs-string">&#x27;&#x27;</span>
     }
 
-    <span class="hljs-keyword">if</span> ((issuer = certData.<span class="hljs-title function_">match</span>(<span class="hljs-regexp">/\s*Issuer:\r?\n(\s*([a-zA-Z0-9.]+)\s=\s[^\r\n].*\r?\n)*\s*\b/</span>)) &amp;&amp; issuer.<span class="hljs-property">length</span> &gt; <span class="hljs-number">1</span>) {
+    <span class="hljs-keyword">if</span> ((issuer = certData.<span class="hljs-title function_">match</span>(<span class="hljs-regexp">/\s*Issuer:\r?\n([ \t]*[a-zA-Z0-9.]+\s=\s[^\r\n].*\r?\n)*[ \t]*/</span>)) &amp;&amp; issuer.<span class="hljs-property">length</span> &gt; <span class="hljs-number">1</span>) {
       issuer = issuer[<span class="hljs-number">0</span>]
       tmp = <span class="hljs-title function_">matchAll</span>(issuer, <span class="hljs-regexp">/\s([a-zA-Z0-9.]+)\s=\s([^\r\n].*)/g</span>)
-      <span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; tmp.<span class="hljs-property">length</span>; i++) {
-        ky = tmp[i][<span class="hljs-number">1</span>].<span class="hljs-title function_">toString</span>()
-        <span class="hljs-keyword">if</span> (ky.<span class="hljs-title function_">match</span>(<span class="hljs-string">&#x27;(C|ST|L|O|OU|CN|emailAddress|DC)&#x27;</span>)) {
-          <span class="hljs-keyword">continue</span>
+      <span class="hljs-keyword">if</span> (tmp) {
+        <span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; tmp.<span class="hljs-property">length</span>; i++) {
+          ky = tmp[i][<span class="hljs-number">1</span>].<span class="hljs-title function_">toString</span>()
+          <span class="hljs-keyword">if</span> (ky.<span class="hljs-title function_">match</span>(<span class="hljs-string">&#x27;(C|ST|L|O|OU|CN|emailAddress|DC)&#x27;</span>)) {
+            <span class="hljs-keyword">continue</span>
+          }
+          certValues.<span class="hljs-property">issuer</span>[ky] = tmp[i][<span class="hljs-number">2</span>].<span class="hljs-title function_">toString</span>()
         }
-        certValues.<span class="hljs-property">issuer</span>[ky] = tmp[i][<span class="hljs-number">2</span>].<span class="hljs-title function_">toString</span>()
       }</pre></div></div>
             
         </li>
         
         
-        <li id="section-25">
+        <li id="section-34">
             <div class="annotation">
               
               <div class="sswrap ">
-                <a class="ss" href="#section-25">&#x00a7;</a>
+                <a class="ss" href="#section-34">&#x00a7;</a>
               </div>
               <p>country</p>
 
@@ -1846,11 +2201,11 @@ create password file for the password “-password”</p>
         </li>
         
         
-        <li id="section-26">
+        <li id="section-35">
             <div class="annotation">
               
               <div class="sswrap ">
-                <a class="ss" href="#section-26">&#x00a7;</a>
+                <a class="ss" href="#section-35">&#x00a7;</a>
               </div>
               <p>state</p>
 
@@ -1862,11 +2217,11 @@ create password file for the password “-password”</p>
         </li>
         
         
-        <li id="section-27">
+        <li id="section-36">
             <div class="annotation">
               
               <div class="sswrap ">
-                <a class="ss" href="#section-27">&#x00a7;</a>
+                <a class="ss" href="#section-36">&#x00a7;</a>
               </div>
               <p>locality</p>
 
@@ -1878,11 +2233,11 @@ create password file for the password “-password”</p>
         </li>
         
         
-        <li id="section-28">
+        <li id="section-37">
             <div class="annotation">
               
               <div class="sswrap ">
-                <a class="ss" href="#section-28">&#x00a7;</a>
+                <a class="ss" href="#section-37">&#x00a7;</a>
               </div>
               <p>organization</p>
 
@@ -1902,11 +2257,11 @@ create password file for the password “-password”</p>
         </li>
         
         
-        <li id="section-29">
+        <li id="section-38">
             <div class="annotation">
               
               <div class="sswrap ">
-                <a class="ss" href="#section-29">&#x00a7;</a>
+                <a class="ss" href="#section-38">&#x00a7;</a>
               </div>
               <p>unit</p>
 
@@ -1927,11 +2282,11 @@ create password file for the password “-password”</p>
         </li>
         
         
-        <li id="section-30">
+        <li id="section-39">
             <div class="annotation">
               
               <div class="sswrap ">
-                <a class="ss" href="#section-30">&#x00a7;</a>
+                <a class="ss" href="#section-39">&#x00a7;</a>
               </div>
               <p>common name</p>
 
@@ -1952,11 +2307,11 @@ create password file for the password “-password”</p>
         </li>
         
         
-        <li id="section-31">
+        <li id="section-40">
             <div class="annotation">
               
               <div class="sswrap ">
-                <a class="ss" href="#section-31">&#x00a7;</a>
+                <a class="ss" href="#section-40">&#x00a7;</a>
               </div>
               <p>DC name</p>
 
@@ -1978,28 +2333,28 @@ create password file for the password “-password”</p>
         </li>
         
         
-        <li id="section-32">
+        <li id="section-41">
             <div class="annotation">
               
               <div class="sswrap ">
-                <a class="ss" href="#section-32">&#x00a7;</a>
+                <a class="ss" href="#section-41">&#x00a7;</a>
               </div>
               <p>SAN</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> ((san = certData.<span class="hljs-title function_">match</span>(<span class="hljs-regexp">/X509v3 Subject Alternative Name: \r?\n([^\r\n]*)\r?\n/</span>)) &amp;&amp; san.<span class="hljs-property">length</span> &gt; <span class="hljs-number">1</span>) {
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> ((san = certData.<span class="hljs-title function_">match</span>(<span class="hljs-regexp">/X509v3 Subject Alternative Name:\s*\r?\n([^\r\n]*)\r?\n/</span>)) &amp;&amp; san.<span class="hljs-property">length</span> &gt; <span class="hljs-number">1</span>) {
       san = san[<span class="hljs-number">1</span>].<span class="hljs-title function_">trim</span>() + <span class="hljs-string">&#x27;\n&#x27;</span>
       certValues.<span class="hljs-property">san</span> = {}</pre></div></div>
             
         </li>
         
         
-        <li id="section-33">
+        <li id="section-42">
             <div class="annotation">
               
               <div class="sswrap ">
-                <a class="ss" href="#section-33">&#x00a7;</a>
+                <a class="ss" href="#section-42">&#x00a7;</a>
               </div>
               <p>hostnames</p>
 
@@ -2011,11 +2366,11 @@ create password file for the password “-password”</p>
         </li>
         
         
-        <li id="section-34">
+        <li id="section-43">
             <div class="annotation">
               
               <div class="sswrap ">
-                <a class="ss" href="#section-34">&#x00a7;</a>
+                <a class="ss" href="#section-43">&#x00a7;</a>
               </div>
               <p>IP-Addresses IPv4 &amp; IPv6</p>
 
@@ -2027,11 +2382,11 @@ create password file for the password “-password”</p>
         </li>
         
         
-        <li id="section-35">
+        <li id="section-44">
             <div class="annotation">
               
               <div class="sswrap ">
-                <a class="ss" href="#section-35">&#x00a7;</a>
+                <a class="ss" href="#section-44">&#x00a7;</a>
               </div>
               <p>Email Addresses</p>
 
@@ -2044,11 +2399,11 @@ create password file for the password “-password”</p>
         </li>
         
         
-        <li id="section-36">
+        <li id="section-45">
             <div class="annotation">
               
               <div class="sswrap ">
-                <a class="ss" href="#section-36">&#x00a7;</a>
+                <a class="ss" href="#section-45">&#x00a7;</a>
               </div>
               <p>Validity</p>
 
@@ -2069,11 +2424,11 @@ create password file for the password “-password”</p>
         </li>
         
         
-        <li id="section-37">
+        <li id="section-46">
             <div class="annotation">
               
               <div class="sswrap ">
-                <a class="ss" href="#section-37">&#x00a7;</a>
+                <a class="ss" href="#section-46">&#x00a7;</a>
               </div>
               <p>Validity end</p>
 
@@ -2082,11 +2437,11 @@ create password file for the password “-password”</p>
         </li>
         
         
-        <li id="section-38">
+        <li id="section-47">
             <div class="annotation">
               
               <div class="sswrap ">
-                <a class="ss" href="#section-38">&#x00a7;</a>
+                <a class="ss" href="#section-47">&#x00a7;</a>
               </div>
               <p>Signature Algorithm</p>
 
@@ -2099,11 +2454,11 @@ create password file for the password “-password”</p>
         </li>
         
         
-        <li id="section-39">
+        <li id="section-48">
             <div class="annotation">
               
               <div class="sswrap ">
-                <a class="ss" href="#section-39">&#x00a7;</a>
+                <a class="ss" href="#section-48">&#x00a7;</a>
               </div>
               <p>Public Key</p>
 
@@ -2116,11 +2471,11 @@ create password file for the password “-password”</p>
         </li>
         
         
-        <li id="section-40">
+        <li id="section-49">
             <div class="annotation">
               
               <div class="sswrap ">
-                <a class="ss" href="#section-40">&#x00a7;</a>
+                <a class="ss" href="#section-49">&#x00a7;</a>
               </div>
               <p>Public Key Algorithm</p>
 
@@ -2159,6 +2514,22 @@ create password file for the password “-password”</p>
     matchArray.<span class="hljs-title function_">push</span>(nonGlobalMatch[<span class="hljs-number">1</span>])
   }
   <span class="hljs-keyword">return</span> matchArray
+}
+
+<span class="hljs-keyword">var</span> <span class="hljs-variable constant_">DNS_LABEL_PATTERN</span> = <span class="hljs-string">&#x27;[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?&#x27;</span>
+<span class="hljs-keyword">var</span> <span class="hljs-variable constant_">DNS_NAME_REGEX</span> = <span class="hljs-keyword">new</span> <span class="hljs-title class_">RegExp</span>(<span class="hljs-string">&#x27;^(?:\\*\\.)?&#x27;</span> + <span class="hljs-variable constant_">DNS_LABEL_PATTERN</span> + <span class="hljs-string">&#x27;(?:\\.&#x27;</span> + <span class="hljs-variable constant_">DNS_LABEL_PATTERN</span> + <span class="hljs-string">&#x27;)*\\.?$&#x27;</span>)
+<span class="hljs-keyword">var</span> <span class="hljs-variable constant_">DNS_EMAIL_REGEX</span> = <span class="hljs-keyword">new</span> <span class="hljs-title class_">RegExp</span>(<span class="hljs-string">&#x27;^[A-Za-z0-9.!#$%&amp;\&#x27;*+/=?^_`{|}~-]+@&#x27;</span> + <span class="hljs-variable constant_">DNS_LABEL_PATTERN</span> + <span class="hljs-string">&#x27;(?:\\.&#x27;</span> + <span class="hljs-variable constant_">DNS_LABEL_PATTERN</span> + <span class="hljs-string">&#x27;)*$&#x27;</span>)
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">isValidDNSName</span>(<span class="hljs-params">value</span>) {
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">typeof</span> value === <span class="hljs-string">&#x27;string&#x27;</span> &amp;&amp; value.<span class="hljs-property">length</span> &lt;= <span class="hljs-number">253</span> &amp;&amp; <span class="hljs-variable constant_">DNS_NAME_REGEX</span>.<span class="hljs-title function_">test</span>(value)
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">isValidSANEmail</span>(<span class="hljs-params">value</span>) {
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">typeof</span> value === <span class="hljs-string">&#x27;string&#x27;</span> &amp;&amp; value.<span class="hljs-property">length</span> &lt;= <span class="hljs-number">254</span> &amp;&amp; <span class="hljs-variable constant_">DNS_EMAIL_REGEX</span>.<span class="hljs-title function_">test</span>(value)
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">isValidAltName</span>(<span class="hljs-params">value</span>) {
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">typeof</span> value === <span class="hljs-string">&#x27;string&#x27;</span> &amp;&amp; (net.<span class="hljs-title function_">isIP</span>(value) &gt; <span class="hljs-number">0</span> || <span class="hljs-title function_">isValidDNSName</span>(value))
 }
 
 <span class="hljs-keyword">function</span> <span class="hljs-title function_">generateCSRSubject</span>(<span class="hljs-params">options</span>) {
@@ -2226,11 +2597,11 @@ create password file for the password “-password”</p>
         </li>
         
         
-        <li id="section-41">
+        <li id="section-50">
             <div class="annotation">
               
               <div class="sswrap ">
-                <a class="ss" href="#section-41">&#x00a7;</a>
+                <a class="ss" href="#section-50">&#x00a7;</a>
               </div>
               <p>promisify not tested yet</p>
 
