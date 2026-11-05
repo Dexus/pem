@@ -1,13 +1,13 @@
-var helper = require('./helper.js')
-var {debug} = require('./debug.js')
+var helper = require('./helper')
+var {debug} = require('./debug')
 var cpspawn = require('child_process').spawn
 var spawnSync = require('child_process').spawnSync
 var pathlib = require('path')
 var fs = require('fs')
 const {tmpdir} = require('os')
 var crypto = require('crypto')
-var which = require('which')
-var settings = {}
+import which = require('which')
+var settings: Record<string, any> = {}
 var tempDir = process.env.PEMJS_TMPDIR || tmpdir()
 
 const versionRegEx = new RegExp('^(OpenSSL|LibreSSL) (((\\d+).(\\d+)).(\\d+))([a-z]+)?')
@@ -20,6 +20,10 @@ if ("DEBUG" in process.env && process.env.DEBUG === 'true') {
     }
   }
 }
+
+type ExecCallback = (err: Error | null, data?: string) => void
+type ExecBinaryCallback = (err: Error | null, stdout?: string | Buffer) => void
+type SpawnCallback = (err: Error | null, code?: number | null, stdout?: string | Buffer, stderr?: string) => void
 
 /**
  * pem openssl module
@@ -34,7 +38,7 @@ if ("DEBUG" in process.env && process.env.DEBUG === 'true') {
  * @param {String} option name e.g. pathOpenSSL, openSslVersion; TODO rethink nomenclature
  * @param {*} value value
  */
-function set(option, value) {
+function set(option: string, value: any) {
   settings[option] = value
 }
 
@@ -44,7 +48,7 @@ function set(option, value) {
  * @static
  * @param {String} option name
  */
-function get(option) {
+function get(option: string) {
   return settings[option] || null
 }
 
@@ -57,14 +61,14 @@ function get(option) {
  * @param {Array} [tmpfiles] list of temporary files
  * @param {Function} callback Called with (error, stdout-substring)
  */
-function exec(params, searchStr, tmpfiles, callback) {
+function exec(params: string[], searchStr: string, tmpfiles: string[] | ExecCallback | false, callback: ExecCallback) {
   if (!callback && typeof tmpfiles === 'function') {
     callback = tmpfiles
     tmpfiles = false
   }
 
-  spawnWrapper(params, tmpfiles, function (err, code, stdout, stderr) {
-    var start, end
+  spawnWrapper(params, tmpfiles, function (err: any, code: any, stdout: any, stderr: any) {
+    var start: any, end: any
 
     if (err) {
       return callback(err)
@@ -103,7 +107,7 @@ function exec(params, searchStr, tmpfiles, callback) {
  * @param {Array} [tmpfiles] list of temporary files
  * @param {Function} callback Called with (error, stdout)
  */
-function execBinary(params, tmpfiles, callback) {
+function execBinary(params: string[], tmpfiles: string[] | ExecBinaryCallback | false, callback: ExecBinaryCallback) {
   if (!callback && typeof tmpfiles === 'function') {
     callback = tmpfiles
     tmpfiles = false
@@ -125,7 +129,7 @@ function execBinary(params, tmpfiles, callback) {
  * @param {Boolean}      binary   Output of openssl is binary or text
  * @param {Function}     callback Called with (error, exitCode, stdout, stderr)
  */
-function spawn(params, binary, callback) {
+function spawn(params: string[], binary: boolean, callback: SpawnCallback) {
   var pathBin = get('pathOpenSSL') || process.env.OPENSSL_BIN || 'openssl'
 
   testOpenSSLPath(pathBin, function (err) {
@@ -135,25 +139,25 @@ function spawn(params, binary, callback) {
     var openssl = cpspawn(pathBin, params)
     var stderr = ''
 
-    var stdout = (binary ? Buffer.alloc(0) : '')
-    openssl.stdout.on('data', function (data) {
+    var stdout: string | Buffer = (binary ? Buffer.alloc(0) : '')
+    openssl.stdout.on('data', function (data: Buffer) {
       if (!binary) {
-        stdout += data.toString('binary')
+        stdout = (stdout as string) + data.toString('binary')
       } else {
-        stdout = Buffer.concat([stdout, data])
+        stdout = Buffer.concat([stdout as Buffer, data as Buffer])
       }
     })
 
-    openssl.stderr.on('data', function (data) {
+    openssl.stderr.on('data', function (data: Buffer) {
       stderr += data.toString('binary')
     })
     // We need both the return code and access to all of stdout.  Stdout isn't
     // *really* available until the close event fires; the timing nuance was
     // making this fail periodically.
     var needed = 2 // wait for both exit and close.
-    var code = -1
+    var code: number | null = -1
     var finished = false
-    var done = function (err) {
+    var done = function (err?: Error | null) {
       if (finished) {
         return
       }
@@ -178,19 +182,21 @@ function spawn(params, binary, callback) {
 
     openssl.on('error', done)
 
-    openssl.on('exit', function (ret) {
+    openssl.on('exit', function (ret: number | null) {
       code = ret
       done()
     })
 
     openssl.on('close', function () {
-      stdout = (binary ? stdout : Buffer.from(stdout, 'binary').toString('utf-8'))
+      stdout = (binary ? stdout : Buffer.from(stdout as string, 'binary').toString('utf-8'))
       stderr = Buffer.from(stderr, 'binary').toString('utf-8')
       done()
     })
   })
 }
 
+function spawnWrapper(params: string[], tmpfiles: string | string[] | false | undefined | ((...args: any[]) => void), callback: SpawnCallback): void
+function spawnWrapper(params: string[], tmpfiles: string | string[] | false | undefined | ((...args: any[]) => void), binary: boolean | ((...args: any[]) => void), callback: SpawnCallback): void
 /**
  * Wrapper for spawn method
  *
@@ -200,14 +206,14 @@ function spawn(params, binary, callback) {
  * @param {Boolean} [binary] Output of openssl is binary or text
  * @param {Function} callback Called with (error, exitCode, stdout, stderr)
  */
-function spawnWrapper(params, tmpfiles, binary, callback) {
+function spawnWrapper(params: string[], tmpfiles: any, binary: any, callback?: any): void {
   if (!callback && typeof binary === 'function') {
     callback = binary
     binary = false
   }
 
   var files = []
-  var delTempPWFiles = []
+  var delTempPWFiles: string[] = []
 
   if (tmpfiles) {
     tmpfiles = [].concat(tmpfiles)
@@ -230,11 +236,11 @@ function spawnWrapper(params, tmpfiles, binary, callback) {
     file = files[i]
     // tmpfiles can hold private keys and other secrets: never readable
     // by other local users, regardless of the process umask.
-    fs.writeFileSync(file.path, file.contents, { mode: 0o600 })
+    fs.writeFileSync(file.path, file.contents as string, { mode: 0o600 })
   }
 
   spawn(params, binary, function (err, code, stdout, stderr) {
-    helper.deleteTempFiles(delTempPWFiles, function (fsErr) {
+    helper.deleteTempFiles(delTempPWFiles, function (fsErr: NodeJS.ErrnoException | null) {
       debug(params[0], {
         err: err,
         fsErr: fsErr,
@@ -254,7 +260,7 @@ function spawnWrapper(params, tmpfiles, binary, callback) {
  * @param {String} pathBin The path to OpenSSL Bin
  * @param {Function} callback Callback function with an error object
  */
-function testOpenSSLPath(pathBin, callback) {
+function testOpenSSLPath(pathBin: string, callback: (err?: Error | null) => void) {
   const resolved = which.sync(pathBin, { nothrow: true });
   if (!resolved) {
     return callback(new Error('Could not find openssl on your system on this path: ' + pathBin))
@@ -291,7 +297,7 @@ function setVersion() {
  * @param {Number} minor minimum minor version
  * @returns {Boolean}
  */
-function atLeastVersion(major, minor) {
+function atLeastVersion(major: number, minor: number): boolean {
   var vMajor = Number(get('VendorVersionMajor'))
   var vMinor = Number(get('VendorVersionMinor'))
   return vMajor > major || (vMajor === major && vMinor >= minor)
@@ -299,13 +305,13 @@ function atLeastVersion(major, minor) {
 
 setVersion();
 
-module.exports = {
-  exec: exec,
-  execBinary: execBinary,
-  spawn: spawn,
-  spawnWrapper: spawnWrapper,
-  settings: settings,
-  set: set,
-  get: get,
-  atLeastVersion: atLeastVersion
+export = {
+  exec,
+  execBinary,
+  spawn,
+  spawnWrapper,
+  settings,
+  set,
+  get,
+  atLeastVersion
 }
