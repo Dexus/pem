@@ -293,7 +293,7 @@ Where
 * **clientKey** is a PEM encoded private key
 * **certificate** is a PEM encoded certificate
 * **p12Password** is the password of the exported keystore
-* **options** is an optional options object with `cipher`, (one of "aes128", "aes192", "aes256", "camellia128", "camellia192", "camellia256", "des", "des3" or "idea"), `clientKeyPassword` and `certFiles` (an array of additional certificates to include - e.g. CA certificates)
+* **options** is an optional options object with `cipher`, (one of "aes128", "aes192", "aes256", "camellia128", "camellia192", "camellia256", "des", "des3" or "idea"), `clientKeyPassword`, `certFiles` (an array of additional certificates to include - e.g. CA certificates) and the PBE algorithm selection `certpbe`, `keypbe` (e.g. "AES-256-CBC") and `macalg` (e.g. "sha256") for openssl ≥ 3 compatibility (see the [PKCS12 PFX note](https://github.com/Dexus/pem/issues/406))
 * **callback** is a callback function with an error object and `{pkcs12}` (binary)
 
 ### Read a PKCS12 keystore
@@ -307,6 +307,18 @@ Where
 * **bufferOrPath** is a PKCS12 keystore as a [Buffer](https://nodejs.org/api/buffer.html) or the path to a file
 * **options** is an optional options object with `clientKeyPassword` which will be used to encrypt the stored key and `p12Password` which will be used to open the keystore
 * **callback** is a callback function with an error object and `{key: String, cert: String, ca: Array}`
+
+### Convert a private key to PKCS#8
+
+Use `createPkcs8` to convert a PEM private key to PKCS#8 format, optionally encrypted and optionally DER-encoded.
+
+	pem.createPkcs8(key, [options], callback)
+
+Where
+
+* **key** is a PEM encoded private key (may itself be encrypted)
+* **options** is an optional options object with `clientKeyPassword` (the password of an encrypted source key), `password` and `cipher` (one of "aes128", "aes192", "aes256", ...) to produce an *encrypted* PKCS#8 key, and `outform` ("PEM" (default, string) or "DER" (Buffer))
+* **callback** is a callback function with an error object and `{pkcs8}` (string for PEM, [Buffer](https://nodejs.org/api/buffer.html) for DER)
 
 ### Check a PKCS12 keystore
 
@@ -437,6 +449,20 @@ pem.config({
 })
 // do something with the pem module
 ```
+
+### Custom OpenSSL command line parameters
+
+Additional command line parameters can be passed to every openssl invocation, e.g. to select an engine, provider or property query that the library does not know about:
+
+```javascript
+var pem = require('pem')
+pem.config({
+  openSslParams: ['-provider', 'default', '-propquery', '?legacy!=yes']
+})
+// every openssl command run by pem now starts with the given parameters
+```
+
+The list is merged into every spawned openssl command right after the subcommand. Use with care — invalid parameters make openssl fail; reset with `pem.config({openSslParams: []})`.
 
 ### :warning: CSR/Certificates with special chars
 For more details, search in `test/pem.spec.js`: `Create CSR with specialchars config file`

@@ -22,6 +22,7 @@ export const getModulus = pem.getModulus
 export const getDhparamInfo = pem.getDhparamInfo
 export const createPkcs12 = pem.createPkcs12
 export const readPkcs12 = pem.readPkcs12
+export const createPkcs8 = pem.createPkcs8
 export const verifySigningChain = pem.verifySigningChain
 export const checkCertificate = pem.checkCertificate
 export const checkPkcs12 = pem.checkPkcs12

@@ -132,10 +132,31 @@ declare namespace pem {
     cipher?: string
     clientKeyPassword?: string
     certFiles?: Array<string>
+    /** PBE cipher for the certificate bag (openssl pkcs12 -export -certpbe) */
+    certpbe?: string
+    /** PBE cipher for the key bag (openssl pkcs12 -export -keypbe) */
+    keypbe?: string
+    /** MAC digest algorithm (openssl pkcs12 -export -macalg) */
+    macalg?: string
   }
 
   interface CreatePkcs12Result {
     pkcs12: Buffer
+  }
+
+  interface CreatePkcs8Options {
+    /** cipher for the encrypted PKCS#8 output (openssl pkcs8 -v2) */
+    cipher?: string
+    /** password for the encrypted PKCS#8 output; omit for -nocrypt */
+    password?: string
+    /** password of an encrypted source key (openssl pkcs8 -passin) */
+    clientKeyPassword?: string
+    /** output encoding, PEM (default, string) or DER (Buffer) */
+    outform?: 'PEM' | 'DER'
+  }
+
+  interface CreatePkcs8Result {
+    pkcs8: string | Buffer
   }
 
   interface ReadPkcs12Options {
@@ -230,6 +251,7 @@ declare namespace pem {
     getDhparamInfo(dh: CertificateInput): Promise<DhparamInfoResult>
     createPkcs12(key: string | Buffer, certificate: string | Buffer, password: string, options?: CreatePkcs12Options): Promise<CreatePkcs12Result>
     readPkcs12(bufferOrPath: Buffer | string, options?: ReadPkcs12Options): Promise<ReadPkcs12Result>
+    createPkcs8(key: string | Buffer, options?: CreatePkcs8Options): Promise<CreatePkcs8Result>
     verifySigningChain(certificate: CertificateChainInput, ca?: CertificateChainInput): Promise<boolean>
     checkCertificate(certificate: CertificateInput, passphrase?: string): Promise<boolean>
     checkPkcs12(bufferOrPath: Buffer | string, passphrase?: string): Promise<boolean>
@@ -287,6 +309,10 @@ declare namespace pem {
     readPkcs12(bufferOrPath: Buffer | string, options: ReadPkcs12Options, callback: Callback<ReadPkcs12Result>): void
     readPkcs12(bufferOrPath: Buffer | string, callback: Callback<ReadPkcs12Result>): void
     readPkcs12(bufferOrPath: Buffer | string, options?: ReadPkcs12Options): Promise<ReadPkcs12Result>
+
+    createPkcs8(key: string | Buffer, options: CreatePkcs8Options, callback: Callback<CreatePkcs8Result>): void
+    createPkcs8(key: string | Buffer, callback: Callback<CreatePkcs8Result>): void
+    createPkcs8(key: string | Buffer, options?: CreatePkcs8Options): Promise<CreatePkcs8Result>
 
     verifySigningChain(certificate: CertificateChainInput, ca: CertificateChainInput, callback: Callback<boolean>): void
     verifySigningChain(certificate: CertificateChainInput, callback: Callback<boolean>): void

@@ -15,6 +15,7 @@ type ReadPkcs12Callback = (err?: Error | string | null, bundle?: { cert?: string
 type VerifySigningChainCallback = (err?: Error | string | null, valid?: boolean | string) => void
 type CheckCertificateCallback = (err?: Error | string | null, valid?: boolean) => void
 type CheckPkcs12Callback = (err?: Error | string | null, valid?: boolean) => void
+type CreatePkcs8Callback = (err?: Error | string | null, result?: { pkcs8: string | Buffer }) => void
 
 interface CreatePrivateKeyOptions {
   cipher?: string
@@ -66,11 +67,21 @@ interface CreatePkcs12Options {
   cipher?: string
   clientKeyPassword?: string
   certFiles?: string[]
+  certpbe?: string
+  keypbe?: string
+  macalg?: string
 }
 
 interface ReadPkcs12Options {
   p12Password?: string
   clientKeyPassword?: string
+}
+
+interface CreatePkcs8Options {
+  cipher?: string
+  password?: string
+  clientKeyPassword?: string
+  outform?: 'PEM' | 'DER'
 }
 
 // widened honestly from what fetchCertificateData actually stores (SAN fields
@@ -110,6 +121,7 @@ module.exports.getModulus = getModulus
 module.exports.getDhparamInfo = getDhparamInfo
 module.exports.createPkcs12 = createPkcs12
 module.exports.readPkcs12 = readPkcs12
+module.exports.createPkcs8 = createPkcs8
 module.exports.verifySigningChain = verifySigningChain
 module.exports.checkCertificate = checkCertificate
 module.exports.checkPkcs12 = checkPkcs12
@@ -1233,7 +1245,7 @@ function getFingerprint(certificate: string | Buffer, hash: string | GetFingerpr
  * @param {String} key PEM encoded private key
  * @param {String} certificate PEM encoded certificate
  * @param {String} password Password of the result PKCS12 file
- * @param {Object} [options] object of cipher and optional client key password {cipher:'aes128', clientKeyPassword: 'xxxx', certFiles: ['file1','file2']}
+ * @param {Object} [options] object of cipher and optional client key password {cipher:'aes128', clientKeyPassword: 'xxxx', certFiles: ['file1','file2']} as well as PBE algorithm selection {certpbe: 'AES-256-CBC', keypbe: 'AES-256-CBC', macalg: 'sha256'}
  * @param {Function} callback Callback function with an error object and {pkcs12}
  * @returns {Promise<{pkcs12: Buffer}>} Resolves with the PKCS#12 bundle when no callback is provided.
  */
@@ -1284,6 +1296,25 @@ function createPkcs12(key: string, certificate: string, password: string, option
 
     params.push('-certfile')
     params.push('--TMPFILE--')
+  }
+
+  // PBE algorithm selection — with OpenSSL 3 the legacy defaults of older
+  // openssl builds can produce PKCS#12 data the Node TLS stack rejects
+  // ("Unsupported PKCS12 PFX data", issue #406), so cert/key encryption and
+  // MAC digest are user-selectable.
+  if (options.certpbe) {
+    params.push('-certpbe')
+    params.push(options.certpbe)
+  }
+
+  if (options.keypbe) {
+    params.push('-keypbe')
+    params.push(options.keypbe)
+  }
+
+  if (options.macalg) {
+    params.push('-macalg')
+    params.push(options.macalg)
   }
 
   // In FIPS mode PKCS12KDF is unavailable, so the MAC must switch to
@@ -1431,6 +1462,91 @@ function readPkcs12(bufferOrPath: Buffer | string, options: ReadPkcs12Options | 
       done(sslErr || fsErr)
     })
   })
+}
+
+/**
+ * Convert a private key to PKCS#8 format
+ * @static
+ * @param {String} key PEM encoded private key (may be encrypted)
+ * @param {Object} [options] object with optional source key decryption {clientKeyPassword: 'xxxx'} and output encryption {cipher: 'aes256', password: 'xxxx'} as well as {outform: 'PEM'|'DER'}
+ * @param {Function} callback Callback function with an error object and {pkcs8}
+ * @returns {Promise<{pkcs8: string|Buffer}>} Resolves with the PKCS#8 key when no callback is provided.
+ */
+function createPkcs8(key: string, options: CreatePkcs8Options | CreatePkcs8Callback | undefined, callback: CreatePkcs8Callback) {
+  if (!callback && typeof options === 'function') {
+    callback = options
+    options = {}
+  }
+
+  if (!callback) {
+    return new Promise(function (resolve, reject) {
+      createPkcs8(key, options, function (err, result) {
+        if (err) {
+          return reject(err)
+        }
+        resolve(result)
+      })
+    })
+  }
+
+  options = (options || {}) as CreatePkcs8Options
+
+  var outform = (options.outform || 'PEM')
+  var params = ['pkcs8', '-topk8', '-inform', 'PEM', '-outform', outform]
+  var delTempPWFiles: string[] = []
+
+  if (options.clientKeyPassword) {
+    // decrypt the source key while reading it ("-passin")
+    helper.createPasswordFile({
+      cipher: '',
+      password: options.clientKeyPassword,
+      passType: 'in'
+    }, params, delTempPWFiles)
+  }
+
+  if (options.password) {
+    // pkcs8 selects its encryption cipher via "-v2 <cipher>" — the "-<cipher>"
+    // shorthand form that createPasswordFile pushes is not accepted here
+    if (options.cipher && helper.ciphers.indexOf(options.cipher) !== -1) {
+      params.push('-v2')
+      params.push(options.cipher)
+    }
+    // encrypt the PKCS#8 output ("-passout"; without -v2 openssl picks the default)
+    helper.createPasswordFile({
+      cipher: '',
+      password: options.password,
+      passType: 'out'
+    }, params, delTempPWFiles)
+  }
+
+  if (!options.password) {
+    params.push('-nocrypt')
+  }
+
+  params.push('-in')
+  params.push('--TMPFILE--')
+
+  function done(sslErr: Error | string | null, pkcs8: string | Buffer) {
+    helper.deleteTempFiles(delTempPWFiles, function (fsErr: NodeJS.ErrnoException | null) {
+      if (sslErr || fsErr) {
+        return callback(sslErr || fsErr)
+      }
+      return callback(null, {
+        pkcs8: pkcs8
+      })
+    })
+  }
+
+  if (outform === 'DER') {
+    openssl.execBinary(params, [key], function (sslErr: Error | null, pkcs8: Buffer) {
+      done(sslErr, pkcs8)
+    })
+  } else {
+    // exec extracts the PEM block by header; the encrypted header differs
+    openssl.exec(params, options.password ? 'ENCRYPTED PRIVATE KEY' : 'PRIVATE KEY', [key], function (sslErr: Error | string | null, pkcs8: string) {
+      done(sslErr, pkcs8)
+    })
+  }
 }
 
 /**
