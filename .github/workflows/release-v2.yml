@@ -1,0 +1,81 @@
+name: "Release v2 NPM Package"
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: |
+          Enter the version for the release tag.
+          Must be larger than last tag and start with 2.
+          Use patch (2.0.x) for bug fixes.
+          Use minor (2.x.0) for new actions.
+        type: string
+        required: true
+      dry_run:
+        description: |
+          Run the full release pipeline without side effects:
+          nothing is pushed and nothing is published.
+        type: boolean
+        required: false
+        default: false
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  merge-to-v2-branch:
+    name: Create release by rebasing master to v2 and create a new tag
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '26'
+          cache: 'yarn'
+          registry-url: 'https://registry.npmjs.org'
+      - run: yarn install
+      - name: Check release version targets the v2 line
+        run: |
+          case "${{ inputs.tag }}" in
+            2.*) ;;
+            *) echo "::error::Release version must be 2.x.y for the v2 branch, got '${{ inputs.tag }}'" ; exit 1 ;;
+          esac
+      - name: Set git name, mail and origin
+        run: |
+          git config --global user.name "Josef Fröhle"
+          git config --global user.email "github@josef-froehle.de"
+          git remote set-url origin https://${{ secrets.BOT_PIPELINE_TOKEN }}@github.com/${{ github.repository }}
+      - name: Checkout v2 branch and merge
+        run: |
+          git checkout v2 2>/dev/null || git checkout -b v2 origin/master
+          git merge --ff-only master
+      - name: Generate new tag
+        run: |
+          yarn run build
+          if [ "$(node -p "require('./package.json').version")" != "${{ inputs.tag }}" ]; then
+            yarn version "${{ inputs.tag }}" --immediate
+          fi
+          yarn run changelog
+          yarn run documentation
+          git add -A
+          git commit -m "v${{ inputs.tag }}"
+          git tag -a "v${{ inputs.tag }}" -m "v${{ inputs.tag }}"
+      - name: Push tag and branch, sync master, publish docs
+        if: ${{ !inputs.dry_run }}
+        run: |
+          git push -u origin v2
+          git push --tags
+          git checkout master
+          git merge --ff-only v2
+          git push
+          git subtree split --prefix docs -b gh-pages
+          git push -f origin gh-pages:gh-pages
+      - name: Publish to npm
+        if: ${{ !inputs.dry_run }}
+        run: yarn npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Pack package without publishing (dry run)
+        if: ${{ inputs.dry_run }}
+        run: yarn npm publish --dry-run
