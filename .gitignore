@@ -22,3 +22,6 @@ tmp
 openssl/
 
 test/fixtures/tmp.*
+
+/lib/*.js
+.superpowers/

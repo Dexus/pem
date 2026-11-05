@@ -23,14 +23,16 @@
   ],
   "type": "commonjs",
   "scripts": {
-    "documentation": "yarn run docco && yarn run jsdoc",
+    "documentation": "yarn run build:lib && yarn run docco && yarn run jsdoc",
     "docco": "docco -l parallel -o docs/docco lib/helper.js lib/openssl.js lib/pem.js",
     "jsdoc": "jsdoc -c jsdoc.json",
     "build": "ncc build -m -s lib/pem.js -o dist",
+    "build:lib": "tsc -p .",
     "changelog": "auto-changelog -p --commit-limit false --output HISTORY.md",
     "coverage": "cross-env NODE_ENV=development nyc ./node_modules/.bin/mocha --recursive --bail --inline-diffs --reporter spec --check-leaks --use_strict $(find . -type f -name '*.spec.js'  ! -path './nyc_output/*' ! -path './coverage/*' ! -path './node_modules/*')",
-    "lint": "eslint --fix lib/*.js *.md *.json test/*.js test/*.spec.js",
-    "test": "yarn run lint && yarn run coverage",
+    "lint": "eslint --fix lib/*.ts *.md *.json test/*.js test/*.spec.js",
+    "prepack": "yarn run build:lib",
+    "test": "yarn run build:lib && yarn run lint && yarn run coverage",
     "test:opensslv3.0.1": "yarn run build > openssl_v3.0.1.log && yarn run test >> openssl_v3.0.1.log",
     "test:types": "tsd"
   },
@@ -73,7 +75,9 @@
     "marked": "18.1.3",
     "mocha": "^12.0.3",
     "nyc": "18.0.0",
-    "tsd": "0.33.0"
+    "tsd": "0.33.0",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.72.1"
   },
   "engines": {
     "node": ">=22.13.0"
