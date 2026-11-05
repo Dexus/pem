@@ -2169,6 +2169,7 @@ var promisifiedMethods = [
   'getDhparamInfo',
   'createPkcs12',
   'readPkcs12',
+  'createPkcs8',
   'verifySigningChain',
   'checkCertificate',
   'checkPkcs12'

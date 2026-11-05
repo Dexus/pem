@@ -44,6 +44,14 @@ describe('Issue #174 — createPkcs8 (PKCS#8 support)', function () {
     expect(pem.createPkcs8).to.be.a('function')
   })
 
+  it('is exposed and working on the deprecated promisified wrapper (types/pem.d.ts promises it)', async function () {
+    expect(pem.promisified.createPkcs8).to.be.a('function')
+    const key = await pem.createPrivateKey()
+    const result = await pem.promisified.createPkcs8(key.key, { outform: 'DER' })
+    expect(result.pkcs8).to.be.an.instanceof(Buffer)
+    expect(opensslReads(['pkey', '-inform', 'DER', '-noout'], result.pkcs8)).to.equal(0)
+  })
+
   it('converts an unencrypted private key to unencrypted PKCS#8 PEM', function (done) {
     makePrivateKey(function (key) {
       pem.createPkcs8(key, function (err, result) {
