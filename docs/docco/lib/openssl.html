@@ -149,7 +149,7 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> (searchStr === <span class="hljs-string">&#x27;EC PARAMETERS&#x27;</span>) {
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> (searchStr === <span class="hljs-string">&#x27;EC PARAMETERS&#x27;</span> &amp;&amp; params[<span class="hljs-number">0</span>] === <span class="hljs-string">&#x27;ecparam&#x27;</span>) {
       searchStr = <span class="hljs-string">&#x27;EC PRIVATE KEY&#x27;</span>
     }
 
@@ -312,8 +312,23 @@ making this fail periodically.</p>
 
   <span class="hljs-keyword">var</span> file
   <span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; files.<span class="hljs-property">length</span>; i++) {
-    file = files[i]
-    fs.<span class="hljs-title function_">writeFileSync</span>(file.<span class="hljs-property">path</span>, file.<span class="hljs-property">contents</span>)
+    file = files[i]</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="sswrap ">
+                <a class="ss" href="#section-4">&#x00a7;</a>
+              </div>
+              <p>tmpfiles can hold private keys and other secrets: never readable
+by other local users, regardless of the process umask.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    fs.<span class="hljs-title function_">writeFileSync</span>(file.<span class="hljs-property">path</span>, file.<span class="hljs-property">contents</span>, { <span class="hljs-attr">mode</span>: <span class="hljs-number">0o600</span> })
   }
 
   <span class="hljs-title function_">spawn</span>(params, binary, <span class="hljs-keyword">function</span> (<span class="hljs-params">err, code, stdout, stderr</span>) {
@@ -362,6 +377,24 @@ making this fail periodically.</p>
   <span class="hljs-title function_">set</span>(<span class="hljs-string">&#x27;VendorVersionBuildChar&#x27;</span>, <span class="hljs-keyword">typeof</span> version[<span class="hljs-number">7</span>] === <span class="hljs-string">&#x27;undefined&#x27;</span> ? <span class="hljs-string">&#x27;&#x27;</span> : version[<span class="hljs-number">7</span>])
 }
 
+<span class="hljs-comment">/**
+ * True when the detected OpenSSL CLI version is at least major.minor
+ *
+ * Feature flags vary between OpenSSL release lines (e.g. `-pbmac1_pbkdf2`
+ * exists only from 3.4 on), so command assembly must not assume a bare
+ * major-version check is enough.
+ *
+ * <span class="hljs-doctag">@private</span>
+ * <span class="hljs-doctag">@param</span> {<span class="hljs-type">Number</span>} major minimum major version
+ * <span class="hljs-doctag">@param</span> {<span class="hljs-type">Number</span>} minor minimum minor version
+ * <span class="hljs-doctag">@returns</span> {<span class="hljs-type">Boolean</span>}
+ */</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">atLeastVersion</span>(<span class="hljs-params">major, minor</span>) {
+  <span class="hljs-keyword">var</span> vMajor = <span class="hljs-title class_">Number</span>(<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;VendorVersionMajor&#x27;</span>))
+  <span class="hljs-keyword">var</span> vMinor = <span class="hljs-title class_">Number</span>(<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;VendorVersionMinor&#x27;</span>))
+  <span class="hljs-keyword">return</span> vMajor &gt; major || (vMajor === major &amp;&amp; vMinor &gt;= minor)
+}
+
 <span class="hljs-title function_">setVersion</span>();
 
 <span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span> = {
@@ -371,7 +404,8 @@ making this fail periodically.</p>
   <span class="hljs-attr">spawnWrapper</span>: spawnWrapper,
   <span class="hljs-attr">settings</span>: settings,
   <span class="hljs-attr">set</span>: set,
-  <span class="hljs-attr">get</span>: get
+  <span class="hljs-attr">get</span>: get,
+  <span class="hljs-attr">atLeastVersion</span>: atLeastVersion
 }</pre></div></div>
             
         </li>

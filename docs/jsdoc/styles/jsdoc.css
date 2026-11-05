@@ -1,5 +1,3 @@
-@import url(https://fonts.googleapis.com/css?family=Montserrat:400,700);
-
 * {
   box-sizing: border-box
 }
@@ -16,7 +14,6 @@ body {
   padding: 0 20px;
   font-family: 'Helvetica Neue', Helvetica, sans-serif;
   font-size: 16px;
-  line-height: 160%;
 }
 
 img {
@@ -41,8 +38,13 @@ article a:hover, article a:active {
   border-bottom-color: #222;
 }
 
+article .description a {
+    word-break: break-word;
+}
+
 p, ul, ol, blockquote {
   margin-bottom: 1em;
+  line-height: 160%;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -64,6 +66,8 @@ h1 {
 h1.page-title {
   font-size: 48px;
   margin: 1em 30px;
+  line-height: 100%;
+  word-wrap: break-word;
 }
 
 h2 {
@@ -113,11 +117,63 @@ h6 {
   font-style: italic;
 }
 
-tt, code, kbd, samp {
+.usertext h1 {
+  font-family: "Source Sans Pro";
+  font-size: 24px;
+  margin: 2.5em 0 1em;
+  font-weight: 400;
+}
+
+.usertext h2 {
+  font-family: "Source Sans Pro";
+  font-size: 18px;
+  margin: 2em 0 0.5em;
+  font-weight: 400;
+
+}
+
+.usertext h3 {
+  font-family: "Source Sans Pro";
+  font-size: 15px;
+  margin: 1.5em 0 0;
+  font-weight: 400;
+}
+
+.usertext h4 {
+  font-family: "Source Sans Pro";
+  font-size: 14px;
+  margin: 0 0 0;
+  font-weight: 400;
+}
+
+.usertext h5 {
+  font-size: 12px;
+  margin: 1em 0 0;
+  font-weight: normal;
+  color: #666;
+}
+
+.usertext h6 {
+  font-size: 11px;
+  margin: 1em 0 0;
+  font-weight: normal;
+  font-style: normal;
+  color: #666;
+}
+
+
+tt, code, kbd, samp, pre {
   font-family: Consolas, Monaco, 'Andale Mono', monospace;
   background: #f4f4f4;
+}
+
+tt, code, kbd, samp{
   padding: 1px 5px;
 }
+
+pre {
+  padding-bottom: 1em;
+}  
 
 .class-description {
   font-size: 130%;
@@ -132,7 +188,6 @@ tt, code, kbd, samp {
 
 #main {
   float: right;
-  min-width: 360px;
   width: calc(100% - 240px);
 }
 
@@ -167,6 +222,21 @@ nav {
   height: 100%;
 }
 
+nav #nav-search{
+    width: 210px;
+    height: 30px;
+    padding: 5px 10px;
+    font-size: 12px;
+    line-height: 1.5;
+    border-radius: 3px;
+    margin-right: 20px;
+    margin-top: 20px;
+}
+
+nav.wrap a{
+    word-wrap: break-word;
+}
+
 nav h3 {
   margin-top: 12px;
   font-size: 13px;
@@ -177,6 +247,10 @@ nav h3 {
   margin: 15px 0 10px;
   padding: 0;
   color: #000;
+}
+
+nav h3.collapsed_header {
+  cursor: pointer;
 }
 
 nav ul {
@@ -208,14 +282,7 @@ nav > ul {
 
 nav > ul > li > a {
   color: #606;
-}
-
-nav ul ul {
-  margin-bottom: 10px
-}
-
-nav ul ul + ul {
-  margin-top: -10px;
+  margin-top: 10px;
 }
 
 nav ul ul a {
@@ -229,13 +296,12 @@ nav ul ul a:active {
 }
 
 nav h2 {
-   font-size: 12px;
-   margin: 0;
+   font-size: 13px;
+   margin: 10px 0 0 0;
    padding: 0;
 }
 
 nav > h2 > a {
-   display: block;
    margin: 10px 0 -10px;
    color: #606 !important;
 }
@@ -294,7 +360,7 @@ footer {
 }
 
 .details dt {
-   width: 120px;
+   width: auto;
    float: left;
    padding-left: 10px;
 }
@@ -395,7 +461,13 @@ footer {
    user-select: text;
 }
 
-.params, .props {
+.prettyprint.linenums li code:empty:after {
+  content:"";
+  display:inline-block;
+  width:0px;
+}
+
+table {
   border-spacing: 0;
   border: 1px solid #ddd;
   border-collapse: collapse;
@@ -404,6 +476,20 @@ footer {
   width: 100%;
   font-size: 14px;
   margin: 1em 0;
+}
+
+td, th {
+   margin: 0px;
+   text-align: left;
+   vertical-align: top;
+   padding: 10px;
+   display: table-cell;
+}
+
+thead tr, thead tr {
+   background-color: #fff;
+   font-weight: bold;
+   border-bottom: 1px solid #ddd;
 }
 
 .params .type {
@@ -420,26 +506,8 @@ footer {
    font-size: 100%;
 }
 
-.params td, .params th, .props td, .props th {
-   margin: 0px;
-   text-align: left;
-   vertical-align: top;
-   padding: 10px;
-   display: table-cell;
-}
-
 .params td {
    border-top: 1px solid #eee
-}
-
-.params thead tr, .props thead tr {
-   background-color: #fff;
-   font-weight: bold;
-}
-
-.params .params thead tr, .props .props thead tr {
-   background-color: #fff;
-   font-weight: bold;
 }
 
 .params td.description > p:first-child, .props td.description > p:first-child {
@@ -595,7 +663,16 @@ span.param-type, .params td .param-type, .param-type dd {
   z-index: 1;
 }
 
-@media only screen and (min-width: 320px) and (max-width: 680px) {
+/* nav level */
+.level-hide {
+    display: none;
+}
+html[data-search-mode] .level-hide {
+    display: block;
+}
+
+
+@media only screen and (max-width: 680px) {
   body {
     overflow-x: hidden;
   }
@@ -624,7 +701,6 @@ span.param-type, .params td .param-type, .param-type dd {
 
   #main {
     width: 100%;
-    min-width: 360px;
   }
 
   #main h1.page-title {
@@ -646,4 +722,55 @@ span.param-type, .params td .param-type, .param-type dd {
   display: inline-block;
   margin-left: -14px;
   margin-right: 5px;
+}
+
+#disqus_thread{
+    margin-left: 30px;
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 400;
+  src: url('../fonts/Montserrat/Montserrat-Regular.eot'); /* IE9 Compat Modes */
+  src: url('../fonts/Montserrat/Montserrat-Regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('../fonts/Montserrat/Montserrat-Regular.woff2') format('woff2'), /* Super Modern Browsers */
+       url('../fonts/Montserrat/Montserrat-Regular.woff') format('woff'), /* Pretty Modern Browsers */
+       url('../fonts/Montserrat/Montserrat-Regular.ttf')  format('truetype'); /* Safari, Android, iOS */
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 700;
+  src: url('../fonts/Montserrat/Montserrat-Bold.eot'); /* IE9 Compat Modes */
+  src: url('../fonts/Montserrat/Montserrat-Bold.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('../fonts/Montserrat/Montserrat-Bold.woff2') format('woff2'), /* Super Modern Browsers */
+       url('../fonts/Montserrat/Montserrat-Bold.woff') format('woff'), /* Pretty Modern Browsers */
+       url('../fonts/Montserrat/Montserrat-Bold.ttf')  format('truetype'); /* Safari, Android, iOS */
+}
+
+@font-face {
+    font-family: 'Source Sans Pro';
+    src: url('../fonts/Source-Sans-Pro/sourcesanspro-regular-webfont.eot');
+    src: url('../fonts/Source-Sans-Pro/sourcesanspro-regular-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/Source-Sans-Pro/sourcesanspro-regular-webfont.woff2') format('woff2'),
+         url('../fonts/Source-Sans-Pro/sourcesanspro-regular-webfont.woff') format('woff'),
+         url('../fonts/Source-Sans-Pro/sourcesanspro-regular-webfont.ttf') format('truetype'),
+         url('../fonts/Source-Sans-Pro/sourcesanspro-regular-webfont.svg#source_sans_proregular') format('svg');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Source Sans Pro';
+    src: url('../fonts/Source-Sans-Pro/sourcesanspro-light-webfont.eot');
+    src: url('../fonts/Source-Sans-Pro/sourcesanspro-light-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/Source-Sans-Pro/sourcesanspro-light-webfont.woff2') format('woff2'),
+         url('../fonts/Source-Sans-Pro/sourcesanspro-light-webfont.woff') format('woff'),
+         url('../fonts/Source-Sans-Pro/sourcesanspro-light-webfont.ttf') format('truetype'),
+         url('../fonts/Source-Sans-Pro/sourcesanspro-light-webfont.svg#source_sans_prolight') format('svg');
+    font-weight: 300;
+    font-style: normal;
+
 }

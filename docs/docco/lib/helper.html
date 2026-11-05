@@ -63,8 +63,8 @@
 <span class="hljs-keyword">var</span> pathlib = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;path&#x27;</span>)
 <span class="hljs-keyword">var</span> fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;fs&#x27;</span>)
 <span class="hljs-keyword">var</span> crypto = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;crypto&#x27;</span>)
-<span class="hljs-keyword">var</span> osTmpdir = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;os-tmpdir&#x27;</span>)
-<span class="hljs-keyword">var</span> tempDir = process.<span class="hljs-property">env</span>.<span class="hljs-property">PEMJS_TMPDIR</span> || <span class="hljs-title function_">osTmpdir</span>()
+<span class="hljs-keyword">const</span> {tmpdir} = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;os&#x27;</span>)
+<span class="hljs-keyword">var</span> tempDir = process.<span class="hljs-property">env</span>.<span class="hljs-property">PEMJS_TMPDIR</span> || <span class="hljs-title function_">tmpdir</span>()
 
 <span class="hljs-comment">/**
  * pem helper module
@@ -143,7 +143,7 @@
  * <span class="hljs-doctag">@return</span> {<span class="hljs-type">Boolean</span>} <span class="hljs-variable">result</span>
  */</span>
 <span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span>.<span class="hljs-property">createPasswordFile</span> = <span class="hljs-keyword">function</span> (<span class="hljs-params">options, params, PasswordFileArray</span>) {
-  <span class="hljs-keyword">if</span> (!options || !<span class="hljs-title class_">Object</span>.<span class="hljs-property"><span class="hljs-keyword">prototype</span></span>.<span class="hljs-property">hasOwnProperty</span>.<span class="hljs-title function_">call</span>(options, <span class="hljs-string">&#x27;password&#x27;</span>) || !<span class="hljs-title class_">Object</span>.<span class="hljs-property"><span class="hljs-keyword">prototype</span></span>.<span class="hljs-property">hasOwnProperty</span>.<span class="hljs-title function_">call</span>(options, <span class="hljs-string">&#x27;passType&#x27;</span>) || !<span class="hljs-regexp">/^(word|in|out)$/</span>.<span class="hljs-title function_">test</span>(options.<span class="hljs-property">passType</span>)) {
+  <span class="hljs-keyword">if</span> (!options || !<span class="hljs-title class_">Object</span>.<span class="hljs-property"><span class="hljs-keyword">prototype</span></span>.<span class="hljs-property">hasOwnProperty</span>.<span class="hljs-title function_">call</span>(options, <span class="hljs-string">&#x27;password&#x27;</span>) || !(<span class="hljs-keyword">typeof</span> options.<span class="hljs-property">password</span> === <span class="hljs-string">&#x27;string&#x27;</span>) || !<span class="hljs-title class_">Object</span>.<span class="hljs-property"><span class="hljs-keyword">prototype</span></span>.<span class="hljs-property">hasOwnProperty</span>.<span class="hljs-title function_">call</span>(options, <span class="hljs-string">&#x27;passType&#x27;</span>) || !<span class="hljs-regexp">/^(word|in|out)$/</span>.<span class="hljs-title function_">test</span>(options.<span class="hljs-property">passType</span>)) {
     <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>
   }
   <span class="hljs-keyword">var</span> <span class="hljs-title class_">PasswordFile</span> = pathlib.<span class="hljs-title function_">join</span>(tempDir, crypto.<span class="hljs-title function_">randomBytes</span>(<span class="hljs-number">20</span>).<span class="hljs-title function_">toString</span>(<span class="hljs-string">&#x27;hex&#x27;</span>))
@@ -155,11 +155,26 @@
   <span class="hljs-keyword">if</span> (options.<span class="hljs-property">cipher</span> &amp;&amp; (ciphers.<span class="hljs-title function_">indexOf</span>(options.<span class="hljs-property">cipher</span>) !== -<span class="hljs-number">1</span>)) {
     params.<span class="hljs-title function_">push</span>(<span class="hljs-string">&#x27;-&#x27;</span> + options.<span class="hljs-property">cipher</span>)
   }
-  params.<span class="hljs-title function_">push</span>(<span class="hljs-string">&#x27;-pass&#x27;</span> + options.<span class="hljs-property">passType</span>)
+  params.<span class="hljs-title function_">push</span>(<span class="hljs-string">&#x27;-pass&#x27;</span> + (params[<span class="hljs-number">0</span>] !== <span class="hljs-string">&#x27;genpkey&#x27;</span> ? options.<span class="hljs-property">passType</span> : <span class="hljs-string">&#x27;&#x27;</span>))
   <span class="hljs-keyword">if</span> (options.<span class="hljs-property">mustPass</span>) {
     params.<span class="hljs-title function_">push</span>(<span class="hljs-string">&#x27;pass:&#x27;</span> + options.<span class="hljs-property">password</span>)
-  } <span class="hljs-keyword">else</span> {
-    fs.<span class="hljs-title function_">writeFileSync</span>(<span class="hljs-title class_">PasswordFile</span>, options.<span class="hljs-property">password</span>)
+  } <span class="hljs-keyword">else</span> {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="sswrap ">
+                <a class="ss" href="#section-3">&#x00a7;</a>
+              </div>
+              <p>the password file holds a secret: never readable by other local
+users, regardless of the process umask.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    fs.<span class="hljs-title function_">writeFileSync</span>(<span class="hljs-title class_">PasswordFile</span>, options.<span class="hljs-property">password</span>, { <span class="hljs-attr">mode</span>: <span class="hljs-number">0o600</span> })
     params.<span class="hljs-title function_">push</span>(<span class="hljs-string">&#x27;file:&#x27;</span> + <span class="hljs-title class_">PasswordFile</span>)
   }
   <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>
@@ -188,11 +203,11 @@
         </li>
         
         
-        <li id="section-3">
+        <li id="section-4">
             <div class="annotation">
               
               <div class="sswrap ">
-                <a class="ss" href="#section-3">&#x00a7;</a>
+                <a class="ss" href="#section-4">&#x00a7;</a>
               </div>
               <p>file doens’t exist</p>
 
@@ -204,11 +219,11 @@
         </li>
         
         
-        <li id="section-4">
+        <li id="section-5">
             <div class="annotation">
               
               <div class="sswrap ">
-                <a class="ss" href="#section-4">&#x00a7;</a>
+                <a class="ss" href="#section-5">&#x00a7;</a>
               </div>
               <p>other errors, e.g. maybe we don’t have enough permission</p>
 
