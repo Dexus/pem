@@ -9,12 +9,22 @@ import promisePlugin from 'eslint-plugin-promise'
 import eslintPluginPlugin from 'eslint-plugin-eslint-plugin'
 import chaiFriendly from 'eslint-plugin-chai-friendly'
 import importPlugin from 'eslint-plugin-import'
+import tseslint from 'typescript-eslint'
 
 export default [
   {
     ignores: ['coverage/**', 'nyc_output/**', 'dist/**', 'docs/**']
   },
   js.configs.recommended,
+  ...tseslint.configs.recommended,
+  {
+    // typescript-eslint's recommended rules are not files-scoped and would
+    // also hit plain JS; keep JS (tests, markdown examples) on the old rules.
+    files: ['**/*.js'],
+    rules: {
+      '@typescript-eslint/no-require-imports': 'off'
+    }
+  },
   {
     plugins: {
       import: importPlugin
@@ -55,6 +65,24 @@ export default [
       'n/no-missing-require': 'off',
       'n/no-process-exit': 'off',
       'n/no-unpublished-require': 'off'
+    }
+  },
+  {
+    // The TS compiler (tsc with noEmitOnError) is the module-resolution gate
+    // for lib TS files; the import/n resolvers cannot resolve .ts siblings
+    // and would false-positive from U2 onward.
+    files: ['lib/**/*.ts'],
+    rules: {
+      'import/no-unresolved': 'off',
+      'n/no-missing-require': 'off',
+      // Conversions keep node builtins as import-equals / verbatim require() for identical CJS emit.
+      '@typescript-eslint/no-require-imports': 'off',
+      // Behavior-identical conversions need `any` where the JS coerces arbitrary inputs; casts are banned.
+      '@typescript-eslint/no-explicit-any': 'off',
+      // var is preserved verbatim by design (R11); --fix must not rewrite it.
+      'no-var': 'off',
+      // Same design rule as no-var: master's declarations stay as written.
+      'prefer-const': 'off'
     }
   }
 ]

@@ -1,9 +1,30 @@
 'use strict'
 
-var openssl = require('./openssl.js')
-var helper = require('./helper.js')
-var {debug} = require('./debug.js')
+// TS-module marker (R16): without an import/export statement tsc treats this file as a global script whose top-level bindings leak and collide across lib files. The emitted __esModule property is discarded when module.exports = convert below replaces the exports object.
+export {}
+
+var openssl = require('./openssl')
+var helper = require('./helper')
+var {debug} = require('./debug')
 const {getFips} = require('node:crypto')
+
+type ConvertCallback = (error: Error | null, result?: boolean) => void
+
+interface PathBundleIn {
+  cert: string
+  key?: string
+  ca?: string | string[]
+}
+
+interface ConvertExports {
+  PEM2DER: (pathIN: string, pathOUT: string, type: string | ConvertCallback, callback: ConvertCallback) => void
+  DER2PEM: (pathIN: string, pathOUT: string, type: string | ConvertCallback, callback: ConvertCallback) => void
+  PEM2P7B: (pathBundleIN: PathBundleIn, pathOUT: string, callback: ConvertCallback) => void
+  P7B2PEM: (pathIN: string, pathOUT: string, callback: ConvertCallback) => void
+  PEM2PFX: (pathBundleIN: PathBundleIn, pathOUT: string, password: string, callback: ConvertCallback) => void
+  PFX2PEM: (pathIN: string, pathOUT: string, password: string, callback: ConvertCallback) => void
+  P7B2PFX: (pathBundleIN: PathBundleIn, pathOUT: string, password: string, callback: ConvertCallback) => void
+}
 
 // PEM format: .pem, .crt, .cer (!bin), .key
 // base64 encoded; the cert file might also include the private key; so key file is optional
@@ -24,6 +45,9 @@ const {getFips} = require('node:crypto')
  * @module convert
  */
 
+var convert: ConvertExports = {} as ConvertExports
+module.exports = convert
+
 /**
  * conversion from PEM to DER format
  * if private key is included in PEM encoded file, it won't be included in DER file
@@ -33,13 +57,13 @@ const {getFips} = require('node:crypto')
  * @param  {String} [type] type of file, use 'rsa' for key file, 'x509' otherwise or leave this parameter out
  * @param  {Function} callback callback method called with error, boolean result
  */
-module.exports.PEM2DER = function (pathIN, pathOUT, type, callback) {
+module.exports.PEM2DER = function (pathIN: string, pathOUT: string, type: string | ConvertCallback, callback: ConvertCallback) {
   if (!callback && typeof type === 'function') {
     callback = type
     type = 'x509'
   }
   var params = [
-    type,
+    type as string,
     '-outform',
     'der',
     '-in',
@@ -47,7 +71,7 @@ module.exports.PEM2DER = function (pathIN, pathOUT, type, callback) {
     '-out',
     pathOUT
   ]
-  openssl.spawnWrapper(params, false, function (error, code) {
+  openssl.spawnWrapper(params, false, function (error: Error | null, code: number | null) {
     if (error) {
       callback(error)
     } else {
@@ -63,13 +87,13 @@ module.exports.PEM2DER = function (pathIN, pathOUT, type, callback) {
  * @param  {String} [type] type of file, use 'rsa' for key file, 'x509' otherwise or leave this parameter out
  * @param  {Function} callback callback method called with error, boolean result
  */
-module.exports.DER2PEM = function (pathIN, pathOUT, type, callback) {
+module.exports.DER2PEM = function (pathIN: string, pathOUT: string, type: string | ConvertCallback, callback: ConvertCallback) {
   if (!callback && typeof type === 'function') {
     callback = type
     type = 'x509'
   }
   var params = [
-    type,
+    type as string,
     '-inform',
     'der',
     '-in',
@@ -77,7 +101,7 @@ module.exports.DER2PEM = function (pathIN, pathOUT, type, callback) {
     '-out',
     pathOUT
   ]
-  openssl.spawnWrapper(params, false, function (error, code) {
+  openssl.spawnWrapper(params, false, function (error: Error | null, code: number | null) {
     if (error) {
       callback(error)
     } else {
@@ -92,7 +116,7 @@ module.exports.DER2PEM = function (pathIN, pathOUT, type, callback) {
  * @param  {String} pathOUT path of the P7B encoded certificate file to generate
  * @param  {Function} callback callback method called with error, boolean result
  */
-module.exports.PEM2P7B = function (pathBundleIN, pathOUT, callback) {
+module.exports.PEM2P7B = function (pathBundleIN: PathBundleIn, pathOUT: string, callback: ConvertCallback) {
   var params = [
     'crl2pkcs7',
     '-nocrl',
@@ -110,7 +134,7 @@ module.exports.PEM2P7B = function (pathBundleIN, pathOUT, callback) {
       params.push(ca)
     })
   }
-  openssl.spawnWrapper(params, false, function (error, code) {
+  openssl.spawnWrapper(params, false, function (error: Error | null, code: number | null) {
     if (error) {
       callback(error)
     } else {
@@ -125,7 +149,7 @@ module.exports.PEM2P7B = function (pathBundleIN, pathOUT, callback) {
  * @param  {String} pathOUT path of the PEM encoded certificate file to generate
  * @param  {Function} callback callback method called with error, boolean result
  */
-module.exports.P7B2PEM = function (pathIN, pathOUT, callback) {
+module.exports.P7B2PEM = function (pathIN: string, pathOUT: string, callback: ConvertCallback) {
   var params = [
     'pkcs7',
     '-print_certs',
@@ -134,7 +158,7 @@ module.exports.P7B2PEM = function (pathIN, pathOUT, callback) {
     '-out',
     pathOUT
   ]
-  openssl.spawnWrapper(params, false, function (error, code) {
+  openssl.spawnWrapper(params, false, function (error: Error | null, code: number | null) {
     if (error) {
       callback(error)
     } else {
@@ -150,14 +174,14 @@ module.exports.P7B2PEM = function (pathIN, pathOUT, callback) {
  * @param  {String} password password to set for accessing the PFX file
  * @param  {Function} callback callback method called with error, boolean result
  */
-module.exports.PEM2PFX = function (pathBundleIN, pathOUT, password, callback) {
+module.exports.PEM2PFX = function (pathBundleIN: PathBundleIn, pathOUT: string, password: string, callback: ConvertCallback) {
   var params = [
     'pkcs12',
     '-export',
     '-out',
     pathOUT,
     '-inkey',
-    pathBundleIN.key,
+    pathBundleIN.key as string,
     '-in',
     pathBundleIN.cert
   ]
@@ -176,18 +200,18 @@ module.exports.PEM2PFX = function (pathBundleIN, pathOUT, password, callback) {
       params.push(ca)
     })
   }
-  var delTempPWFiles = []
+  var delTempPWFiles: string[] = []
   helper.createPasswordFile({ cipher: '', password: password, passType: 'in' }, params, delTempPWFiles)
   helper.createPasswordFile({ cipher: '', password: password, passType: 'out' }, params, delTempPWFiles)
-  openssl.spawnWrapper(params, false, function (error, code) {
-    function done (error) {
+  openssl.spawnWrapper(params, false, function (error: Error | null, code: number | null) {
+    function done (error: Error | null) {
       if (error) {
         callback(error)
       } else {
         callback(null, code === 0)
       }
     }
-    helper.deleteTempFiles(delTempPWFiles, function (fsErr) {
+    helper.deleteTempFiles(delTempPWFiles, function (fsErr: NodeJS.ErrnoException | null) {
       done(error || fsErr)
     })
   })
@@ -200,7 +224,7 @@ module.exports.PEM2PFX = function (pathBundleIN, pathOUT, password, callback) {
  * @param  {String} password password to set for accessing the PFX file
  * @param  {Function} callback callback method called with error, boolean result
  */
-module.exports.PFX2PEM = function (pathIN, pathOUT, password, callback) {
+module.exports.PFX2PEM = function (pathIN: string, pathOUT: string, password: string, callback: ConvertCallback) {
   var params = [
     'pkcs12',
     '-in',
@@ -211,18 +235,18 @@ module.exports.PFX2PEM = function (pathIN, pathOUT, password, callback) {
   ]
   // Reading needs no PBMAC1 flag in FIPS mode: the MAC is detected from
   // the input, and the flag only exists since 3.4 anyway.
-  var delTempPWFiles = []
+  var delTempPWFiles: string[] = []
   helper.createPasswordFile({ cipher: '', password: password, passType: 'in' }, params, delTempPWFiles)
   helper.createPasswordFile({ cipher: '', password: password, passType: 'out' }, params, delTempPWFiles)
-  openssl.spawnWrapper(params, false, function (error, code) {
-    function done (error) {
+  openssl.spawnWrapper(params, false, function (error: Error | null, code: number | null) {
+    function done (error: Error | null) {
       if (error) {
         callback(error)
       } else {
         callback(null, code === 0)
       }
     }
-    helper.deleteTempFiles(delTempPWFiles, function (fsErr) {
+    helper.deleteTempFiles(delTempPWFiles, function (fsErr: NodeJS.ErrnoException | null) {
       done(error || fsErr)
     })
   })
@@ -235,7 +259,7 @@ module.exports.PFX2PEM = function (pathIN, pathOUT, password, callback) {
  * @param  {String} password password to be set for the PFX file and to be used to access the key file
  * @param  {Function} callback callback method called with error, boolean result
  */
-module.exports.P7B2PFX = function (pathBundleIN, pathOUT, password, callback) {
+module.exports.P7B2PFX = function (pathBundleIN: PathBundleIn, pathOUT: string, password: string, callback: ConvertCallback) {
   var tmpfile = pathBundleIN.cert.replace(/\.[^.]+$/, '.cer')
   var params = [
     'pkcs7',
@@ -245,7 +269,7 @@ module.exports.P7B2PFX = function (pathBundleIN, pathOUT, password, callback) {
     '-out',
     tmpfile
   ]
-  openssl.spawnWrapper(params, false, function (error, code) {
+  openssl.spawnWrapper(params, false, function (error: Error | null, code: number | null) {
     debug("P7B2PFX", {
       error, code
     })
@@ -258,7 +282,7 @@ module.exports.P7B2PFX = function (pathBundleIN, pathOUT, password, callback) {
         '-in',
         tmpfile,
         '-inkey',
-        pathBundleIN.key,
+        pathBundleIN.key as string,
         '-out',
         pathOUT
       ]
@@ -278,15 +302,15 @@ module.exports.P7B2PFX = function (pathBundleIN, pathOUT, password, callback) {
       var delTempPWFiles = [tmpfile]
       helper.createPasswordFile({ cipher: '', password: password, passType: 'in' }, params, delTempPWFiles)
       helper.createPasswordFile({ cipher: '', password: password, passType: 'out' }, params, delTempPWFiles)
-      openssl.spawnWrapper(params, false, function (error, code) {
-        function done (error) {
+      openssl.spawnWrapper(params, false, function (error: Error | null, code: number | null) {
+        function done (error: Error | null) {
           if (error) {
             callback(error)
           } else {
             callback(null, code === 0)
           }
         }
-        helper.deleteTempFiles(delTempPWFiles, function (fsErr) {
+        helper.deleteTempFiles(delTempPWFiles, function (fsErr: NodeJS.ErrnoException | null) {
           done(error || fsErr)
         })
       })

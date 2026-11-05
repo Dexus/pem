@@ -1,19 +1,78 @@
 'use strict'
 
 const {randomBytes} = require('crypto')
-const fs = require('fs')
-const path = require('path')
+import fs = require('fs')
+import path = require('path')
 const {tmpdir} = require('os')
-const helper = require('./helper.js')
-const openssl = require('./openssl.js')
-const pem = require('./pem.js')
+import helper = require('./helper')
+import openssl = require('./openssl')
+const pem = require('./pem')
 
 const createCSR = pem.createCSR
 
 const DAY_MS = 24 * 60 * 60 * 1000
 
+interface CAConstructorOptions {
+  key?: string | Buffer
+  certificate?: string | Buffer
+  keyPassword?: string
+  password?: string
+  chain?: Array<string | Buffer>
+  defaultDays?: number
+}
+
+interface IssueCertificateOptions {
+  csr?: string
+  clientKey?: string
+  clientKeyPassword?: string
+  serial?: string | number | Buffer
+  hash?: string
+  copyExtensions?: boolean
+  config?: string
+  extFile?: string
+  startDate?: Date | number | string
+  endDate?: Date | number | string
+  days?: number
+  keyBitsize?: number
+  country?: string
+  state?: string
+  locality?: string
+  organization?: string | string[]
+  organizationUnit?: string | string[]
+  commonName?: string
+  altNames?: string[]
+  emailAddress?: string
+  csrConfigFile?: string
+  password?: string
+  dc?: string | string[]
+  C?: string
+  ST?: string
+  L?: string
+  O?: string | string[]
+  OU?: string | string[]
+  CN?: string
+}
+
+interface IssueResult {
+  csr: string | undefined
+  clientKey: string
+  certificate: string
+  caCertificate: string
+  caChain: string[]
+  serial: string
+  validity: { start: Date; end: Date }
+}
+
+type IssueCallback = (err?: Error | null, result?: IssueResult) => void
+
 class CertificateAuthority {
-  constructor(options = {}) {
+  declare key: string
+  declare certificate: string
+  declare password: string | null
+  declare chain: string[]
+  declare defaultDays: number
+
+  constructor(options: CAConstructorOptions = {}) {
     if (!options.key) {
       throw new Error('CA private key is required')
     }
@@ -27,17 +86,17 @@ class CertificateAuthority {
     this.chain = Array.isArray(options.chain) ? options.chain.map(function (value) {
       return value.toString()
     }) : []
-    this.defaultDays = Number.isFinite(options.defaultDays) && options.defaultDays > 0 ? Number(options.defaultDays) : 7
+    this.defaultDays = Number.isFinite(options.defaultDays) && (options.defaultDays as number) > 0 ? Number(options.defaultDays) : 7
   }
 
-  issueCertificate(options, callback) {
+  issueCertificate(options?: IssueCertificateOptions | IssueCallback, callback?: IssueCallback) {
     if (!callback && typeof options === 'function') {
       callback = options
       options = undefined
     }
 
     if (!callback) {
-      return new Promise((resolve, reject) => {
+      return new Promise<IssueResult | undefined>((resolve, reject) => {
         this.issueCertificate(options, function (err, result) {
           if (err) {
             return reject(err)
@@ -47,9 +106,9 @@ class CertificateAuthority {
       })
     }
 
-    const issueOptions = Object.assign({}, options || {})
+    const issueOptions = Object.assign({}, options || {}) as IssueCertificateOptions
 
-    const handleResult = (err, signResult) => {
+    const handleResult = (err: Error | null, signResult: any) => {
       if (err) {
         return callback(err)
       }
@@ -76,7 +135,7 @@ class CertificateAuthority {
       return
     }
 
-    createCSR(issueOptions, (err, csrData) => {
+    createCSR(issueOptions, (err: Error | null, csrData: { csr: string; clientKey: string; config: string | null }) => {
       if (err) {
         return callback(err)
       }
@@ -89,25 +148,25 @@ class CertificateAuthority {
     })
   }
 
-  _signCertificate(options, callback) {
-    let validity
+  _signCertificate(options: IssueCertificateOptions, callback: (err: Error | null, result?: { certificate: string; serial: string; validity: { start: Date; end: Date } }) => void) {
+    let validity: { asn1: {start: string; end: string}, dates: {start: Date; end: Date} }
     try {
       validity = resolveValidity(options, this.defaultDays)
     } catch (err) {
-      return callback(err)
+      return callback(err as Error)
     }
 
-    let serial
+    let serial: string
     try {
       serial = formatSerial(options.serial)
     } catch (err) {
-      return callback(err)
+      return callback(err as Error)
     }
 
     const serialValue = serial.slice(2).toUpperCase() || '1'
-    const passwordFiles = []
-    let workDir
-    let certPath
+    const passwordFiles: string[] = []
+    let workDir: string | undefined
+    let certPath: string | undefined
 
     try {
       workDir = fs.mkdtempSync(path.join(tmpdir(), 'pem-ca-'))
@@ -117,7 +176,7 @@ class CertificateAuthority {
       certPath = path.join(workDir, 'issued.pem')
     } catch (err) {
       const cleanupErr = removeDirectory(workDir)
-      return callback(cleanupErr || err)
+      return callback(cleanupErr || (err as Error))
     }
 
     const configContent = buildCaConfig(workDir, options.hash || 'sha256', options.copyExtensions)
@@ -139,10 +198,10 @@ class CertificateAuthority {
       '-in',
       '--TMPFILE--',
       '-out',
-      certPath
+      certPath as string
     ]
 
-    const tmpfiles = [configContent, this.key, this.certificate, options.csr]
+    const tmpfiles = [configContent, this.key, this.certificate, options.csr as string]
 
     if (this.password) {
       helper.createPasswordFile({
@@ -157,14 +216,14 @@ class CertificateAuthority {
       params.push('v3_req')
       params.push('-extfile')
       params.push('--TMPFILE--')
-      tmpfiles.push(options.config)
+      tmpfiles.push(options.config as string)
     } else if (options.extFile) {
       params.push('-extfile')
-      params.push(options.extFile)
+      params.push(options.extFile as string)
     }
 
-    const finalize = (err, certificate) => {
-      const removePasswordFiles = (removeErr) => {
+    const finalize = (err: Error | null, certificate?: any) => {
+      const removePasswordFiles = (removeErr: NodeJS.ErrnoException | null) => {
         const dirErr = removeDirectory(workDir)
         const finalErr = err || removeErr || dirErr
         if (finalErr) {
@@ -190,16 +249,16 @@ class CertificateAuthority {
       }
       let certificate
       try {
-        certificate = fs.readFileSync(certPath, 'utf-8')
+        certificate = fs.readFileSync(certPath as string, 'utf-8')
       } catch (readErr) {
-        return finalize(readErr)
+        return finalize(readErr as Error)
       }
       finalize(null, certificate)
     })
   }
 }
 
-function buildCaConfig(workDir, digest, copyExtensions) {
+function buildCaConfig(workDir: string, digest: string, copyExtensions: boolean | undefined): string {
   const lines = [
     '[ ca ]',
     'default_ca = pem_ca',
@@ -241,7 +300,7 @@ function buildCaConfig(workDir, digest, copyExtensions) {
   return lines.join('\n')
 }
 
-function removeDirectory(directory) {
+function removeDirectory(directory?: string): NodeJS.ErrnoException | null {
   if (!directory) {
     return null
   }
@@ -250,14 +309,14 @@ function removeDirectory(directory) {
     fs.rmSync(directory, {recursive: true})
     return null
   } catch (err) {
-    if (err && err.code === 'ENOENT') {
+    if (err && (err as NodeJS.ErrnoException).code === 'ENOENT') {
       return null
     }
-    return err
+    return err as NodeJS.ErrnoException
   }
 }
 
-function formatSerial(serial) {
+function formatSerial(serial: string | Buffer | number | undefined | null) {
   if (serial === undefined || serial === null) {
     return '0x' + randomBytes(20).toString('hex')
   }
@@ -293,9 +352,9 @@ function formatSerial(serial) {
   return '0x' + hexSerial.padStart(40, '0').slice(-40)
 }
 
-function resolveValidity(options, defaultDays) {
+function resolveValidity(options: IssueCertificateOptions, defaultDays: number) {
   const start = normalizeDate(options.startDate) || new Date()
-  let end
+  let end: Date | null
 
   if (options.endDate) {
     end = normalizeDate(options.endDate)
@@ -332,7 +391,7 @@ function resolveValidity(options, defaultDays) {
   }
 }
 
-function normalizeDate(value) {
+function normalizeDate(value: Date | number | string | undefined | null) {
   if (!value) {
     return null
   }
@@ -366,8 +425,8 @@ function normalizeDate(value) {
   throw new Error('Unsupported date value')
 }
 
-function formatAsn1Date(date) {
-  const pad = (num) => {
+function formatAsn1Date(date: Date) {
+  const pad = (num: number) => {
     let s = String(num)
     while (s.length < 2) {
       s = '0' + s
@@ -389,14 +448,14 @@ function formatAsn1Date(date) {
   return year.toString() + timePortion + 'Z'
 }
 
-function parseAsn1Date(value) {
+function parseAsn1Date(value: string) {
   const normalized = value.replace(/\s+/g, '')
   if (!/^\d{12}Z$/.test(normalized) && !/^\d{14}Z$/.test(normalized)) {
     throw new Error('Invalid ASN.1 date value')
   }
 
-  let offset
-  let year
+  let offset: number
+  let year: number
 
   if (normalized.length === 13) { // YYMMDDHHMMSSZ
     const twoDigit = Number(normalized.slice(0, 2))
@@ -419,4 +478,4 @@ function parseAsn1Date(value) {
   return date
 }
 
-module.exports = CertificateAuthority
+export = CertificateAuthority

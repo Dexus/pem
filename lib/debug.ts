@@ -1,4 +1,4 @@
-function debug (title, content) {
+function debug (title: string, content: unknown): void {
   if (process.env.DEBUG === 'true') {
     console.log(`::group::${title}`)
     console.log(JSON.stringify(content, null, 3))
@@ -6,6 +6,6 @@ function debug (title, content) {
   }
 }
 
-module.exports = {
+export = {
   debug: debug
 }
