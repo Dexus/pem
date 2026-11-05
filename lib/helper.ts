@@ -1,10 +1,12 @@
 'use strict'
 
-var pathlib = require('path')
-var fs = require('fs')
-var crypto = require('crypto')
+import pathlib = require('path')
+import fs = require('fs')
+import crypto = require('crypto')
 const {tmpdir} = require('os')
 var tempDir = process.env.PEMJS_TMPDIR || tmpdir()
+
+interface CreatePasswordFileOptions { cipher?: string; password?: string; passType?: string; mustPass?: boolean }
 
 /**
  * pem helper module
@@ -12,11 +14,20 @@ var tempDir = process.env.PEMJS_TMPDIR || tmpdir()
  * @module helper
  */
 
+var helper = {} as {
+  isNumber: (str: any) => boolean
+  isHex: (hex: any) => boolean
+  toHex: (str: string) => string
+  ciphers: string[]
+  createPasswordFile: (options: CreatePasswordFileOptions, params: string[], PasswordFileArray: string[]) => boolean
+  deleteTempFiles: (files: string | string[], callback: (err: NodeJS.ErrnoException | null) => void) => void
+}
+
 /**
  * helper function to check is the string a number or not
  * @param {String} str String that should be checked to be a number
  */
-module.exports.isNumber = function (str) {
+helper.isNumber = function (str: any) {
   if (Array.isArray(str)) {
     return false
   }
@@ -35,7 +46,7 @@ module.exports.isNumber = function (str) {
  * helper function to check is the string a hexaceximal value
  * @param {String} hex String that should be checked to be a hexaceximal
  */
-module.exports.isHex = function isHex (hex) {
+helper.isHex = function isHex (hex: any) {
   return /^(0x){0,1}([0-9A-F]{1,40}|[0-9A-F]{1,40})$/gi.test(hex)
 }
 
@@ -43,7 +54,7 @@ module.exports.isHex = function isHex (hex) {
  * helper function to convert a string to a hexaceximal value
  * @param {String} str String that should be converted to a hexaceximal
  */
-module.exports.toHex = function toHex (str) {
+helper.toHex = function toHex (str: string) {
   var hex = ''
   for (var i = 0; i < str.length; i++) {
     hex += '' + str.charCodeAt(i).toString(16)
@@ -56,8 +67,8 @@ module.exports.toHex = function toHex (str) {
  * list of supported ciphers
  * @type {Array}
  */
-module.exports.ciphers = ['aes128', 'aes192', 'aes256', 'camellia128', 'camellia192', 'camellia256', 'des', 'des3', 'idea']
-var ciphers = module.exports.ciphers
+helper.ciphers = ['aes128', 'aes192', 'aes256', 'camellia128', 'camellia192', 'camellia256', 'des', 'des3', 'idea']
+var ciphers: string[] = helper.ciphers
 
 /**
  * Creates a PasswordFile to hide the password form process infos via `ps auxf` etc.
@@ -70,8 +81,8 @@ var ciphers = module.exports.ciphers
  * @param {String} PasswordFileArray PasswordFileArray is an array of filePaths that later need to deleted ,after the openssl command. IS USED AS POINTER!
  * @return {Boolean} result
  */
-module.exports.createPasswordFile = function (options, params, PasswordFileArray) {
-  if (!options || !Object.prototype.hasOwnProperty.call(options, 'password') || !(typeof options.password === 'string') || !Object.prototype.hasOwnProperty.call(options, 'passType') || !/^(word|in|out)$/.test(options.passType)) {
+helper.createPasswordFile = function (options: CreatePasswordFileOptions, params: string[], PasswordFileArray: string[]): boolean {
+  if (!options || !Object.prototype.hasOwnProperty.call(options, 'password') || !(typeof options.password === 'string') || !Object.prototype.hasOwnProperty.call(options, 'passType') || !/^(word|in|out)$/.test(options.passType as string)) {
     return false
   }
   var PasswordFile = pathlib.join(tempDir, crypto.randomBytes(20).toString('hex'))
@@ -83,7 +94,7 @@ module.exports.createPasswordFile = function (options, params, PasswordFileArray
   if (options.cipher && (ciphers.indexOf(options.cipher) !== -1)) {
     params.push('-' + options.cipher)
   }
-  params.push('-pass' + (params[0] !== 'genpkey' ? options.passType : ''))
+  params.push('-pass' + (params[0] !== 'genpkey' ? (options.passType as string) : ''))
   if (options.mustPass) {
     params.push('pass:' + options.password)
   } else {
@@ -100,8 +111,8 @@ module.exports.createPasswordFile = function (options, params, PasswordFileArray
  * @param {Array} files array of files that shoudld be deleted
  * @param {errorCallback} callback Callback function with an error object
  */
-module.exports.deleteTempFiles = function (files, callback) {
-  var rmFiles = []
+helper.deleteTempFiles = function (files: string | string[], callback: (err: NodeJS.ErrnoException | null) => void) {
+  var rmFiles: string[] = []
   if (typeof files === 'string') {
     rmFiles.push(files)
   } else if (Array.isArray(files)) {
@@ -109,10 +120,10 @@ module.exports.deleteTempFiles = function (files, callback) {
   } else {
     return callback(new Error('Unexcepted files parameter type; only string or array supported'))
   }
-  var deleteSeries = function (list, finalCallback) {
+  var deleteSeries = function (list: string[], finalCallback: (err: NodeJS.ErrnoException | null) => void): void {
     if (list.length) {
       var file = list.shift()
-      var myCallback = function (err) {
+      var myCallback = function (err: NodeJS.ErrnoException | null) {
         if (err && err.code === 'ENOENT') {
           // file doens't exist
           return deleteSeries(list, finalCallback)
@@ -134,6 +145,8 @@ module.exports.deleteTempFiles = function (files, callback) {
   }
   deleteSeries(rmFiles, callback)
 }
+
+export = helper
 /**
  * Callback for return an error object.
  * @callback errorCallback
