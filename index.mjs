@@ -29,4 +29,5 @@ export const checkPkcs12 = pem.checkPkcs12
 export const config = pem.config
 export const convert = pem.convert
 export const CA = pem.CA
+export const createCA = pem.createCA
 export const promisified = pem.promisified

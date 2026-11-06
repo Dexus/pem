@@ -356,6 +356,42 @@ Where
 * **callback** is a callback function with an error object and a boolean as arguments
 -->
 
+### Create a Certificate Authority in a single call
+
+Use `createCA` when you want a working certificate authority in one step: it generates the CA private key, a self-signed certificate with `CA:TRUE` basic constraints and returns a ready-to-use `CA` instance that issues certificates from it. The CA certificate defaults to a 10 year validity (pass `days` to override), so issued certificates have room for their own validity windows — including the explicit `startDate`/`endDate` windows that only `openssl ca` can encode ([issue #30](https://github.com/Dexus/pem/issues/30)).
+
+```javascript
+const pem = require('pem')
+
+async function main () {
+  const ca = await pem.createCA({
+    commonName: 'Example Root CA',
+    days: 3650, // CA validity, default 3650
+    defaultDays: 30 // validity used by issueCertificate when no dates are given
+  })
+
+  // PEM material if you want to persist it
+  console.log(ca.key)
+  console.log(ca.certificate)
+
+  // issue a certificate with an explicit validity window
+  const issued = await ca.issueCertificate({
+    commonName: 'service.example',
+    startDate: new Date('2030-01-01T00:00:00Z'),
+    endDate: new Date('2030-01-31T00:00:00Z')
+  })
+
+  console.log(issued.certificate)
+  console.log(issued.caChain) // [ca.certificate]
+}
+
+main().catch(console.error)
+```
+
+Like the `CA` helper itself, `createCA` is also available as `pem.CA.createCA` and accepts a callback as its last argument instead of returning a promise.
+
+A CA refuses to issue certificates it knows can never verify: the requested validity window must sit inside the CA certificate's own validity window, otherwise `issueCertificate` rejects with an error telling you which boundary was crossed. `openssl ca` would silently issue such certificates; the check exists because `openssl verify` validates the whole chain at usage time, so a leaf whose window reaches outside its issuer is always invalid.
+
 ### Issue certificates with an existing Certificate Authority
 
 Use the `CA` helper when you already have a certificate authority key pair and want to issue new certificates without rebuilding the PKI state on your own.
@@ -397,6 +433,43 @@ Extensions from a submitted `csr` are **not** copied into the issued certificate
 By default issued certificates are valid starting "now" and expire after `defaultDays`. You can override this by supplying `startDate`, `endDate`, or `days`. Dates can be JavaScript `Date` objects, timestamps, ISO strings, or ASN.1 date strings (e.g. `20240101000000Z`).
 
 The returned object contains the issued certificate, the CSR that was used, any generated private key, the CA certificate and chain, the serial number used for issuance, and the resolved validity window.
+
+#### Certificate profiles, serials and validity windows
+
+`issueCertificate` creates certificates **from a CSR** (pass `csr`) **or directly** (pass subject options like `commonName`; a fresh key pair and CSR are generated for you). The serial number is generated securely (20 random bytes) unless you pass `serial` (number, hex string, `0x`-prefixed string or Buffer, max 20 octets) — the serial used is returned in the result. Validity windows can be given as `startDate`/`endDate`, as the X.509 names `notBefore`/`notAfter`, or as a relative `days` count; a window may never reach outside the CA certificate's own validity, which the CA rejects with a descriptive error instead of issuing a certificate `openssl verify` would refuse.
+
+Instead of hand-writing extension configs, pass one of the prepared **profiles** for the intended certificate purpose:
+
+| profile | keyUsage | extendedKeyUsage |
+| --- | --- | --- |
+| `server` (default is a superset) | digitalSignature, keyEncipherment | serverAuth |
+| `client` | digitalSignature, keyEncipherment | clientAuth |
+| `codeSigning` | digitalSignature | codeSigning |
+
+Without a profile, issued certificates carry `digitalSignature, keyEncipherment` key usage and `serverAuth, clientAuth` extended key usage. Every profile keeps `basicConstraints` at `CA:FALSE` — a profile can never mint a CA certificate, and CSR-requested extensions are only copied with `copyExtensions: true` (and still never override the CA's own floor). A `profile` cannot be combined with `config`/`extFile`: if you need full control, pass those and own the extensions yourself.
+
+#### Create an intermediate certificate authority
+
+Use `createIntermediateCA` on any `CA` instance to issue a subordinate authority. The intermediate receives the prepared CA extensions — critical `CA:TRUE` with an optional `pathlen`, `keyCertSign`/`cRLSign` key usage, plus subject and authority key identifiers for clean chain building — and comes back as a working `CA` whose `chain` contains the parent chain. Its extensions are fixed by design; the method rejects `config`, `extFile` and `profile`.
+
+```javascript
+const root = await pem.createCA({ commonName: 'Example Root CA', days: 3650 })
+
+const intermediate = await root.createIntermediateCA({
+  commonName: 'Example Intermediate CA',
+  pathlen: 0
+})
+
+const issued = await intermediate.issueCertificate({
+  commonName: 'service.example',
+  profile: 'server'
+})
+
+console.log(issued.certificate)
+console.log(issued.caChain) // [intermediate.certificate, root.certificate]
+```
+
+Without explicit dates the intermediate uses the parent's whole remaining validity, so leaf certificates never reach outside it. `openssl ca` does not enforce `pathlen` at signing time — chains that exceed the constraint are refused later by `openssl verify` (error: *path length constraint exceeded*), which is exactly what a relying party does.
 
 ### Custom extensions config file
 

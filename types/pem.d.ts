@@ -199,8 +199,21 @@ declare namespace pem {
     chain?: Array<string | Buffer>
     startDate?: Date | number | string
     endDate?: Date | number | string
+    notBefore?: Date | number | string
+    notAfter?: Date | number | string
     days?: number
     serial?: string | number | Buffer
+    profile?: 'server' | 'client' | 'codeSigning'
+  }
+
+  interface CreateCAOptions extends IssueCertificateOptions {
+    keyPassword?: string
+    defaultDays?: number
+  }
+
+  interface CreateIntermediateCAOptions extends IssueCertificateOptions {
+    pathlen?: number
+    defaultDays?: number
   }
 
   interface IssuedCertificate {
@@ -229,10 +242,16 @@ declare namespace pem {
     issueCertificate(options?: IssueCertificateOptions): Promise<IssuedCertificate>
     issueCertificate(callback: Callback<IssuedCertificate>): void
     issueCertificate(options: IssueCertificateOptions, callback: Callback<IssuedCertificate>): void
+    createIntermediateCA(options?: CreateIntermediateCAOptions): Promise<CA>
+    createIntermediateCA(callback: Callback<CA>): void
+    createIntermediateCA(options: CreateIntermediateCAOptions, callback: Callback<CA>): void
   }
 
   interface CAConstructor {
     new (options: CertificateAuthorityOptions): CA
+    createCA(options: CreateCAOptions, callback: Callback<CA>): void
+    createCA(callback: Callback<CA>): void
+    createCA(options?: CreateCAOptions): Promise<CA>
   }
 
   interface Promisified {
@@ -281,6 +300,10 @@ declare namespace pem {
     createCertificate(options: CreateCertificateOptions, callback: Callback<CertificateCreationResult>): void
     createCertificate(callback: Callback<CertificateCreationResult>): void
     createCertificate(options?: CreateCertificateOptions): Promise<CertificateCreationResult>
+
+    createCA(options: CreateCAOptions, callback: Callback<CA>): void
+    createCA(callback: Callback<CA>): void
+    createCA(options?: CreateCAOptions): Promise<CA>
 
     readCertificateInfo(certificate: CertificateInput, callback: Callback<CertificateInfo>): void
     readCertificateInfo(callback: Callback<CertificateInfo>): void
