@@ -35,7 +35,7 @@ type SpawnCallback = (err: Error | null, code?: number | null, stdout?: string |
  * configue this openssl module
  *
  * @static
- * @param {String} option name e.g. pathOpenSSL, openSslVersion; TODO rethink nomenclature
+ * @param {String} option name e.g. pathOpenSSL, openSslVersion, openSslParams; TODO rethink nomenclature
  * @param {*} value value
  */
 function set(option: string, value: any) {
@@ -210,6 +210,14 @@ function spawnWrapper(params: string[], tmpfiles: any, binary: any, callback?: a
   if (!callback && typeof binary === 'function') {
     callback = binary
     binary = false
+  }
+
+  // Custom global openssl parameters (issue #305, set via openssl.set /
+  // pem.config({openSslParams: [...]})) — merged after the subcommand so
+  // they reach every invocation through this single funnel.
+  var openSslParams = settings.openSslParams
+  if (Array.isArray(openSslParams) && openSslParams.length > 0 && params.length > 0) {
+    params = [params[0]].concat(openSslParams, params.slice(1))
   }
 
   var files = []
