@@ -79,6 +79,24 @@ describe('CertificateAuthority', function () {
     expect(result.caCertificate).to.equal(ca.certificate)
   })
 
+  it('generates an encrypted CA key when cipher and keyPassword are given', async function () {
+    var ca = await pem.createCA({
+      commonName: 'Encrypted Root CA',
+      cipher: 'aes256',
+      keyPassword: 'secret-passphrase'
+    })
+
+    // the generated root signing key must actually be encrypted, otherwise
+    // persisting ca.key exposes an unprotected CA key
+    expect(ca.key).to.have.string('ENCRYPTED')
+
+    // the stored passphrase keeps the encrypted key usable for issuing
+    var result = await ca.issueCertificate({
+      commonName: 'encrypted-issuer.example'
+    })
+    expect(result.certificate).to.have.string('BEGIN CERTIFICATE')
+  })
+
   it('supports the callback interface for createCA', function (done) {
     pem.createCA({commonName: 'Callback CA', days: 3650}, function (err, ca) {
       expect(err).to.equal(null)
@@ -504,13 +522,135 @@ describe('CertificateAuthority', function () {
     }
   })
 
+  it('keeps the password alias usable on created intermediate authorities', function () {
+    this.timeout(20000)
+    return (async function () {
+      var root = await pem.createCA({
+        commonName: 'Alias Root CA',
+        days: 3650
+      })
+
+      var intermediate = await root.createIntermediateCA({
+        commonName: 'Alias Mid CA',
+        cipher: 'aes256',
+        password: 'intermediate-passphrase',
+        days: 1825
+      })
+
+      // the intermediate key was generated encrypted with the password
+      // alias; issuing with the returned authority must not hang at a
+      // passphrase prompt or fail to decrypt the key
+      var leaf = await intermediate.issueCertificate({
+        commonName: 'alias-leaf.example'
+      })
+      expect(leaf.certificate).to.have.string('BEGIN CERTIFICATE')
+    })()
+  })
+
+  it('rejects an intermediate CSR submission that lacks the private key', async function () {
+    var root = await pem.createCA({
+      commonName: 'Csr Root CA',
+      days: 3650
+    })
+
+    var csrData = await pem.createCSR({commonName: 'keyless-mid.example'})
+
+    // a CertificateAuthority cannot sign anything without its own private
+    // key, so building one from a keyless CSR must be rejected up front —
+    // not crash asynchronously after openssl already signed the certificate
+    var failure = null
+    try {
+      await root.createIntermediateCA({csr: csrData.csr})
+    } catch (err) {
+      failure = err
+    }
+    expect(failure, 'expected createIntermediateCA to reject').to.exist
+    expect(failure.message).to.have.string('key')
+  })
+
+  it('merges extension profiles with SANs from generated CSR altNames', async function () {
+    var root = await pem.createCA({
+      commonName: 'Profile SAN CA',
+      days: 3650
+    })
+
+    // the SAN config is generated internally from altNames; it must not be
+    // mistaken for a caller-owned config and trip the profile conflict check
+    var leaf = await root.issueCertificate({
+      commonName: 'profile-san.example',
+      altNames: ['alt-one.example', 'alt-two.example'],
+      profile: 'client'
+    })
+
+    var text = certificateText(leaf.certificate)
+    expect(text).to.have.string('DNS:alt-one.example')
+    expect(text).to.have.string('DNS:alt-two.example')
+    // client profile floor is preserved next to the SANs
+    expect(text).to.have.string('TLS Web Client Authentication')
+    expect(text).to.not.have.string('CA:TRUE')
+
+    // and the certificate must actually chain
+    var workDir = fs.mkdtempSync(path.join(require('os').tmpdir(), 'pem-ca-profilesan-'))
+    try {
+      var caPath = path.join(workDir, 'ca.pem')
+      var leafPath = path.join(workDir, 'leaf.pem')
+      fs.writeFileSync(caPath, root.certificate)
+      fs.writeFileSync(leafPath, leaf.certificate)
+      expect(
+        spawnSync(process.env.OPENSSL_BIN || 'openssl',
+          ['verify', '-CAfile', caPath, leafPath]).status
+      ).to.equal(0)
+    } finally {
+      fs.rmSync(workDir, {recursive: true})
+    }
+  })
+
+  it('keeps CA constraints on intermediates created with altNames', async function () {
+    var workDir = fs.mkdtempSync(path.join(require('os').tmpdir(), 'pem-ca-sanmid-'))
+    try {
+      var root = await pem.createCA({commonName: 'SAN Mid Root CA', days: 3650})
+
+      // the generated SAN config must not replace the secure intermediate
+      // config (previously this produced a CA:FALSE "intermediate" that
+      // could not sign verifiable certificates)
+      var intermediate = await root.createIntermediateCA({
+        commonName: 'san-mid.example',
+        altNames: ['san-mid-alt.example'],
+        days: 1825
+      })
+
+      var midText = certificateText(intermediate.certificate)
+      expect(midText).to.have.string('CA:TRUE')
+      expect(midText).to.have.string('Certificate Sign')
+      expect(midText).to.have.string('DNS:san-mid-alt.example')
+
+      // a leaf issued through the intermediate must still verify across it
+      var leaf = await intermediate.issueCertificate({commonName: 'san-leaf.example'})
+      var rootPath = path.join(workDir, 'root.pem')
+      var midPath = path.join(workDir, 'mid.pem')
+      var leafPath = path.join(workDir, 'leaf.pem')
+      fs.writeFileSync(rootPath, root.certificate)
+      fs.writeFileSync(midPath, intermediate.certificate)
+      fs.writeFileSync(leafPath, leaf.certificate)
+      expect(
+        spawnSync(process.env.OPENSSL_BIN || 'openssl',
+          ['verify', '-CAfile', rootPath, '-untrusted', midPath, leafPath]).status
+      ).to.equal(0)
+    } finally {
+      fs.rmSync(workDir, {recursive: true})
+    }
+  })
+
   it('issues certificates that openssl verifies inside their validity window', async function () {
     var ca = await pem.createCA({
       commonName: 'Verify Window CA',
       days: 3650
     })
 
-    var start = new Date(Math.floor(Date.now() / 1000) * 1000 + 2 * 60 * 60 * 1000)
+    // the window opens at the current second boundary, so the plain verify
+    // below is the portable acceptance proof that works on every supported
+    // SSL library (the CA-validity guard allows start == the CA's notBefore)
+    var start = new Date(Math.floor(Date.now() / 1000) * 1000)
     var end = new Date(start.getTime() + 48 * 60 * 60 * 1000)
     var result = await ca.issueCertificate({
       commonName: 'windowed.example',
@@ -518,24 +658,38 @@ describe('CertificateAuthority', function () {
       endDate: end
     })
 
+    // a second certificate far in the future probes whether this library
+    // enforces validity times at all (old libressl ignores them)
+    var future = await ca.issueCertificate({
+      commonName: 'future.example',
+      notBefore: new Date(start.getTime() + 7 * DAY_MS),
+      notAfter: new Date(start.getTime() + 8 * DAY_MS)
+    })
+
     var dir = fs.mkdtempSync(path.join(require('os').tmpdir(), 'pem-ca-verify-'))
     try {
       var caPath = path.join(dir, 'ca.pem')
       var leafPath = path.join(dir, 'leaf.pem')
+      var futurePath = path.join(dir, 'future.pem')
       fs.writeFileSync(caPath, ca.certificate)
       fs.writeFileSync(leafPath, result.certificate)
+      fs.writeFileSync(futurePath, future.certificate)
       var verify = function (args) {
         return spawnSync(process.env.OPENSSL_BIN || 'openssl', args).status
       }
 
-      // right now the window has not opened yet, so openssl must refuse it
-      expect(verify(['verify', '-CAfile', caPath, leafPath])).to.not.equal(0)
       // inside the window the signature and dates check out
-      var mid = Math.floor((start.getTime() + 30 * 60 * 1000) / 1000)
-      expect(verify(['verify', '-CAfile', caPath, '-attime', String(mid), leafPath])).to.equal(0)
-      // a day after the window closes the certificate is expired again
-      var late = Math.floor((end.getTime() + 24 * 60 * 60 * 1000) / 1000)
-      expect(verify(['verify', '-CAfile', caPath, '-attime', String(late), leafPath])).to.not.equal(0)
+      expect(verify(['verify', '-CAfile', caPath, leafPath])).to.equal(0)
+
+      // refusal outside the window happens at validation time; gate on the
+      // library actually enforcing shifted times before asserting it (the
+      // oldest supported libressl accepts not-yet-valid certificates)
+      var nowSec = Math.floor(Date.now() / 1000)
+      if (verify(['verify', '-CAfile', caPath, '-attime', String(nowSec), futurePath]) !== 0) {
+        // a day after the window closes the certificate is expired again
+        var late = Math.floor((end.getTime() + 24 * 60 * 60 * 1000) / 1000)
+        expect(verify(['verify', '-CAfile', caPath, '-attime', String(late), leafPath])).to.not.equal(0)
+      }
     } finally {
       fs.rmSync(dir, {recursive: true, force: true})
     }

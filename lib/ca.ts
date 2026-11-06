@@ -54,6 +54,8 @@ interface IssueCertificateOptions {
   O?: string | string[]
   OU?: string | string[]
   CN?: string
+  /** @internal SAN config generated internally from altNames (never caller-owned config) */
+  generatedSanConfig?: string | null
 }
 
 interface IssueResult {
@@ -168,6 +170,12 @@ class CertificateAuthority {
     }
     const keyPassword = caOptions.keyPassword || caOptions.clientKeyPassword || caOptions.password || null
     delete caOptions.keyPassword
+    if (keyPassword && !caOptions.clientKeyPassword) {
+      // forward the passphrase so the generated CA private key is really
+      // encrypted — createCertificate encrypts the key it generates with
+      // clientKeyPassword, and signing needs the same passphrase again
+      caOptions.clientKeyPassword = keyPassword
+    }
 
     pem.createCertificate(caOptions, (error: Error | string | null, result?: { certificate: string; serviceKey: string }) => {
       if (error) {
@@ -218,6 +226,9 @@ class CertificateAuthority {
     if (intOptions.config || intOptions.extFile || intOptions.profile) {
       return callback(new Error('createIntermediateCA defines its own secure extensions; config, extFile and profile are not allowed here'))
     }
+    if (intOptions.csr && !intOptions.clientKey) {
+      return callback(new Error('issuing an intermediate CA from a CSR requires its private key (clientKey): the returned authority needs the key to sign certificates'))
+    }
     const pathlen = intOptions.pathlen
     if (pathlen !== undefined && (!Number.isInteger(pathlen) || pathlen < 0)) {
       return callback(new Error('pathlen must be a non-negative integer'))
@@ -247,7 +258,7 @@ class CertificateAuthority {
         key: (issued as { clientKey: string }).clientKey,
         certificate: (issued as { certificate: string }).certificate,
         chain: [this.certificate].concat(this.chain),
-        keyPassword: intOptions.clientKeyPassword || undefined,
+        keyPassword: intOptions.clientKeyPassword || intOptions.password || undefined,
         defaultDays: intOptions.defaultDays
       }))
     }
@@ -321,7 +332,11 @@ class CertificateAuthority {
       issueOptions.csr = csrData.csr
       issueOptions.clientKey = csrData.clientKey
       if (csrData.config) {
-        issueOptions.config = csrData.config
+        // keep generated SAN config separate from caller-owned options.config:
+        // merging it into config would replace a caller's extensions (or a
+        // secure intermediate config) and would wrongly trip the profile
+        // conflict check; _signCertificate merges the alt_names block instead
+        issueOptions.generatedSanConfig = csrData.config
       }
       signWithOptions()
     })
@@ -422,15 +437,28 @@ class CertificateAuthority {
       }, params, passwordFiles)
     }
 
+    const altNamesLines = options.generatedSanConfig ? extractAltNamesSection(options.generatedSanConfig) : null
+
     if (options.config) {
+      // caller-owned config keeps authority over the extension section; a
+      // generated SAN block (from the altNames of our own CSR) is merged in
       params.push('-extensions')
       params.push('v3_req')
       params.push('-extfile')
       params.push('--TMPFILE--')
-      tmpfiles.push(options.config as string)
+      tmpfiles.push(altNamesLines ? mergeAltNamesIntoConfig(options.config as string, altNamesLines) : options.config as string)
     } else if (options.extFile) {
+      // caller-owned extension file: the caller owns the extensions entirely
       params.push('-extfile')
       params.push(options.extFile as string)
+    } else if (altNamesLines) {
+      // no caller extensions: emit the CA-controlled floor (basicConstraints,
+      // profile keyUsage/EKU) plus the generated SAN block
+      params.push('-extensions')
+      params.push('v3_req')
+      params.push('-extfile')
+      params.push('--TMPFILE--')
+      tmpfiles.push(buildExtensionFile(options.profile as ExtensionProfileName | undefined, altNamesLines))
     }
 
     const finalize = (err: Error | null, certificate?: any) => {
@@ -521,6 +549,71 @@ function buildCaConfig(workDir: string, digest: string, copyExtensions: boolean 
     'extendedKeyUsage = ' + usage.extKeyUsage
   )
 
+  return lines.join('\n')
+}
+
+function extractAltNamesSection(configContent: string): string[] | null {
+  const lines = configContent.split('\n')
+  const start = lines.findIndex(function (line) {
+    return line.trim().toLowerCase() === '[alt_names]'
+  })
+  if (start === -1) {
+    return null
+  }
+  const section: string[] = []
+  for (let i = start + 1; i < lines.length; i++) {
+    if (/^\s*\[/.test(lines[i])) {
+      break
+    }
+    if (lines[i].trim()) {
+      section.push(lines[i].trim())
+    }
+  }
+  return section.length ? section : null
+}
+
+function mergeAltNamesIntoConfig(configContent: string, altNamesLines: string[]): string {
+  const lines = configContent.split('\n')
+  const v3 = lines.findIndex(function (line) {
+    return line.trim().toLowerCase() === '[v3_req]'
+  })
+  if (v3 === -1) {
+    return configContent.replace(/\n*$/, '\n') +
+      '[v3_req]\nsubjectAltName = @alt_names\n[alt_names]\n' + altNamesLines.join('\n') + '\n'
+  }
+  let insertAt = lines.length
+  let hasSan = false
+  for (let i = v3 + 1; i < lines.length; i++) {
+    if (/^\s*\[/.test(lines[i])) {
+      insertAt = i
+      break
+    }
+    if (/subjectAltName/i.test(lines[i])) {
+      hasSan = true
+    }
+  }
+  const merged = lines.slice()
+  if (!hasSan) {
+    merged.splice(insertAt, 0, 'subjectAltName = @alt_names')
+  }
+  merged.push('', '[alt_names]', altNamesLines.join('\n'))
+  return merged.join('\n')
+}
+
+function buildExtensionFile(profile: ExtensionProfileName | undefined, altNamesLines: string[]): string {
+  const usage = profile ? EXTENSION_PROFILES[profile] : {
+    keyUsage: 'digitalSignature, keyEncipherment',
+    extKeyUsage: 'serverAuth, clientAuth'
+  }
+  const lines = [
+    '[v3_req]',
+    'basicConstraints = CA:FALSE',
+    'keyUsage = ' + usage.keyUsage,
+    'extendedKeyUsage = ' + usage.extKeyUsage,
+    'subjectAltName = @alt_names',
+    '[alt_names]',
+    altNamesLines.join('\n')
+  ]
   return lines.join('\n')
 }
 
