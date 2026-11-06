@@ -356,6 +356,42 @@ Where
 * **callback** is a callback function with an error object and a boolean as arguments
 -->
 
+### Create a Certificate Authority in a single call
+
+Use `createCA` when you want a working certificate authority in one step: it generates the CA private key, a self-signed certificate with `CA:TRUE` basic constraints and returns a ready-to-use `CA` instance that issues certificates from it. The CA certificate defaults to a 10 year validity (pass `days` to override), so issued certificates have room for their own validity windows — including the explicit `startDate`/`endDate` windows that only `openssl ca` can encode ([issue #30](https://github.com/Dexus/pem/issues/30)).
+
+```javascript
+const pem = require('pem')
+
+async function main () {
+  const ca = await pem.createCA({
+    commonName: 'Example Root CA',
+    days: 3650, // CA validity, default 3650
+    defaultDays: 30 // validity used by issueCertificate when no dates are given
+  })
+
+  // PEM material if you want to persist it
+  console.log(ca.key)
+  console.log(ca.certificate)
+
+  // issue a certificate with an explicit validity window
+  const issued = await ca.issueCertificate({
+    commonName: 'service.example',
+    startDate: new Date('2030-01-01T00:00:00Z'),
+    endDate: new Date('2030-01-31T00:00:00Z')
+  })
+
+  console.log(issued.certificate)
+  console.log(issued.caChain) // [ca.certificate]
+}
+
+main().catch(console.error)
+```
+
+Like the `CA` helper itself, `createCA` is also available as `pem.CA.createCA` and accepts a callback as its last argument instead of returning a promise.
+
+A CA refuses to issue certificates it knows can never verify: the requested validity window must sit inside the CA certificate's own validity window, otherwise `issueCertificate` rejects with an error telling you which boundary was crossed. `openssl ca` would silently issue such certificates; the check exists because `openssl verify` validates the whole chain at usage time, so a leaf whose window reaches outside its issuer is always invalid.
+
 ### Issue certificates with an existing Certificate Authority
 
 Use the `CA` helper when you already have a certificate authority key pair and want to issue new certificates without rebuilding the PKI state on your own.
