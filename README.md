@@ -434,6 +434,43 @@ By default issued certificates are valid starting "now" and expire after `defaul
 
 The returned object contains the issued certificate, the CSR that was used, any generated private key, the CA certificate and chain, the serial number used for issuance, and the resolved validity window.
 
+#### Certificate profiles, serials and validity windows
+
+`issueCertificate` creates certificates **from a CSR** (pass `csr`) **or directly** (pass subject options like `commonName`; a fresh key pair and CSR are generated for you). The serial number is generated securely (20 random bytes) unless you pass `serial` (number, hex string, `0x`-prefixed string or Buffer, max 20 octets) — the serial used is returned in the result. Validity windows can be given as `startDate`/`endDate`, as the X.509 names `notBefore`/`notAfter`, or as a relative `days` count; a window may never reach outside the CA certificate's own validity, which the CA rejects with a descriptive error instead of issuing a certificate `openssl verify` would refuse.
+
+Instead of hand-writing extension configs, pass one of the prepared **profiles** for the intended certificate purpose:
+
+| profile | keyUsage | extendedKeyUsage |
+| --- | --- | --- |
+| `server` (default is a superset) | digitalSignature, keyEncipherment | serverAuth |
+| `client` | digitalSignature, keyEncipherment | clientAuth |
+| `codeSigning` | digitalSignature | codeSigning |
+
+Without a profile, issued certificates carry `digitalSignature, keyEncipherment` key usage and `serverAuth, clientAuth` extended key usage. Every profile keeps `basicConstraints` at `CA:FALSE` — a profile can never mint a CA certificate, and CSR-requested extensions are only copied with `copyExtensions: true` (and still never override the CA's own floor). A `profile` cannot be combined with `config`/`extFile`: if you need full control, pass those and own the extensions yourself.
+
+#### Create an intermediate certificate authority
+
+Use `createIntermediateCA` on any `CA` instance to issue a subordinate authority. The intermediate receives the prepared CA extensions — critical `CA:TRUE` with an optional `pathlen`, `keyCertSign`/`cRLSign` key usage, plus subject and authority key identifiers for clean chain building — and comes back as a working `CA` whose `chain` contains the parent chain. Its extensions are fixed by design; the method rejects `config`, `extFile` and `profile`.
+
+```javascript
+const root = await pem.createCA({ commonName: 'Example Root CA', days: 3650 })
+
+const intermediate = await root.createIntermediateCA({
+  commonName: 'Example Intermediate CA',
+  pathlen: 0
+})
+
+const issued = await intermediate.issueCertificate({
+  commonName: 'service.example',
+  profile: 'server'
+})
+
+console.log(issued.certificate)
+console.log(issued.caChain) // [intermediate.certificate, root.certificate]
+```
+
+Without explicit dates the intermediate uses the parent's whole remaining validity, so leaf certificates never reach outside it. `openssl ca` does not enforce `pathlen` at signing time — chains that exceed the constraint are refused later by `openssl verify` (error: *path length constraint exceeded*), which is exactly what a relying party does.
+
 ### Custom extensions config file
 
 You can specify custom OpenSSL extensions using the `config` or `extFile` options for `createCertificate` (or using `csrConfigFile` with `createCSR`).
