@@ -25,6 +25,7 @@ describe('ESM interop', function () {
     // eslint-disable-next-line import/no-unresolved -- self-reference via the exports map; eslint's resolver cannot resolve a package by its own name
     const esm = await import('pem')
     expect(esm.default).to.equal(pemCJS)
+    expect(typeof esm.createCA, 'named export createCA').to.equal('function')
     const keys = Object.keys(pemCJS).sort()
     for (const key of keys) {
       expect(esm[key], 'named export ' + key).to.equal(pemCJS[key])

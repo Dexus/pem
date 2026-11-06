@@ -65,12 +65,22 @@ interface IssueResult {
 
 type IssueCallback = (err?: Error | null, result?: IssueResult) => void
 
+interface CreateCAOptions extends IssueCertificateOptions {
+  CA?: boolean
+  selfSigned?: boolean
+  keyPassword?: string
+  defaultDays?: number
+}
+
+type CACallback = (err?: Error | string | null, ca?: CertificateAuthority) => void
+
 class CertificateAuthority {
   declare key: string
   declare certificate: string
   declare password: string | null
   declare chain: string[]
   declare defaultDays: number
+  declare caValidity: {start: Date; end: Date} | null
 
   constructor(options: CAConstructorOptions = {}) {
     if (!options.key) {
@@ -87,6 +97,61 @@ class CertificateAuthority {
       return value.toString()
     }) : []
     this.defaultDays = Number.isFinite(options.defaultDays) && (options.defaultDays as number) > 0 ? Number(options.defaultDays) : 7
+    this.caValidity = null
+  }
+
+  /**
+   * Creates a self-signed CA certificate with its own private key in a single
+   * call and returns a ready-to-use CertificateAuthority for issuing
+   * certificates from it. The certificate gets the CA:TRUE basicConstraints
+   * and defaults to a 10 year validity (pass `days` to override), so issued
+   * certificates can use explicit startdate/enddate windows inside it
+   * (issue #30).
+   * @static
+   * @param {Object} [options] Optional options object, see createCertificate for subject/serial options
+   * @param {Number} [options.days] Validity of the CA certificate in days (defaults to 3650)
+   * @param {Number} [options.defaultDays] Default validity in days used by the returned CA when issuing certificates
+   * @param {String} [options.keyPassword] Password for using the generated CA key later
+   * @param {Function} [callback] Callback function with an error object and a CertificateAuthority instance
+   * @returns {Promise<CertificateAuthority>|undefined} Resolves with the CertificateAuthority when no callback is provided.
+   */
+  static createCA(options: CreateCAOptions | CACallback | undefined, callback?: CACallback): Promise<CertificateAuthority> | void {
+    if (!callback && typeof options === 'function') {
+      callback = options
+      options = undefined
+    }
+
+    if (!callback) {
+      return new Promise<CertificateAuthority>((resolve, reject) => {
+        CertificateAuthority.createCA(options, (err?: Error | string | null, ca?: CertificateAuthority) => {
+          if (err) {
+            return reject(err)
+          }
+          resolve(ca as CertificateAuthority)
+        })
+      })
+    }
+
+    const caOptions = Object.assign({}, options || {}) as CreateCAOptions
+    caOptions.CA = true
+    caOptions.selfSigned = true
+    if (!caOptions.days) {
+      caOptions.days = 3650
+    }
+    const keyPassword = caOptions.keyPassword || caOptions.clientKeyPassword || caOptions.password || null
+    delete caOptions.keyPassword
+
+    pem.createCertificate(caOptions, (error: Error | string | null, result?: { certificate: string; serviceKey: string }) => {
+      if (error) {
+        return callback(error as Error)
+      }
+      callback(null, new CertificateAuthority({
+        key: (result as { serviceKey: string }).serviceKey,
+        certificate: (result as { certificate: string }).certificate,
+        keyPassword: keyPassword as string,
+        defaultDays: caOptions.defaultDays
+      }))
+    })
   }
 
   issueCertificate(options?: IssueCertificateOptions | IssueCallback, callback?: IssueCallback) {
@@ -148,13 +213,37 @@ class CertificateAuthority {
     })
   }
 
-  _signCertificate(options: IssueCertificateOptions, callback: (err: Error | null, result?: { certificate: string; serial: string; validity: { start: Date; end: Date } }) => void) {
-    let validity: { asn1: {start: string; end: string}, dates: {start: Date; end: Date} }
-    try {
-      validity = resolveValidity(options, this.defaultDays)
-    } catch (err) {
-      return callback(err as Error)
+  _getCAValidity(callback: (err: Error | null, validity?: {start: Date; end: Date}) => void) {
+    if (this.caValidity) {
+      return callback(null, this.caValidity)
     }
+    pem.readCertificateInfo(this.certificate, (err: Error | null, info: { validity?: { start?: number; end?: number } }) => {
+      if (err) {
+        return callback(new Error('Unable to read the CA certificate: ' + err.message))
+      }
+      if (!info || !info.validity || !info.validity.start || !info.validity.end) {
+        return callback(new Error('Unable to read the validity of the CA certificate'))
+      }
+      this.caValidity = {
+        start: new Date(info.validity.start),
+        end: new Date(info.validity.end)
+      }
+      callback(null, this.caValidity)
+    })
+  }
+
+  _signCertificate(options: IssueCertificateOptions, callback: (err: Error | null, result?: { certificate: string; serial: string; validity: { start: Date; end: Date } }) => void) {
+    const proceed = (caValidity: {start: Date; end: Date}) => {
+      let validity: { asn1: {start: string; end: string}, dates: {start: Date; end: Date} }
+      try {
+        validity = resolveValidity(options, this.defaultDays)
+        // a CA must not issue certificates it knows can never verify: the
+        // requested window has to sit inside the CA certificate's own
+        // validity window (openssl ca would silently accept either way)
+        assertValidityInsideCA(validity.dates, caValidity)
+      } catch (err) {
+        return callback(err as Error)
+      }
 
     let serial: string
     try {
@@ -243,17 +332,25 @@ class CertificateAuthority {
       }
     }
 
-    openssl.spawnWrapper(params, tmpfiles, (err) => {
+      openssl.spawnWrapper(params, tmpfiles, (err) => {
+        if (err) {
+          return finalize(err)
+        }
+        let certificate
+        try {
+          certificate = fs.readFileSync(certPath as string, 'utf-8')
+        } catch (readErr) {
+          return finalize(readErr as Error)
+        }
+        finalize(null, certificate)
+      })
+    }
+
+    this._getCAValidity((err: Error | null, caValidity?: {start: Date; end: Date}) => {
       if (err) {
-        return finalize(err)
+        return callback(err)
       }
-      let certificate
-      try {
-        certificate = fs.readFileSync(certPath as string, 'utf-8')
-      } catch (readErr) {
-        return finalize(readErr as Error)
-      }
-      finalize(null, certificate)
+      proceed(caValidity as {start: Date; end: Date})
     })
   }
 }
@@ -350,6 +447,17 @@ function formatSerial(serial: string | Buffer | number | undefined | null) {
 
   hexSerial = hexSerial.toLowerCase()
   return '0x' + hexSerial.padStart(40, '0').slice(-40)
+}
+
+function assertValidityInsideCA(validity: {start: Date; end: Date}, caValidity: {start: Date; end: Date}) {
+  if (validity.start.getTime() < caValidity.start.getTime()) {
+    throw new Error('Certificate start date ' + validity.start.toISOString() +
+      ' is before the CA certificate becomes valid (' + caValidity.start.toISOString() + ')')
+  }
+  if (validity.end.getTime() > caValidity.end.getTime()) {
+    throw new Error('Certificate end date ' + validity.end.toISOString() +
+      ' is after the CA certificate expires (' + caValidity.end.toISOString() + ')')
+  }
 }
 
 function resolveValidity(options: IssueCertificateOptions, defaultDays: number) {

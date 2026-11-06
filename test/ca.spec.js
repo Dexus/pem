@@ -30,7 +30,9 @@ describe('CertificateAuthority', function () {
     rootCA = await pem.createCertificate({
       commonName: 'Test Root CA',
       selfSigned: true,
-      days: 365,
+      // long-lived so the custom validity windows used below sit inside the
+      // CA certificate's own validity (the CA helper rejects windows beyond it)
+      days: 3650,
       CA: true
     })
 
@@ -53,6 +55,35 @@ describe('CertificateAuthority', function () {
       days: 365,
       serial: Date.now(),
       config: intermediateConfig
+    })
+  })
+
+  it('creates a working CA in a single call', async function () {
+    var ca = await pem.createCA({
+      commonName: 'One Call CA',
+      days: 3650
+    })
+
+    expect(ca).to.be.an.instanceof(pem.CA)
+    expect(ca.certificate).to.be.a('string')
+    expect(ca.key).to.be.a('string')
+
+    var text = certificateText(ca.certificate)
+    expect(text).to.have.string('CA:TRUE')
+
+    var result = await ca.issueCertificate({
+      commonName: 'from-one-call.example'
+    })
+    expect(result.certificate).to.be.a('string')
+    expect(result.caChain).to.deep.equal([ca.certificate])
+    expect(result.caCertificate).to.equal(ca.certificate)
+  })
+
+  it('supports the callback interface for createCA', function (done) {
+    pem.createCA({commonName: 'Callback CA', days: 3650}, function (err, ca) {
+      expect(err).to.equal(null)
+      expect(ca).to.be.an.instanceof(pem.CA)
+      done()
     })
   })
 
@@ -98,6 +129,48 @@ describe('CertificateAuthority', function () {
     var info = await pem.readCertificateInfo(result.certificate)
     expect(info.validity.start).to.equal(start.getTime())
     expect(info.validity.end).to.equal(end.getTime())
+  })
+
+  it('rejects a validity window starting before the CA certificate is valid', async function () {
+    var ca = new pem.CA({
+      key: rootCA.serviceKey,
+      certificate: rootCA.certificate
+    })
+
+    var rootInfo = await pem.readCertificateInfo(rootCA.certificate)
+    var before = new Date(rootInfo.validity.start - 60 * 60 * 1000)
+
+    try {
+      await ca.issueCertificate({
+        commonName: 'before-ca.example',
+        startDate: before,
+        days: 5
+      })
+      throw new Error('Expected issuing to fail when startDate precedes CA validity')
+    } catch (err) {
+      expect(err.message).to.match(/CA certificate/i)
+    }
+  })
+
+  it('rejects a validity window ending after the CA certificate expires', async function () {
+    var ca = new pem.CA({
+      key: rootCA.serviceKey,
+      certificate: rootCA.certificate
+    })
+
+    var rootInfo = await pem.readCertificateInfo(rootCA.certificate)
+    var after = new Date(rootInfo.validity.end + 24 * 60 * 60 * 1000)
+
+    try {
+      await ca.issueCertificate({
+        commonName: 'after-ca.example',
+        endDate: after,
+        days: 5
+      })
+      throw new Error('Expected issuing to fail when endDate exceeds CA validity')
+    } catch (err) {
+      expect(err.message).to.match(/CA certificate/i)
+    }
   })
 
   it('supports existing intermediate chains when issuing certificates', async function () {
@@ -234,5 +307,98 @@ describe('CertificateAuthority', function () {
     // the pem_ca_extensions floor (CA:FALSE) always supersedes CSR requests
     expect(text).to.have.string('CA:FALSE')
     expect(text).to.not.have.string('CA:TRUE')
+  })
+
+  it('issues certificates that openssl verifies inside their validity window', async function () {
+    var ca = await pem.createCA({
+      commonName: 'Verify Window CA',
+      days: 3650
+    })
+
+    var start = new Date(Math.floor(Date.now() / 1000) * 1000 + 2 * 60 * 60 * 1000)
+    var end = new Date(start.getTime() + 48 * 60 * 60 * 1000)
+    var result = await ca.issueCertificate({
+      commonName: 'windowed.example',
+      startDate: start,
+      endDate: end
+    })
+
+    var dir = fs.mkdtempSync(path.join(require('os').tmpdir(), 'pem-ca-verify-'))
+    try {
+      var caPath = path.join(dir, 'ca.pem')
+      var leafPath = path.join(dir, 'leaf.pem')
+      fs.writeFileSync(caPath, ca.certificate)
+      fs.writeFileSync(leafPath, result.certificate)
+      var verify = function (args) {
+        return spawnSync(process.env.OPENSSL_BIN || 'openssl', args).status
+      }
+
+      // right now the window has not opened yet, so openssl must refuse it
+      expect(verify(['verify', '-CAfile', caPath, leafPath])).to.not.equal(0)
+      // inside the window the signature and dates check out
+      var mid = Math.floor((start.getTime() + 30 * 60 * 1000) / 1000)
+      expect(verify(['verify', '-CAfile', caPath, '-attime', String(mid), leafPath])).to.equal(0)
+      // a day after the window closes the certificate is expired again
+      var late = Math.floor((end.getTime() + 24 * 60 * 60 * 1000) / 1000)
+      expect(verify(['verify', '-CAfile', caPath, '-attime', String(late), leafPath])).to.not.equal(0)
+    } finally {
+      fs.rmSync(dir, {recursive: true, force: true})
+    }
+  })
+
+  it('issues intermediate CAs whose leaf certificates verify against the root', async function () {
+    var root = await pem.createCA({
+      commonName: 'Chain Root CA',
+      days: 3650
+    })
+
+    var intermediateConfig = [
+      '[req]',
+      'req_extensions = v3_req',
+      'distinguished_name = req_distinguished_name',
+      '[req_distinguished_name]',
+      'commonName = Common Name',
+      'commonName_max = 64',
+      '[v3_req]',
+      'basicConstraints = critical,CA:TRUE,pathlen:0',
+      'keyUsage = critical,keyCertSign,cRLSign'
+    ].join('\n')
+
+    var intermediate = await root.issueCertificate({
+      commonName: 'Chain Intermediate CA',
+      days: 1825,
+      config: intermediateConfig
+    })
+
+    var intCA = new pem.CA({
+      key: intermediate.clientKey,
+      certificate: intermediate.certificate,
+      chain: [root.certificate]
+    })
+
+    var leaf = await intCA.issueCertificate({
+      commonName: 'chained-verify.example'
+    })
+
+    var dir = fs.mkdtempSync(path.join(require('os').tmpdir(), 'pem-ca-chain-'))
+    try {
+      var rootPath = path.join(dir, 'root.pem')
+      var intPath = path.join(dir, 'intermediate.pem')
+      var leafPath = path.join(dir, 'leaf.pem')
+      fs.writeFileSync(rootPath, root.certificate)
+      fs.writeFileSync(intPath, intermediate.certificate)
+      fs.writeFileSync(leafPath, leaf.certificate)
+
+      var verification = spawnSync(process.env.OPENSSL_BIN || 'openssl', [
+        'verify', '-CAfile', rootPath, '-untrusted', intPath, leafPath
+      ])
+      expect(verification.status).to.equal(0)
+
+      // pem's own chain check agrees with openssl about the same chain
+      var chainCheck = await pem.verifySigningChain(leaf.certificate, [intermediate.certificate, root.certificate])
+      expect(chainCheck).to.equal(true)
+    } finally {
+      fs.rmSync(dir, {recursive: true, force: true})
+    }
   })
 })

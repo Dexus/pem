@@ -203,6 +203,11 @@ declare namespace pem {
     serial?: string | number | Buffer
   }
 
+  interface CreateCAOptions extends IssueCertificateOptions {
+    keyPassword?: string
+    defaultDays?: number
+  }
+
   interface IssuedCertificate {
     csr: string
     clientKey: string
@@ -233,6 +238,9 @@ declare namespace pem {
 
   interface CAConstructor {
     new (options: CertificateAuthorityOptions): CA
+    createCA(options: CreateCAOptions, callback: Callback<CA>): void
+    createCA(callback: Callback<CA>): void
+    createCA(options?: CreateCAOptions): Promise<CA>
   }
 
   interface Promisified {
@@ -281,6 +289,10 @@ declare namespace pem {
     createCertificate(options: CreateCertificateOptions, callback: Callback<CertificateCreationResult>): void
     createCertificate(callback: Callback<CertificateCreationResult>): void
     createCertificate(options?: CreateCertificateOptions): Promise<CertificateCreationResult>
+
+    createCA(options: CreateCAOptions, callback: Callback<CA>): void
+    createCA(callback: Callback<CA>): void
+    createCA(options?: CreateCAOptions): Promise<CA>
 
     readCertificateInfo(certificate: CertificateInput, callback: Callback<CertificateInfo>): void
     readCertificateInfo(callback: Callback<CertificateInfo>): void

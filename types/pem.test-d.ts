@@ -29,6 +29,15 @@ const ca = new pem.CA({
 expectType<Promise<pem.IssuedCertificate>>(ca.issueCertificate({ commonName: 'example.com' }))
 expectType<Promise<pem.IssuedCertificate>>(ca.issueCertificate({ commonName: 'example.com', copyExtensions: true }))
 
+expectType<Promise<pem.CA>>(pem.createCA({ commonName: 'example.com' }))
+expectType<Promise<pem.CA>>(pem.CA.createCA({ commonName: 'example.com' }))
+
+pem.createCA((err, created) => {
+  if (created) {
+    expectType<pem.CA>(created)
+  }
+})
+
 ca.issueCertificate((err, issued) => {
   if (issued) {
     expectType<string>(issued.certificate)

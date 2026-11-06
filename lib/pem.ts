@@ -138,6 +138,12 @@ module.exports.convert = require('./convert')
  * @type {module:ca}
  */
 module.exports.CA = require('./ca')
+/**
+ * Creates a self-signed CA certificate with its own private key in a single
+ * call and resolves to a ready-to-use CertificateAuthority (see CA.createCA)
+ * @type {module:ca.createCA}
+ */
+module.exports.createCA = require('./ca').createCA
 
 var KEY_START = '-----BEGIN PRIVATE KEY-----'
 var KEY_END = '-----END PRIVATE KEY-----'
