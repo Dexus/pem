@@ -7,8 +7,12 @@
 //   pem.config({ openSslParams: ['-provider', 'default'] })
 //
 // Discriminating assertion: an unknown flag set via openSslParams MUST make
-// openssl fail with "Unknown option" — proving the params really reached the
-// openssl argv (pre-fix they are silently dropped and the call succeeds).
+// openssl exit non-zero — proving the params really reached the openssl argv
+// (pre-fix they are silently dropped and the call succeeds). The assertion is
+// deliberately on the exit behavior, not on the message text: diagnostics
+// differ across the supported library matrix (OpenSSL 1.1.1: "Unrecognized
+// flag", 3.0: "Unknown cipher", 3.4+: "Unknown option or cipher", LibreSSL:
+// usage dump), so no single text matches everywhere.
 
 var pem = require('../lib/pem')
 var openssl = require('../lib/openssl.js')
@@ -30,7 +34,6 @@ describe('Issue #305 — openSslParams (custom OpenSSL parameters)', function ()
     openssl.set('openSslParams', ['-notarealflag305'])
     pem.createPrivateKey(function (err) {
       expect(err).to.be.ok()
-      expect(String((err && err.message) || err)).to.match(/unknown option/i)
       done()
     })
   })
@@ -49,14 +52,17 @@ describe('Issue #305 — openSslParams (custom OpenSSL parameters)', function ()
     pem.config({ openSslParams: ['-notarealflag305'] })
     pem.createPrivateKey(function (err) {
       expect(err).to.be.ok()
-      expect(String((err && err.message) || err)).to.match(/unknown option/i)
       pem.config({ openSslParams: [] })
       done()
     })
   })
 
-  it('applies real params: -provider default keeps calls working', function (done) {
-    openssl.set('openSslParams', ['-provider', 'default'])
+  it('applies real params: -outform PEM keeps calls working', function (done) {
+    // -outform PEM is accepted by every supported library (providers via
+    // -provider are OpenSSL >= 3.0 only, so they cannot serve as a
+    // matrix-wide benign control) and genpkey's default output is PEM
+    // anyway, so a benign real param keeps the call working.
+    openssl.set('openSslParams', ['-outform', 'PEM'])
     pem.createPrivateKey(function (err, key) {
       hlp.checkError(err)
       expect(key.key).to.be.a('string')
