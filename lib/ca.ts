@@ -168,6 +168,23 @@ class CertificateAuthority {
     if (!caOptions.days) {
       caOptions.days = 3650
     }
+    if (caOptions.csr && !caOptions.config) {
+      // a submitted CSR bypasses CSR generation, where CA:true is normally
+      // turned into an extension config; provide the secure root CA
+      // extensions ourselves so the "CA" really is one
+      caOptions.config = [
+        '[req]',
+        'req_extensions = v3_req',
+        'distinguished_name = req_distinguished_name',
+        '[req_distinguished_name]',
+        'commonName = Common Name',
+        'commonName_max = 64',
+        '[v3_req]',
+        'basicConstraints = critical,CA:TRUE',
+        'keyUsage = critical,keyCertSign,cRLSign',
+        'subjectKeyIdentifier = hash'
+      ].join('\n')
+    }
     const keyPassword = caOptions.keyPassword || caOptions.clientKeyPassword || caOptions.password || null
     delete caOptions.keyPassword
     if (keyPassword && !caOptions.clientKeyPassword) {
@@ -588,7 +605,10 @@ function mergeAltNamesIntoConfig(configContent: string, altNamesLines: string[])
       insertAt = i
       break
     }
-    if (/subjectAltName/i.test(lines[i])) {
+    if (/^\s*#/.test(lines[i])) {
+      continue
+    }
+    if (/^\s*subjectAltName\s*=/i.test(lines[i])) {
       hasSan = true
     }
   }

@@ -681,27 +681,91 @@ describe('CertificateAuthority', function () {
       // inside the window the signature and dates check out
       expect(verify(['verify', '-CAfile', caPath, leafPath])).to.equal(0)
 
-      // -attime is honored by every supported library: the future certificate
-      // is valid inside its own window and not yet valid at the current time
-      // (measured on OpenSSL 1.1.1-4.x and LibreSSL 3.0.2-3.2.7)
+      // shifted-time validation works on every supported library (measured:
+      // OpenSSL 3.5.x and LibreSSL 3.0.2-4.4.0): the future certificate is
+      // valid inside its own window and not yet valid at the current time
       var futureMid = Math.floor((start.getTime() + 7.5 * DAY_MS) / 1000)
       expect(verify(['verify', '-CAfile', caPath, '-attime', String(futureMid), futurePath])).to.equal(0)
       expect(verify(['verify', '-CAfile', caPath, '-attime', String(Math.floor(Date.now() / 1000)), futurePath])).to.not.equal(0)
 
-      // expiry enforcement at validation time is a library capability:
-      // OpenSSL-family refuses expired certificates at -attime, LibreSSL
-      // honors -attime for notBefore but accepts expired ones (measured
-      // on 3.0.2-3.2.7) — both behaviors are asserted below
+      // expiry enforcement at -attime is a library capability. Measured
+      // behavior for expired certificates at -attime:
+      // - OpenSSL-family and LibreSSL >= 3.3.6: refused
+      // - LibreSSL <= 3.2.7: accepted (only notBefore is enforced)
+      // The branch is chosen from the library identity and version, never
+      // from the probe result itself (a probe gate would be a tautology)
       var late = Math.floor((end.getTime() + 24 * 60 * 60 * 1000) / 1000)
       var versionText = spawnSync(process.env.OPENSSL_BIN || 'openssl', ['version']).stdout.toString()
-      if (versionText.indexOf('LibreSSL') === -1) {
-        expect(verify(['verify', '-CAfile', caPath, '-attime', String(late), leafPath])).to.not.equal(0)
+      var libresslMatch = /^LibreSSL (\d+)\.(\d+)/m.exec(versionText)
+      var acceptsExpiredAtTime = false
+      if (libresslMatch) {
+        acceptsExpiredAtTime = Number(libresslMatch[1]) * 100 + Number(libresslMatch[2]) < 303
+      }
+      var expiredStatus = verify(['verify', '-CAfile', caPath, '-attime', String(late), leafPath])
+      if (acceptsExpiredAtTime) {
+        expect(expiredStatus).to.equal(0)
       } else {
-        expect(verify(['verify', '-CAfile', caPath, '-attime', String(late), leafPath])).to.equal(0)
+        expect(expiredStatus).to.not.equal(0)
       }
     } finally {
       fs.rmSync(dir, {recursive: true, force: true})
     }
+  })
+
+  it('applies CA constraints when creating a root from an existing CSR', async function () {
+    var csrData = await pem.createCSR({commonName: 'csr-root.example'})
+
+    // a submitted CSR bypasses CSR generation, which is where CA:true is
+    // normally turned into an extension config — the root must still get
+    // its CA constraints
+    var ca = await pem.createCA({
+      csr: csrData.csr,
+      clientKey: csrData.clientKey,
+      days: 3650
+    })
+
+    var text = certificateText(ca.certificate)
+    expect(text).to.have.string('CA:TRUE')
+    expect(text).to.have.string('Certificate Sign')
+
+    var leaf = await ca.issueCertificate({commonName: 'csr-root-leaf.example'})
+    var workDir = fs.mkdtempSync(path.join(require('os').tmpdir(), 'pem-ca-csrroot-'))
+    try {
+      var caPath = path.join(workDir, 'ca.pem')
+      var leafPath = path.join(workDir, 'leaf.pem')
+      fs.writeFileSync(caPath, ca.certificate)
+      fs.writeFileSync(leafPath, leaf.certificate)
+      expect(
+        spawnSync(process.env.OPENSSL_BIN || 'openssl',
+          ['verify', '-CAfile', caPath, leafPath]).status
+      ).to.equal(0)
+    } finally {
+      fs.rmSync(workDir, {recursive: true})
+    }
+  })
+
+  it('merges altNames into caller config despite subjectAltName comments', async function () {
+    var root = await pem.createCA({commonName: 'Comment SAN CA', days: 3650})
+
+    // the comment mentions subjectAltName without being one: the real
+    // directive must still be inserted so the altNames are not dropped
+    var callerConfig = [
+      '[req]',
+      'req_extensions = v3_req',
+      '[v3_req]',
+      'basicConstraints = CA:FALSE',
+      '# subjectAltName is supplied by altNames'
+    ].join('\n')
+
+    var leaf = await root.issueCertificate({
+      commonName: 'comment-san.example',
+      altNames: ['comment-alt.example'],
+      config: callerConfig
+    })
+
+    var text = certificateText(leaf.certificate)
+    expect(text).to.have.string('DNS:comment-alt.example')
+    expect(text).to.have.string('CA:FALSE')
   })
 
   it('issues intermediate CAs whose leaf certificates verify against the root', async function () {
