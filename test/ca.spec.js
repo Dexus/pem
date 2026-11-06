@@ -681,14 +681,23 @@ describe('CertificateAuthority', function () {
       // inside the window the signature and dates check out
       expect(verify(['verify', '-CAfile', caPath, leafPath])).to.equal(0)
 
-      // refusal outside the window happens at validation time; gate on the
-      // library actually enforcing shifted times before asserting it (the
-      // oldest supported libressl accepts not-yet-valid certificates)
-      var nowSec = Math.floor(Date.now() / 1000)
-      if (verify(['verify', '-CAfile', caPath, '-attime', String(nowSec), futurePath]) !== 0) {
-        // a day after the window closes the certificate is expired again
-        var late = Math.floor((end.getTime() + 24 * 60 * 60 * 1000) / 1000)
+      // -attime is honored by every supported library: the future certificate
+      // is valid inside its own window and not yet valid at the current time
+      // (measured on OpenSSL 1.1.1-4.x and LibreSSL 3.0.2-3.2.7)
+      var futureMid = Math.floor((start.getTime() + 7.5 * DAY_MS) / 1000)
+      expect(verify(['verify', '-CAfile', caPath, '-attime', String(futureMid), futurePath])).to.equal(0)
+      expect(verify(['verify', '-CAfile', caPath, '-attime', String(Math.floor(Date.now() / 1000)), futurePath])).to.not.equal(0)
+
+      // expiry enforcement at validation time is a library capability:
+      // OpenSSL-family refuses expired certificates at -attime, LibreSSL
+      // honors -attime for notBefore but accepts expired ones (measured
+      // on 3.0.2-3.2.7) — both behaviors are asserted below
+      var late = Math.floor((end.getTime() + 24 * 60 * 60 * 1000) / 1000)
+      var versionText = spawnSync(process.env.OPENSSL_BIN || 'openssl', ['version']).stdout.toString()
+      if (versionText.indexOf('LibreSSL') === -1) {
         expect(verify(['verify', '-CAfile', caPath, '-attime', String(late), leafPath])).to.not.equal(0)
+      } else {
+        expect(verify(['verify', '-CAfile', caPath, '-attime', String(late), leafPath])).to.equal(0)
       }
     } finally {
       fs.rmSync(dir, {recursive: true, force: true})
