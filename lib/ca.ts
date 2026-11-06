@@ -30,8 +30,11 @@ interface IssueCertificateOptions {
   copyExtensions?: boolean
   config?: string
   extFile?: string
+  profile?: ExtensionProfileName
   startDate?: Date | number | string
   endDate?: Date | number | string
+  notBefore?: Date | number | string
+  notAfter?: Date | number | string
   days?: number
   keyBitsize?: number
   country?: string
@@ -72,7 +75,32 @@ interface CreateCAOptions extends IssueCertificateOptions {
   defaultDays?: number
 }
 
+interface CreateIntermediateCAOptions extends IssueCertificateOptions {
+  pathlen?: number
+  defaultDays?: number
+}
+
 type CACallback = (err?: Error | string | null, ca?: CertificateAuthority) => void
+
+// secure prepared extension profiles for issued certificates: the CA keeps
+// basicConstraints at CA:FALSE for every profile, only keyUsage and
+// extendedKeyUsage change with the intended purpose
+const EXTENSION_PROFILES = {
+  server: {
+    keyUsage: 'digitalSignature, keyEncipherment',
+    extKeyUsage: 'serverAuth'
+  },
+  client: {
+    keyUsage: 'digitalSignature, keyEncipherment',
+    extKeyUsage: 'clientAuth'
+  },
+  codeSigning: {
+    keyUsage: 'digitalSignature',
+    extKeyUsage: 'codeSigning'
+  }
+}
+
+type ExtensionProfileName = keyof typeof EXTENSION_PROFILES
 
 class CertificateAuthority {
   declare key: string
@@ -151,6 +179,92 @@ class CertificateAuthority {
         keyPassword: keyPassword as string,
         defaultDays: caOptions.defaultDays
       }))
+    })
+  }
+
+  /**
+   * Issues an intermediate CA certificate from this authority and returns a
+   * ready-to-use CertificateAuthority bound to it. The intermediate gets the
+   * secure prepared CA extensions (critical CA:TRUE with optional pathlen,
+   * keyCertSign/cRLSign, subjectKeyIdentifier and authorityKeyIdentifier) and
+   * cannot be overridden through config, extFile or profile — use
+   * issueCertificate with your own config when you need full control.
+   * Without explicit dates the intermediate uses the parent's whole remaining
+   * validity window, so the issued-validity guard never blocks leaf issuance.
+   * @param {Object} [options] Optional options object, see issueCertificate for subject/serial/date options
+   * @param {Number} [options.pathlen] Maximum number of non-self-issued intermediate CAs allowed below this one (RFC 5280 pathLenConstraint)
+   * @param {Number} [options.defaultDays] Default validity in days used by the returned intermediate when issuing certificates
+   * @param {Function} [callback] Callback function with an error object and a CertificateAuthority instance
+   * @returns {Promise<CertificateAuthority>|undefined} Resolves with the intermediate CertificateAuthority when no callback is provided.
+   */
+  createIntermediateCA(options?: CreateIntermediateCAOptions | CACallback, callback?: CACallback): Promise<CertificateAuthority> | void {
+    if (!callback && typeof options === 'function') {
+      callback = options
+      options = undefined
+    }
+
+    if (!callback) {
+      return new Promise<CertificateAuthority>((resolve, reject) => {
+        this.createIntermediateCA(options, (err?: Error | string | null, ca?: CertificateAuthority) => {
+          if (err) {
+            return reject(err)
+          }
+          resolve(ca as CertificateAuthority)
+        })
+      })
+    }
+
+    const intOptions = Object.assign({}, options || {}) as CreateIntermediateCAOptions
+    if (intOptions.config || intOptions.extFile || intOptions.profile) {
+      return callback(new Error('createIntermediateCA defines its own secure extensions; config, extFile and profile are not allowed here'))
+    }
+    const pathlen = intOptions.pathlen
+    if (pathlen !== undefined && (!Number.isInteger(pathlen) || pathlen < 0)) {
+      return callback(new Error('pathlen must be a non-negative integer'))
+    }
+
+    // the secure prepared config for the authority: a real CA certificate
+    // with keyCertSign/cRLSign only, plus SKI/AKI for clean chain building
+    intOptions.config = [
+      '[req]',
+      'req_extensions = v3_req',
+      'distinguished_name = req_distinguished_name',
+      '[req_distinguished_name]',
+      'commonName = Common Name',
+      'commonName_max = 64',
+      '[v3_req]',
+      'basicConstraints = critical,CA:TRUE' + (pathlen === undefined ? '' : ',pathlen:' + pathlen),
+      'keyUsage = critical,keyCertSign,cRLSign',
+      'subjectKeyIdentifier = hash',
+      'authorityKeyIdentifier = keyid,issuer'
+    ].join('\n')
+
+    const finish = (err?: Error | null, issued?: IssueResult) => {
+      if (err) {
+        return callback(err as Error)
+      }
+      callback(null, new CertificateAuthority({
+        key: (issued as { clientKey: string }).clientKey,
+        certificate: (issued as { certificate: string }).certificate,
+        chain: [this.certificate].concat(this.chain),
+        keyPassword: intOptions.clientKeyPassword || undefined,
+        defaultDays: intOptions.defaultDays
+      }))
+    }
+
+    if (intOptions.days || intOptions.notAfter || intOptions.endDate) {
+      this.issueCertificate(intOptions, finish)
+      return
+    }
+
+    // default to the parent's whole remaining validity so issued leaf
+    // certificates never reach outside the intermediate window either
+    this._getCAValidity((err: Error | null, caValidity?: {start: Date; end: Date}) => {
+      if (err) {
+        return finish(err)
+      }
+      intOptions.notAfter = (caValidity as {start: Date; end: Date}).end
+      this.issueCertificate(intOptions, finish)
     })
   }
 
@@ -241,6 +355,14 @@ class CertificateAuthority {
         // requested window has to sit inside the CA certificate's own
         // validity window (openssl ca would silently accept either way)
         assertValidityInsideCA(validity.dates, caValidity)
+        const profile = options.profile
+        if (profile && !Object.prototype.hasOwnProperty.call(EXTENSION_PROFILES, profile)) {
+          throw new Error('Unknown certificate profile "' + profile + '" — expected one of: ' +
+            Object.keys(EXTENSION_PROFILES).join(', '))
+        }
+        if (profile && (options.config || options.extFile)) {
+          throw new Error('The profile option cannot be combined with config or extFile: the profile defines the extensions itself')
+        }
       } catch (err) {
         return callback(err as Error)
       }
@@ -268,7 +390,7 @@ class CertificateAuthority {
       return callback(cleanupErr || (err as Error))
     }
 
-    const configContent = buildCaConfig(workDir, options.hash || 'sha256', options.copyExtensions)
+    const configContent = buildCaConfig(workDir, options.hash || 'sha256', options.copyExtensions, options.profile as ExtensionProfileName | undefined)
 
     const params = ['ca',
       '-batch',
@@ -355,7 +477,7 @@ class CertificateAuthority {
   }
 }
 
-function buildCaConfig(workDir: string, digest: string, copyExtensions: boolean | undefined): string {
+function buildCaConfig(workDir: string, digest: string, copyExtensions: boolean | undefined, profile?: ExtensionProfileName): string {
   const lines = [
     '[ ca ]',
     'default_ca = pem_ca',
@@ -377,6 +499,11 @@ function buildCaConfig(workDir: string, digest: string, copyExtensions: boolean 
     lines.push('copy_extensions = copy')
   }
 
+  const usage = profile ? EXTENSION_PROFILES[profile] : {
+    keyUsage: 'digitalSignature, keyEncipherment',
+    extKeyUsage: 'serverAuth, clientAuth'
+  }
+
   lines.push(
     'unique_subject = no',
     '',
@@ -390,8 +517,8 @@ function buildCaConfig(workDir: string, digest: string, copyExtensions: boolean 
     '',
     '[ pem_ca_extensions ]',
     'basicConstraints = CA:FALSE',
-    'keyUsage = digitalSignature, keyEncipherment',
-    'extendedKeyUsage = serverAuth, clientAuth'
+    'keyUsage = ' + usage.keyUsage,
+    'extendedKeyUsage = ' + usage.extKeyUsage
   )
 
   return lines.join('\n')
@@ -461,11 +588,13 @@ function assertValidityInsideCA(validity: {start: Date; end: Date}, caValidity: 
 }
 
 function resolveValidity(options: IssueCertificateOptions, defaultDays: number) {
-  const start = normalizeDate(options.startDate) || new Date()
+  // notBefore/notAfter are the X.509 names and take precedence over their
+  // startDate/endDate aliases
+  const start = normalizeDate(options.notBefore || options.startDate) || new Date()
   let end: Date | null
 
-  if (options.endDate) {
-    end = normalizeDate(options.endDate)
+  if (options.notAfter || options.endDate) {
+    end = normalizeDate(options.notAfter || options.endDate)
   } else if (options.days) {
     const days = Number(options.days)
     if (!Number.isFinite(days) || days <= 0) {

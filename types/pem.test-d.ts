@@ -28,6 +28,19 @@ const ca = new pem.CA({
 
 expectType<Promise<pem.IssuedCertificate>>(ca.issueCertificate({ commonName: 'example.com' }))
 expectType<Promise<pem.IssuedCertificate>>(ca.issueCertificate({ commonName: 'example.com', copyExtensions: true }))
+expectType<Promise<pem.IssuedCertificate>>(ca.issueCertificate({
+  commonName: 'example.com',
+  profile: 'server',
+  notBefore: new Date('2030-01-01T00:00:00Z'),
+  notAfter: new Date('2030-01-31T00:00:00Z')
+}))
+
+expectType<Promise<pem.CA>>(ca.createIntermediateCA({ commonName: 'Sub CA', pathlen: 0 }))
+ca.createIntermediateCA({ commonName: 'Sub CA' }, (err, sub) => {
+  if (sub) {
+    expectType<pem.CA>(sub)
+  }
+})
 
 expectType<Promise<pem.CA>>(pem.createCA({ commonName: 'example.com' }))
 expectType<Promise<pem.CA>>(pem.CA.createCA({ commonName: 'example.com' }))

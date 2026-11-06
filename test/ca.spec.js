@@ -131,6 +131,29 @@ describe('CertificateAuthority', function () {
     expect(info.validity.end).to.equal(end.getTime())
   })
 
+  it('accepts notBefore/notAfter as aliases for startDate/endDate', async function () {
+    var ca = new pem.CA({
+      key: rootCA.serviceKey,
+      certificate: rootCA.certificate
+    })
+
+    var notBefore = new Date(Date.UTC(2030, 0, 1, 0, 0, 0))
+    var notAfter = new Date(Date.UTC(2030, 0, 8, 0, 0, 0))
+
+    var result = await ca.issueCertificate({
+      commonName: 'alias-window.example',
+      notBefore: notBefore,
+      notAfter: notAfter
+    })
+
+    expect(result.validity.start.getTime()).to.equal(notBefore.getTime())
+    expect(result.validity.end.getTime()).to.equal(notAfter.getTime())
+
+    var info = await pem.readCertificateInfo(result.certificate)
+    expect(info.validity.start).to.equal(notBefore.getTime())
+    expect(info.validity.end).to.equal(notAfter.getTime())
+  })
+
   it('rejects a validity window starting before the CA certificate is valid', async function () {
     var ca = new pem.CA({
       key: rootCA.serviceKey,
@@ -170,6 +193,70 @@ describe('CertificateAuthority', function () {
       throw new Error('Expected issuing to fail when endDate exceeds CA validity')
     } catch (err) {
       expect(err.message).to.match(/CA certificate/i)
+    }
+  })
+
+  it('issues profile-specific key usage for server, client and codeSigning', async function () {
+    var ca = new pem.CA({
+      key: rootCA.serviceKey,
+      certificate: rootCA.certificate
+    })
+
+    var server = await ca.issueCertificate({
+      commonName: 'profile-server.example',
+      profile: 'server'
+    })
+    var serverText = certificateText(server.certificate)
+    expect(serverText).to.have.string('TLS Web Server Authentication')
+    expect(serverText).to.not.have.string('TLS Web Client Authentication')
+    expect(serverText).to.have.string('CA:FALSE')
+
+    var client = await ca.issueCertificate({
+      commonName: 'profile-client.example',
+      profile: 'client'
+    })
+    var clientText = certificateText(client.certificate)
+    expect(clientText).to.have.string('TLS Web Client Authentication')
+    expect(clientText).to.not.have.string('TLS Web Server Authentication')
+    expect(clientText).to.have.string('CA:FALSE')
+
+    var code = await ca.issueCertificate({
+      commonName: 'profile-code.example',
+      profile: 'codeSigning'
+    })
+    var codeText = certificateText(code.certificate)
+    expect(codeText).to.have.string('Code Signing')
+    expect(codeText).to.have.string('CA:FALSE')
+  })
+
+  it('keeps the default profile as server plus client authentication', async function () {
+    var ca = new pem.CA({
+      key: rootCA.serviceKey,
+      certificate: rootCA.certificate
+    })
+
+    var result = await ca.issueCertificate({
+      commonName: 'profile-default.example'
+    })
+    var text = certificateText(result.certificate)
+    expect(text).to.have.string('TLS Web Server Authentication')
+    expect(text).to.have.string('TLS Web Client Authentication')
+  })
+
+  it('rejects unknown profiles', async function () {
+    var ca = new pem.CA({
+      key: rootCA.serviceKey,
+      certificate: rootCA.certificate
+    })
+
+    try {
+      await ca.issueCertificate({
+        commonName: 'profile-bogus.example',
+        profile: 'worldDomination'
+      })
+      throw new Error('Expected issuing to fail for an unknown profile')
+    } catch (err) {
+      expect(err.message).to.match(/profile/i)
     }
   })
 
@@ -307,6 +394,114 @@ describe('CertificateAuthority', function () {
     // the pem_ca_extensions floor (CA:FALSE) always supersedes CSR requests
     expect(text).to.have.string('CA:FALSE')
     expect(text).to.not.have.string('CA:TRUE')
+  })
+
+  it('creates an intermediate CA that issues verifiable leaf certificates', async function () {
+    var root = await pem.createCA({
+      commonName: 'Inter Root CA',
+      days: 3650
+    })
+
+    var intermediate = await root.createIntermediateCA({
+      commonName: 'Inter Mid CA',
+      pathlen: 0
+    })
+
+    expect(intermediate).to.be.an.instanceof(pem.CA)
+    var intText = certificateText(intermediate.certificate)
+    expect(intText).to.have.string('CA:TRUE')
+    expect(intText).to.have.string('Certificate Sign')
+    expect(intermediate.chain).to.deep.equal([root.certificate])
+
+    var leaf = await intermediate.issueCertificate({
+      commonName: 'inter-leaf.example'
+    })
+    expect(leaf.caChain).to.deep.equal([intermediate.certificate, root.certificate])
+
+    var dir = fs.mkdtempSync(path.join(require('os').tmpdir(), 'pem-ca-inter-'))
+    try {
+      var rootPath = path.join(dir, 'root.pem')
+      var intPath = path.join(dir, 'int.pem')
+      var leafPath = path.join(dir, 'leaf.pem')
+      fs.writeFileSync(rootPath, root.certificate)
+      fs.writeFileSync(intPath, intermediate.certificate)
+      fs.writeFileSync(leafPath, leaf.certificate)
+      var verification = spawnSync(process.env.OPENSSL_BIN || 'openssl', [
+        'verify', '-CAfile', rootPath, '-untrusted', intPath, leafPath
+      ])
+      expect(verification.status).to.equal(0)
+    } finally {
+      fs.rmSync(dir, {recursive: true, force: true})
+    }
+  })
+
+  it('honors notBefore/notAfter on intermediates created with a custom window', async function () {
+    var root = await pem.createCA({
+      commonName: 'Window Root CA',
+      days: 3650
+    })
+
+    var start = new Date(Math.floor(Date.now() / 1000) * 1000 + 60 * 60 * 1000)
+    var end = new Date(start.getTime() + 365 * 24 * 60 * 60 * 1000)
+    var intermediate = await root.createIntermediateCA({
+      commonName: 'Window Mid CA',
+      notBefore: start,
+      notAfter: end
+    })
+
+    expect(intermediate.caValidity).to.equal(null)
+    var info = await pem.readCertificateInfo(intermediate.certificate)
+    expect(info.validity.start).to.equal(start.getTime())
+    expect(info.validity.end).to.equal(end.getTime())
+
+    // the intermediate's own window governs what it can issue
+    var leaf = await intermediate.issueCertificate({
+      commonName: 'window-leaf.example',
+      notBefore: start,
+      days: 30
+    })
+    var leafInfo = await pem.readCertificateInfo(leaf.certificate)
+    expect(leafInfo.validity.start).to.equal(start.getTime())
+    expect(leafInfo.validity.end).to.be.at.most(end.getTime())
+  })
+
+  it('creates sub-intermediates whose chains openssl refuses when pathlen is exceeded', async function () {
+    var root = await pem.createCA({
+      commonName: 'Pathlen Root CA',
+      days: 3650
+    })
+
+    var mid = await root.createIntermediateCA({
+      commonName: 'Pathlen Mid CA',
+      pathlen: 0
+    })
+
+    // signing succeeds here; openssl ca does not enforce pathlen. The
+    // enforcement happens at chain validation time, which is what we prove.
+    var sub = await mid.createIntermediateCA({
+      commonName: 'Pathlen Sub CA'
+    })
+    var leaf = await sub.issueCertificate({
+      commonName: 'sub-leaf.example'
+    })
+
+    var dir = fs.mkdtempSync(path.join(require('os').tmpdir(), 'pem-ca-pathlen-'))
+    try {
+      var rootPath = path.join(dir, 'root.pem')
+      var midPath = path.join(dir, 'mid.pem')
+      var subPath = path.join(dir, 'sub.pem')
+      var leafPath = path.join(dir, 'leaf.pem')
+      fs.writeFileSync(rootPath, root.certificate)
+      fs.writeFileSync(midPath, mid.certificate)
+      fs.writeFileSync(subPath, sub.certificate)
+      fs.writeFileSync(leafPath, leaf.certificate)
+      var verification = spawnSync(process.env.OPENSSL_BIN || 'openssl', [
+        'verify', '-CAfile', rootPath, '-untrusted', midPath, '-untrusted', subPath, leafPath
+      ])
+      expect(verification.status).to.not.equal(0)
+    } finally {
+      fs.rmSync(dir, {recursive: true, force: true})
+    }
   })
 
   it('issues certificates that openssl verifies inside their validity window', async function () {
