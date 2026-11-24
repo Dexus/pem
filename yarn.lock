@@ -3959,12 +3959,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"marked@npm:18.1.3":
-  version: 18.1.3
-  resolution: "marked@npm:18.1.3"
+"marked@npm:18.3.0":
+  version: 18.3.0
+  resolution: "marked@npm:18.3.0"
   bin:
     marked: bin/marked.js
-  checksum: 10c0/13e72a88c479f388f8c476f8fd50498740097f239091fcfc57d477ac1732c72c70261170029ef6f5029f48cda68663a4d2cd892041f588d95daf52caca02e1a2
+  checksum: 10c0/397a926e5ae58b66e1daf0edecdf7d7408889b782d79117a51cf59f36c01870a7b8b9734ff8eb6466ea05022b3e8acc767b4ec9c9be593098ecc415e57145e24
   languageName: node
   linkType: hard
 
@@ -4589,7 +4589,7 @@ __metadata:
     eslint-plugin-promise: "npm:7.3.0"
     globals: "npm:17.14.0"
     jsdoc: "npm:4.0.5"
-    marked: "npm:18.1.3"
+    marked: "npm:18.3.0"
     mocha: "npm:^12.0.3"
     nyc: "npm:18.0.0"
     tsd: "npm:0.33.0"
