@@ -644,12 +644,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:26.6.6":
-  version: 26.6.6
-  resolution: "@types/node@npm:26.6.6"
+"@types/node@npm:26.6.11":
+  version: 26.6.11
+  resolution: "@types/node@npm:26.6.11"
   dependencies:
     undici-types: "npm:~8.9.0"
-  checksum: 10c0/5cb63f644f6e85a257a9cd2403cbcbe196760e2a35fd3ec9fb8b5cff663e14cc832b198cc17b53f870a2e30900ed45a1fb3f53e6589aba26b8e8c484aa672053
+  checksum: 10c0/9771f1140557ee98f65de05fdc50a4da8d0e602bbbedf206b41f679f95fb52c9a39d854ad813dc3e4f1fb9a4c22f1b4d324607eb299670c515d3ab093701e815
   languageName: node
   linkType: hard
 
@@ -4570,7 +4570,7 @@ __metadata:
     "@eslint/js": "npm:10.0.1"
     "@types/chai": "npm:5.2.3"
     "@types/dirty-chai": "npm:2.0.5"
-    "@types/node": "npm:26.6.6"
+    "@types/node": "npm:26.6.11"
     "@vercel/ncc": "npm:0.45.0"
     auto-changelog: "npm:2.7.0"
     chai: "npm:4.5.0"
